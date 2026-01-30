@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notalar | Mahmut Burak ASLANTAŞ</title>
+    
+    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #000000;
+            --accent: #c5a059;
+            --bg-dark: #0f0f0f;
+            --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
+            --box-bg: rgba(30, 30, 30, 0.4);
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: var(--text); 
+            line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- NAVİGASYON --- */
+        nav {
+            background: #000; padding: 20px 0; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
+        nav ul { display: flex; gap: 50px; list-style: none; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
+        nav a:hover, nav a.active { color: var(--accent); }
+        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
+
+        /* --- BAŞLIK --- */
+        .page-header { text-align: center; padding: 80px 0 40px; animation: fadeInUp 1s ease-out forwards; opacity: 0; }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; letter-spacing: 5px; text-transform: uppercase; }
+        .page-header h1::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 15px auto 0; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- ARAMA --- */
+        .main-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; width: 100%; }
+        .search-wrapper { display: flex; justify-content: center; margin-bottom: 40px; animation: fadeInUp 1s ease-out 0.2s forwards; opacity: 0; }
+        .search-box { position: relative; width: 100%; max-width: 400px; }
+        .search-box input { width: 100%; padding: 12px 50px; background: rgba(255,255,255,0.05); border: 1px solid rgba(197,160,89,0.3); border-radius: 4px; color: #fff; outline: none; transition: 0.3s; font-family: 'Montserrat', sans-serif; }
+        .search-box input:focus { border-color: var(--accent); background: rgba(0,0,0,0.5); }
+        .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); }
+
+        /* --- TABLO TASARIMI (PREMIUM) --- */
+        .table-container {
+            overflow-x: auto; 
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+            background: var(--box-bg);
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px; 
+        }
+
+        thead {
+            background: rgba(197, 160, 89, 0.1);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        th {
+            text-align: left;
+            padding: 20px;
+            font-family: 'Playfair Display', serif;
+            color: var(--accent);
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        tr { transition: 0.3s; }
+        
+        tbody tr:hover {
+            background: rgba(197, 160, 89, 0.05);
+        }
+        tbody tr:hover td {
+            color: #fff;
+        }
+
+        .note-link {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            transition: 0.3s;
+            display: block; 
+        }
+        .note-link:hover { color: var(--accent); }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        .download-btn:hover {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* --- FOOTER --- */
+        footer { background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
+        .social-wrapper { display: flex; justify-content: center; gap: 40px; }
+        .social-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: #888; font-size: 0.8rem; transition: 0.3s; }
+        .social-icon-box { font-size: 24px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; border-radius: 50%; transition: all 0.3s ease; }
+        .social-item:hover .social-icon-box { border-color: var(--accent); transform: translateY(-5px); }
+        .social-item:hover { color: #fff; }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
+            nav ul.aktif { display: flex; }
+            .page-header h1 { font-size: 2.5rem; }
+            th, td { padding: 15px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
+            <ul id="anaMenu">
+                <li><a href="index.html">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html">HAKKINDA</a></li>
+                <li><a href="notalar.html" class="active">NOTALAR</a></li>
+                <li><a href="siirler.html">ŞİİRLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>NOTALAR</h1>
+        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;">Bağlama repertuvarı ve döküman arşivi...</p>
+    </header>
+
+    <div class="main-container">
+        <div class="search-wrapper">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="notaAra" onkeyup="filtrele()" placeholder="Eser adı veya besteci ara...">
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="notaTablosu">
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">ESER ADI</th>
+                        <th style="width: 30%;">BESTECİ / KAYNAK KİŞİ</th>
+                        <th style="width: 20%; text-align: center;">İNDİR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>
+                            <a href="nota-yoruldum.html" class="note-link">Yoruldum</a>
+                        </td>
+                        <td>Mahmut Burak ASLANTAŞ</td>
+                        <td style="text-align: center;">
+                            <a href="notalar/yoruldum.pdf" download class="download-btn" title="İndir">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <a href="nota-cehennem-nari.html" class="note-link">Cehennem Narı</a>
+                        </td>
+                        <td>Mahmut Burak ASLANTAŞ</td>
+                        <td style="text-align: center;">
+                            <a href="notalar/cehennem-nari.pdf" download class="download-btn" title="İndir">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <a href="nota-ardic-sazim.html" class="note-link">Ardıç Sazım</a>
+                        </td>
+                        <td>Mahmut Burak ASLANTAŞ</td>
+                        <td style="text-align: center;">
+                            <a href="notalar/ardic-sazim.pdf" download class="download-btn" title="İndir">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div id="no-result" style="display:none; text-align:center; margin-top:20px; color:#888;">Aradığınız eser bulunamadı.</div>
+    </div>
+
+    <footer>
+        <div class="social-wrapper">
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-instagram"></i></div><span>Instagram</span></a>
+            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-youtube"></i></div><span>YouTube</span></a>
+        </div>
+        <br>
+        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script>
+        function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
+        
+        function filtrele() {
+            var input = document.getElementById("notaAra").value.toUpperCase();
+            var table = document.getElementById("notaTablosu");
+            var tr = table.getElementsByTagName("tr");
+            var foundAny = false;
+
+            for (var i = 1; i < tr.length; i++) {
+                var tdEser = tr[i].getElementsByTagName("td")[0]; 
+                var tdBesteci = tr[i].getElementsByTagName("td")[1]; 
+                
+                if (tdEser || tdBesteci) {
+                    var txtEser = tdEser.textContent || tdEser.innerText;
+                    var txtBesteci = tdBesteci.textContent || tdBesteci.innerText;
+                    
+                    if (txtEser.toUpperCase().indexOf(input) > -1 || txtBesteci.toUpperCase().indexOf(input) > -1) {
+                        tr[i].style.display = "";
+                        foundAny = true;
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+            document.getElementById("no-result").style.display = foundAny ? "none" : "block";
+            document.querySelector("thead").style.display = foundAny ? "" : "none";
+        }
+    </script>
+</body>
+</html>
