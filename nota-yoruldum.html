@@ -13,60 +13,193 @@
         :root { --primary: #000000; --accent: #c5a059; --bg-dark: #0f0f0f; --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%); --text: #ffffff; --text-secondary: #b0b0b0; }
         body { font-family: 'Montserrat', sans-serif; background: var(--bg-dark); background-image: var(--bg-gradient); color: var(--text); line-height: 1.8; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
         
-        nav { background: #000; padding: 20px 0; border-bottom: 1px solid rgba(197, 160, 89, 0.2); }
-        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; }
-        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; margin: 0 15px; text-transform: uppercase; transition: 0.3s; }
-        nav a:hover { color: var(--accent); }
+        /* NAVİGASYON */
+        nav { background: #000; padding: 15px 0; border-bottom: 1px solid rgba(197, 160, 89, 0.2); position: sticky; top: 0; z-index: 1000; }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
+        nav ul { display: flex; gap: 40px; list-style: none; padding: 0; margin: 0; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
+        nav a:hover, nav a.active { color: var(--accent); }
+        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
 
-        .container { max-width: 1000px; margin: 50px auto; padding: 0 20px; text-align: center; }
+        /* ANA KAPLAYICI */
+        .container { max-width: 1200px; margin: 20px auto 60px; padding: 0 20px; width: 100%; }
         
-        .nota-header h1 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .nota-info { color: var(--text-secondary); margin-bottom: 30px; font-style: italic; }
+        /* BAŞLIK ALANI (Sıkıştırılmış) */
+        .nota-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
+        .nota-header h1 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 2.2rem; margin: 0; letter-spacing: 3px; }
+        .nota-info { color: var(--text-secondary); font-style: italic; font-size: 1rem; margin-top: 5px; }
 
-        .nota-image-box {
-            background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 4px;
-            border: 1px solid rgba(197, 160, 89, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        /* İKİ SÜTUNLU YAPI */
+        .content-wrapper {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
         }
-        .nota-image-box img { width: 100%; height: auto; border-radius: 2px; filter: brightness(0.9); }
 
-        .btn-container { margin-top: 40px; display: flex; justify-content: center; gap: 20px; }
-        .action-btn { padding: 12px 30px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; font-size: 0.9rem; }
+        /* SOL TARAF: NOTA GÖRSELİ */
+        .left-column { flex: 1.5; } /* Notaya daha fazla alan verdik */
+        
+        .nota-image-wrapper {
+            position: relative;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: zoom-in;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+        .nota-image-wrapper:hover { border-color: var(--accent); }
+        .nota-image-wrapper img { width: 100%; display: block; filter: brightness(0.95); }
+        
+        /* Zoom İkonu */
+        .zoom-hint {
+            position: absolute; bottom: 10px; right: 10px;
+            background: rgba(0,0,0,0.7); color: #fff;
+            padding: 5px 10px; font-size: 0.8rem; border-radius: 4px;
+            pointer-events: none;
+        }
+
+        /* SAĞ TARAF: SÖZLER VE BUTON */
+        .right-column { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+
+        .lyrics-box {
+            background: rgba(30, 30, 30, 0.4);
+            padding: 30px;
+            border-left: 4px solid var(--accent);
+            border-radius: 2px;
+            text-align: center;
+        }
+        .lyrics-box h3 { font-family: 'Playfair Display', serif; color: var(--accent); margin-bottom: 20px; font-size: 1.4rem; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; display: inline-block; }
+        .lyrics-text { color: #ddd; font-style: italic; line-height: 2.2; font-size: 1.05rem; }
+
+        /* BUTONLAR */
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            font-weight: 600;
+            background: rgba(197, 160, 89, 0.05);
+        }
         .action-btn:hover { background: var(--accent); color: #000; }
-        .btn-back { border-color: #555; color: #aaa; }
-        .btn-back:hover { background: #333; color: #fff; border-color: #333; }
+        
+        .btn-back { margin-top: 10px; border-color: #444; color: #888; font-size: 0.8rem; background: transparent; }
+        .btn-back:hover { border-color: #fff; color: #fff; background: #222; }
 
-        footer { background: #050505; padding: 40px; text-align: center; border-top: 1px solid #222; margin-top: auto; color: #666; }
+        /* LIGHTBOX (BÜYÜK RESİM) */
+        .lightbox {
+            display: none; position: fixed; z-index: 9999;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            align-items: center; justify-content: center;
+            cursor: zoom-out;
+        }
+        .lightbox img { max-width: 95%; max-height: 95vh; box-shadow: 0 0 50px rgba(0,0,0,0.8); border: 2px solid #333; }
+
+        /* FOOTER */
+        footer { background: #050505; padding: 40px; text-align: center; border-top: 1px solid #222; margin-top: auto; color: #666; font-size: 0.9rem; }
+
+        /* MOBİL UYUMLULUK */
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; }
+            .left-column, .right-column { width: 100%; }
+        }
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
+            nav ul.aktif { display: flex; }
+            .nota-header h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-container">
-            <a href="index.html">ANA SAYFA</a>
-            <a href="notalar.html" style="color: var(--accent);">NOTALAR</a>
+            <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
+            <ul id="anaMenu">
+                <li><a href="index.html">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html">HAKKINDA</a></li>
+                <li><a href="notalar.html" class="active">NOTALAR</a></li>
+                <li><a href="siirler.html">ŞİİRLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
+            </ul>
         </div>
     </nav>
 
     <div class="container">
         <div class="nota-header">
             <h1>YORULDUM</h1>
-            <div class="nota-info">Besteci: Mahmut Burak ASLANTAŞ</div>
+            <div class="nota-info">Söz-Müzik: Mahmut Burak ASLANTAŞ</div>
         </div>
 
-        <div class="nota-image-box">
-            <img src="https://i.hizliresim.com/ORNEK_RESIM_LINKI.jpg" alt="Yoruldum Nota">
-        </div>
-
-        <div class="btn-container">
-            <a href="notalar.html" class="action-btn btn-back"><i class="fas fa-arrow-left"></i> Geri Dön</a>
+        <div class="content-wrapper">
             
-            <a href="nota-yoruldum.pdf" download class="action-btn"><i class="fas fa-download"></i> PDF İndir</a>
+            <div class="left-column">
+                <div class="nota-image-wrapper" onclick="openLightbox()">
+                    <img id="notaResmi" src="https://i.hizliresim.com/oncuy30.png" alt="Yoruldum Nota Kağıdı">
+                    <div class="zoom-hint"><i class="fas fa-search-plus"></i> Büyütmek için tıkla</div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                
+                <div class="lyrics-box">
+                    <h3>Şarkı Sözleri</h3>
+                    <div class="lyrics-text">
+                        Yoruldum artık sevmekten<br>
+                        Yar derdi ile yaş dökmekten<br>
+                        Feryad edip inlemekten<br>
+                        Gözlerimde fer (yaş) kalmadı<br><br>
+                        Gül gibi sarardım soldum<br>
+                        Genç delikanlı yaşımda<br>
+                        Kaderime tüm sitemim<br>
+                        Gözlerimin al (kan) yaşında.
+                    </div>
+                </div>
+
+                <a href="nota-yoruldum.pdf" download class="action-btn">
+                    <i class="fas fa-download"></i> PDF OLARAK İNDİR
+                </a>
+
+                <a href="notalar.html" class="action-btn btn-back">
+                    <i class="fas fa-arrow-left"></i> LİSTEYE DÖN
+                </a>
+
+            </div>
         </div>
+    </div>
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img src="https://i.hizliresim.com/oncuy30.png" alt="Yoruldum Büyük Nota">
     </div>
 
     <footer>
         <p>© 2026 Mahmut Burak ASLANTAŞ</p>
     </footer>
+
+    <script>
+        // Menü Aç/Kapa
+        function menuyuAcKapa() {
+            document.getElementById("anaMenu").classList.toggle("aktif");
+        }
+
+        // Lightbox (Resim Büyütme)
+        function openLightbox() {
+            document.getElementById("lightbox").style.display = "flex";
+            document.body.style.overflow = "hidden"; // Sayfa kaymasını engelle
+        }
+        function closeLightbox() {
+            document.getElementById("lightbox").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+    </script>
 
 </body>
 </html>
