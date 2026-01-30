@@ -10,10 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
     <style>
+        /* GENEL AYARLAR */
         :root { --primary: #000000; --accent: #c5a059; --bg-dark: #0f0f0f; --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%); --text: #ffffff; --text-secondary: #b0b0b0; }
         body { font-family: 'Montserrat', sans-serif; background: var(--bg-dark); background-image: var(--bg-gradient); color: var(--text); line-height: 1.8; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* NAVİGASYON */
         nav { background: #000; padding: 15px 0; border-bottom: 1px solid rgba(197, 160, 89, 0.2); position: sticky; top: 0; z-index: 1000; }
         .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
         nav ul { display: flex; gap: 40px; list-style: none; padding: 0; margin: 0; }
@@ -21,25 +21,60 @@
         nav a:hover, nav a.active { color: var(--accent); }
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
 
-        /* ANA KAPLAYICI */
         .container { max-width: 1200px; margin: 20px auto 60px; padding: 0 20px; width: 100%; }
-        
-        /* BAŞLIK ALANI */
         .nota-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
         .nota-header h1 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 2.2rem; margin: 0; letter-spacing: 3px; }
         .nota-info { color: var(--text-secondary); font-style: italic; font-size: 1rem; margin-top: 5px; }
 
-        /* İKİ SÜTUNLU YAPI */
         .content-wrapper { display: flex; gap: 40px; align-items: flex-start; }
-        .left-column { flex: 1.5; } 
         
-        .nota-image-wrapper {
-            position: relative; border: 1px solid rgba(197, 160, 89, 0.3); border-radius: 4px; overflow: hidden;
-            cursor: zoom-in; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s;
+        /* SOL TARAF - SLIDER ALANI */
+        .left-column { flex: 1.5; position: relative; } 
+        
+        .slider-window {
+            position: relative;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 4px;
+            overflow: hidden; /* Taşmayı gizle */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .nota-image-wrapper:hover { border-color: var(--accent); }
-        .nota-image-wrapper img { width: 100%; display: block; filter: brightness(0.95); }
-        
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Kayma efekti */
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%; /* Her resim kutuyu tam kaplar */
+            cursor: zoom-in;
+            position: relative;
+        }
+
+        .slide img { width: 100%; display: block; filter: brightness(0.95); }
+
+        /* SLIDER BUTONLARI (Ok İşaretleri) */
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .slider-btn:hover { background: var(--accent); color: #000; }
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+
         .zoom-hint {
             position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff;
             padding: 5px 10px; font-size: 0.8rem; border-radius: 4px; pointer-events: none;
@@ -54,7 +89,6 @@
         .lyrics-box h3 { font-family: 'Playfair Display', serif; color: var(--accent); margin-bottom: 20px; font-size: 1.4rem; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; display: inline-block; }
         .lyrics-text { color: #ddd; font-style: italic; line-height: 2.2; font-size: 1.05rem; }
 
-        /* BUTONLAR */
         .action-btn {
             display: block; width: 100%; padding: 15px; text-align: center; border: 1px solid var(--accent);
             color: var(--accent); text-decoration: none; text-transform: uppercase; letter-spacing: 2px;
@@ -69,7 +103,6 @@
         .lightbox img { max-width: 95%; max-height: 95vh; box-shadow: 0 0 50px rgba(0,0,0,0.8); border: 2px solid #333; }
 
         footer { background: #050505; padding: 40px; text-align: center; border-top: 1px solid #222; margin-top: auto; color: #666; font-size: 0.9rem; }
-
         @media (max-width: 900px) { .content-wrapper { flex-direction: column; } .left-column, .right-column { width: 100%; } }
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
@@ -101,9 +134,20 @@
 
         <div class="content-wrapper">
             <div class="left-column">
-                <div class="nota-image-wrapper" onclick="openLightbox()">
-                    <img src="https://i.hizliresim.com/fts26sm.png" alt="Cehennem Narı Nota Kağıdı">
-                    <div class="zoom-hint"><i class="fas fa-search-plus"></i> Büyütmek için tıkla</div>
+                <div class="slider-window">
+                    <button class="slider-btn prev-btn" onclick="slideHaraket(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-btn next-btn" onclick="slideHaraket(1)"><i class="fas fa-chevron-right"></i></button>
+
+                    <div class="slider-track" id="sliderTrack">
+                        <div class="slide" onclick="openLightbox(this.querySelector('img').src)">
+                            <img src="https://i.hizliresim.com/fts26sm.png" alt="Cehennem Narı Sayfa 1">
+                            <div class="zoom-hint">Sayfa 1 (Büyütmek için tıkla)</div>
+                        </div>
+                        <div class="slide" onclick="openLightbox(this.querySelector('img').src)">
+                            <img src="https://i.hizliresim.com/8a8turx.png" alt="Cehennem Narı Sayfa 2">
+                            <div class="zoom-hint">Sayfa 2 (Büyütmek için tıkla)</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -111,11 +155,15 @@
                 <div class="lyrics-box">
                     <h3>Şarkı Sözleri</h3>
                     <div class="lyrics-text">
-                        Yandı içimde cehennem narı<br>
-                        Ala gözlü bir güzelden gayrı<br>
-                        Var mıdır bunca derdin dermanı<br>
+                        Yandı içimde cehennem narı.<br>
+                        Ala gözlü bir güzelden gayrı.<br>
+                        Var mıdır bunca derdin dermanı.<br>
+                        Dermanı vardır, bekle zamanı.<br>
                         <br>
-                        (Sözlerin devamını buraya ekleyebilirsiniz...)
+                        Zalım felek geldi beni seçti.<br>
+                        Dermansız derdi başıma açtı.<br>
+                        Yaş aldı başını ömür geçti.<br>
+                        Bir daha göremedim o zatı.
                     </div>
                 </div>
                 <a href="nota-cehennem-nari.pdf" download class="action-btn">
@@ -129,15 +177,41 @@
     </div>
 
     <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-        <img src="https://i.hizliresim.com/fts26sm.png" alt="Cehennem Narı Büyük Nota">
+        <img id="lightboxImg" src="" alt="Büyük Nota">
     </div>
 
     <footer><p>© 2026 Mahmut Burak ASLANTAŞ</p></footer>
 
     <script>
         function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
-        function openLightbox() { document.getElementById("lightbox").style.display = "flex"; document.body.style.overflow = "hidden"; }
-        function closeLightbox() { document.getElementById("lightbox").style.display = "none"; document.body.style.overflow = "auto"; }
+        
+        // Slider Mantığı
+        let slideIndex = 0;
+        function slideHaraket(yon) {
+            const track = document.getElementById("sliderTrack");
+            const slides = document.querySelectorAll(".slide");
+            const toplamSlide = slides.length;
+
+            slideIndex += yon;
+
+            // Döngüsel kaydırma (Sona gelince başa dön)
+            if (slideIndex < 0) { slideIndex = toplamSlide - 1; }
+            if (slideIndex >= toplamSlide) { slideIndex = 0; }
+
+            const kaydirmaMiktari = slideIndex * -100;
+            track.style.transform = `translateX(${kaydirmaMiktari}%)`;
+        }
+
+        // Lightbox Mantığı
+        function openLightbox(src) {
+            document.getElementById("lightboxImg").src = src; // Tıklanan resmin kaynağını al
+            document.getElementById("lightbox").style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
+        function closeLightbox() {
+            document.getElementById("lightbox").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
     </script>
 
 </body>
