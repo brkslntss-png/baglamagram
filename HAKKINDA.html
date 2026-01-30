@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkında | Mahmut Burak ASLANTAŞ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #000000;
+            --accent: #c5a059; /* Altın Sarısı */
+            --bg: #121212;    /* Karanlık Arka Plan */
+            --box-bg: #1e1e1e; /* Kutu Arka Planı */
+            --text: #ffffff;  /* Beyaz Yazı */
+            --text-secondary: #b0b0b0; /* Gri Yazı */
+            --spotify: #1DB954; /* Spotify Yeşili */
+            --youtube: #FF0000; /* YouTube Kırmızısı */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            font-weight: 300;
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.8;
+        }
+
+        /* Navigasyon */
+        nav {
+            background: var(--primary);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+        nav ul { display: flex; justify-content: center; list-style: none; gap: 30px; }
+        nav a { color: #888; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; }
+        nav a:hover { color: var(--accent); }
+
+        /* İçerik Düzeni */
+        .container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 5%;
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        /* Fotoğraf Bölümü */
+        .profile-image { flex: 1; position: sticky; top: 120px; }
+        .profile-image img {
+            width: 100%;
+            border-radius: 4px;
+            border-left: 6px solid var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        /* Biyografi İçeriği */
+        .bio-content { flex: 1.5; }
+        h2 { 
+            font-weight: 300; font-size: 2.8rem; color: var(--accent); 
+            margin-bottom: 30px; border-bottom: 1px solid #333; display: inline-block;
+        }
+        p { margin-bottom: 20px; font-size: 1.1rem; text-align: justify; color: var(--text-secondary); }
+
+        /* Vurgu Kutuları */
+        .highlight-box {
+            background: var(--box-bg); padding: 30px; border-radius: 4px;
+            margin-top: 40px; border-top: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .highlight-box h3 { font-weight: 400; color: var(--accent); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .highlight-box ul { list-style: none; }
+        .highlight-box li { margin-bottom: 15px; position: relative; padding-left: 20px; color: var(--text-secondary); }
+        .highlight-box li::before { content: "•"; color: var(--accent); position: absolute; left: 0; font-weight: bold; }
+
+        /* Sosyal Medya Genel Yapı (Ters Üçgen İçin) */
+        .social-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* Satırlar arası boşluk */
+            margin-top: 50px;
+            padding: 20px;
+        }
+        
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px; /* Yan yana ikonlar arası boşluk */
+        }
+
+        .social-item {
+            display: flex; align-items: center; gap: 10px; text-decoration: none;
+            color: var(--text); font-size: 0.95rem; transition: 0.3s;
+        }
+        .social-item:hover { transform: translateY(-3px); opacity: 0.8; }
+
+        /* İkon Renkleri (Vektör Renklendirme) */
+        .fa-instagram {
+            background: -webkit-linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 24px;
+        }
+        .fa-spotify { color: var(--spotify); font-size: 24px; }
+        .fa-youtube { color: var(--youtube); font-size: 24px; }
+
+        /* Footer Stili */
+        footer {
+            background: #0a0a0a; color: #555; padding: 60px 20px;
+            text-align: center; border-top: 1px solid #222; margin-top: 100px;
+        }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 900px) {
+            .container { flex-direction: column; }
+            .profile-image { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="hakkinda.html" style="color: var(--accent);">Hakkında</a></li>
+            <li><a href="notalar.html">Notalar</a></li>
+            <li><a href="siirler.html">Şiirler</a></li>
+            <li><a href="konserler.html">Konserler</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="profile-image">
+            <img src="https://i.hizliresim.com/olj28le.jpg" alt="Mahmut Burak ASLANTAŞ">
+        </div>
+
+        <div class="bio-content">
+            <h2>Hakkında</h2>
+            <p>
+                Mahmut Burak ASLANTAŞ, 8 Şubat 2002 yılında Birecik'te dünyaya gelmiştir. Müzikal yolculuğuna çocuk yaşlarında bağlama ile başlamıştır. Lise eğitimini Mehmet Adil Çulcuoğlu Anadolu Lisesinde tamamlamıştır. 2021 yılında Adnan Menderes Üniversitesinde Müzik Öğretmenliği bölümünü kazanmıştır. Öğrencilik dönemimde okulun çeşitli projelerinde ve konserlerinde yer almıştır. 2024 yılında TRT Türk Halk Müziği Gençlik Korosuna bağlama icracısı olarak katılmıştır. 17 Aralık 2025'te Elzė MARKEVIČIŪTĖ'nin katılımı ile "East to West" projesi kapsamında ilk konserini tamamlamıştır. Aslantaş, müziği sadece bir ses dizisi değil, kültürler arası bir köprü olarak konumlandırmaktadır. 
+            </p>
+            <p>
+                Aynı zamanda amatör olarak şiirle uğraşan Aslantaş, şarkı sözü ve yeni beste üretme yolunda çalışmalarını sürdürmektedir.
+            </p>
+
+            <div class="highlight-box">
+                <h3>Kariyer Özeti</h3>
+                <ul>
+                    <li><strong>TRT Gençlik Korosu (2025):</strong> Bağlama icracısı olarak koro bünyesinde aktif görev.</li>
+                    <li><strong>Katıldığı Programlar:</strong> TRT Türkü'de yayınlanan "Genç Nesilden Türküler" programlarında konuk sanatçı ve orkestra üyesi olarak yer aldı (17 Mayıs, 14 Kasım 2025).</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Sanat Projeleri</h3>
+                <ul>
+                    <li><strong>East to West:</strong> Piyanist Elzė Markevičiūtė ile Anadolu ezgilerini Batı klasikleriyle buluşturan uluslararası konser serisi.</li>
+                    <li><strong>Edebiyat Alanında Denemeleri:</strong> Aruz ve hece ölçüsü kullanarak özgün şiirler ve şarkı sözleri üretme çabasındadır. Şiirlerinde kullandığı net ve doğrudan üslubuyla dikkat çekmektedir.</li>
+                </ul>
+            </div>
+
+            <div class="social-wrapper">
+                <div class="social-row">
+                    <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
+                        <i class="fab fa-instagram"></i>
+                        <span>baglamagram</span>
+                    </a>
+                    <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item">
+                        <i class="fab fa-spotify"></i>
+                        <span>Mahmut Burak ASLANTAŞ</span>
+                    </a>
+                </div>
+                <div class="social-row">
+                    <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item">
+                        <i class="fab fa-youtube"></i>
+                        <span>Mahmut Burak ASLANTAŞ</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+        
+        <div class="social-wrapper" style="margin-top: 20px;">
+            <div class="social-row">
+                <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
+                    <i class="fab fa-instagram"></i>
+                    <span>baglamagram</span>
+                </a>
+                <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item">
+                    <i class="fab fa-spotify"></i>
+                    <span>Mahmut Burak ASLANTAŞ</span>
+                </a>
+            </div>
+            <div class="social-row">
+                <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item">
+                    <i class="fab fa-youtube"></i>
+                    <span>Mahmut Burak ASLANTAŞ</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

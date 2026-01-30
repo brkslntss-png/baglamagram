@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konserler | Mahmut Burak ASLANTAŞ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #000000;
+            --accent: #c5a059; /* Altın Sarısı */
+            --bg: #121212;    /* Karanlık Arka Plan */
+            --box-bg: #1e1e1e; /* Kutu Arka Planı */
+            --text: #ffffff;  /* Beyaz Yazı */
+            --text-secondary: #b0b0b0; /* Gri Yazı */
+            --spotify: #1DB954; /* Spotify Yeşili */
+            --youtube: #FF0000; /* YouTube Kırmızısı */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            font-weight: 300;
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.8;
+        }
+
+        /* Navigasyon */
+        nav {
+            background: var(--primary);
+            padding: 30px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+        nav ul { display: flex; justify-content: center; list-style: none; gap: 40px; }
+        nav a { 
+            color: #888; text-decoration: none; font-size: 0.85rem; 
+            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; 
+        }
+        nav a:hover { color: var(--accent); }
+
+        /* Sayfa Ana Başlığı (KONSERLER) */
+        .page-header {
+            text-align: center;
+            padding: 60px 0 20px;
+        }
+        .page-header h1 {
+            font-weight: 300;
+            font-size: 3.5rem;
+            color: var(--accent);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Ana Konteyner */
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 5%;
+        }
+
+        /* Bölüm 1: East to West Vitrini */
+        .spotlight-section {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+            margin-bottom: 80px;
+            background: var(--box-bg);
+            padding: 40px;
+            border-radius: 4px;
+            border-left: 5px solid var(--accent);
+        }
+        .poster-wrapper { flex: 1; }
+        .poster-wrapper img {
+            width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+        .poster-wrapper img:hover { transform: scale(1.02); }
+
+        .info-wrapper { flex: 1.5; }
+        
+        /* East to West Başlığı - Kalın */
+        .info-wrapper h1 {
+            font-size: 2.5rem; 
+            color: var(--accent); 
+            margin-bottom: 20px;
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            font-weight: 700; /* Kalın */
+        }
+        
+        .info-wrapper p { 
+            color: var(--text-secondary); 
+            margin-bottom: 20px; 
+            font-size: 1.1rem; 
+            text-align: justify; 
+        }
+        
+        /* İsimler için Özel Stil: Kalın ve Beyaz */
+        .highlight-name {
+            color: var(--text);
+            font-weight: 700; /* Kalın Font */
+        }
+
+        .concert-meta {
+            display: flex; gap: 20px; font-size: 0.9rem; color: #fff; margin-top: 20px;
+        }
+        .meta-item { display: flex; align-items: center; gap: 8px; }
+        .meta-item i { color: var(--accent); }
+
+        /* Bölüm 2: Video Alanı */
+        .video-section {
+            text-align: center;
+            margin-bottom: 100px;
+            padding: 40px 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+        }
+        .video-section h3 {
+            color: var(--accent); font-size: 1.5rem; margin-bottom: 30px;
+            text-transform: uppercase; letter-spacing: 2px; font-weight: 300;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Oranı */
+            height: 0;
+            overflow: hidden;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            background: #000;
+        }
+        .video-wrapper iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        /* Yedek YouTube Linki Butonu */
+        .video-fallback {
+            margin-top: 20px;
+        }
+        .youtube-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #222;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            border: 1px solid #333;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .youtube-btn:hover {
+            background: #FF0000;
+            border-color: #FF0000;
+            color: #fff;
+        }
+
+        /* Bölüm 3: Diğer Konserler Galerisi */
+        .gallery-section h2 {
+            text-align: center; color: var(--text); font-size: 2rem; margin-bottom: 50px;
+            font-weight: 300; letter-spacing: 2px;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        .gallery-item {
+            text-align: center;
+            transition: 0.3s;
+        }
+        .gallery-item:hover { transform: translateY(-10px); }
+        .gallery-item img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            border: 1px solid #333;
+        }
+        .gallery-item h4 {
+            color: var(--accent); font-weight: 400; letter-spacing: 1px;
+            font-size: 1.1rem;
+        }
+
+        /* Footer & Ters Üçgen Sosyal Medya */
+        footer {
+            background: #0a0a0a; color: #444; padding: 80px 20px;
+            text-align: center; border-top: 1px solid #222; margin-top: 100px;
+        }
+        .social-wrapper {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 15px; margin-top: 30px;
+        }
+        .social-row { display: flex; justify-content: center; gap: 30px; }
+        .social-item { 
+            display: flex; align-items: center; gap: 10px; text-decoration: none; 
+            color: #fff; font-size: 0.95rem; transition: 0.3s; 
+        }
+        .social-item:hover { transform: translateY(-3px); }
+        
+        .fa-instagram { 
+            background: -webkit-linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; 
+        }
+        .fa-spotify { color: var(--spotify); font-size: 26px; }
+        .fa-youtube { color: var(--youtube); font-size: 26px; }
+
+        @media (max-width: 900px) {
+            .spotlight-section { flex-direction: column; text-align: center; }
+            .info-wrapper h1 { font-size: 2rem; }
+            .concert-meta { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">ANA SAYFA</a></li>
+            <li><a href="hakkinda.html">HAKKINDA</a></li>
+            <li><a href="notalar.html">NOTALAR</a></li>
+            <li><a href="siirler.html">ŞİİRLER</a></li>
+            <li><a href="konserler.html" style="color: var(--accent);">KONSERLER</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1>KONSERLER</h1>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="spotlight-section">
+            <div class="poster-wrapper">
+                <img src="https://i.hizliresim.com/6vp28ri.JPG" alt="East to West Konser Afişi">
+            </div>
+            <div class="info-wrapper">
+                <h1>East to West</h1>
+                <p>
+                    Anadolu'nun kadim ezgilerinin Batı'nın klasik formlarıyla buluştuğu eşsiz bir müzikal yolculuk. 
+                    <span class="highlight-name">Mahmut Burak ASLANTAŞ</span> ve <span class="highlight-name">Elzė MARKEVIČIŪTĖ</span>'nin 
+                    ortak projesi olan bu konser, kültürlerarası bir köprü kurarak dinleyicilere unutulmaz bir deneyim sunuyor.
+                </p>
+                <div class="concert-meta">
+                    <div class="meta-item"><i class="far fa-calendar-alt"></i> 17 Aralık 2025</div>
+                    <div class="meta-item"><i class="fas fa-map-marker-alt"></i> Adnan Menderes Üniversitesi</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <h3>KONSERİ BURADAN İZLEYEBİLİRSİNİZ</h3>
+            <div class="video-wrapper">
+                <iframe 
+                    width="560" 
+                    height="315" 
+                    src="https://www.youtube.com/embed/q7fH0v_sgO8?rel=0" 
+                    title="East to West Concert" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            
+            <div class="video-fallback">
+                <a href="https://www.youtube.com/watch?v=q7fH0v_sgO8" target="_blank" class="youtube-btn">
+                    <i class="fab fa-youtube"></i> Video Açılmıyorsa YouTube'da İzle
+                </a>
+            </div>
+        </div>
+
+        <div class="gallery-section">
+            <h2>DİĞER KONSERLER</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://i.hizliresim.com/hcxh8kf.JPG" alt="Konser Afişi">
+                    <h4>TRT Türkü Radyo Programı</h4>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.hizliresim.com/bc69112.JPG" alt="Konser Afişi">
+                    <h4>Genç Nesilden Türküler</h4>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.hizliresim.com/6vp28ri.JPG" alt="Konser Afişi">
+                    <h4>East to West Projesi</h4>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.hizliresim.com/8u4tkrb.JPG" alt="Konser Afişi">
+                    <h4>TRT Gençlik Korosu</h4>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.hizliresim.com/2hvoqlr.jpg" alt="Konser Afişi">
+                    <h4>Bahar Konseri</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+        
+        <div class="social-wrapper">
+            <div class="social-row">
+                <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
+                    <i class="fab fa-instagram"></i> <span>baglamagram</span>
+                </a>
+                <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item">
+                    <i class="fab fa-spotify"></i> <span>Mahmut Burak ASLANTAŞ</span>
+                </a>
+            </div>
+            <div class="social-row">
+                <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item">
+                    <i class="fab fa-youtube"></i> <span>Mahmut Burak ASLANTAŞ</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

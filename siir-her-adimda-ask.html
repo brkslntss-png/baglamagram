@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Her Adımda Aşk | Mahmut Burak ASLANTAŞ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root { 
+            --primary: #000; 
+            --accent: #c5a059; 
+            --bg: #121212; 
+            --text: #fff; 
+            --text-sec: #b0b0b0; 
+            --spotify: #1DB954; 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            font-weight: 300;
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navigasyon - 5 Sekmeli ve Standart Fontlu */
+        nav {
+            background: var(--primary);
+            padding: 30px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+        nav ul { 
+            display: flex; 
+            justify-content: center; 
+            list-style: none; 
+            gap: 40px; 
+        }
+        nav a { 
+            color: #888; 
+            text-decoration: none; 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            transition: 0.3s;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        nav a:hover { color: var(--accent); }
+
+        .poem-content { max-width: 800px; margin: 100px auto; padding: 0 5%; text-align: center; }
+        .back-btn { 
+            color: #555; 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+            display: inline-block; 
+            margin-bottom: 50px; 
+            transition: 0.3s;
+        }
+        .back-btn:hover { color: var(--accent); }
+        
+        h1 { 
+            font-weight: 300; 
+            font-size: 3.5rem; 
+            color: var(--accent); 
+            margin-bottom: 60px; 
+            letter-spacing: 6px; 
+            text-transform: uppercase; 
+        }
+        .poem-text { 
+            font-size: 1.35rem; 
+            color: var(--text-sec); 
+            white-space: pre-line; 
+            font-style: italic;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        footer { 
+            background: #0a0a0a; 
+            color: #444; 
+            padding: 80px 20px; 
+            text-align: center; 
+            border-top: 1px solid #222; 
+            margin-top: 150px; 
+        }
+        .footer-social { 
+            display: flex; 
+            justify-content: center; 
+            gap: 35px; 
+            margin-top: 25px; 
+        }
+        .social-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            text-decoration: none; 
+            color: #fff; 
+            font-size: 0.95rem; 
+            transition: 0.3s; 
+        }
+        .social-item:hover { transform: translateY(-3px); }
+        
+        .fa-instagram { 
+            background: -webkit-linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            font-size: 26px; 
+        }
+        .fa-spotify { color: var(--spotify); font-size: 26px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">ANA SAYFA</a></li>
+            <li><a href="hakkinda.html">HAKKINDA</a></li>
+            <li><a href="notalar.html">NOTALAR</a></li>
+            <li><a href="siirler.html" style="color: var(--accent);">ŞİİRLER</a></li>
+            <li><a href="konserler.html">KONSERLER</a></li>
+        </ul>
+    </nav>
+
+    <div class="poem-content">
+        <a href="siirler.html" class="back-btn">← Tüm Şiirlere Dön</a>
+        <h1>Her Adımda Aşk</h1>
+        <div class="poem-text">Dağın koynunda derinden bir nida.
+Su taşla konuşur, gönlüm duyar da.
+Her şey Hak'tan gelir, ben bilmem daha.
+Her taşta bir sır var, bilirim sessiz.
+Bir yıldız kayar da durup kalırım.</div>
+    </div>
+
+    <footer>
+        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+        <div class="footer-social">
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
+                <i class="fab fa-instagram"></i> <span>baglamagram</span>
+            </a>
+            <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item">
+                <i class="fab fa-spotify"></i> <span>Mahmut Burak ASLANTAŞ</span>
+            </a>
+        </div>
+    </footer>
+</body>
+</html>
