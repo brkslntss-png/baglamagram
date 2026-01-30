@@ -9,11 +9,10 @@
         :root {
             --primary: #000000;
             --accent: #c5a059; /* Altın Sarısı */
-            --bg: #121212;    /* Karanlık Arka Plan */
-            --card-bg: #1e1e1e; /* Kart Arka Planı */
-            --text: #ffffff;  /* Beyaz Yazı */
-            --text-secondary: #b0b0b0; /* Gri Yazı */
-            --spotify: #1DB954; /* Spotify Yeşili */
+            --bg: #121212;
+            --box-bg: #1e1e1e;
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,222 +23,285 @@
             background: var(--bg); 
             color: var(--text); 
             line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* Navigasyon */
+        /* --- MENÜ (Önceki sayfa ile aynı) --- */
         nav {
             background: var(--primary);
-            padding: 20px 0;
+            padding: 30px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid #333;
         }
-        nav ul { display: flex; justify-content: center; list-style: none; gap: 30px; }
-        nav a { color: #888; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; }
+        .nav-container {
+            display: flex; justify-content: center; align-items: center; position: relative;
+        }
+        nav ul { 
+            display: flex; list-style: none; gap: 40px; padding: 0 20px;
+        }
+        nav a { 
+            color: #888; text-decoration: none; font-size: 0.85rem; 
+            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; 
+        }
         nav a:hover { color: var(--accent); }
+        .menu-toggle {
+            display: none; font-size: 1.8rem; color: var(--text);
+            cursor: pointer; position: absolute; right: 20px; top: -5px;
+        }
 
-        /* Başlık Bölümü */
+        /* --- SAYFA BAŞLIĞI --- */
         .page-header { text-align: center; padding: 60px 0 20px; }
-        .page-header h1 { font-weight: 300; font-size: 3rem; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; }
+        .page-header h1 {
+            font-weight: 300; font-size: 3.5rem; color: var(--accent);
+            letter-spacing: 4px; text-transform: uppercase;
+        }
 
-        /* Şiir Galerisi */
+        .main-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 5%;
+        }
+
+        /* --- ARAMA ÇUBUĞU STİLLERİ --- */
+        .search-wrapper {
+            display: flex;
+            justify-content: flex-start; /* Masaüstü: SOLA yaslı */
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 300px; /* Genişlik sınırı */
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px; /* İkon için soldan boşluk */
+            background: rgba(255, 255, 255, 0.05); /* Çok hafif saydam arka plan */
+            border: 1px solid #333;
+            border-radius: 30px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+        }
+
+        /* Placeholder (Saydam yazı) rengi */
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        /* --- ŞİİR LİSTESİ --- */
         .poems-grid {
-            max-width: 1200px; margin: 40px auto; padding: 0 5%;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;
+            display: grid;
+            gap: 30px;
         }
 
-        /* DÜZELTME: display: block eklendi çünkü artık 'a' etiketi kullanıyoruz */
         .poem-card {
-            background: var(--card-bg); padding: 40px; border-radius: 4px;
-            border-top: 1px solid #333; transition: all 0.4s ease;
-            text-decoration: none; display: flex; flex-direction: column;
-            cursor: pointer; /* Tıklanabilir el işareti */
+            background: var(--box-bg);
+            padding: 30px;
+            border-radius: 4px;
+            border-left: 3px solid transparent;
+            transition: 0.3s;
         }
-        .poem-card:hover { transform: translateY(-10px); border-top-color: var(--accent); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-        .poem-card h3 { color: var(--accent); font-weight: 400; font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-        .poem-card p { color: var(--text-secondary); font-style: italic; font-size: 0.95rem; line-height: 1.6; white-space: pre-line; flex-grow: 1; }
-        .read-more { margin-top: 20px; display: inline-block; color: var(--accent); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .poem-card:hover {
+            border-left-color: var(--accent);
+            transform: translateX(10px);
+        }
+
+        .poem-card h3 {
+            color: var(--text);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .poem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* Filtreleme sonucu bulunamadı mesajı */
+        #no-result {
+            display: none;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 20px;
+        }
 
         /* Footer */
-        footer { background: #0a0a0a; color: #555; padding: 60px 20px; text-align: center; border-top: 1px solid #222; margin-top: 100px; }
-        .footer-social { display: flex; justify-content: center; gap: 25px; margin-top: 20px; }
-        .social-item { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-size: 0.95rem; transition: 0.3s; }
-        .social-item:hover { transform: translateY(-3px); opacity: 0.8; }
-        
-        .fa-instagram {
-            background: -webkit-linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 24px;
+        footer {
+            background: #0a0a0a; color: #444; padding: 60px 20px;
+            text-align: center; border-top: 1px solid #222; margin-top: auto;
         }
-        .fa-spotify { color: var(--spotify); font-size: 24px; }
 
-        @media (max-width: 768px) { .poems-grid { grid-template-columns: 1fr; } .page-header h1 { font-size: 2rem; } }
+        /* --- MOBİL UYUMLULUK --- */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none; flex-direction: column; width: 100%;
+                text-align: center; background: var(--primary);
+                padding-top: 20px; border-top: 1px solid #333; margin-top: 20px;
+            }
+            nav ul.aktif { display: flex; }
+            .menu-toggle { display: block; }
+            .nav-container { flex-direction: column; align-items: flex-start; }
+
+            .page-header h1 { font-size: 2.5rem; }
+
+            /* Arama Çubuğu Mobilde Ortalı */
+            .search-wrapper {
+                justify-content: center; /* ORTALA */
+            }
+            .search-box {
+                max-width: 90%; /* Mobilde biraz daha genişleyebilir */
+            }
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <ul>
-            <li><a href="index.html">Ana Sayfa</a></li>
-            <li><a href="hakkinda.html">Hakkında</a></li>
-            <li><a href="notalar.html">Notalar</a></li>
-            <li><a href="siirler.html" style="color: var(--accent);">Şiirler</a></li>
-            <li><a href="konserler.html">Konserler</a></li>
-        </ul>
+        <div class="nav-container">
+            <div class="menu-toggle" onclick="menuyuAcKapa()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul id="anaMenu">
+                <li><a href="index.html">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html">HAKKINDA</a></li>
+                <li><a href="notalar.html">NOTALAR</a></li>
+                <li><a href="siirler.html" style="color: var(--accent);">ŞİİRLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
+            </ul>
+        </div>
     </nav>
 
     <header class="page-header">
-        <h1>Şiirler</h1>
-        <p style="color: var(--text-secondary);">Gönülden dökülen nağmeler...</p>
+        <h1>ŞİİRLER</h1>
     </header>
 
-    <main class="poems-grid">
-        <a href="siir-hasret.html" class="poem-card">
-            <h3>Hasret</h3>
-            <p>Her anımda sadece sen varsın.<br>Geceler senin gündüzler senin.<br>Ey yüreğimi dağlayan hasre...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
+    <div class="main-container">
 
-        <a href="siir-ardic-sazim.html" class="poem-card">
-            <h3>Ardıç Sazım</h3>
-            <p>Düştün ustanın eline.<br>Ruhun üfürdü teline.<br>Gel benimle konuş di...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
+        <div class="search-wrapper">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="siirAra" onkeyup="filtrele()" placeholder="ara...">
+            </div>
+        </div>
 
-        <a href="siir-sazima-meramim.html" class="poem-card">
-            <h3>Sazıma Meramım</h3>
-            <p>Yarama derman bulunmaz.<br>Dinmez benim gönül sızım.<br>Kimseler bana yar olm...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
+        <div id="siirListesi" class="poems-grid">
+            <div class="poem-card">
+                <h3>Sürgün</h3>
+                <p>"Karanlık bir gecede düştüm yollara, heybemde hüzün, dilimde dua..."</p>
+                <a href="#" class="read-more">Tamamını Oku &rarr;</a>
+            </div>
 
-        <a href="siir-cesm-i-derya.html" class="poem-card">
-            <h3>Çeşm-i Derya</h3>
-            <p>Gönül bu, ne laf dinler ne de haya.<br>Büyüne kapıldım ey Çeşm-i Derya.<br>Gerçek olabilir mi bu yüce kudre...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
+            <div class="poem-card">
+                <h3>Bekleyiş</h3>
+                <p>"Saatler durmuş sanki zaman akmıyor, gözlerim kapıda kimse çalmıyor..."</p>
+                <a href="#" class="read-more">Tamamını Oku &rarr;</a>
+            </div>
 
-        <a href="siir-gonlumde-irmaklar-caglar.html" class="poem-card">
-            <h3>Gönlümde Irmaklar Çağlar</h3>
-            <p>Evimin önünde abşar.<br>Dereler akar uzunca.<br>Gönlümde Irmaklar Çağl...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
+            <div class="poem-card">
+                <h3>Veda Busesi</h3>
+                <p>"Son bir bakış atıp gittin sessizce, ardında bıraktın koca bir bilmece..."</p>
+                <a href="#" class="read-more">Tamamını Oku &rarr;</a>
+            </div>
 
-        <a href="siir-pencereden-gelen.html" class="poem-card">
-            <h3>Pencereden Gelen</h3>
-            <p>Pencereden gelen ala gözlü dilber.<br>Yaktın odpare nigahınla bağrımı<br>Beni yolumdan döndüren ah şu ka...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
+             <div class="poem-card">
+                <h3>Anadolu</h3>
+                <p>"Toprağı buram buram tarih kokan, yiğitlerin harman olduğu diyar..."</p>
+                <a href="#" class="read-more">Tamamını Oku &rarr;</a>
+            </div>
+        </div>
 
-        <a href="siir-kendine-gel-ademoglu.html" class="poem-card">
-            <h3>Kendine Gel Ademoğlu</h3>
-            <p>Boğazın dokuz boğumlu<br>Her sözün adabı vardır.<br>Kendine gel Ademoğ...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
+        <div id="no-result">Aradığınız kriterlere uygun şiir bulunamadı.</div>
 
-        <a href="siir-vatan-sevdasi.html" class="poem-card">
-            <h3>Vatan Sevdası</h3>
-            <p>Farklı kültürlerden gönüldaşlarımı.<br>Yurdumun her köşesini göresim var.<br>Taşını toprağını ormanları...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-agyar-in-ardindan.html" class="poem-card">
-            <h3>Ağyar'ın Ardından</h3>
-            <p>Ölü vücuda gerekmez toprak.<br>Yaşarken ölmüş insanlara tok.<br>Sanma sakın onları yaşı...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-cehennem-nari.html" class="poem-card">
-            <h3>Cehennem Narı</h3>
-            <p>Yandı içimde cehennem narı.<br>Ala gözlü bir güzelden gayrı.<br>Var mıdır bunca derdin derma...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-dort-mevsim-ask-in-siiri.html" class="poem-card">
-            <h3>Dört Mevsim Aşk'ın Şiiri</h3>
-            <p>Baharın başında, çiçekler açanda.<br>Bütün cihan yeniden canlandığında.<br>Öten kuşlarla yeşillenen kırl...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-dertli-yoldas.html" class="poem-card">
-            <h3>Dertli Yoldaş</h3>
-            <p>Ey gam yüklü dertli yoldaş.<br>Yükünü kenarı indir.<br>Nedir bu gözündeki y...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-yoruldum.html" class="poem-card">
-            <h3>Yoruldum</h3>
-            <p>Yoruldum artık sevmekten<br>Yar derdi ile yaş dökmekten<br>Feryad edip inlemek...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-gonul-derd-ile.html" class="poem-card">
-            <h3>Gönül derd ile</h3>
-            <p>Gönül derd ile yanmada harâbım,<br>Ne dermân olur âhımda ne şâbım.<br>Ne çeşmimde karar var, ne hayâ...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-yorgun-saatler.html" class="poem-card">
-            <h3>Yorgun Saatler</h3>
-            <p>Bir günün tortusu kaldı üzerimde,<br>yürüyen gölgeler gibi sessizim.<br>Ne bir başlangıcın sevinci var içim...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-yarim-kalan.html" class="poem-card">
-            <h3>Yarım Kalan</h3>
-            <p>Yürüdüm… yollar tükendi, dizlerimde takat yok.<br>Bir yarım türküyüm ben, seyrimde karar yok.<br>Bir yanım bahar ister, öbür yanım kış içim...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-hak-tan-gelir-biliriz.html" class="poem-card">
-            <h3>Hak'tan Gelir Biliriz</h3>
-            <p>Benim de yüzümde yeller eser ya,<br>Yâr uzak, ses uzak, gönül gezer ya,<br>Dikenler de batar, gül de açar...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-her-adimda-ask.html" class="poem-card">
-            <h3>Her Adımda Aşk</h3>
-            <p>Dağın koynunda derinden bir nida.<br>Su taşla konuşur, gönlüm duyar da.<br>Her şey Hak'tan gelir, ben bilmem da...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-yalin-iz.html" class="poem-card">
-            <h3>Yalın İz</h3>
-            <p>Kalabalık içinde garip halim,<br>Söylerim duyulmaz, lal oldu dilim.<br>Dünya bir pazardır, boş kaldı e...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-ait.html" class="poem-card">
-            <h3>Ait</h3>
-            <p>Ne bu şehre aitim, ne sokağa,<br>Düşmüşüm dalımdan kuru toprağa.<br>Bakıp doymadım göğe, ırma...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-nigah-i-revnak.html" class="poem-card">
-            <h3>Nigah-ı Revnak</h3>
-            <p>Bir bakışla yaktın gönül evini,<br>Didârın şavkıyla doldum bu gece.<br>Kime arz edeyim derin derdi...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-
-        <a href="siir-dost-pazari.html" class="poem-card">
-            <h3>Dost Pazarı</h3>
-            <p>Dili şeker şerbet, kalbi buz imiş,<br>Dost dediğin meğer, sadece söz imiş.<br>Dağ sanıp yaslandım, hepsi toz i...</p>
-            <span class="read-more">Tamamını Oku</span>
-        </a>
-    </main>
+    </div>
 
     <footer>
         <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
-        <div class="footer-social">
-            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
-                <i class="fab fa-instagram"></i>
-                <span>baglamagram</span>
-            </a>
-            <a href="https://open.spotify.com/artist/0" target="_blank" class="social-item">
-                <i class="fab fa-spotify"></i>
-                <span>Mahmut Burak ASLANTAŞ</span>
-            </a>
-        </div>
     </footer>
+
+    <script>
+        // Mobil Menü Fonksiyonu
+        function menuyuAcKapa() {
+            var menu = document.getElementById("anaMenu");
+            menu.classList.toggle("aktif");
+        }
+
+        // Arama / Filtreleme Fonksiyonu
+        function filtrele() {
+            var input, filter, container, cards, h3, p, i, txtValue;
+            input = document.getElementById("siirAra");
+            filter = input.value.toUpperCase(); // Büyük/küçük harf duyarlılığını kaldır
+            container = document.getElementById("siirListesi");
+            cards = container.getElementsByClassName("poem-card");
+            var foundAny = false;
+
+            for (i = 0; i < cards.length; i++) {
+                // Şiir Başlığı (h3) ve Önizleme Metnini (p) al
+                var title = cards[i].getElementsByTagName("h3")[0];
+                var content = cards[i].getElementsByTagName("p")[0];
+                
+                if (title || content) {
+                    var titleText = title.textContent || title.innerText;
+                    var contentText = content.textContent || content.innerText;
+
+                    // Hem başlıkta hem içerikte ara
+                    if (titleText.toUpperCase().indexOf(filter) > -1 || contentText.toUpperCase().indexOf(filter) > -1) {
+                        cards[i].style.display = ""; // Eşleşirse göster
+                        foundAny = true;
+                    } else {
+                        cards[i].style.display = "none"; // Eşleşmezse gizle
+                    }
+                }       
+            }
+
+            // Hiçbir sonuç yoksa mesaj göster
+            var noResultMsg = document.getElementById("no-result");
+            if (!foundAny) {
+                noResultMsg.style.display = "block";
+            } else {
+                noResultMsg.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
