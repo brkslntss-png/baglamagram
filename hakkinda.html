@@ -25,22 +25,57 @@
             background: var(--bg); 
             color: var(--text); 
             line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* Navigasyon */
+        /* --- MENÜ / NAVİGASYON STİLLERİ --- */
         nav {
             background: var(--primary);
-            padding: 20px 0;
+            padding: 30px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid #333;
         }
-        nav ul { display: flex; justify-content: center; list-style: none; gap: 30px; }
-        nav a { color: #888; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; }
+        
+        /* Menü Kapsayıcısı */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        nav ul { 
+            display: flex; 
+            justify-content: center; 
+            list-style: none; 
+            gap: 40px; 
+            padding: 0 20px; 
+            transition: max-height 0.3s ease-in-out;
+        }
+        
+        nav a { 
+            color: #888; text-decoration: none; font-size: 0.85rem; 
+            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; 
+            white-space: nowrap;
+        }
         nav a:hover { color: var(--accent); }
 
-        /* İçerik Düzeni */
+        /* Hamburger İkonu (Başlangıçta gizli) */
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: var(--text);
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: -5px;
+        }
+
+        /* --- İÇERİK DÜZENİ --- */
         .container {
             max-width: 1200px;
             margin: 60px auto;
@@ -48,6 +83,7 @@
             display: flex;
             gap: 60px;
             align-items: flex-start;
+            flex: 1; /* Footer'ı aşağı iter */
         }
 
         /* Fotoğraf Bölümü */
@@ -77,61 +113,77 @@
         .highlight-box li { margin-bottom: 15px; position: relative; padding-left: 20px; color: var(--text-secondary); }
         .highlight-box li::before { content: "•"; color: var(--accent); position: absolute; left: 0; font-weight: bold; }
 
-        /* Sosyal Medya Genel Yapı (Ters Üçgen İçin) */
+        /* --- FOOTER & SOSYAL MEDYA --- */
+        footer {
+            background: #0a0a0a; color: #555; padding: 60px 20px;
+            text-align: center; border-top: 1px solid #222; margin-top: auto;
+        }
         .social-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px; /* Satırlar arası boşluk */
-            margin-top: 50px;
-            padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 15px; margin-top: 30px;
         }
-        
-        .social-row {
-            display: flex;
-            justify-content: center;
-            gap: 30px; /* Yan yana ikonlar arası boşluk */
-        }
-
-        .social-item {
-            display: flex; align-items: center; gap: 10px; text-decoration: none;
-            color: var(--text); font-size: 0.95rem; transition: 0.3s;
+        .social-row { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .social-item { 
+            display: flex; align-items: center; gap: 10px; text-decoration: none; 
+            color: var(--text); font-size: 0.95rem; transition: 0.3s; 
         }
         .social-item:hover { transform: translateY(-3px); opacity: 0.8; }
 
-        /* İkon Renkleri (Vektör Renklendirme) */
         .fa-instagram {
             background: -webkit-linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 24px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 24px;
         }
         .fa-spotify { color: var(--spotify); font-size: 24px; }
         .fa-youtube { color: var(--youtube); font-size: 24px; }
 
-        /* Footer Stili */
-        footer {
-            background: #0a0a0a; color: #555; padding: 60px 20px;
-            text-align: center; border-top: 1px solid #222; margin-top: 100px;
+
+        /* --- RESPONSIVE VE HAMBURGER MENÜ AYARLARI --- */
+        @media (max-width: 900px) {
+            /* İçerik Düzeni Mobilde */
+            .container { flex-direction: column; margin-top: 30px;}
+            .profile-image { position: static; margin-bottom: 30px; }
+            h2 { font-size: 2rem; }
         }
 
-        /* Mobil Uyumluluk */
-        @media (max-width: 900px) {
-            .container { flex-direction: column; }
-            .profile-image { position: static; }
+        @media (max-width: 768px) {
+            /* Menü Ayarları */
+            nav { padding: 20px 0; }
+            .menu-toggle { display: block; }
+
+            nav ul {
+                display: none; /* Gizli */
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                background: var(--primary);
+                padding-top: 20px;
+                border-top: 1px solid #333;
+                margin-top: 20px;
+                gap: 20px;
+            }
+            nav ul.aktif { display: flex; }
+            
+            .nav-container { flex-direction: column; align-items: flex-start; }
+            .menu-toggle { top: 0; right: 20px; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <ul>
-            <li><a href="index.html">Ana Sayfa</a></li>
-            <li><a href="hakkinda.html" style="color: var(--accent);">Hakkında</a></li>
-            <li><a href="notalar.html">Notalar</a></li>
-            <li><a href="siirler.html">Şiirler</a></li>
-            <li><a href="konserler.html">Konserler</a></li>
-        </ul>
+        <div class="nav-container">
+            <div class="menu-toggle" onclick="menuyuAcKapa()">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <ul id="anaMenu">
+                <li><a href="index.html">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html" style="color: var(--accent);">HAKKINDA</a></li>
+                <li><a href="notalar.html">NOTALAR</a></li>
+                <li><a href="siirler.html">ŞİİRLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
+            </ul>
+        </div>
     </nav>
 
     <div class="container">
@@ -163,7 +215,7 @@
                     <li><strong>Edebiyat Alanında Denemeleri:</strong> Aruz ve hece ölçüsü kullanarak özgün şiirler ve şarkı sözleri üretme çabasındadır. Şiirlerinde kullandığı net ve doğrudan üslubuyla dikkat çekmektedir.</li>
                 </ul>
             </div>
-
+            
             <div class="social-wrapper">
                 <div class="social-row">
                     <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
@@ -208,6 +260,13 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function menuyuAcKapa() {
+            var menu = document.getElementById("anaMenu");
+            menu.classList.toggle("aktif");
+        }
+    </script>
 
 </body>
 </html>
