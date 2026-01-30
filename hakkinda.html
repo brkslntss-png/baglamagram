@@ -4,25 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hakkında | Mahmut Burak ASLANTAŞ</title>
+    
+    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --primary: #000000;
-            --accent: #c5a059; /* Altın Sarısı */
-            --bg: #121212;    /* Karanlık Arka Plan */
-            --box-bg: #1e1e1e; /* Kutu Arka Planı */
-            --text: #ffffff;  /* Beyaz Yazı */
-            --text-secondary: #b0b0b0; /* Gri Yazı */
-            --spotify: #1DB954; /* Spotify Yeşili */
-            --youtube: #FF0000; /* YouTube Kırmızısı */
+            --accent: #c5a059; /* Altın Rengi */
+            --bg-dark: #0f0f0f;
+            --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
+            --box-bg: rgba(30, 30, 30, 0.4);
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+            --spotify: #1DB954;
+            --youtube: #FF0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            font-family: 'Montserrat', sans-serif; 
             font-weight: 300;
-            background: var(--bg); 
+            background-color: var(--bg-dark);
+            background-image: var(--bg-gradient);
             color: var(--text); 
             line-height: 1.8;
             display: flex;
@@ -30,97 +39,108 @@
             min-height: 100vh;
         }
 
-        /* --- MENÜ / NAVİGASYON STİLLERİ --- */
+        /* --- NAVİGASYON --- */
         nav {
-            background: var(--primary);
-            padding: 30px 0;
+            background: #000000;
+            padding: 20px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
         
-        /* Menü Kapsayıcısı */
         .nav-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            display: flex; justify-content: center; align-items: center; 
+            max-width: 1200px; margin: 0 auto; position: relative;
         }
 
         nav ul { 
-            display: flex; 
-            justify-content: center; 
-            list-style: none; 
-            gap: 40px; 
-            padding: 0 20px; 
-            transition: max-height 0.3s ease-in-out;
+            display: flex; justify-content: center; list-style: none; 
+            gap: 50px; padding: 0 20px; 
         }
         
         nav a { 
-            color: #888; text-decoration: none; font-size: 0.85rem; 
-            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; 
-            white-space: nowrap;
+            color: var(--text-secondary); text-decoration: none; 
+            font-size: 0.8rem; font-weight: 500; text-transform: uppercase; 
+            letter-spacing: 2px; transition: all 0.3s ease; position: relative;
         }
-        nav a:hover { color: var(--accent); }
 
-        /* Hamburger İkonu (Başlangıçta gizli) */
+        nav a:hover, nav a.active { color: var(--accent); }
+
         .menu-toggle {
-            display: none;
-            font-size: 1.8rem;
-            color: var(--text);
-            cursor: pointer;
-            position: absolute;
-            right: 20px;
-            top: -5px;
+            display: none; font-size: 1.5rem; color: var(--accent);
+            cursor: pointer; position: absolute; right: 20px;
+        }
+
+        /* --- ANIMASYONLAR --- */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         /* --- İÇERİK DÜZENİ --- */
         .container {
             max-width: 1200px;
             margin: 60px auto;
-            padding: 0 5%;
+            padding: 0 20px;
             display: flex;
             gap: 60px;
             align-items: flex-start;
-            flex: 1; /* Footer'ı aşağı iter */
+            flex: 1;
+            animation: fadeInUp 1s ease-out forwards;
         }
 
         /* Fotoğraf Bölümü */
         .profile-image { flex: 1; position: sticky; top: 120px; }
         .profile-image img {
             width: 100%;
-            border-radius: 4px;
-            border-left: 6px solid var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border-radius: 2px;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+            filter: contrast(1.1);
         }
 
         /* Biyografi İçeriği */
         .bio-content { flex: 1.5; }
+        
         h2 { 
-            font-weight: 300; font-size: 2.8rem; color: var(--accent); 
-            margin-bottom: 30px; border-bottom: 1px solid #333; display: inline-block;
+            font-family: 'Playfair Display', serif;
+            font-weight: 400; font-size: 3rem; color: var(--text); 
+            margin-bottom: 30px; position: relative; display: inline-block;
+            text-transform: uppercase; letter-spacing: 3px;
         }
-        p { margin-bottom: 20px; font-size: 1.1rem; text-align: justify; color: var(--text-secondary); }
+        
+        h2::after {
+            content: ''; display: block; width: 50px; height: 3px;
+            background: var(--accent); margin-top: 10px;
+        }
+
+        p { margin-bottom: 25px; font-size: 1.05rem; text-align: justify; color: var(--text-secondary); font-weight: 300; }
 
         /* Vurgu Kutuları */
         .highlight-box {
-            background: var(--box-bg); padding: 30px; border-radius: 4px;
-            margin-top: 40px; border-top: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: var(--box-bg); padding: 40px; border-radius: 4px;
+            margin-top: 40px; border: 1px solid rgba(197, 160, 89, 0.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transition: 0.3s;
         }
-        .highlight-box h3 { font-weight: 400; color: var(--accent); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .highlight-box:hover { border-color: rgba(197, 160, 89, 0.3); transform: translateY(-5px); }
+        
+        .highlight-box h3 { 
+            font-family: 'Playfair Display', serif;
+            font-weight: 400; color: var(--accent); margin-bottom: 20px; 
+            text-transform: uppercase; letter-spacing: 2px; font-size: 1.3rem;
+        }
+        
         .highlight-box ul { list-style: none; }
-        .highlight-box li { margin-bottom: 15px; position: relative; padding-left: 20px; color: var(--text-secondary); }
-        .highlight-box li::before { content: "•"; color: var(--accent); position: absolute; left: 0; font-weight: bold; }
+        .highlight-box li { margin-bottom: 18px; position: relative; padding-left: 25px; color: var(--text-secondary); font-size: 0.95rem; }
+        .highlight-box li::before { content: "◈"; color: var(--accent); position: absolute; left: 0; font-size: 0.8rem; }
 
-        /* --- FOOTER & SOSYAL MEDYA --- */
-        footer {
-            background: #0a0a0a; color: #555; padding: 60px 20px;
-            text-align: center; border-top: 1px solid #222; margin-top: auto;
-        }
+        /* --- SOSYAL MEDYA (Kullanıcının Orijinal Tasarımı) --- */
         .social-wrapper {
             display: flex; flex-direction: column; align-items: center;
-            gap: 15px; margin-top: 30px;
+            gap: 15px; margin-top: 50px;
         }
         .social-row { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
         .social-item { 
@@ -136,33 +156,28 @@
         .fa-spotify { color: var(--spotify); font-size: 24px; }
         .fa-youtube { color: var(--youtube); font-size: 24px; }
 
+        /* --- FOOTER --- */
+        footer {
+            background: #050505; color: #555; padding: 60px 20px;
+            text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto;
+        }
 
-        /* --- RESPONSIVE VE HAMBURGER MENÜ AYARLARI --- */
+        /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
-            /* İçerik Düzeni Mobilde */
             .container { flex-direction: column; margin-top: 30px;}
-            .profile-image { position: static; margin-bottom: 30px; }
-            h2 { font-size: 2rem; }
+            .profile-image { position: static; margin-bottom: 40px; width: 100%; max-width: 400px; align-self: center; }
+            h2 { font-size: 2.2rem; }
         }
 
         @media (max-width: 768px) {
-            /* Menü Ayarları */
-            nav { padding: 20px 0; }
+            nav { padding: 15px 0; background: #000; }
             .menu-toggle { display: block; }
-
             nav ul {
-                display: none; /* Gizli */
-                flex-direction: column;
-                width: 100%;
-                text-align: center;
-                background: var(--primary);
-                padding-top: 20px;
-                border-top: 1px solid #333;
-                margin-top: 20px;
-                gap: 20px;
+                display: none; flex-direction: column; position: absolute;
+                top: 100%; left: 0; width: 100%; background: #000;
+                border-bottom: 1px solid var(--accent); padding: 20px 0; gap: 20px;
             }
             nav ul.aktif { display: flex; }
-            
             .nav-container { flex-direction: column; align-items: flex-start; }
             .menu-toggle { top: 0; right: 20px; }
         }
@@ -178,7 +193,7 @@
 
             <ul id="anaMenu">
                 <li><a href="index.html">ANA SAYFA</a></li>
-                <li><a href="hakkinda.html" style="color: var(--accent);">HAKKINDA</a></li>
+                <li><a href="hakkinda.html" class="active">HAKKINDA</a></li>
                 <li><a href="notalar.html">NOTALAR</a></li>
                 <li><a href="siirler.html">ŞİİRLER</a></li>
                 <li><a href="konserler.html">KONSERLER</a></li>
@@ -194,17 +209,17 @@
         <div class="bio-content">
             <h2>Hakkında</h2>
             <p>
-                Mahmut Burak ASLANTAŞ, 8 Şubat 2002 yılında Birecik'te dünyaya gelmiştir. Müzikal yolculuğuna çocuk yaşlarında bağlama ile başlamıştır. Lise eğitimini Mehmet Adil Çulcuoğlu Anadolu Lisesinde tamamlamıştır. 2021 yılında Adnan Menderes Üniversitesinde Müzik Öğretmenliği bölümünü kazanmıştır. Öğrencilik dönemimde okulun çeşitli projelerinde ve konserlerinde yer almıştır. 2024 yılında TRT Türk Halk Müziği Gençlik Korosuna bağlama icracısı olarak katılmıştır. 17 Aralık 2025'te Elzė MARKEVIČIŪTĖ'nin katılımı ile "East to West" projesi kapsamında ilk konserini tamamlamıştır. Aslantaş, müziği sadece bir ses dizisi değil, kültürler arası bir köprü olarak konumlandırmaktadır. 
+                Mahmut Burak ASLANTAŞ, 8 Şubat 2002 yılında Birecik'te dünyaya gelmiştir. Müzikal yolculuğuna çocuk yaşlarında bağlama ile başlamıştır. Lise eğitimini Mehmet Adil Çulcuoğlu Anadolu Lisesinde tamamlamıştır. 2021 yılında Adnan Menderes Üniversitesinde Müzik Öğretmenliği bölümünü kazanmıştır. Öğrencilik dönemimde okulun çeşitli projelerinde ve konserlerinde yer almıştır. 
             </p>
             <p>
-                Aynı zamanda amatör olarak şiirle uğraşan Aslantaş, şarkı sözü ve yeni beste üretme yolunda çalışmalarını sürdürmektedir.
+                2024 yılında TRT Türk Halk Müziği Gençlik Korosuna bağlama icracısı olarak katılmıştır. 17 Aralık 2025'te Elzė MARKEVIČIŪTĖ'nin katılımı ile "East to West" projesi kapsamında ilk konserini tamamlamıştır. Aslantaş, müziği sadece bir ses dizisi değil, kültürler arası bir köprü olarak konumlandırmaktadır. Aynı zamanda amatör olarak şiirle uğraşan Aslantaş, şarkı sözü ve yeni beste üretme yolunda çalışmalarını sürdürmektedir.
             </p>
 
             <div class="highlight-box">
                 <h3>Kariyer Özeti</h3>
                 <ul>
                     <li><strong>TRT Gençlik Korosu (2025):</strong> Bağlama icracısı olarak koro bünyesinde aktif görev.</li>
-                    <li><strong>Katıldığı Programlar:</strong> TRT Türkü'de yayınlanan "Genç Nesilden Türküler" programlarında konuk sanatçı ve orkestra üyesi olarak yer aldı (17 Mayıs, 14 Kasım 2025).</li>
+                    <li><strong>Katıldığı Programlar:</strong> TRT Türkü'de yayınlanan "Genç Nesilden Türküler" programlarında konuk sanatçı ve orkestra üyesi olarak yer aldı.</li>
                 </ul>
             </div>
 
@@ -212,7 +227,7 @@
                 <h3>Sanat Projeleri</h3>
                 <ul>
                     <li><strong>East to West:</strong> Piyanist Elzė Markevičiūtė ile Anadolu ezgilerini Batı klasikleriyle buluşturan uluslararası konser serisi.</li>
-                    <li><strong>Edebiyat Alanında Denemeleri:</strong> Aruz ve hece ölçüsü kullanarak özgün şiirler ve şarkı sözleri üretme çabasındadır. Şiirlerinde kullandığı net ve doğrudan üslubuyla dikkat çekmektedir.</li>
+                    <li><strong>Edebiyat Denemeleri:</strong> Aruz ve hece ölçüsü kullanarak özgün şiirler üretmektedir. Şiirlerinde kullandığı net ve doğrudan üslubuyla dikkat çekmektedir.</li>
                 </ul>
             </div>
             
@@ -249,12 +264,6 @@
                 </a>
                 <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item">
                     <i class="fab fa-spotify"></i>
-                    <span>Mahmut Burak ASLANTAŞ</span>
-                </a>
-            </div>
-            <div class="social-row">
-                <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item">
-                    <i class="fab fa-youtube"></i>
                     <span>Mahmut Burak ASLANTAŞ</span>
                 </a>
             </div>
