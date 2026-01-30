@@ -49,10 +49,12 @@
             display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;
         }
 
+        /* DÜZELTME: display: block eklendi çünkü artık 'a' etiketi kullanıyoruz */
         .poem-card {
             background: var(--card-bg); padding: 40px; border-radius: 4px;
             border-top: 1px solid #333; transition: all 0.4s ease;
             text-decoration: none; display: flex; flex-direction: column;
+            cursor: pointer; /* Tıklanabilir el işareti */
         }
         .poem-card:hover { transform: translateY(-10px); border-top-color: var(--accent); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
         .poem-card h3 { color: var(--accent); font-weight: 400; font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
@@ -65,7 +67,6 @@
         .social-item { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-size: 0.95rem; transition: 0.3s; }
         .social-item:hover { transform: translateY(-3px); opacity: 0.8; }
         
-        /* Instagram Gradyan & Spotify Yeşil */
         .fa-instagram {
             background: -webkit-linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 24px;
@@ -93,93 +94,137 @@
     </header>
 
     <main class="poems-grid">
-        <div class="poem-card"><h3>Hasret</h3><p>Her anımda sadece sen varsın.
-Geceler senin gündüzler senin.
-Ey yüreğimi dağlayan hasre...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-hasret.html" class="poem-card">
+            <h3>Hasret</h3>
+            <p>Her anımda sadece sen varsın.<br>Geceler senin gündüzler senin.<br>Ey yüreğimi dağlayan hasre...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Ardıç Sazım</h3><p>Düştün ustanın eline.
-Ruhun üfürdü teline.
-Gel benimle konuş di...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-ardic-sazim.html" class="poem-card">
+            <h3>Ardıç Sazım</h3>
+            <p>Düştün ustanın eline.<br>Ruhun üfürdü teline.<br>Gel benimle konuş di...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Sazıma Meramım</h3><p>Yarama derman bulunmaz.
-Dinmez benim gönül sızım.
-Kimseler bana yar olm...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-sazima-meramim.html" class="poem-card">
+            <h3>Sazıma Meramım</h3>
+            <p>Yarama derman bulunmaz.<br>Dinmez benim gönül sızım.<br>Kimseler bana yar olm...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Çeşm-i Derya</h3><p>Gönül bu, ne laf dinler ne de haya.
-Büyüne kapıldım ey Çeşm-i Derya.
-Gerçek olabilir mi bu yüce kudre...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-cesm-i-derya.html" class="poem-card">
+            <h3>Çeşm-i Derya</h3>
+            <p>Gönül bu, ne laf dinler ne de haya.<br>Büyüne kapıldım ey Çeşm-i Derya.<br>Gerçek olabilir mi bu yüce kudre...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Gönlümde Irmaklar Çağlar</h3><p>Evimin önünde abşar.
-Dereler akar uzunca.
-Gönlümde Irmaklar Çağl...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-gonlumde-irmaklar-caglar.html" class="poem-card">
+            <h3>Gönlümde Irmaklar Çağlar</h3>
+            <p>Evimin önünde abşar.<br>Dereler akar uzunca.<br>Gönlümde Irmaklar Çağl...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Pencereden Gelen</h3><p>Pencereden gelen ala gözlü dilber.
-Yaktın odpare nigahınla bağrımı
-Beni yolumdan döndüren ah şu ka...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-pencereden-gelen.html" class="poem-card">
+            <h3>Pencereden Gelen</h3>
+            <p>Pencereden gelen ala gözlü dilber.<br>Yaktın odpare nigahınla bağrımı<br>Beni yolumdan döndüren ah şu ka...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Kendine Gel Ademoğlu</h3><p>Boğazın dokuz boğumlu
-Her sözün adabı vardır.
-Kendine gel Ademoğ...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-kendine-gel-ademoglu.html" class="poem-card">
+            <h3>Kendine Gel Ademoğlu</h3>
+            <p>Boğazın dokuz boğumlu<br>Her sözün adabı vardır.<br>Kendine gel Ademoğ...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Vatan Sevdası</h3><p>Farklı kültürlerden gönüldaşlarımı.
-Yurdumun her köşesini göresim var.
-Taşını toprağını ormanları...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-vatan-sevdasi.html" class="poem-card">
+            <h3>Vatan Sevdası</h3>
+            <p>Farklı kültürlerden gönüldaşlarımı.<br>Yurdumun her köşesini göresim var.<br>Taşını toprağını ormanları...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Ağyar'ın Ardından</h3><p>Ölü vücuda gerekmez toprak.
-Yaşarken ölmüş insanlara tok.
-Sanma sakın onları yaşı...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-agyar-in-ardindan.html" class="poem-card">
+            <h3>Ağyar'ın Ardından</h3>
+            <p>Ölü vücuda gerekmez toprak.<br>Yaşarken ölmüş insanlara tok.<br>Sanma sakın onları yaşı...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Cehennem Narı</h3><p>Yandı içimde cehennem narı.
-Ala gözlü bir güzelden gayrı.
-Var mıdır bunca derdin derma...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-cehennem-nari.html" class="poem-card">
+            <h3>Cehennem Narı</h3>
+            <p>Yandı içimde cehennem narı.<br>Ala gözlü bir güzelden gayrı.<br>Var mıdır bunca derdin derma...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Dört Mevsim Aşk'ın Şiiri</h3><p>Baharın başında, çiçekler açanda.
-Bütün cihan yeniden canlandığında.
-Öten kuşlarla yeşillenen kırl...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-dort-mevsim-ask-in-siiri.html" class="poem-card">
+            <h3>Dört Mevsim Aşk'ın Şiiri</h3>
+            <p>Baharın başında, çiçekler açanda.<br>Bütün cihan yeniden canlandığında.<br>Öten kuşlarla yeşillenen kırl...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Dertli Yoldaş</h3><p>Ey gam yüklü dertli yoldaş.
-Yükünü kenarı indir.
-Nedir bu gözündeki y...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-dertli-yoldas.html" class="poem-card">
+            <h3>Dertli Yoldaş</h3>
+            <p>Ey gam yüklü dertli yoldaş.<br>Yükünü kenarı indir.<br>Nedir bu gözündeki y...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Yoruldum</h3><p>Yoruldum artık sevmekten
-Yar derdi ile yaş dökmekten
-Feryad edip inlemek...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-yoruldum.html" class="poem-card">
+            <h3>Yoruldum</h3>
+            <p>Yoruldum artık sevmekten<br>Yar derdi ile yaş dökmekten<br>Feryad edip inlemek...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Gönül derd ile</h3><p>Gönül derd ile yanmada harâbım,
-Ne dermân olur âhımda ne şâbım.
-Ne çeşmimde karar var, ne hayâ...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-gonul-derd-ile.html" class="poem-card">
+            <h3>Gönül derd ile</h3>
+            <p>Gönül derd ile yanmada harâbım,<br>Ne dermân olur âhımda ne şâbım.<br>Ne çeşmimde karar var, ne hayâ...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Yorgun Saatler</h3><p>Bir günün tortusu kaldı üzerimde,
-yürüyen gölgeler gibi sessizim.
-Ne bir başlangıcın sevinci var içim...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-yorgun-saatler.html" class="poem-card">
+            <h3>Yorgun Saatler</h3>
+            <p>Bir günün tortusu kaldı üzerimde,<br>yürüyen gölgeler gibi sessizim.<br>Ne bir başlangıcın sevinci var içim...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Yarım Kalan</h3><p>Yürüdüm… yollar tükendi, dizlerimde takat yok.
-Bir yarım türküyüm ben, seyrimde karar yok.
-Bir yanım bahar ister, öbür yanım kış içim...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-yarim-kalan.html" class="poem-card">
+            <h3>Yarım Kalan</h3>
+            <p>Yürüdüm… yollar tükendi, dizlerimde takat yok.<br>Bir yarım türküyüm ben, seyrimde karar yok.<br>Bir yanım bahar ister, öbür yanım kış içim...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Hak'tan Gelir Biliriz</h3><p>Benim de yüzümde yeller eser ya,
-Yâr uzak, ses uzak, gönül gezer ya,
-Dikenler de batar, gül de açar...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-hak-tan-gelir-biliriz.html" class="poem-card">
+            <h3>Hak'tan Gelir Biliriz</h3>
+            <p>Benim de yüzümde yeller eser ya,<br>Yâr uzak, ses uzak, gönül gezer ya,<br>Dikenler de batar, gül de açar...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Her Adımda Aşk</h3><p>Dağın koynunda derinden bir nida.
-Su taşla konuşur, gönlüm duyar da.
-Her şey Hak'tan gelir, ben bilmem da...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-her-adimda-ask.html" class="poem-card">
+            <h3>Her Adımda Aşk</h3>
+            <p>Dağın koynunda derinden bir nida.<br>Su taşla konuşur, gönlüm duyar da.<br>Her şey Hak'tan gelir, ben bilmem da...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Yalın İz</h3><p>Kalabalık içinde garip halim,
-Söylerim duyulmaz, lal oldu dilim.
-Dünya bir pazardır, boş kaldı e...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-yalin-iz.html" class="poem-card">
+            <h3>Yalın İz</h3>
+            <p>Kalabalık içinde garip halim,<br>Söylerim duyulmaz, lal oldu dilim.<br>Dünya bir pazardır, boş kaldı e...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Ait</h3><p>Ne bu şehre aitim, ne sokağa,
-Düşmüşüm dalımdan kuru toprağa.
-Bakıp doymadım göğe, ırma...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-ait.html" class="poem-card">
+            <h3>Ait</h3>
+            <p>Ne bu şehre aitim, ne sokağa,<br>Düşmüşüm dalımdan kuru toprağa.<br>Bakıp doymadım göğe, ırma...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Nigah-ı Revnak</h3><p>Bir bakışla yaktın gönül evini,
-Didârın şavkıyla doldum bu gece.
-Kime arz edeyim derin derdi...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-nigah-i-revnak.html" class="poem-card">
+            <h3>Nigah-ı Revnak</h3>
+            <p>Bir bakışla yaktın gönül evini,<br>Didârın şavkıyla doldum bu gece.<br>Kime arz edeyim derin derdi...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
 
-        <div class="poem-card"><h3>Dost Pazarı</h3><p>Dili şeker şerbet, kalbi buz imiş,
-Dost dediğin meğer, sadece söz imiş.
-Dağ sanıp yaslandım, hepsi toz i...</p><span class="read-more">Tamamını Oku</span></div>
+        <a href="siir-dost-pazari.html" class="poem-card">
+            <h3>Dost Pazarı</h3>
+            <p>Dili şeker şerbet, kalbi buz imiş,<br>Dost dediğin meğer, sadece söz imiş.<br>Dağ sanıp yaslandım, hepsi toz i...</p>
+            <span class="read-more">Tamamını Oku</span>
+        </a>
     </main>
 
     <footer>
