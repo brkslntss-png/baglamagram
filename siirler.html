@@ -15,11 +15,10 @@
     <style>
         :root {
             --primary: #000000;
-            --accent: #c5a059; /* Altın Rengi */
-            --accent-hover: #d4b06a;
+            --accent: #c5a059;
             --bg-dark: #0f0f0f;
             --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
-            --box-bg: rgba(30, 30, 30, 0.4);
+            --box-bg: rgba(30, 30, 30, 0.5);
             --text: #ffffff;
             --text-secondary: #b0b0b0;
         }
@@ -28,8 +27,7 @@
         
         body { 
             font-family: 'Montserrat', sans-serif; 
-            font-weight: 300;
-            background-color: var(--bg-dark);
+            background: var(--bg-dark); /* Siyah ekranı önlemek için düz renk yedeği */
             background-image: var(--bg-gradient);
             color: var(--text); 
             line-height: 1.8;
@@ -40,39 +38,20 @@
 
         /* --- NAVİGASYON --- */
         nav {
-            background: #000000;
+            background: rgba(0, 0, 0, 0.95);
             padding: 20px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
-        
-        .nav-container {
-            display: flex; justify-content: center; align-items: center; 
-            max-width: 1200px; margin: 0 auto; position: relative;
-        }
-
-        nav ul { 
-            display: flex; justify-content: center; list-style: none; 
-            gap: 50px; padding: 0 20px; 
-        }
-        
-        nav a { 
-            color: var(--text-secondary); text-decoration: none; 
-            font-size: 0.8rem; font-weight: 500; text-transform: uppercase; 
-            letter-spacing: 2px; transition: all 0.3s ease; position: relative;
-            font-family: 'Montserrat', sans-serif;
-        }
-
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
+        nav ul { display: flex; gap: 50px; list-style: none; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         nav a:hover, nav a.active { color: var(--accent); }
+        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
 
-        .menu-toggle {
-            display: none; font-size: 1.5rem; color: var(--accent);
-            cursor: pointer; position: absolute; right: 20px;
-        }
-
-        /* --- ANIMASYONLAR --- */
+        /* --- ANIMASYONLAR (Garantili Çalışma İçin Revize Edildi) --- */
         @keyframes fadeInUp {
             0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -82,39 +61,11 @@
         .page-header {
             text-align: center;
             padding: 80px 0 40px;
-            animation: fadeInUp 1s ease-out forwards; 
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0; /* Animasyon başlayana kadar gizli */
         }
-        
-        .page-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-            font-size: 3.5rem;
-            color: var(--text);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .page-header h1::after {
-            content: ''; display: block; width: 60px; height: 3px;
-            background: var(--accent); margin: 15px auto 0;
-        }
-        
-        .page-header p {
-            color: var(--text-secondary);
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            margin-top: 15px;
-            font-size: 1.1rem;
-        }
-
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            width: 100%;
-        }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; letter-spacing: 5px; text-transform: uppercase; }
+        .page-header h1::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 15px auto 0; }
 
         /* --- ARAMA KUTUSU --- */
         .search-wrapper {
@@ -122,46 +73,15 @@
             justify-content: center;
             margin-bottom: 60px;
             animation: fadeInUp 1s ease-out 0.2s forwards;
-            opacity: 0; 
+            opacity: 0;
         }
-
-        .search-box {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 15px 20px 15px 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(197, 160, 89, 0.3);
-            border-radius: 50px;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.3s ease;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 1px;
-        }
-
-        .search-box input:focus {
-            border-color: var(--accent);
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 15px rgba(197, 160, 89, 0.15);
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--accent);
-            font-size: 1rem;
-            pointer-events: none;
-        }
+        .search-box { position: relative; width: 100%; max-width: 400px; }
+        .search-box input { width: 100%; padding: 15px 50px; background: rgba(255,255,255,0.05); border: 1px solid rgba(197,160,89,0.3); border-radius: 50px; color: #fff; outline: none; transition: 0.3s; }
+        .search-box input:focus { border-color: var(--accent); background: rgba(0,0,0,0.5); }
+        .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); }
 
         /* --- ŞİİR KARTLARI --- */
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
         .poems-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -170,128 +90,33 @@
             animation: fadeInUp 1s ease-out 0.4s forwards;
             opacity: 0;
         }
-
-        .poem-card {
-            background: var(--box-bg);
-            padding: 40px 30px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 280px;
-        }
-
-        .poem-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(197, 160, 89, 0.4);
-            background: rgba(197, 160, 89, 0.05);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-        }
-
-        .poem-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0;
-            background: var(--accent); transition: height 0.5s ease;
-        }
-        .poem-card:hover::before { height: 100%; }
-
-        .poem-card h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--accent);
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: 400;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .poem-card p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.8;
-            font-style: italic;
-            margin-bottom: 30px;
-            flex-grow: 1;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .read-more {
-            align-self: flex-start;
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 600;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 5px;
-            transition: all 0.3s;
-        }
         
-        .read-more:hover {
-            color: var(--accent);
-            border-color: var(--accent);
+        .poem-link { text-decoration: none; color: inherit; display: block; outline: none; }
+        
+        .poem-card {
+            background: var(--box-bg); padding: 40px 30px; border-radius: 4px; transition: all 0.4s ease; border: 1px solid transparent; min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;
         }
-
-        #no-result {
-            display: none;
-            text-align: center;
-            color: var(--text-secondary);
-            margin-top: 20px;
-            font-size: 1.1rem;
-            font-family: 'Playfair Display', serif;
-        }
+        .poem-link:hover .poem-card { transform: translateY(-10px); border-color: rgba(197, 160, 89, 0.4); background: rgba(197, 160, 89, 0.08); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+        
+        .poem-card h3 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .poem-card p { font-family: 'Playfair Display', serif; color: var(--text-secondary); font-style: italic; font-size: 1rem; flex-grow: 1; }
+        .read-more { margin-top: 20px; font-size: 0.75rem; letter-spacing: 2px; font-weight: 600; color: #fff; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; width: fit-content; transition: 0.3s; }
+        .poem-link:hover .read-more { color: var(--accent); border-color: var(--accent); }
 
         /* --- FOOTER --- */
-        footer {
-            background: #050505;
-            padding: 50px 20px;
-            text-align: center;
-            border-top: 1px solid #1a1a1a;
-            margin-top: auto;
-        }
-
+        footer { background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
         footer p { font-size: 0.9rem; color: #666; margin-bottom: 25px; }
-
-        .social-wrapper {
-            display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
-        }
-
-        .social-item { 
-            display: flex; flex-direction: column; align-items: center; 
-            gap: 8px; text-decoration: none; color: #888; font-size: 0.8rem; transition: 0.3s;
-        }
-
-        .social-icon-box {
-            font-size: 24px; width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid #333; border-radius: 50%; transition: all 0.3s ease;
-        }
-
+        .social-wrapper { display: flex; justify-content: center; gap: 40px; }
+        .social-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: #888; font-size: 0.8rem; transition: 0.3s; }
+        .social-icon-box { font-size: 24px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; border-radius: 50%; transition: all 0.3s ease; }
         .social-item:hover .social-icon-box { border-color: var(--accent); transform: translateY(-5px); }
-        .social-item:hover { color: var(--text); }
+        .social-item:hover { color: #fff; }
         
-        .fa-instagram { color: #fff; }
-        .social-item:hover .fa-instagram { color: #E1306C; }
-        .social-item:hover .fa-spotify { color: var(--spotify); }
-        .social-item:hover .fa-youtube { color: var(--youtube); }
-
-
-        /* --- MOBİL --- */
         @media (max-width: 768px) {
-            nav { padding: 15px 0; background: #000; }
             .menu-toggle { display: block; }
-            nav ul {
-                display: none; flex-direction: column; position: absolute;
-                top: 100%; left: 0; width: 100%; background: #000;
-                border-bottom: 1px solid var(--accent); padding: 20px 0; gap: 20px;
-            }
+            nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
             nav ul.aktif { display: flex; }
             .page-header h1 { font-size: 2.5rem; }
-            .search-box { max-width: 90%; }
         }
     </style>
 </head>
@@ -299,9 +124,7 @@
 
     <nav>
         <div class="nav-container">
-            <div class="menu-toggle" onclick="menuyuAcKapa()">
-                <i class="fas fa-bars"></i>
-            </div>
+            <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
             <ul id="anaMenu">
                 <li><a href="index.html">ANA SAYFA</a></li>
                 <li><a href="hakkinda.html">HAKKINDA</a></li>
@@ -314,11 +137,10 @@
 
     <header class="page-header">
         <h1>ŞİİRLER</h1>
-        <p>Gönülden dökülen nağmeler...</p>
+        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;">Gönülden dökülen nağmeler...</p>
     </header>
 
     <div class="main-container">
-
         <div class="search-wrapper">
             <div class="search-box">
                 <i class="fas fa-search"></i>
@@ -328,202 +150,55 @@
 
         <div id="siirListesi" class="poems-grid">
             
-            <div class="poem-card">
-                <h3>Hasret</h3>
-                <p>"Her anımda sadece sen varsın. Geceler senin gündüzler senin. Ey yüreğimi dağlayan hasret..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Ardıç Sazım</h3>
-                <p>"Düştün ustanın eline. Ruhun üfürdü teline. Gel benimle konuş diye..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Sazıma Meramım</h3>
-                <p>"Yarama derman bulunmaz. Dinmez benim gönül sızım. Kimseler bana yar olmaz..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Çeşm-i Derya</h3>
-                <p>"Gönül bu, ne laf dinler ne de haya. Büyüne kapıldım ey Çeşm-i Derya..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Gönlümde Irmaklar Çağlar</h3>
-                <p>"Evimin önünde abşar. Dereler akar uzunca. Gönlümde Irmaklar Çağlar..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Pencereden Gelen</h3>
-                <p>"Pencereden gelen ala gözlü dilber. Yaktın odpare nigahınla bağrımı..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Kendine Gel Ademoğlu</h3>
-                <p>"Boğazın dokuz boğumlu. Her sözün adabı vardır. Kendine gel Ademoğlu..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Vatan Sevdası</h3>
-                <p>"Farklı kültürlerden gönüldaşlarımı. Yurdumun her köşesini göresim var..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Ağyar'ın Ardından</h3>
-                <p>"Ölü vücuda gerekmez toprak. Yaşarken ölmüş insanlara tok. Sanma sakın onları yaşıyor..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Cehennem Narı</h3>
-                <p>"Yandı içimde cehennem narı. Ala gözlü bir güzelden gayrı. Var mıdır bunca derdin dermanı..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Dört Mevsim Aşk'ın Şiiri</h3>
-                <p>"Baharın başında, çiçekler açanda. Bütün cihan yeniden canlandığında..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Dertli Yoldaş</h3>
-                <p>"Ey gam yüklü dertli yoldaş. Yükünü kenarı indir. Nedir bu gözündeki yaş..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Yoruldum</h3>
-                <p>"Yoruldum artık sevmekten. Yar derdi ile yaş dökmekten. Feryad edip inlemekten..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Gönül derd ile</h3>
-                <p>"Gönül derd ile yanmada harâbım, Ne dermân olur âhımda ne şâbım..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Yorgun Saatler</h3>
-                <p>"Bir günün tortusu kaldı üzerimde, yürüyen gölgeler gibi sessizim..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Yarım Kalan</h3>
-                <p>"Yürüdüm… yollar tükendi, dizlerimde takat yok. Bir yarım türküyüm ben..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Hak'tan Gelir Biliriz</h3>
-                <p>"Benim de yüzümde yeller eser ya, Yâr uzak, ses uzak, gönül gezer ya..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Her Adımda Aşk</h3>
-                <p>"Dağın koynunda derinden bir nida. Su taşla konuşur, gönlüm duyar da..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Yalın İz</h3>
-                <p>"Kalabalık içinde garip halim, Söylerim duyulmaz, lal oldu dilim..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Ait</h3>
-                <p>"Ne bu şehre aitim, ne sokağa, Düşmüşüm dalımdan kuru toprağa..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Nigah-ı Revnak</h3>
-                <p>"Bir bakışla yaktın gönül evini, Didârın şavkıyla doldum bu gece..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
-
-            <div class="poem-card">
-                <h3>Dost Pazarı</h3>
-                <p>"Dili şeker şerbet, kalbi buz imiş, Dost dediğin meğer, sadece söz imiş..."</p>
-                <a href="#" class="read-more">TAMAMINI OKU →</a>
-            </div>
+            <a href="siir-hasret.html" class="poem-link"><div class="poem-card"><h3>Hasret</h3><p>"Her anımda sadece sen varsın. Geceler senin gündüzler senin..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-ardic-sazim.html" class="poem-link"><div class="poem-card"><h3>Ardıç Sazım</h3><p>"Düştün ustanın eline. Ruhun üfürdü teline. Gel benimle konuş di..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-sazima-meramim.html" class="poem-link"><div class="poem-card"><h3>Sazıma Meramım</h3><p>"Yarama derman bulunmaz. Dinmez benim gönül sızım. Kimseler bana yar olm..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-cesm-i-derya.html" class="poem-link"><div class="poem-card"><h3>Çeşm-i Derya</h3><p>"Gönül bu, ne laf dinler ne de haya. Büyüne kapıldım ey Çeşm-i Derya..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-gonlumde-irmaklar-caglar.html" class="poem-link"><div class="poem-card"><h3>Irmaklar Çağlar</h3><p>"Evimin önünde abşar. Dereler akar uzunca. Gönlümde Irmaklar Çağl..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-pencereden-gelen.html" class="poem-link"><div class="poem-card"><h3>Pencereden Gelen</h3><p>"Pencereden gelen ala gözlü dilber. Yaktın odpare nigahınla bağrımı..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-kendine-gel-ademoglu.html" class="poem-link"><div class="poem-card"><h3>Kendine Gel Ademoğlu</h3><p>"Boğazın dokuz boğumlu Her sözün adabı vardır. Kendine gel Ademoğ..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-vatan-sevdasi.html" class="poem-link"><div class="poem-card"><h3>Vatan Sevdası</h3><p>"Farklı kültürlerden gönüldaşlarımı. Yurdumun her köşesini göresim var..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-agyarin-ardindan.html" class="poem-link"><div class="poem-card"><h3>Ağyar'ın Ardından</h3><p>"Ölü vücuda gerekmez toprak. Yaşarken ölmüş insanlara tok. Sanma sakın..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-cehennem-nari.html" class="poem-link"><div class="poem-card"><h3>Cehennem Narı</h3><p>"Yandı içimde cehennem narı. Ala gözlü bir güzelden gayrı..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-dort-mevsim-askin-siiri.html" class="poem-link"><div class="poem-card"><h3>Dört Mevsim Aşk</h3><p>"Baharın başında, çiçekler açanda. Bütün cihan yeniden canlandığında..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-dertli-yoldas.html" class="poem-link"><div class="poem-card"><h3>Dertli Yoldaş</h3><p>"Ey gam yüklü dertli yoldaş. Yükünü kenarı indir. Nedir bu gözündeki y..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-yoruldum.html" class="poem-link"><div class="poem-card"><h3>Yoruldum</h3><p>"Yoruldum artık sevmekten Yar derdi ile yaş dökmekten..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-gonul-derd-ile.html" class="poem-link"><div class="poem-card"><h3>Gönül derd ile</h3><p>"Gönül derd ile yanmada harâbım, Ne dermân olur âhımda ne şâbım..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-yorgun-saatler.html" class="poem-link"><div class="poem-card"><h3>Yorgun Saatler</h3><p>"Bir günün tortusu kaldı üzerimde, yürüyen gölgeler gibi sessizim..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-yarim-kalan.html" class="poem-link"><div class="poem-card"><h3>Yarım Kalan</h3><p>"Yürüdüm… yollar tükendi, dizlerimde takat yok. Bir yarım türküyüm ben..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-haktan-gelir-biliriz.html" class="poem-link"><div class="poem-card"><h3>Hak'tan Gelir</h3><p>"Benim de yüzümde yeller eser ya, Yâr uzak, ses uzak, gönül gezer ya..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-her-adimda-ask.html" class="poem-link"><div class="poem-card"><h3>Her Adımda Aşk</h3><p>"Dağın koynunda derinden bir nida. Su taşla konuşur, gönlüm duyar da..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-yalin-iz.html" class="poem-link"><div class="poem-card"><h3>Yalın İz</h3><p>"Kalabalık içinde garip halim, Söylerim duyulmaz, lal oldu dilim..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-ait.html" class="poem-link"><div class="poem-card"><h3>Ait</h3><p>"Ne bu şehre aitim, ne sokağa, Düşmüşüm dalımdan kuru toprağa..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-nigah-i-revnak.html" class="poem-link"><div class="poem-card"><h3>Nigah-ı Revnak</h3><p>"Bir bakışla yaktın gönül evini, Didârın şavkıyla doldum bu gece..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-dost-pazari.html" class="poem-link"><div class="poem-card"><h3>Dost Pazarı</h3><p>"Dili şeker şerbet, kalbi buz imiş, Dost dediğin meğer, sadece söz imiş..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
 
         </div>
-
         <div id="no-result">Aradığınız kriterlere uygun şiir bulunamadı.</div>
-
     </div>
 
     <footer>
         <div class="social-wrapper">
-            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
-                <div class="social-icon-box"><i class="fab fa-instagram"></i></div>
-                <span>Instagram</span>
-            </a>
-            <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item">
-                <div class="social-icon-box"><i class="fab fa-spotify"></i></div>
-                <span>Spotify</span>
-            </a>
-            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item">
-                <div class="social-icon-box"><i class="fab fa-youtube"></i></div>
-                <span>YouTube</span>
-            </a>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-instagram"></i></div><span>Instagram</span></a>
+            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-youtube"></i></div><span>YouTube</span></a>
         </div>
         <br>
         <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
     </footer>
 
     <script>
-        function menuyuAcKapa() {
-            var menu = document.getElementById("anaMenu");
-            menu.classList.toggle("aktif");
-        }
-
+        function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
         function filtrele() {
-            var input, filter, container, cards, h3, p, i;
-            input = document.getElementById("siirAra");
-            filter = input.value.toUpperCase();
-            container = document.getElementById("siirListesi");
-            cards = container.getElementsByClassName("poem-card");
+            var input = document.getElementById("siirAra").value.toUpperCase();
+            var cards = document.getElementsByClassName("poem-link");
             var foundAny = false;
-
-            for (i = 0; i < cards.length; i++) {
-                var title = cards[i].getElementsByTagName("h3")[0];
-                var content = cards[i].getElementsByTagName("p")[0];
-                
-                if (title || content) {
-                    var titleText = title.textContent || title.innerText;
-                    var contentText = content.textContent || content.innerText;
-
-                    if (titleText.toUpperCase().indexOf(filter) > -1 || contentText.toUpperCase().indexOf(filter) > -1) {
-                        cards[i].style.display = ""; 
-                        foundAny = true;
-                    } else {
-                        cards[i].style.display = "none";
-                    }
-                }        
+            for (var i = 0; i < cards.length; i++) {
+                var text = cards[i].innerText.toUpperCase();
+                if (text.indexOf(input) > -1) { cards[i].style.display = ""; foundAny = true; }
+                else { cards[i].style.display = "none"; }
             }
-
-            var noResultMsg = document.getElementById("no-result");
-            if (!foundAny) {
-                noResultMsg.style.display = "block";
-            } else {
-                noResultMsg.style.display = "none";
-            }
+            document.getElementById("no-result").style.display = foundAny ? "none" : "block";
         }
     </script>
-
 </body>
 </html>
