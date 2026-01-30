@@ -8,12 +8,12 @@
     <style>
         :root {
             --primary: #000000;
-            --accent: #c5a059; /* Altın Sarısı */
-            --bg: #121212;    /* Karanlık Arka Plan */
-            --text: #ffffff;  /* Beyaz Yazı */
-            --text-secondary: #b0b0b0; /* Gri Yazı */
-            --spotify: #1DB954; /* Spotify Yeşili */
-            --youtube: #FF0000; /* YouTube Kırmızısı */
+            --accent: #c5a059;
+            --bg: #121212;
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+            --spotify: #1DB954;
+            --youtube: #FF0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,26 +37,52 @@
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid #333;
-            transition: padding 0.3s;
         }
-        nav ul { display: flex; justify-content: center; list-style: none; gap: 40px; padding: 0 20px; }
+        
+        /* Menü Kapsayıcısı */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* İkonu konumlandırmak için gerekli */
+        }
+
+        nav ul { 
+            display: flex; 
+            justify-content: center; 
+            list-style: none; 
+            gap: 40px; 
+            padding: 0 20px; 
+            transition: max-height 0.3s ease-in-out;
+        }
+        
         nav a { 
             color: #888; text-decoration: none; font-size: 0.85rem; 
             text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; 
-            white-space: nowrap; /* Linklerin kırılmasını önler */
+            white-space: nowrap;
         }
         nav a:hover { color: var(--accent); }
 
+        /* Hamburger İkonu (Başlangıçta gizli) */
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: var(--text);
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: -5px; /* Hizalamayı düzeltmek için */
+        }
+
         /* Hero (Karşılama) Bölümü */
         .hero {
-            flex: 1; /* Footer'ı aşağı itmek için */
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 40px 20px;
-            /* margin-top negatif değeri kaldırıldı, mobilde sorun yaratabilir */
         }
 
         .hero h1 {
@@ -110,19 +136,13 @@
             transition: all 0.3s ease;
             text-align: center;
         }
+        .btn:hover { background: var(--accent); color: #000; }
 
-        .btn:hover {
-            background: var(--accent);
-            color: #000;
-        }
-
-        /* Giriş Animasyonu */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Footer & Ters Üçgen Sosyal Medya */
         footer {
             background: #0a0a0a; color: #444; padding: 60px 20px;
             text-align: center; border-top: 1px solid #222; margin-top: auto;
@@ -145,56 +165,60 @@
         .fa-spotify { color: var(--spotify); font-size: 26px; }
         .fa-youtube { color: var(--youtube); font-size: 26px; }
 
-        /* --- MOBİL UYUMLULUK (RESPONSIVE) --- */
+
+        /* --- RESPONSIVE VE HAMBURGER MENÜ AYARLARI --- */
         @media (max-width: 768px) {
             
-            /* Navigasyon: Linkleri alt alta dizer */
-            nav { padding: 15px 0; }
-            nav ul { 
-                flex-direction: column; 
-                gap: 15px; 
-                align-items: center;
-            }
-            nav a { font-size: 0.9rem; letter-spacing: 1px; }
+            nav { padding: 20px 0; }
 
-            /* Hero Bölümü: Yazıları küçültür */
+            /* İkonu görünür yap */
+            .menu-toggle { display: block; }
+
+            /* Menü listesini başlangıçta gizle */
+            nav ul {
+                display: none; /* Gizli */
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                background: var(--primary);
+                padding-top: 20px;
+                border-top: 1px solid #333;
+                margin-top: 20px;
+                gap: 20px;
+            }
+
+            /* JavaScript ile 'aktif' sınıfı eklenince görünür olacak */
+            nav ul.aktif { display: flex; }
+
+            /* Hero ve Butonlar */
             .hero h1 { font-size: 2rem; letter-spacing: 3px; }
-            .hero p.subtitle { font-size: 1rem; letter-spacing: 2px; }
+            .hero p.subtitle { font-size: 1rem; }
+            .hero .quote { font-size: 0.95rem; padding: 20px 0; width: 100%; }
+            .cta-buttons { flex-direction: column; width: 100%; gap: 15px; }
+            .btn { width: 100%; display: block; }
             
-            .hero .quote { 
-                font-size: 0.95rem; 
-                padding: 20px 0;
-                width: 100%;
-            }
-
-            /* Butonlar: Alt alta ve tam genişlik */
-            .cta-buttons { 
-                flex-direction: column; 
-                width: 100%;
-                gap: 15px;
-            }
-            .btn { 
-                width: 100%; 
-                display: block; 
-            }
-
-            /* Footer: Sosyal medya ikonlarını sığdırır */
-            footer { padding: 40px 20px; }
-            .social-row { gap: 15px; }
-            .social-item span { font-size: 0.85rem; }
+            .nav-container { flex-direction: column; align-items: flex-start; }
+            /* İkon sağ üstte kalsın diye konteyner ayarı */
+            .menu-toggle { top: 0; right: 20px; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <ul>
-            <li><a href="index.html" style="color: var(--accent);">ANA SAYFA</a></li>
-            <li><a href="hakkinda.html">HAKKINDA</a></li>
-            <li><a href="notalar.html">NOTALAR</a></li>
-            <li><a href="siirler.html">ŞİİRLER</a></li>
-            <li><a href="konserler.html">KONSERLER</a></li>
-        </ul>
+        <div class="nav-container">
+            <div class="menu-toggle" onclick="menuyuAcKapa()">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <ul id="anaMenu">
+                <li><a href="index.html" style="color: var(--accent);">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html">HAKKINDA</a></li>
+                <li><a href="notalar.html">NOTALAR</a></li>
+                <li><a href="siirler.html">ŞİİRLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
+            </ul>
+        </div>
     </nav>
 
     <header class="hero">
@@ -229,6 +253,13 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function menuyuAcKapa() {
+            var menu = document.getElementById("anaMenu");
+            menu.classList.toggle("aktif");
+        }
+    </script>
 
 </body>
 </html>
