@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cehennem Narı - Nota | Mahmut Burak ASLANTAŞ</title>
+    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* (Tasarım kodları standart, değiştirmene gerek yok) */
+        :root { --primary: #000000; --accent: #c5a059; --bg-dark: #0f0f0f; --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%); --text: #ffffff; --text-secondary: #b0b0b0; }
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg-dark); background-image: var(--bg-gradient); color: var(--text); line-height: 1.8; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        nav { background: #000; padding: 20px 0; border-bottom: 1px solid rgba(197, 160, 89, 0.2); }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; margin: 0 15px; text-transform: uppercase; transition: 0.3s; }
+        nav a:hover { color: var(--accent); }
+        .container { max-width: 1000px; margin: 50px auto; padding: 0 20px; text-align: center; }
+        .nota-header h1 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        .nota-info { color: var(--text-secondary); margin-bottom: 30px; font-style: italic; }
+        .nota-image-box { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 4px; border: 1px solid rgba(197, 160, 89, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .nota-image-box img { width: 100%; height: auto; border-radius: 2px; filter: brightness(0.9); }
+        .btn-container { margin-top: 40px; display: flex; justify-content: center; gap: 20px; }
+        .action-btn { padding: 12px 30px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; font-size: 0.9rem; }
+        .action-btn:hover { background: var(--accent); color: #000; }
+        .btn-back { border-color: #555; color: #aaa; }
+        .btn-back:hover { background: #333; color: #fff; border-color: #333; }
+        footer { background: #050505; padding: 40px; text-align: center; border-top: 1px solid #222; margin-top: auto; color: #666; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html">ANA SAYFA</a>
+            <a href="notalar.html" style="color: var(--accent);">NOTALAR</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="nota-header">
+            <h1>CEHENNEM NARI</h1>
+            <div class="nota-info">Besteci: Mahmut Burak ASLANTAŞ</div>
+        </div>
+        <div class="nota-image-box">
+            <img src="https://i.hizliresim.com/ORNEK_RESIM_LINKI.jpg" alt="Cehennem Narı Nota">
+        </div>
+        <div class="btn-container">
+            <a href="notalar.html" class="action-btn btn-back"><i class="fas fa-arrow-left"></i> Geri Dön</a>
+            <a href="nota-cehennem-nari.pdf" download class="action-btn"><i class="fas fa-download"></i> PDF İndir</a>
+        </div>
+    </div>
+    <footer><p>© 2026 Mahmut Burak ASLANTAŞ</p></footer>
+</body>
+</html>
