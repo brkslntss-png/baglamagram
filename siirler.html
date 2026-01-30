@@ -28,7 +28,7 @@
             min-height: 100vh;
         }
 
-        /* --- MENÜ (Önceki sayfa ile aynı) --- */
+        /* --- MENÜ --- */
         nav {
             background: var(--primary);
             padding: 30px 0;
@@ -76,13 +76,13 @@
         .search-box {
             position: relative;
             width: 100%;
-            max-width: 300px; /* Genişlik sınırı */
+            max-width: 300px;
         }
 
         .search-box input {
             width: 100%;
-            padding: 12px 20px 12px 45px; /* İkon için soldan boşluk */
-            background: rgba(255, 255, 255, 0.05); /* Çok hafif saydam arka plan */
+            padding: 12px 20px 12px 45px;
+            background: rgba(255, 255, 255, 0.05); /* Saydam */
             border: 1px solid #333;
             border-radius: 30px;
             color: #fff;
@@ -98,7 +98,6 @@
             box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
         }
 
-        /* Placeholder (Saydam yazı) rengi */
         .search-box input::placeholder {
             color: rgba(255, 255, 255, 0.3);
             font-style: italic;
@@ -133,8 +132,9 @@
             transform: translateX(10px);
         }
 
+        /* ŞİİR BAŞLIK RENGİ GÜNCELLENDİ: ALTIN SARISI */
         .poem-card h3 {
-            color: var(--text);
+            color: var(--accent); /* Önceden beyazdı, şimdi altın */
             font-size: 1.5rem;
             margin-bottom: 10px;
             font-weight: 400;
@@ -149,15 +149,18 @@
         }
 
         .read-more {
-            color: var(--accent);
+            color: var(--text); /* "Tamamını Oku" beyaz kalsın veya accent yapılabilir */
             text-decoration: none;
             font-size: 0.85rem;
             letter-spacing: 1px;
             text-transform: uppercase;
             font-weight: bold;
+            transition: color 0.3s;
+        }
+        .read-more:hover {
+            color: var(--accent);
         }
 
-        /* Filtreleme sonucu bulunamadı mesajı */
         #no-result {
             display: none;
             text-align: center;
@@ -186,10 +189,10 @@
 
             /* Arama Çubuğu Mobilde Ortalı */
             .search-wrapper {
-                justify-content: center; /* ORTALA */
+                justify-content: center;
             }
             .search-box {
-                max-width: 90%; /* Mobilde biraz daha genişleyebilir */
+                max-width: 90%;
             }
         }
     </style>
@@ -225,6 +228,7 @@
         </div>
 
         <div id="siirListesi" class="poems-grid">
+            
             <div class="poem-card">
                 <h3>Sürgün</h3>
                 <p>"Karanlık bir gecede düştüm yollara, heybemde hüzün, dilimde dua..."</p>
@@ -248,6 +252,31 @@
                 <p>"Toprağı buram buram tarih kokan, yiğitlerin harman olduğu diyar..."</p>
                 <a href="#" class="read-more">Tamamını Oku &rarr;</a>
             </div>
+
+            <div class="poem-card">
+                <h3>Gece ve Hüzün</h3>
+                <p>"Yıldızlar şahit oldu sessiz çığlığıma, ay ışığı vurdu garip yalnızlığıma..."</p>
+                <a href="#" class="read-more">Tamamını Oku &rarr;</a>
+            </div>
+
+            <div class="poem-card">
+                <h3>Uzak Şehirler</h3>
+                <p>"Her şehir bir başka gurbet bana, her sokak çıkmaz bir yol sana..."</p>
+                <a href="#" class="read-more">Tamamını Oku &rarr;</a>
+            </div>
+
+            <div class="poem-card">
+                <h3>Mevsimsiz</h3>
+                <p>"Ne baharı bildim ne de kışı, ömrümün geçti en güzel yaşı..."</p>
+                <a href="#" class="read-more">Tamamını Oku &rarr;</a>
+            </div>
+
+             <div class="poem-card">
+                <h3>Sessiz Gemi</h3>
+                <p>"Bir limandan kalkar bu sessiz gemi, meçhule yol alır, bilinmez demi..."</p>
+                <a href="#" class="read-more">Tamamını Oku &rarr;</a>
+            </div>
+
         </div>
 
         <div id="no-result">Aradığınız kriterlere uygun şiir bulunamadı.</div>
@@ -259,23 +288,20 @@
     </footer>
 
     <script>
-        // Mobil Menü Fonksiyonu
         function menuyuAcKapa() {
             var menu = document.getElementById("anaMenu");
             menu.classList.toggle("aktif");
         }
 
-        // Arama / Filtreleme Fonksiyonu
         function filtrele() {
-            var input, filter, container, cards, h3, p, i, txtValue;
+            var input, filter, container, cards, h3, p, i;
             input = document.getElementById("siirAra");
-            filter = input.value.toUpperCase(); // Büyük/küçük harf duyarlılığını kaldır
+            filter = input.value.toUpperCase();
             container = document.getElementById("siirListesi");
             cards = container.getElementsByClassName("poem-card");
             var foundAny = false;
 
             for (i = 0; i < cards.length; i++) {
-                // Şiir Başlığı (h3) ve Önizleme Metnini (p) al
                 var title = cards[i].getElementsByTagName("h3")[0];
                 var content = cards[i].getElementsByTagName("p")[0];
                 
@@ -283,17 +309,15 @@
                     var titleText = title.textContent || title.innerText;
                     var contentText = content.textContent || content.innerText;
 
-                    // Hem başlıkta hem içerikte ara
                     if (titleText.toUpperCase().indexOf(filter) > -1 || contentText.toUpperCase().indexOf(filter) > -1) {
-                        cards[i].style.display = ""; // Eşleşirse göster
+                        cards[i].style.display = "";
                         foundAny = true;
                     } else {
-                        cards[i].style.display = "none"; // Eşleşmezse gizle
+                        cards[i].style.display = "none";
                     }
                 }       
             }
 
-            // Hiçbir sonuç yoksa mesaj göster
             var noResultMsg = document.getElementById("no-result");
             if (!foundAny) {
                 noResultMsg.style.display = "block";
