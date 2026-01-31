@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <meta name="google-site-verification" content="_M5BfxWGwxt47kzLdqDckVCSwkliVvvoYFVn8SdsrwM" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konserler | Mahmut Burak ASLANTAŞ</title>
     
-    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <title>Mahmut Burak ASLANTAŞ</title>
+    
+    <meta name="description" content="Mahmut Burak ASLANTAŞ'ın resmi web sitesi. Bağlama icraları, özgün şiir çalışmaları, konser takvimi ve online eğitim portalına dair güncel içerikler.">
+    <meta name="keywords" content="Mahmut Burak ASLANTAŞ, bağlama, türk halk müziği, şair, şiir, dijital tasarım, baglamagram, konser">
+    <meta name="author" content="Mahmut Burak ASLANTAŞ">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baglamagram.com.tr/index.html">
+    <meta property="og:title" content="Mahmut Burak ASLANTAŞ | Resmi Web Sitesi">
+    <meta property="og:description" content="Bağlama icraları, özgün şiirler ve online eğitim portalı.">
+    <meta property="og:image" content="https://i.hizliresim.com/h6g4amm.jpg">
+    <meta property="og:locale" content="tr_TR">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mahmut Burak ASLANTAŞ | Resmi Web Sitesi">
+    <meta name="twitter:description" content="Sanat ve eğitimin dijital buluşma noktası.">
+    <meta name="twitter:image" content="https://i.hizliresim.com/h6g4amm.jpg">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,11 +37,9 @@
             --accent-hover: #d4b06a;
             --bg-dark: #0f0f0f;
             --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
-            --box-bg: rgba(30, 30, 30, 0.6);
+            --box-bg: rgba(255, 255, 255, 0.03);
             --text: #ffffff;
             --text-secondary: #b0b0b0;
-            --spotify: #1DB954;
-            --youtube: #FF0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,18 +47,19 @@
         body { 
             font-family: 'Montserrat', sans-serif; 
             font-weight: 300;
-            background: var(--bg-dark); /* Arka plan rengi */
-            background-image: var(--bg-gradient); /* Gradyan eklemesi */
+            background: var(--bg-dark);
+            background-image: var(--bg-gradient);
             color: var(--text); 
             line-height: 1.8;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* --- NAVİGASYON --- */
         nav {
-            background: #000000;
+            background: rgba(0, 0, 0, 0.95);
             padding: 20px 0;
             position: sticky;
             top: 0;
@@ -59,270 +76,167 @@
             position: relative;
         }
 
-        nav ul { 
-            display: flex; 
-            justify-content: center; 
-            list-style: none; 
-            gap: 50px; 
-            padding: 0 20px; 
-        }
+        nav ul { display: flex; justify-content: center; list-style: none; gap: 50px; padding: 0 20px; }
         
         nav a { 
-            color: var(--text-secondary); 
-            text-decoration: none; 
-            font-size: 0.8rem; 
-            font-weight: 500;
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            transition: all 0.3s ease; 
-            position: relative;
-            font-family: 'Montserrat', sans-serif;
+            color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; 
+            font-weight: 500; text-transform: uppercase; letter-spacing: 2px; 
+            transition: all 0.3s ease; position: relative;
         }
 
+        nav a::after {
+            content: ''; position: absolute; width: 0; height: 2px; 
+            bottom: -5px; left: 0; background-color: var(--accent); transition: width 0.3s ease;
+        }
         nav a:hover { color: var(--accent); }
-        nav a.active { color: var(--accent); }
+        nav a:hover::after { width: 100%; }
 
         .menu-toggle {
             display: none; font-size: 1.5rem; color: var(--accent);
             cursor: pointer; position: absolute; right: 20px;
         }
 
-        /* --- ANIMASYONLAR --- */
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+        /* --- HERO --- */
+        .hero {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 80px 20px 40px; position: relative;
         }
 
-        /* --- SAYFA İÇERİĞİ --- */
-        .page-header {
-            text-align: center;
-            padding: 80px 0 40px;
-            /* BAŞLIK ANİMASYONU */
-            animation: fadeInUp 1s ease-out forwards;
-            opacity: 0; 
-        }
-        
-        .page-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-            font-size: 3.5rem;
-            color: var(--text);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .page-header h1::after {
-            content: ''; display: block; width: 60px; height: 3px;
-            background: var(--accent); margin: 15px auto 0;
+        .name-container {
+            border: 1px solid rgba(197, 160, 89, 0.3); padding: 40px 60px; margin-bottom: 30px;
+            position: relative; animation: fadeIn 1.5s ease-in-out;
         }
 
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            width: 100%;
-            /* İÇERİK ANİMASYONU (Hafif gecikmeli) */
-            animation: fadeInUp 1s ease-out 0.2s forwards;
-            opacity: 0;
+        .name-container::after, .name-container::before {
+            content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid var(--accent);
         }
+        .name-container::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .name-container::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-        /* BÖLÜM 1: Spotlight (Öne Çıkan) */
-        .spotlight-section {
-            display: flex;
-            gap: 60px;
-            align-items: center;
-            margin-bottom: 100px;
-            background: var(--box-bg);
-            padding: 50px;
-            border: 1px solid rgba(197, 160, 89, 0.1);
-            position: relative;
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: 3.5rem; letter-spacing: 5px;
+            text-transform: uppercase; line-height: 1.2;
         }
-        
-        .spotlight-section::before {
-            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-            width: 4px; background: var(--accent);
-        }
+        .hero h1 span { color: var(--accent); font-weight: 600; }
 
-        .poster-wrapper { flex: 1; }
-        
-        .poster-wrapper img {
-            width: 100%;
-            border-radius: 2px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            border: 1px solid #333;
-        }
+        /* --- BUTONLAR --- */
+        .cta-buttons { display: flex; gap: 25px; animation: fadeIn 2s ease-in-out; margin-bottom: 60px; }
 
-        .info-wrapper { flex: 1.5; }
-        
-        .info-wrapper h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8rem; 
-            color: var(--accent); 
-            margin-bottom: 25px;
-            line-height: 1.2;
+        .btn {
+            padding: 18px 45px; border: 1px solid var(--accent); color: var(--accent);
+            background: transparent; text-decoration: none; text-transform: uppercase;
+            letter-spacing: 2px; font-size: 0.85rem; transition: 0.4s; position: relative;
+            z-index: 1; overflow: hidden;
         }
-        
-        .info-wrapper p { 
-            color: var(--text-secondary); 
-            margin-bottom: 30px; 
-            font-size: 1.05rem; 
-            text-align: justify;
+        .btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%;
+            background: var(--accent); z-index: -1; transition: 0.4s;
         }
-        
-        .highlight-name {
-            color: #fff;
-            font-weight: 500;
-            border-bottom: 1px solid rgba(197, 160, 89, 0.4);
-        }
+        .btn:hover { color: #000; }
+        .btn:hover::before { width: 100%; }
+        .btn-secondary { border-color: var(--text-secondary); color: var(--text-secondary); }
+        .btn-secondary::before { background: var(--text-secondary); }
 
-        .concert-meta {
-            display: flex; gap: 30px; font-size: 0.95rem; color: #fff; 
-            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;
+        /* --- İSTATİSTİK PANELİ (RAKAMLARLA MAHMUT BURAK) --- */
+        .stats-section {
+            background: rgba(0, 0, 0, 0.5); border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 40px 0; margin-bottom: 60px;
+            animation: fadeIn 2.2s ease-in-out;
         }
-        .meta-item { display: flex; align-items: center; gap: 10px; }
-        .meta-item i { color: var(--accent); }
+        .stats-grid {
+            display: flex; justify-content: center; gap: 80px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto;
+        }
+        .stat-item { text-align: center; }
+        .stat-number { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--accent); display: block; }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* BÖLÜM 2: Video Alanı */
-        .video-section {
-            text-align: center;
-            margin-bottom: 120px;
+        /* --- GÜNÜN SÖZÜ --- */
+        .quote-section {
+            text-align: center; max-width: 800px; margin: 0 auto 80px; padding: 0 20px;
+            position: relative; animation: fadeIn 2.4s ease-in-out;
         }
+        .daily-quote {
+            font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: #fff;
+            margin-bottom: 15px; display: block;
+        }
+        .quote-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; display: block;}
+        .quote-line { width: 40px; height: 2px; background: var(--accent); margin: 0 auto; opacity: 0.5; }
+
+        /* --- KREATİF KÖŞE (FOTOĞRAF & VİDEO) --- */
+        .creative-section {
+            max-width: 1200px; margin: 0 auto 80px; padding: 0 20px;
+        }
+        .section-title {
+            text-align: center; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent);
+            margin-bottom: 40px; letter-spacing: 2px;
+        }
+        .creative-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+        }
+        .creative-item {
+            position: relative; overflow: hidden; aspect-ratio: 4/3; border: 1px solid #333;
+        }
+        .creative-item img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
+            filter: grayscale(100%);
+        }
+        .creative-item:hover img { transform: scale(1.1); filter: grayscale(0%); }
+
+        /* --- INSTAGRAM FEED (MANUEL TASARIM) --- */
+        .instagram-section {
+            background: #080808; padding: 60px 20px; text-align: center;
+        }
+        .insta-header { margin-bottom: 40px; }
+        .insta-header i { font-size: 2rem; color: var(--text); margin-bottom: 10px; }
+        .insta-link { color: var(--text); text-decoration: none; font-size: 1.1rem; }
         
-        .video-section h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--text); 
-            font-size: 1.8rem; 
-            margin-bottom: 40px;
-            font-weight: 400; letter-spacing: 2px;
+        .insta-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 1000px; margin: 0 auto;
         }
-        
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-            max-width: 900px;
-            margin: 0 auto;
-            border: 1px solid #333;
-            background: #000;
+        .insta-item {
+            position: relative; aspect-ratio: 1/1; overflow: hidden; display: block; group;
         }
-        .video-wrapper iframe {
+        .insta-item img {
+            width: 100%; height: 100%; object-fit: cover; transition: 0.3s;
+        }
+        .insta-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+            opacity: 0; transition: 0.3s;
         }
+        .insta-item:hover .insta-overlay { opacity: 1; }
+        .insta-overlay i { color: #fff; font-size: 1.5rem; }
 
-        .youtube-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: transparent;
-            color: var(--text-secondary);
-            padding: 12px 30px;
-            margin-top: 30px;
-            border: 1px solid #444;
-            text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .youtube-btn:hover { border-color: var(--youtube); color: #fff; }
-        .youtube-btn i { color: var(--youtube); }
-
-        /* BÖLÜM 3: Galeri */
-        .gallery-section h2 {
-            text-align: center; 
-            font-family: 'Playfair Display', serif;
-            color: var(--text); 
-            font-size: 2.2rem; 
-            margin-bottom: 60px;
-            font-weight: 400; letter-spacing: 3px;
-        }
-        
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 30px;
-        }
-        
-        .gallery-item {
-            text-align: center;
-            background: rgba(255,255,255,0.02);
-            padding: 15px;
-            border: 1px solid transparent;
-        }
-        
-        .gallery-item:hover { 
-            border-color: rgba(197, 160, 89, 0.3);
-            background: rgba(197, 160, 89, 0.05);
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            aspect-ratio: 2/3;
-            object-fit: cover;
-            margin-bottom: 20px;
-            border: 1px solid #333;
-        }
-        
-        .gallery-item h4 {
-            color: var(--text); 
-            font-weight: 400; 
-            font-size: 0.95rem;
-            text-transform: uppercase;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- FOOTER --- */
         footer {
-            background: #050505;
-            padding: 50px 20px;
-            text-align: center;
-            border-top: 1px solid #1a1a1a;
-            margin-top: auto;
+            background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a;
         }
-
-        footer p { font-size: 0.9rem; color: #666; margin-bottom: 25px; }
-
-        .social-wrapper {
-            display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
-        }
-
-        .social-item { 
-            display: flex; flex-direction: column; align-items: center; 
-            gap: 8px; text-decoration: none; color: #888; font-size: 0.8rem;
-        }
-
-        .social-icon-box {
-            font-size: 24px; width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid #333; border-radius: 50%;
-        }
-
-        .social-item:hover .social-icon-box { border-color: var(--accent); }
+        .social-wrapper { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .social-item { display: flex; flexDirection: column; align-items: center; gap: 8px; textDecoration: none; color: #888; fontSize: 0.8rem; transition: 0.3s; }
+        .social-icon-box { fontSize: 24px; width: 50px; height: 50px; display: flex; alignItems: center; justifyContent: center; border: 1px solid #333; borderRadius: 50%; }
+        .social-item:hover .social-icon-box { borderColor: var(--accent); transform: translateY(-5px); }
         .social-item:hover { color: var(--text); }
-        
-        .fa-instagram { color: #fff; }
-        .social-item:hover .fa-instagram { color: #E1306C; }
-        .social-item:hover .fa-spotify { color: var(--spotify); }
-        .social-item:hover .fa-youtube { color: var(--youtube); }
+        .fa-instagram { color: #fff; } .social-item:hover .fa-instagram { color: #E1306C; }
+        .fa-spotify { color: var(--spotify); } .social-item:hover .fa-spotify { color: var(--spotify); }
+        .fa-youtube { color: var(--youtube); } .social-item:hover .fa-youtube { color: var(--youtube); }
 
-        /* --- MOBİL --- */
-        @media (max-width: 900px) {
-            .spotlight-section { flex-direction: column; text-align: center; padding: 30px; }
-            .spotlight-section::before { width: 100%; height: 4px; top: 0; bottom: auto; left: 0; }
-            .concert-meta { justify-content: center; flex-direction: column; gap: 10px; }
-        }
-
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            nav { padding: 15px 0; background: #000; }
+            .hero h1 { font-size: 2.2rem; }
             .menu-toggle { display: block; }
             nav ul {
-                display: none; flex-direction: column; position: absolute;
-                top: 100%; left: 0; width: 100%; background: #000;
-                border-bottom: 1px solid var(--accent); padding: 20px 0; gap: 20px;
+                display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
+                background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent);
             }
             nav ul.aktif { display: flex; }
-            .page-header h1 { font-size: 2.5rem; }
+            .cta-buttons { flex-direction: column; width: 80%; }
+            .stats-grid { gap: 40px; }
+            .creative-grid, .insta-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -330,92 +244,90 @@
 
     <nav>
         <div class="nav-container">
-            <div class="menu-toggle" onclick="menuyuAcKapa()">
-                <i class="fas fa-bars"></i>
-            </div>
-
+            <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
             <ul id="anaMenu">
-                <li><a href="index.html">ANA SAYFA</a></li>
+                <li><a href="index.html" style="color: var(--accent);">ANA SAYFA</a></li>
                 <li><a href="hakkinda.html">HAKKINDA</a></li>
                 <li><a href="online-egitim.html">ONLINE EĞİTİM</a></li>
                 <li><a href="notalar.html">NOTALAR</a></li>
                 <li><a href="siirler.html">ŞİİRLER</a></li>
-                <li><a href="konserler.html" class="active">KONSERLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
             </ul>
         </div>
     </nav>
 
-    <header class="page-header">
-        <h1>KONSERLER</h1>
+    <header class="hero">
+        <div class="name-container">
+            <h1>Mahmut Burak<br><span>ASLANTAŞ</span></h1>
+        </div>
+        
+        <div class="cta-buttons">
+            <a href="konserler.html" class="btn">Konserleri Keşfet</a>
+            <a href="siirler.html" class="btn btn-secondary">Şiirleri Oku</a>
+        </div>
     </header>
 
-    <div class="main-container">
-        
-        <div class="spotlight-section">
-            <div class="poster-wrapper">
-                <img src="https://i.hizliresim.com/6vp28ri.JPG" alt="East to West Konser Afişi">
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">SAAT ONLINE DERS</span>
             </div>
-            <div class="info-wrapper">
-                <h1>East to West</h1>
-                <p>
-                    Anadolu'nun kadim ezgilerinin Batı'nın klasik formlarıyla buluştuğu eşsiz bir müzikal yolculuk. 
-                    <span class="highlight-name">Mahmut Burak ASLANTAŞ</span> ve <span class="highlight-name">Elzė MARKEVIČIŪTĖ</span>'nin 
-                    ortak projesi olan bu konser, kültürlerarası bir köprü kurarak dinleyicilere unutulmaz bir deneyim sunuyor.
-                </p>
-                <div class="concert-meta">
-                    <div class="meta-item"><i class="far fa-calendar-alt"></i> 17 ARALIK 2025</div>
-                    <div class="meta-item"><i class="fas fa-map-marker-alt"></i> ADNAN MENDERES ÜNİVERSİTESİ</div>
-                </div>
+            <div class="stat-item">
+                <span class="stat-number">20+</span>
+                <span class="stat-label">ÖZGÜN ESER & ŞİİR</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">TRT</span>
+                <span class="stat-label">GENÇLİK KOROSU</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">10+</span>
+                <span class="stat-label">SAHNE PERFORMANSI</span>
             </div>
         </div>
+    </section>
 
-        <div class="video-section">
-            <h3>Konseri İzleyin</h3>
-            <div class="video-wrapper">
-                <iframe 
-                    width="560" 
-                    height="315" 
-                    src="https://www.youtube.com/embed/q7fH0v_sgO8?rel=0" 
-                    title="East to West Concert" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    referrerpolicy="strict-origin-when-cross-origin" 
-                    allowfullscreen>
-                </iframe>
-            </div>
-            
-            <a href="https://www.youtube.com/watch?v=q7fH0v_sgO8" target="_blank" class="youtube-btn">
-                <i class="fab fa-youtube"></i> YouTube'da İzle
+    <section class="quote-section">
+        <span class="quote-title">GÜNÜN SÖZÜ</span>
+        <span id="gununSozu" class="daily-quote">“Sanat, görüneni tekrarlamak değil; görünür kılmaktır.”</span>
+        <div class="quote-line"></div>
+    </section>
+
+    <section class="creative-section">
+        <h2 class="section-title">KREATİF KÖŞE</h2>
+        <div class="creative-grid">
+            <div class="creative-item"><img src="https://i.hizliresim.com/olj28le.jpg" alt="Fotoğraf 1"></div>
+            <div class="creative-item"><img src="https://i.hizliresim.com/6vp28ri.JPG" alt="Fotoğraf 2"></div>
+            <div class="creative-item"><img src="https://i.hizliresim.com/h6g4amm.jpg" alt="Fotoğraf 3"></div>
+        </div>
+    </section>
+
+    <section class="instagram-section">
+        <div class="insta-header">
+            <i class="fab fa-instagram"></i>
+            <br>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-link">@baglamagram</a>
+        </div>
+        <div class="insta-grid">
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
+                <img src="https://i.hizliresim.com/olj28le.jpg" alt="Insta 1">
+                <div class="insta-overlay"><i class="fas fa-heart"></i></div>
+            </a>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
+                <img src="https://i.hizliresim.com/6vp28ri.JPG" alt="Insta 2">
+                <div class="insta-overlay"><i class="fas fa-heart"></i></div>
+            </a>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
+                <img src="https://i.hizliresim.com/h6g4amm.jpg" alt="Insta 3">
+                <div class="insta-overlay"><i class="fas fa-heart"></i></div>
+            </a>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
+                <img src="https://i.hizliresim.com/hcxh8kf.JPG" alt="Insta 4">
+                <div class="insta-overlay"><i class="fas fa-heart"></i></div>
             </a>
         </div>
-
-        <div class="gallery-section">
-            <h2>GEÇMİŞ KONSERLER</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="https://i.hizliresim.com/hcxh8kf.JPG" alt="Konser Afişi">
-                    <h4>Yıldızların Altında</h4>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://i.hizliresim.com/bc69112.JPG" alt="Konser Afişi">
-                    <h4>Sanat Müziği Korosu</h4>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://i.hizliresim.com/6vp28ri.JPG" alt="Konser Afişi">
-                    <h4>East to West - Aydın</h4>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://i.hizliresim.com/8u4tkrb.JPG" alt="Konser Afişi">
-                    <h4>Bahar Konseri</h4>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://i.hizliresim.com/2hvoqlr.jpg" alt="Konser Afişi">
-                    <h4>ADÜ Ses Finali</h4>
-                </div>
-            </div>
-        </div>
-
-    </div>
+    </section>
 
     <footer>
         <div class="social-wrapper">
@@ -441,6 +353,35 @@
             var menu = document.getElementById("anaMenu");
             menu.classList.toggle("aktif");
         }
+
+        // --- GÜNÜN SÖZÜ OTOMASYONU ---
+        // Buraya istediğin kadar söz ekleyebilirsin.
+        const sozler = [
+            "Sabırla Bekleyen, taş üstüne gül açtırır. - Mahmut Burak ASLANTAŞ",
+            "Müziğin olduğu yerde kötülük barınmaz. - Cervantes",
+            "Gönül kimi severse, aşk onda güzeldir. - Neşet Ertaş",
+            "Türküler, şiirlerin kanatlanmış halidir.",
+            "Bağlama, Anadolu'nun sesidir; duymasını bilene çok şey anlatır.",
+            "Sanat, görüneni tekrarlamak değil; görünür kılmaktır. - Paul Klee",
+            "Yoruldum artık sevmekten, yar derdi ile yaş dökmekten... - M.B. Aslantaş",
+            "Her adımda aşk, her perdede hasret vardır."
+        ];
+
+        function gununSozunuGetir() {
+            const bugun = new Date();
+            // Yılın kaçıncı günü olduğunu hesapla (0-365 arası)
+            const baslangic = new Date(bugun.getFullYear(), 0, 0);
+            const fark = bugun - baslangic;
+            const gunSayisi = Math.floor(fark / (1000 * 60 * 60 * 24));
+            
+            // Gün sayısına göre sıradaki sözü seç (Modül aritmetiği)
+            const secilenSoz = sozler[gunSayisi % sozler.length];
+            
+            document.getElementById("gununSozu").innerText = secilenSoz;
+        }
+
+        // Sayfa yüklendiğinde sözü getir
+        gununSozunuGetir();
     </script>
 
 </body>
