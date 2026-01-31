@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta name="description" content="Mahmut Burak ASLANTAŞ ile profesyonel online bağlama eğitimi. Ders notları, nota arşivi, dikte çalışmaları ve kişiye özel öğrenci portalına buradan ulaşın.">
-
-<meta property="og:title" content="Online Bağlama Eğitimi | Mahmut Burak ASLANTAŞ">
-<meta property="og:description" content="Bağlama eğitiminize dijital bir boyut kazandırın. Materyallere ve ders dökümanlarına anında erişin.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://baglamagram.com.tr/online-egitim.html">
-<meta property="og:image" content="https://i.hizliresim.com/h6g4amm.jpg"> <meta property="og:locale" content="tr_TR">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Online Bağlama Eğitimi | Mahmut Burak ASLANTAŞ">
-<meta name="twitter:description" content="Ders notları, notalar ve dikte çalışmalarıyla online bağlama portalı.">
-<meta name="twitter:image" content="https://i.hizliresim.com/h6g4amm.jpg"> ```
-
     <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Eğitim | Mahmut Burak ASLANTAŞ</title>
     
+    <meta name="description" content="Mahmut Burak ASLANTAŞ ile profesyonel online bağlama eğitimi. Ders notları, nota arşivi, dikte çalışmaları ve kişiye özel öğrenci portalına buradan ulaşın.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baglamagram.com.tr/online-egitim.html">
+    <meta property="og:title" content="Online Bağlama Eğitimi | Mahmut Burak ASLANTAŞ">
+    <meta property="og:description" content="Bağlama eğitiminize dijital bir boyut kazandırın. Materyallere ve ders dökümanlarına anında erişin.">
+    <meta property="og:image" content="https://i.hizliresim.com/h6g4amm.jpg">
+    <meta property="og:locale" content="tr_TR">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Online Bağlama Eğitimi | Mahmut Burak ASLANTAŞ">
+    <meta name="twitter:description" content="Ders notları, notalar ve dikte çalışmalarıyla online bağlama portalı.">
+    <meta name="twitter:image" content="https://i.hizliresim.com/h6g4amm.jpg">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
@@ -168,7 +169,7 @@
         .cat-title { color: var(--accent); font-family: 'Playfair Display', serif; font-size: 1.2rem; display: block; margin-bottom: 5px; }
         .cat-desc { color: #fff; font-size: 0.9rem; opacity: 0.8; }
         
-        /* BURASI GÜNCELLENDİ: 4 Sütun */
+        /* 4 Sütunlu Grid */
         .materials-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
         
         .mat-item { background: #1a1a1a; border: 1px solid #333; padding: 20px 10px; text-align: center; border-radius: 5px; cursor: pointer; transition: 0.3s; text-decoration: none; }
@@ -311,7 +312,7 @@
                         <br>
                         <div class="dashboard-grid">
                             <div class="dash-card" onclick="sayfaGoster('baglama-menu-view')">
-                                <img src="baglama.png" class="custom-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'">
+                                <img src="baglama-ikon.png" class="custom-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'">
                                 <i class="fas fa-music" style="display:none; font-size:3rem; color:var(--accent); margin-bottom:20px;"></i>
                                 <h3>BAĞLAMA EĞİTİMİ</h3>
                                 <p>Ders notları, notalar ve egzersizler.</p>
@@ -418,11 +419,11 @@
     <script>
         // --- 1. ÖĞRENCİ VERİTABANI
         const ogrenciler = {
-            "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },          
-            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },   
-            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },  
-            "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3RvwJ8=", soyad: "UEFJTlRFUg==" },   
-            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }   
+            "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },           
+            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },    
+            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },   
+            "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3RvwJ8=", soyad: "UEFJTlRFUg==" },    
+            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }    
         };
 
         // --- 2. DİKTE SES DOSYALARI ---
