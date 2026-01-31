@@ -433,15 +433,12 @@
     </footer>
 
     <script>
-        // --- 1. ÖĞRENCİ VERİTABANI (DÜZELTİLDİ) ---
+        // --- 1. ÖĞRENCİ VERİTABANI (YENİLENMİŞ VE TEMİZLENMİŞ) ---
         const ogrenciler = {
             "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },           
             "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },    
             "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },   
-            
-            // 
             "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3R1xJ8=", soyad: "UEFJTlRFUg==" }, 
-            
             "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }    
         };
 
@@ -527,7 +524,8 @@
         });
 
         function sistemeGiris() {
-            const hamSifre = document.getElementById("studentPass").value;
+            // Şifrenin başındaki ve sonundaki boşlukları otomatik temizle (.trim())
+            const hamSifre = document.getElementById("studentPass").value.trim();
             let sifre = "";
             
             try {
@@ -540,18 +538,17 @@
             if (ogrenciler[sifre]) {
                 const ogr = ogrenciler[sifre];
                 
-                // İsim çözme işlemi (Hata korumalı)
                 let formatliAd = "Öğrenci";
                 let formatliSoyad = "";
 
                 try {
+                    // İsimleri Base64'ten çöz
                     let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
                     let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
                     formatliAd = gercekAd.charAt(0).toUpperCase() + gercekAd.slice(1).toLowerCase();
                     formatliSoyad = gercekSoyad.toUpperCase();
                 } catch (err) {
-                    console.log("İsim çözme hatası:", err);
-                    // Hata olsa bile girişe izin ver, sadece isim düzgün görünmeyebilir.
+                    console.log("İsim çözme hatası");
                 }
                 
                 document.getElementById("displayAd").innerText = formatliAd;
