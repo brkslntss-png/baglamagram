@@ -124,10 +124,9 @@
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* DASHBOARD */
+        /* DASHBOARD - FONT GÜNCELLENDİ: CENTURY GOTHIC */
         .dashboard-header h1 { 
-            /* BURASI DEĞİŞTİ: Century Gothic Fontu */
-            font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+            font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif; 
             color: var(--accent); margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; 
             font-weight: normal;
         }
@@ -248,7 +247,7 @@
                 <h3 style="text-align: center; margin-bottom: 25px;">BAŞVURU FORMU</h3>
                 <form action="https://formspree.io/f/xnjvyknz" method="POST" class="form-group">
                     <input type="text" name="ad_soyad" placeholder="Ad Soyad" required>
-                    <input type="tel" name="telefon" placeholder="Telefon Numarası" required>
+                    <input type="tel" name="telefon" placeholder="Telefon Numarası (05...)" required>
                     <div style="display: flex; gap: 10px;"><input type="number" name="yas" placeholder="Yaş (16+)" min="16" required style="flex:1;"><input type="text" name="meslek" placeholder="Meslek (Opsiyonel)" style="flex:1;"></div>
                     <select name="seviye"><option value="" disabled selected>Mevcut Seviyeniz</option><option value="sifir">Hiç Bilmiyorum</option><option value="temel">Temel Seviye</option><option value="ileri">İleri Seviye</option></select>
                     <textarea name="mesaj" rows="4" placeholder="Müzikal hedefleriniz..." required></textarea>
@@ -372,9 +371,8 @@
                         </div>
                         <div class="exam-detail-container">
                             <p style="color:#888; margin-bottom:15px;">🎧 Dikte Kaydını Dinle:</p>
-                            <audio controls id="exam-audio-player" style="width: 100%;">
-                                <source src="" type="audio/mpeg">
-                            </audio>
+                            <iframe id="exam-audio-player" src="" width="100%" height="150" style="border:none; border-radius: 10px;" allow="autoplay"></iframe>
+                            
                             <div class="answer-key-btn" onclick="cevapGoster()">
                                 <i class="fas fa-eye"></i> CEVAP ANAHTARINI GÖRÜNTÜLE
                             </div>
@@ -403,15 +401,12 @@
     </footer>
 
     <script>
-        // --- 1. ÖĞRENCİ VERİTABANI ---
         const ogrenciler = {
             "1234": { ad: "Ahmet", soyad: "YILMAZ" },
             "2026": { ad: "Elif", soyad: "DEMİR" },
             "mahmut": { ad: "Mahmut Burak", soyad: "ASLANTAŞ" }
         };
 
-        // --- 2. DİKTE İÇİN DRIVE ID VERİTABANI (1-22 Arası, 18 Hariç) ---
-        // Buraya sadece ID'leri girmen yeterli (önceki konuşmadan aldım)
         const dikteVerileri = {
             1: "1CprU3vYtFIEZ0gRgReVEye4IHShh0y0_",
             2: "1F47H-u9OgakbY-Y8o0X3s_ago7C9x-RO",
@@ -438,7 +433,6 @@
 
         function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
-        
         function girisAc() { document.getElementById("login-overlay").style.display = "flex"; }
         function girisKapat() { document.getElementById("login-overlay").style.display = "none"; }
 
@@ -461,33 +455,24 @@
                 document.getElementById("portal-entry-btn-section").style.display = "none";
                 document.getElementById("public-content").style.display = "none";
                 document.getElementById("student-portal").style.display = "block";
-                
                 history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
             } else {
                 document.getElementById("loginError").style.display = "block";
             }
         }
 
-        // SPA Navigasyon (History API)
         function sayfaGoster(id, addToHistory = true) {
             document.querySelectorAll(".view-section").forEach(s => s.classList.remove("active"));
             document.getElementById(id).classList.add("active");
-            
-            if(addToHistory) {
-                history.pushState({view: id}, "", "#" + id.replace("-view", ""));
-            }
+            if(addToHistory) history.pushState({view: id}, "", "#" + id.replace("-view", ""));
             if(window.innerWidth < 900) { document.getElementById("sidebar").classList.add("collapsed"); }
         }
 
         window.onpopstate = function(event) {
-            if(event.state && event.state.view) {
-                sayfaGoster(event.state.view, false);
-            } else {
-                sayfaGoster('dashboard-view', false);
-            }
+            if(event.state && event.state.view) sayfaGoster(event.state.view, false);
+            else sayfaGoster('dashboard-view', false);
         };
 
-        // Bağlama Materyalleri
         function materyalAc(kategori) {
             document.getElementById("mat-category-title").innerText = kategori;
             const container = document.getElementById("materials-container");
@@ -503,20 +488,14 @@
             sayfaGoster("materials-view");
         }
 
-        // Yetenek Sınavı Kategori Seçimi
         function yetenekKategoriAc(kategoriAdi) {
             document.getElementById("exam-list-title").innerText = kategoriAdi;
             const listeContainer = document.getElementById("exam-list-container");
-            listeContainer.innerHTML = ""; // Temizle
-
+            listeContainer.innerHTML = "";
             if (kategoriAdi === "Dikte Soruları") {
-                // 1'den 22'ye kadar, 18 hariç listele
                 for (let i = 1; i <= 22; i++) {
                     if (i === 18) continue;
-                    
-                    // Drive ID'sini al (varsa)
                     let driveId = dikteVerileri[i] || ""; 
-                    
                     listeContainer.innerHTML += `
                         <div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', 'Çalışma ${i}')">
                             <span style="color:#fff; font-weight:500;">Çalışma ${i}</span>
@@ -525,27 +504,22 @@
                     `;
                 }
             } else {
-                // Diğer kategoriler için boş veya örnek veri
                 listeContainer.innerHTML = "<p style='color:#888;'>Bu kategoride henüz içerik yok.</p>";
             }
-            
             sayfaGoster("exam-list-view");
         }
 
-        // Dikte Detay Açma
         function dikteDetayAc(no, audioId, baslik) {
             document.getElementById("exam-detail-title").innerText = baslik;
             
-            let audioUrl = "";
+            // OYNATICI DÜZELTME: KESİN ÇÖZÜM İÇİN IFRAME FORMATI
+            let embedUrl = "";
             if(audioId) {
-                audioUrl = "https://docs.google.com/uc?export=download&id=" + audioId;
+                embedUrl = "https://drive.google.com/file/d/" + audioId + "/preview";
             }
+            document.getElementById("exam-audio-player").src = embedUrl;
             
-            document.getElementById("exam-audio-player").src = audioUrl;
-            
-            // Buraya Hızlı Resim linklerini de bir objeden çekebiliriz, şimdilik boş
             document.getElementById("current-answer-img").value = "HIZLI_RESIM_LINKI"; 
-            
             sayfaGoster("exam-detail-view");
         }
 
