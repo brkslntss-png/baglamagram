@@ -74,7 +74,23 @@
         .portal-btn:hover .icon-stack .fa-music { color: #000; }
 
         /* --- SAYFA İÇERİĞİ --- */
-        .page-content { flex: 1; padding: 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .page-content { 
+            flex: 1; 
+            padding: 20px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            width: 100%;
+            /* ANİMASYON EKLENDİ */
+            animation: fadeInUp 1s ease-out forwards; 
+            opacity: 0; 
+        }
+        
+        /* ANİMASYON KEYFRAMES */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
 
         /* PUBLIC CONTENT */
