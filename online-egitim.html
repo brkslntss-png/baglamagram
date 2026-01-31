@@ -433,12 +433,15 @@
     </footer>
 
     <script>
-        // --- 1. ÖĞRENCİ VERİTABANI
+        // --- 1. ÖĞRENCİ VERİTABANI (DÜZELTİLDİ) ---
         const ogrenciler = {
             "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },           
             "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },    
             "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },   
-            "amansendecano": { ad: "R8Oka3RvwJ8=", soyad: "UEFJTlRFUg==" },  
+            
+            // 
+            "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3R1xJ8=", soyad: "UEFJTlRFUg==" }, 
+            
             "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }    
         };
 
@@ -482,7 +485,7 @@
             { ad: "Nota Süreleri 2", dosya: "nota-sureleri1.png" }
         ];
 
-        // --- 4. KISA SAP NOTALARI (s harfi .png, diğerleri .jpg) ---
+        // --- 4. KISA SAP NOTALARI ---
         const kisaSapNotalari = [
             { ad: "Gelin Ayşem", dosya: "a.jpg" },
             { ad: "Eklemedir Koca Konak", dosya: "b.jpg" },
@@ -501,7 +504,7 @@
             { ad: "Değmen Benim Gamlı Yaslı Gönlüme", dosya: "o.jpg" },
             { ad: "Denizin Dibinde Hatçam", dosya: "p.jpg" },
             { ad: "Kütahyanın Pınarları", dosya: "r.jpg" },
-            { ad: "Dostum Dostum", dosya: "s.png" }, 
+            { ad: "Dostum Dostum", dosya: "s.png?v=1" }, 
             { ad: "Han Sarhoş Hancı Sarhoş", dosya: "t.jpg" },
             { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
         ];
@@ -527,22 +530,29 @@
             const hamSifre = document.getElementById("studentPass").value;
             let sifre = "";
             
-            //
             try {
+                // Şifreyi Base64'e çevir
                 sifre = btoa(unescape(encodeURIComponent(hamSifre)));
-            } catch (e) { 
-                console.log("Şifre çevrilemedi"); 
+            } catch (e) {
+                console.log("Şifre çevrim hatası");
             }
 
             if (ogrenciler[sifre]) {
                 const ogr = ogrenciler[sifre];
                 
-                // İsimleri Base64'ten geri çöz (Türkçe karakter destekli)
-                let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
-                let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
+                // İsim çözme işlemi (Hata korumalı)
+                let formatliAd = "Öğrenci";
+                let formatliSoyad = "";
 
-                let formatliAd = gercekAd.charAt(0).toUpperCase() + gercekAd.slice(1).toLowerCase();
-                let formatliSoyad = gercekSoyad.toUpperCase();
+                try {
+                    let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
+                    let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
+                    formatliAd = gercekAd.charAt(0).toUpperCase() + gercekAd.slice(1).toLowerCase();
+                    formatliSoyad = gercekSoyad.toUpperCase();
+                } catch (err) {
+                    console.log("İsim çözme hatası:", err);
+                    // Hata olsa bile girişe izin ver, sadece isim düzgün görünmeyebilir.
+                }
                 
                 document.getElementById("displayAd").innerText = formatliAd;
                 document.getElementById("displaySoyad").innerText = formatliSoyad;
