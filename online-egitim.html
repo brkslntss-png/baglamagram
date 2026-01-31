@@ -148,14 +148,16 @@
         }
         .dash-whatsapp-btn:hover { background: #1ebc57; transform: translateY(-2px); }
 
-        /* GRIDLER */
+        /* GRIDLER - (4 Sütunlu) */
         .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .cat-box { background: #151515; padding: 30px; border-left: 3px solid var(--accent); cursor: pointer; transition: 0.3s; }
         .cat-box:hover { background: #222; }
         .cat-title { color: var(--accent); font-family: 'Playfair Display', serif; font-size: 1.2rem; display: block; margin-bottom: 5px; }
         .cat-desc { color: #fff; font-size: 0.9rem; opacity: 0.8; }
         
+        /* BURASI GÜNCELLENDİ: 4 Sütun */
         .materials-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+        
         .mat-item { background: #1a1a1a; border: 1px solid #333; padding: 20px 10px; text-align: center; border-radius: 5px; cursor: pointer; transition: 0.3s; text-decoration: none; }
         .mat-item:hover { border-color: var(--accent); background: #000; }
         .mat-item i { font-size: 2rem; color: #d45d5d; display: block; margin-bottom: 10px; }
@@ -401,11 +403,13 @@
     </footer>
 
     <script>
-        // --- 1. ÖĞRENCİ VERİTABANI ---
+        // --- 1. ÖĞRENCİ VERİTABANI
         const ogrenciler = {
-            "YW1hbnNlbmRlY2Fubw==": { ad: "Gokuğ", soyad: "PAINTER" },
-            "ZWxpZmthcm1hbjEyMw==": { ad: "Elif", soyad: "KARMAN" },
-            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "ASLANTAŞ" }
+            "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },          
+            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },   
+            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },  
+            "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3RvwJ8=", soyad: "UEFJTlRFUg==" },   
+            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }   
         };
 
         // --- 2. DİKTE SES DOSYALARI ---
@@ -467,16 +471,16 @@
             { ad: "Değmen Benim Gamlı Yaslı Gönlüme", dosya: "o.jpg" },
             { ad: "Denizin Dibinde Hatçam", dosya: "p.jpg" },
             { ad: "Kütahyanın Pınarları", dosya: "r.jpg" },
-            { ad: "Dostum Dostum", dosya: "s.png?v=1" },
+            { ad: "Dostum Dostum", dosya: "s.png?v=1" }, 
             { ad: "Han Sarhoş Hancı Sarhoş", dosya: "t.jpg" },
             { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
         ];
 
-        // --- 5. PARMAK EGZERSİZLERİ (GitHub Dosya İsimleri Birebir) ---
+        // --- 5. PARMAK EGZERSİZLERİ ---
         const parmakEgzersizleri = [
-            { ad: "Alıştırma 1", dosya: "aliştirma-1.png" }, // Türkçe karakterlere dikkat
+            { ad: "Alıştırma 1", dosya: "aliştirma-1.png" },
             { ad: "Alıştırma 2", dosya: "aliştirma-2.png" },
-            { ad: "4 Parmak Etüdü 1", dosya: "4-parmak-etutdu1.png" }, // Yazım hatası korundu: etutdu1
+            { ad: "4 Parmak Etüdü 1", dosya: "4-parmak-etutdu1.png" },
             { ad: "4 Parmak Etüdü 2", dosya: "4-parmak-etudu2.png" }
         ];
 
@@ -490,18 +494,35 @@
         });
 
         function sistemeGiris() {
-            const sifre = document.getElementById("studentPass").value;
+            const hamSifre = document.getElementById("studentPass").value;
+            let sifre = "";
+            
+            // Girilen şifreyi Base64'e çevir
+            try {
+                sifre = btoa(unescape(encodeURIComponent(hamSifre)));
+            } catch (e) { 
+                console.log("Şifre çevrilemedi"); 
+            }
+
             if (ogrenciler[sifre]) {
                 const ogr = ogrenciler[sifre];
-                let formatliAd = ogr.ad.charAt(0).toUpperCase() + ogr.ad.slice(1).toLowerCase();
-                let formatliSoyad = ogr.soyad.toUpperCase();
+                
+                // İsimleri Base64'ten geri çöz (Türkçe karakter destekli)
+                let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
+                let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
+
+                let formatliAd = gercekAd.charAt(0).toUpperCase() + gercekAd.slice(1).toLowerCase();
+                let formatliSoyad = gercekSoyad.toUpperCase();
+                
                 document.getElementById("displayAd").innerText = formatliAd;
                 document.getElementById("displaySoyad").innerText = formatliSoyad;
                 document.getElementById("welcomeTitle").innerText = "Merhaba " + formatliAd + "!";
+                
                 girisKapat();
                 document.getElementById("portal-entry-btn-section").style.display = "none";
                 document.getElementById("public-content").style.display = "none";
                 document.getElementById("student-portal").style.display = "block";
+                
                 history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
             } else {
                 document.getElementById("loginError").style.display = "block";
@@ -520,7 +541,7 @@
             else sayfaGoster('dashboard-view', false);
         };
 
-        // MATERYAL AÇMA: Tüm Kategoriler İçin Logic
+        // MATERYAL AÇMA FONKSİYONU
         function materyalAc(kategori) {
             document.getElementById("mat-category-title").innerText = kategori;
             const container = document.getElementById("materials-container");
