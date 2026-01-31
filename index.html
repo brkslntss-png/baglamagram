@@ -102,11 +102,10 @@
         .hero {
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 80px 20px 40px; position: relative;
-            /* DÜZELTME: Işık hüzmesi için overflow kontrolü */
             overflow: hidden; 
         }
 
-        /* DÜZELTME: Hafif Sarı Işık Hüzmesi Geri Eklendi */
+        /* Işık Hüzmesi Efekti (Geri Geldi) */
         .hero::before {
             content: '';
             position: absolute;
@@ -115,14 +114,13 @@
             transform: translate(-50%, -50%);
             width: 600px;
             height: 600px;
-            /* Hafif sarı/altın radyal gradyan */
             background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
             z-index: -1;
             pointer-events: none;
         }
 
         .name-container {
-            border: 1px solid rgba(197, 160, 89, 0.3); padding: 40px 60px; margin-bottom: 30px;
+            border: 1px solid rgba(197, 160, 89, 0.3); padding: 40px 60px; margin-bottom: 20px;
             position: relative; animation: fadeIn 1.5s ease-in-out;
         }
 
@@ -138,8 +136,27 @@
         }
         .hero h1 span { color: var(--accent); font-weight: 600; }
 
+        /* HERO ALTINDAKİ SABİT SÖZ */
+        .hero-static-quote {
+            max-width: 700px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin: 0 auto 50px auto;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .hero-static-quote span {
+            font-size: 0.9em;
+            color: var(--accent);
+            display: block;
+            margin-top: 10px;
+            font-style: normal;
+            font-weight: 500;
+        }
+
         /* --- BUTONLAR --- */
-        .cta-buttons { display: flex; gap: 25px; animation: fadeIn 2s ease-in-out; margin-bottom: 60px; }
+        .cta-buttons { display: flex; gap: 25px; animation: fadeIn 2.5s ease-in-out; margin-bottom: 60px; }
 
         .btn {
             padding: 18px 45px; border: 1px solid var(--accent); color: var(--accent);
@@ -181,24 +198,32 @@
         .quote-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; display: block;}
         .quote-line { width: 40px; height: 2px; background: var(--accent); margin: 0 auto; opacity: 0.5; }
 
-        /* --- KREATİF KÖŞE (VİDEO GALERİSİ) --- */
+        /* --- KREATİF KÖŞE (BÜYÜK VİDEOLAR) --- */
         .creative-section {
-            max-width: 1200px; margin: 0 auto 80px; padding: 0 20px;
+            max-width: 1400px; margin: 0 auto 80px; padding: 0 20px;
         }
         .section-title {
             text-align: center; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent);
             margin-bottom: 40px; letter-spacing: 2px;
         }
         .creative-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            display: grid;
+            /* Videoları büyütmek için 2 sütun (bilgisayarda) */
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 40px;
         }
-        /* DÜZELTME: Video kapsayıcıları için stil */
         .video-container {
             position: relative; padding-bottom: 56.25%; /* 16:9 aspect ratio */
             height: 0; overflow: hidden; border: 1px solid #333;
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .video-container iframe {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+        /* 3. video ortada dursun diye genişletme (isteğe bağlı, şu an normal gridde) */
+        .video-container:last-child {
+             grid-column: span 1; 
         }
 
         /* --- INSTAGRAM FEED --- */
@@ -238,7 +263,6 @@
         .social-wrapper { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
         .social-item { display: flex; flexDirection: column; align-items: center; gap: 8px; textDecoration: none; color: #888; fontSize: 0.8rem; transition: 0.3s; }
         
-        /* Footer İkon Kutusu */
         .social-icon-box {
             font-size: 1.2rem;
             width: 50px;
@@ -255,17 +279,22 @@
         .social-item:hover .social-icon-box { borderColor: var(--accent); transform: translateY(-5px); }
         .social-item:hover { color: var(--text); }
         
-        /* DÜZELTME: Footer İkonlarının Marka Renkleri Geri Getirildi */
+        /* Footer İkon Renkleri (Artık bozuk değil) */
         .fa-instagram { color: #fff; } 
-        .social-item:hover .fa-instagram { color: #E1306C; /* Instagram Rengi */ }
+        .social-item:hover .fa-instagram { color: #E1306C; }
         
         .fa-spotify { color: #fff; } 
-        .social-item:hover .fa-spotify { color: var(--spotify); /* Spotify Rengi */ }
+        .social-item:hover .fa-spotify { color: var(--spotify); }
         
         .fa-youtube { color: #fff; } 
-        .social-item:hover .fa-youtube { color: var(--youtube); /* YouTube Rengi */ }
+        .social-item:hover .fa-youtube { color: var(--youtube); }
 
         /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .creative-grid { grid-template-columns: 1fr; } /* Mobilde videolar kocaman tek sıra */
+            .video-container:last-child { grid-column: auto; }
+        }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
             .menu-toggle { display: block; }
@@ -276,8 +305,6 @@
             nav ul.aktif { display: flex; }
             .cta-buttons { flex-direction: column; width: 80%; }
             .stats-grid { gap: 40px; }
-            /* DÜZELTME: Videolar mobilde alt alta */
-            .creative-grid { grid-template-columns: 1fr; } 
             .insta-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
@@ -303,6 +330,11 @@
             <h1>Mahmut Burak<br><span>ASLANTAŞ</span></h1>
         </div>
         
+        <div class="hero-static-quote">
+            “Sanatsız kalan bir milletin, hayat damarlarından biri kopmuş demektir.”<br>
+            <span>Mustafa Kemal ATATÜRK</span>
+        </div>
+
         <div class="cta-buttons">
             <a href="konserler.html" class="btn">Konserleri Keşfet</a>
             <a href="siirler.html" class="btn btn-secondary">Şiirleri Oku</a>
@@ -328,12 +360,13 @@
 
     <section class="quote-section">
         <span class="quote-title">GÜNÜN SÖZÜ</span>
-        <span id="gununSozu" class="daily-quote">“Sanat, görüneni tekrarlamak değil; görünür kılmaktır.”</span>
+        <span id="gununSozu" class="daily-quote"></span>
         <div class="quote-line"></div>
     </section>
 
     <section class="creative-section">
-        <h2 class="section-title">PERFORMANSLAR</h2> <div class="creative-grid">
+        <h2 class="section-title">KREATİF KÖŞE</h2>
+        <div class="creative-grid">
             <div class="video-container">
                 <iframe src="https://www.youtube.com/embed/SvliCP5Wznw?si=SVzAKtUlTDZbdhXH" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
@@ -419,13 +452,11 @@
             const fark = bugun - baslangic;
             const gunSayisi = Math.floor(fark / (1000 * 60 * 60 * 24));
             
-            // Söz sayısına göre otomatik seçim yapar
             const secilenSoz = sozler[gunSayisi % sozler.length];
             
             document.getElementById("gununSozu").innerText = `“${secilenSoz}”`;
         }
 
-        // Sayfa yüklendiğinde çalıştır
         gununSozunuGetir();
     </script>
 
