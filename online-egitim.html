@@ -126,8 +126,7 @@
 
         /* DASHBOARD */
         .dashboard-header h1 { 
-            /* BURASI GÜNCELLENDİ: Century Gothic Fontu */
-            font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
+            font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif; /* FONT GÜNCELLENDİ */
             color: var(--accent); margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; 
             font-weight: normal;
         }
@@ -248,8 +247,7 @@
                 <h3 style="text-align: center; margin-bottom: 25px;">BAŞVURU FORMU</h3>
                 <form action="https://formspree.io/f/xnjvyknz" method="POST" class="form-group">
                     <input type="text" name="ad_soyad" placeholder="Ad Soyad" required>
-                    <input type="tel" name="tel" placeholder="Telefon Numaranız (05...)" required>
-                    
+                    <input type="tel" name="telefon" placeholder="Telefon Numaranız" required>
                     <div style="display: flex; gap: 10px;"><input type="number" name="yas" placeholder="Yaş (16+)" min="16" required style="flex:1;"><input type="text" name="meslek" placeholder="Meslek (Opsiyonel)" style="flex:1;"></div>
                     <select name="seviye"><option value="" disabled selected>Mevcut Seviyeniz</option><option value="sifir">Hiç Bilmiyorum</option><option value="temel">Temel Seviye</option><option value="ileri">İleri Seviye</option></select>
                     <textarea name="mesaj" rows="4" placeholder="Müzikal hedefleriniz..." required></textarea>
@@ -410,7 +408,7 @@
             "mahmut": { ad: "Mahmut Burak", soyad: "ASLANTAŞ" }
         };
 
-        // --- 2. DİKTE İÇİN DRIVE ID VERİTABANI (1-22 Arası, 18 Hariç) ---
+        // --- 2. DİKTE SES DOSYALARI ---
         const dikteVerileri = {
             1: "1CprU3vYtFIEZ0gRgReVEye4IHShh0y0_",
             2: "1F47H-u9OgakbY-Y8o0X3s_ago7C9x-RO",
@@ -435,6 +433,21 @@
             22: "1pdHx7gHYkg1sEfu01AfVTxbpHQJ3GCOS"
         };
 
+        // --- 3. DERS NOTLARI LİSTESİ (baglama-ders-teori) ---
+        const dersNotlariDosyalari = [
+            { ad: "Ders Notu 1", dosya: "1.png" },
+            { ad: "Ders Notu 2", dosya: "2.png" },
+            { ad: "Ders Notu 3", dosya: "3.png" },
+            { ad: "Ders Notu 4", dosya: "4.png" },
+            { ad: "Ders Notu 5", dosya: "5.png" },
+            { ad: "Ders Notu 6", dosya: "6.png" },
+            { ad: "Ders Notu 7", dosya: "7.png" },
+            { ad: "Ders Notu 8", dosya: "8.png" },
+            { ad: "Ders Notu 9", dosya: "9.png" },
+            { ad: "Nota Süreleri", dosya: "nota-sureleri.png" },
+            { ad: "Nota Süreleri 2", dosya: "nota-sureleri1.png" }
+        ];
+
         function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function girisAc() { document.getElementById("login-overlay").style.display = "flex"; }
@@ -450,11 +463,9 @@
                 const ogr = ogrenciler[sifre];
                 let formatliAd = ogr.ad.charAt(0).toUpperCase() + ogr.ad.slice(1).toLowerCase();
                 let formatliSoyad = ogr.soyad.toUpperCase();
-                
                 document.getElementById("displayAd").innerText = formatliAd;
                 document.getElementById("displaySoyad").innerText = formatliSoyad;
                 document.getElementById("welcomeTitle").innerText = "Merhaba " + formatliAd + "!";
-                
                 girisKapat();
                 document.getElementById("portal-entry-btn-section").style.display = "none";
                 document.getElementById("public-content").style.display = "none";
@@ -477,17 +488,23 @@
             else sayfaGoster('dashboard-view', false);
         };
 
+        // MATERYAL AÇMA: DERS NOTLARI LİSTESİNİ GÖSTERİR
         function materyalAc(kategori) {
             document.getElementById("mat-category-title").innerText = kategori;
             const container = document.getElementById("materials-container");
-            container.innerHTML = "";
-            for(let i=1; i<=5; i++) {
-                container.innerHTML += `
-                    <a href="#" class="mat-item">
-                        <i class="fas fa-file-pdf"></i>
-                        <span>${kategori} - Ders ${i}.pdf</span>
-                    </a>
-                `;
+            container.innerHTML = ""; 
+
+            if (kategori === 'Teorik Bilgi') {
+                dersNotlariDosyalari.forEach(item => {
+                    container.innerHTML += `
+                        <div class="mat-item" onclick="resimGosterModal('./baglama-ders-teori/${item.dosya}')" style="cursor:pointer;">
+                            <i class="fas fa-file-image" style="color: var(--accent); font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                            <span>${item.ad}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = "<p style='color:#888; padding: 20px;'>Bu kategoride henüz materyal bulunmuyor.</p>";
             }
             sayfaGoster("materials-view");
         }
@@ -515,28 +532,23 @@
 
         function dikteDetayAc(no, audioId, baslik) {
             document.getElementById("exam-detail-title").innerText = baslik;
-            
-            // SES OYNATICI FORMATI
-            let embedUrl = "";
-            if(audioId) {
-                embedUrl = "https://drive.google.com/file/d/" + audioId + "/preview";
-            }
+            let embedUrl = audioId ? "https://drive.google.com/file/d/" + audioId + "/preview" : "";
             document.getElementById("exam-audio-player").src = embedUrl;
-            
-            // BURASI DÜZELTİLDİ: Artık placeholder yerine senin klasöründeki png dosyasını arıyor
             document.getElementById("current-answer-img").value = "./dikte-cevaplar/calisma-" + no + ".png"; 
-            
             sayfaGoster("exam-detail-view");
+        }
+
+        function resimGosterModal(yol) {
+            document.getElementById("modalImg").src = yol;
+            document.getElementById("imgModal").style.display = "flex";
         }
 
         function cevapGoster() {
             const link = document.getElementById("current-answer-img").value;
-            // BURASI DÜZELTİLDİ: Placeholder kontrolü kaldırıldı, direkt linke bakılıyor
-            if(link && link !== "") {
-                document.getElementById("modalImg").src = link;
-                document.getElementById("imgModal").style.display = "flex";
+            if(link) {
+                resimGosterModal(link);
             } else {
-                alert("Bu çalışmanın cevap anahtarı henüz yüklenmemiş.");
+                alert("Cevap anahtarı bulunamadı.");
             }
         }
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
