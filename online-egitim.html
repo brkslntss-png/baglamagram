@@ -433,7 +433,7 @@
             22: "1pdHx7gHYkg1sEfu01AfVTxbpHQJ3GCOS"
         };
 
-        // --- 3. DERS NOTLARI LİSTESİ (baglama-ders-teori) ---
+        // --- 3. DERS NOTLARI LİSTESİ ---
         const dersNotlariDosyalari = [
             { ad: "Temel Müzik Bilgileri 1", dosya: "1.png" },
             { ad: "Temel Müzik Bilgileri 2", dosya: "2.png" },
@@ -448,7 +448,7 @@
             { ad: "Nota Süreleri 2", dosya: "nota-sureleri1.png" }
         ];
 
-        // --- 4. KISA SAP NOTALARI (a-u arası, q hariç, .jpg) ---
+        // --- 4. KISA SAP NOTALARI (s harfi .png, diğerleri .jpg) ---
         const kisaSapNotalari = [
             { ad: "Gelin Ayşem", dosya: "a.jpg" },
             { ad: "Eklemedir Koca Konak", dosya: "b.jpg" },
@@ -470,6 +470,14 @@
             { ad: "Dostum Dostum", dosya: "s.png?v=1" },
             { ad: "Han Sarhoş Hancı Sarhoş", dosya: "t.jpg" },
             { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
+        ];
+
+        // --- 5. PARMAK EGZERSİZLERİ (GitHub Dosya İsimleri Birebir) ---
+        const parmakEgzersizleri = [
+            { ad: "Alıştırma 1", dosya: "aliştirma-1.png" }, // Türkçe karakterlere dikkat
+            { ad: "Alıştırma 2", dosya: "aliştirma-2.png" },
+            { ad: "4. Parmak Etüdü 1", dosya: "4-parmak-etutdu1.png" }, // Yazım hatası korundu: etutdu1
+            { ad: "4. Parmak Etüdü 2", dosya: "4-parmak-etudu2.png" }
         ];
 
         function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
@@ -512,7 +520,7 @@
             else sayfaGoster('dashboard-view', false);
         };
 
-        // MATERYAL AÇMA: Ders Notları ve Kısa Sap Notaları
+        // MATERYAL AÇMA: Tüm Kategoriler İçin Logic
         function materyalAc(kategori) {
             document.getElementById("mat-category-title").innerText = kategori;
             const container = document.getElementById("materials-container");
@@ -532,6 +540,15 @@
                     container.innerHTML += `
                         <div class="mat-item" onclick="resimGosterModal('./kisa-sap/${item.dosya}')" style="cursor:pointer;">
                             <i class="fas fa-music" style="color: var(--accent); font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                            <span>${item.ad}</span>
+                        </div>
+                    `;
+                });
+            } else if (kategori === 'Parmak Egzersizleri') {
+                parmakEgzersizleri.forEach(item => {
+                    container.innerHTML += `
+                        <div class="mat-item" onclick="resimGosterModal('./parmak-egzersiz/${item.dosya}')" style="cursor:pointer;">
+                            <i class="fas fa-hand-paper" style="color: var(--accent); font-size: 2rem; display: block; margin-bottom: 10px;"></i>
                             <span>${item.ad}</span>
                         </div>
                     `;
