@@ -124,9 +124,9 @@
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* DASHBOARD - FONT GÜNCELLENDİ: CENTURY GOTHIC */
+        /* DASHBOARD - FONT GÜNCELLENDİ */
         .dashboard-header h1 { 
-            font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif; 
+            font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
             color: var(--accent); margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; 
             font-weight: normal;
         }
@@ -247,7 +247,7 @@
                 <h3 style="text-align: center; margin-bottom: 25px;">BAŞVURU FORMU</h3>
                 <form action="https://formspree.io/f/xnjvyknz" method="POST" class="form-group">
                     <input type="text" name="ad_soyad" placeholder="Ad Soyad" required>
-                    <input type="tel" name="telefon" placeholder="Telefon Numarası (05...)" required>
+                    <input type="tel" name="tel" placeholder="Telefon Numarası" required>
                     <div style="display: flex; gap: 10px;"><input type="number" name="yas" placeholder="Yaş (16+)" min="16" required style="flex:1;"><input type="text" name="meslek" placeholder="Meslek (Opsiyonel)" style="flex:1;"></div>
                     <select name="seviye"><option value="" disabled selected>Mevcut Seviyeniz</option><option value="sifir">Hiç Bilmiyorum</option><option value="temel">Temel Seviye</option><option value="ileri">İleri Seviye</option></select>
                     <textarea name="mesaj" rows="4" placeholder="Müzikal hedefleriniz..." required></textarea>
@@ -401,12 +401,14 @@
     </footer>
 
     <script>
+        // --- 1. ÖĞRENCİ VERİTABANI ---
         const ogrenciler = {
             "1234": { ad: "Ahmet", soyad: "YILMAZ" },
             "2026": { ad: "Elif", soyad: "DEMİR" },
             "mahmut": { ad: "Mahmut Burak", soyad: "ASLANTAŞ" }
         };
 
+        // --- 2. DİKTE İÇİN DRIVE ID VERİTABANI ---
         const dikteVerileri = {
             1: "1CprU3vYtFIEZ0gRgReVEye4IHShh0y0_",
             2: "1F47H-u9OgakbY-Y8o0X3s_ago7C9x-RO",
@@ -446,11 +448,9 @@
                 const ogr = ogrenciler[sifre];
                 let formatliAd = ogr.ad.charAt(0).toUpperCase() + ogr.ad.slice(1).toLowerCase();
                 let formatliSoyad = ogr.soyad.toUpperCase();
-                
                 document.getElementById("displayAd").innerText = formatliAd;
                 document.getElementById("displaySoyad").innerText = formatliSoyad;
                 document.getElementById("welcomeTitle").innerText = "Merhaba " + formatliAd + "!";
-                
                 girisKapat();
                 document.getElementById("portal-entry-btn-section").style.display = "none";
                 document.getElementById("public-content").style.display = "none";
@@ -511,21 +511,17 @@
 
         function dikteDetayAc(no, audioId, baslik) {
             document.getElementById("exam-detail-title").innerText = baslik;
-            
-            // OYNATICI DÜZELTME: KESİN ÇÖZÜM İÇİN IFRAME FORMATI
-            let embedUrl = "";
-            if(audioId) {
-                embedUrl = "https://drive.google.com/file/d/" + audioId + "/preview";
-            }
+            let embedUrl = audioId ? "https://drive.google.com/file/d/" + audioId + "/preview" : "";
             document.getElementById("exam-audio-player").src = embedUrl;
             
-            document.getElementById("current-answer-img").value = "HIZLI_RESIM_LINKI"; 
+            // CEVAP ANAHTARI PNG YOLUNU AYARLAR
+            document.getElementById("current-answer-img").value = "./dikte-cevaplar/calisma-" + no + ".png"; 
             sayfaGoster("exam-detail-view");
         }
 
         function cevapGoster() {
             const link = document.getElementById("current-answer-img").value;
-            if(link && link !== "HIZLI_RESIM_LINKI") {
+            if(link) {
                 document.getElementById("modalImg").src = link;
                 document.getElementById("imgModal").style.display = "flex";
             } else {
