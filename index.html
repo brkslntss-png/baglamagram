@@ -400,10 +400,13 @@
 
         // --- GÜNÜN SÖZÜ OTOMASYONU ---
         const sozler = [
-            "Sanatsız kalan bir milletin, hayat damarlarından biri kopmuş demektir. - M.K. Atatürk",
+            "Sabırla bekleyen, taş üstüne gül açtırır. - Mahmut Burak ASLANTAŞ",
             "Müziğin olduğu yerde kötülük barınmaz. - Cervantes",
             "Gönül kimi severse, aşk onda güzeldir. - Neşet Ertaş",
-            "Türküler, şiirlerin kanatlanmış halidir.",
+            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
+            "Yüksek uçan alçak konar, gurur insanı tez yakar.",
+            "Hüzün de bir misafirdir; gelir, geçer, izi kalır. - Mahmut Burak ASLANTAŞ",
+            "Gülü incitme dalında, sözü incitme dilinde. - Mahmut Burak ASLANTAŞ",
             "Bağlama, Anadolu'nun sesidir; duymasını bilene çok şey anlatır.",
             "Sanat, görüneni tekrarlamak değil; görünür kılmaktır. - Paul Klee",
             "Yoruldum artık sevmekten, yar derdi ile yaş dökmekten... - M.B. Aslantaş",
@@ -415,10 +418,14 @@
             const baslangic = new Date(bugun.getFullYear(), 0, 0);
             const fark = bugun - baslangic;
             const gunSayisi = Math.floor(fark / (1000 * 60 * 60 * 24));
+            
+            // Söz sayısına göre otomatik seçim yapar
             const secilenSoz = sozler[gunSayisi % sozler.length];
-            document.getElementById("gununSozu").innerText = secilenSoz;
+            
+            document.getElementById("gununSozu").innerText = `“${secilenSoz}”`;
         }
 
+        // Sayfa yüklendiğinde çalıştır
         gununSozunuGetir();
     </script>
 
