@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Online Eğitim | Mahmut Burak ASLANTAŞ</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- TEMEL AYARLAR (Ana Sayfadan) --- */
+        :root {
+            --primary: #000000;
+            --accent: #c5a059; /* Altın Rengi */
+            --bg-dark: #0f0f0f;
+            --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+            --spotify: #1DB954;
+            --youtube: #FF0000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 300;
+            background: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: var(--text); 
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- MENÜ (NAV) --- */
+        nav {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        }
+        
+        .nav-container {
+            display: flex; justify-content: center; align-items: center;
+            max-width: 1200px; margin: 0 auto; position: relative;
+        }
+
+        nav ul { display: flex; list-style: none; gap: 40px; padding: 0 20px; }
+        
+        nav a { 
+            color: var(--text-secondary); text-decoration: none; 
+            font-size: 0.8rem; font-weight: 500; text-transform: uppercase; 
+            letter-spacing: 2px; transition: all 0.3s ease; position: relative;
+        }
+
+        nav a:hover, nav a.active { color: var(--accent); }
+        
+        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
+
+        /* --- SAYFA İÇERİĞİ --- */
+        .page-content { flex: 1; padding: 60px 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+        h2, h3, h4 {
+            font-family: 'Playfair Display', serif; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;
+        }
+
+        /* 1. GİRİŞ KUTUSU */
+        .login-section {
+            border: 1px solid rgba(197, 160, 89, 0.5);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 40px; text-align: center; margin-bottom: 80px; position: relative;
+        }
+        .login-section::after, .login-section::before {
+            content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid var(--accent);
+        }
+        .login-section::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .login-section::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        .login-inputs { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        
+        input, select, textarea {
+            background: rgba(0, 0, 0, 0.6); border: 1px solid #333; color: white;
+            padding: 12px; font-family: 'Montserrat', sans-serif; outline: none;
+        }
+        input:focus { border-color: var(--accent); }
+
+        .btn {
+            padding: 12px 30px; border: 1px solid var(--accent); color: var(--accent);
+            background: transparent; text-transform: uppercase; cursor: pointer; transition: 0.3s;
+        }
+        .btn:hover { background: var(--accent); color: #000; }
+
+        /* 2. İKNA KARTLARI (2x2 SÜTUN YAPISI - GÜNCELLENDİ) */
+        .features-grid {
+            display: grid;
+            /* GÜNCELLEME: 4 yerine 2 sütun */
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 30px; /* Boşluk biraz artırıldı */
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px; /* İç boşluk artırıldı */
+            border-left: 2px solid var(--accent);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
+        
+        .feature-card i { font-size: 2rem; color: var(--accent); margin-bottom: 20px; }
+        .feature-card h4 { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; }
+        .feature-card p { font-size: 0.95rem; color: #ccc; line-height: 1.6; } /* Yazı boyutu büyütüldü */
+
+        /* 3. BAŞVURU FORMU */
+        .apply-container { background: #050505; padding: 40px; border: 1px solid #222; max-width: 800px; margin: 0 auto; }
+        .form-group { display: flex; flex-direction: column; gap: 15px; }
+        
+        /* 4. GİZLİ PORTAL */
+        #student-portal { display: none; }
+        .whatsapp-btn {
+            background: #25d366; color: white; text-decoration: none; padding: 15px;
+            display: block; text-align: center; font-weight: 600; margin-bottom: 30px; border-radius: 5px;
+        }
+        .weeks-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .week-box { border: 1px solid #333; padding: 20px; background: #111; }
+        .week-box a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+
+        /* Footer */
+        footer { background: #050505; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
+        .social-wrapper { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
+        .social-item { color: #888; text-decoration: none; font-size: 1.5rem; transition: 0.3s; }
+        .social-item:hover { color: var(--accent); }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 768px) {
+            /* Tablet ve Mobilde Tek Sütuna Düşsün */
+            .features-grid { grid-template-columns: 1fr; gap: 20px; } 
+            
+            nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
+            nav ul.aktif { display: flex; }
+            .menu-toggle { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <div class="menu-toggle" onclick="menuyuAcKapa()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul id="anaMenu">
+                <li><a href="index.html">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" class="active">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html">NOTALAR</a></li>
+                <li><a href="siirler.html">ŞİİRLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        
+        <div id="login-area" class="login-section">
+            <h3>ÖĞRENCİ PORTALI</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 10px; font-size: 0.9rem;">Ders materyallerine erişmek için şifrenizi girin.</p>
+            <div class="login-inputs">
+                <input type="password" id="passInput" placeholder="Şifre" style="min-width: 200px;">
+                <button onclick="portalAc()" class="btn">GİRİŞ YAP</button>
+            </div>
+            <p id="hata-mesaji" style="color: #ff4d4d; display: none; margin-top: 10px; font-size: 0.8rem;">Hatalı şifre.</p>
+        </div>
+
+        <div id="public-content">
+            
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2>Neden Online Eğitim?</h2>
+                <div style="width: 60px; height: 2px; background: var(--accent); margin: 15px auto;"></div>
+            </div>
+
+            <div class="features-grid">
+                
+                <div class="feature-card">
+                    <i class="fas fa-home"></i>
+                    <h4>Evin Ortamında Ders Rahatlığı</h4>
+                    <p>İşten eve döndüğünüzde, trafiğe girmeden ve kurs saatlerine yetişme stresi yaşamadan bağlamanızı elinize alın. Eğitim sizin konfor alanınıza gelsin.</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-moon"></i>
+                    <h4>Mesai Sonrası Sanat</h4>
+                    <p>Çoğu kurs akşam 19:00'da kapılarını kapatır. Biz ise tam o saatlerde başlıyoruz. Çalışan profesyoneller için esnek randevu saatleri ile hobinize zaman ayırın.</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h4>16+ Yetişkin Grubu</h4>
+                    <p>Sadece yetişkinlerle çalışarak, ortak bir disiplin ve sanat anlayışı içinde, seviyeniz ne olursa olsun verimli bir süreç yönetiyoruz.</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fab fa-whatsapp"></i>
+                    <h4>Kesintisiz İletişim</h4>
+                    <p>Ders bittiğinde bağımız kopmaz. Portal üzerinden haftalık notlara ulaşabilir, takıldığınız yerde WhatsApp üzerinden bana video göndererek hata kontrolü yaptırabilirsiniz.</p>
+                </div>
+
+            </div>
+
+            <div class="apply-container">
+                <h3 style="text-align: center; margin-bottom: 25px;">BAŞVURU FORMU</h3>
+                <form action="https://formspree.io/f/senin_form_id" method="POST" class="form-group">
+                    <input type="text" name="ad_soyad" placeholder="Ad Soyad" required>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" name="yas" placeholder="Yaş (16+)" min="16" required style="flex:1;">
+                        <input type="text" name="meslek" placeholder="Meslek (Opsiyonel)" style="flex:1;">
+                    </div>
+                    <select name="seviye">
+                        <option value="" disabled selected>Mevcut Seviyeniz</option>
+                        <option value="sifir">Hiç Bilmiyorum</option>
+                        <option value="temel">Temel Seviye</option>
+                        <option value="ileri">İleri Seviye</option>
+                    </select>
+                    <textarea name="mesaj" rows="4" placeholder="Müzikal hedefleriniz..." required></textarea>
+                    <button type="submit" class="btn" style="width: 100%;">GÖNDER</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="student-portal">
+            <h2 style="text-align: center;">ÖĞRENCİ PANELİ</h2>
+            <br>
+            <a href="https://wa.me/905XXXXXXXXX" target="_blank" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> WhatsApp ile Video Gönder
+            </a>
+
+            <div class="weeks-container">
+                <div class="week-box">
+                    <h4>1. HAFTA</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Temel Tutuş</p>
+                    <hr>
+                    <a href="#">▶ Dersi İzle</a><br>
+                    <a href="#">📄 PDF İndir</a>
+                </div>
+                <div class="week-box">
+                    <h4>2. HAFTA</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Egzersizler</p>
+                    <hr>
+                    <a href="#">▶ Dersi İzle</a><br>
+                    <a href="#">📄 PDF İndir</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="social-wrapper">
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item"><i class="fab fa-spotify"></i></a>
+            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p style="font-size: 0.8rem; color: #555;">© 2026 Mahmut Burak ASLANTAŞ.</p>
+    </footer>
+
+    <script>
+        function menuyuAcKapa() {
+            document.getElementById("anaMenu").classList.toggle("aktif");
+        }
+        function portalAc() {
+            var sifre = document.getElementById("passInput").value;
+            if(sifre === "baglama2026") {
+                document.getElementById("login-area").style.display = "none";
+                document.getElementById("public-content").style.display = "none";
+                document.getElementById("student-portal").style.display = "block";
+            } else {
+                document.getElementById("hata-mesaji").style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
