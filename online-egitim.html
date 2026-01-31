@@ -100,18 +100,17 @@
         }
         .btn:hover { background: var(--accent); color: #000; }
 
-        /* 2. İKNA KARTLARI (2x2 SÜTUN YAPISI - GÜNCELLENDİ) */
+        /* 2. İKNA KARTLARI (2x2 SÜTUN YAPISI) */
         .features-grid {
             display: grid;
-            /* GÜNCELLEME: 4 yerine 2 sütun */
             grid-template-columns: repeat(2, 1fr); 
-            gap: 30px; /* Boşluk biraz artırıldı */
+            gap: 30px; 
             margin-bottom: 80px;
         }
 
         .feature-card {
             background: rgba(255, 255, 255, 0.03);
-            padding: 30px; /* İç boşluk artırıldı */
+            padding: 30px; 
             border-left: 2px solid var(--accent);
             transition: transform 0.3s;
             display: flex;
@@ -122,7 +121,7 @@
         
         .feature-card i { font-size: 2rem; color: var(--accent); margin-bottom: 20px; }
         .feature-card h4 { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; }
-        .feature-card p { font-size: 0.95rem; color: #ccc; line-height: 1.6; } /* Yazı boyutu büyütüldü */
+        .feature-card p { font-size: 0.95rem; color: #ccc; line-height: 1.6; }
 
         /* 3. BAŞVURU FORMU */
         .apply-container { background: #050505; padding: 40px; border: 1px solid #222; max-width: 800px; margin: 0 auto; }
@@ -134,9 +133,11 @@
             background: #25d366; color: white; text-decoration: none; padding: 15px;
             display: block; text-align: center; font-weight: 600; margin-bottom: 30px; border-radius: 5px;
         }
-        .weeks-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .weeks-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        /* MP3 Player Kutusu Tasarımı */
         .week-box { border: 1px solid #333; padding: 20px; background: #111; }
-        .week-box a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+        .week-box hr { border-color: #333; opacity: 0.3; margin: 10px 0; }
 
         /* Footer */
         footer { background: #050505; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
@@ -146,7 +147,6 @@
 
         /* Mobil Uyumluluk */
         @media (max-width: 768px) {
-            /* Tablet ve Mobilde Tek Sütuna Düşsün */
             .features-grid { grid-template-columns: 1fr; gap: 20px; } 
             
             nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
@@ -241,27 +241,207 @@
         </div>
 
         <div id="student-portal">
-            <h2 style="text-align: center;">ÖĞRENCİ PANELİ</h2>
-            <br>
-            <a href="https://wa.me/905XXXXXXXXX" target="_blank" class="whatsapp-btn">
-                <i class="fab fa-whatsapp"></i> WhatsApp ile Video Gönder
-            </a>
+            
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="color: var(--accent);">ÖĞRENCİ PANELİ</h2>
+                <p style="color: #ccc;">Hoş geldin! Dikte ve egzersiz çalışmalarını aşağıdan dinleyebilirsin.</p>
+                <br>
+                <a href="https://wa.me/905XXXXXXXXX" target="_blank" class="whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> ÖDEVİNİ GÖNDER (WHATSAPP)
+                </a>
+            </div>
 
             <div class="weeks-container">
+
                 <div class="week-box">
-                    <h4>1. HAFTA</h4>
-                    <p style="font-size: 0.8rem; color: #888;">Temel Tutuş</p>
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 1</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
                     <hr>
-                    <a href="#">▶ Dersi İzle</a><br>
-                    <a href="#">📄 PDF İndir</a>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1CprU3vYtFIEZ0gRgReVEye4IHShh0y0_" type="audio/mpeg">
+                    </audio>
                 </div>
+
                 <div class="week-box">
-                    <h4>2. HAFTA</h4>
-                    <p style="font-size: 0.8rem; color: #888;">Egzersizler</p>
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 2</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
                     <hr>
-                    <a href="#">▶ Dersi İzle</a><br>
-                    <a href="#">📄 PDF İndir</a>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1F47H-u9OgakbY-Y8o0X3s_ago7C9x-RO" type="audio/mpeg">
+                    </audio>
                 </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 3</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1l11yz8LBCdNAVkA4dJDF_YefA4m62PxH" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 4</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1h_BxQSVd1saDgertInDrXgbU7p8kPdrT" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 5</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=16zIsIzjvmznslqO4xi8LtvSE0H3UgEDf" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 6</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1cXuv3Qe-WgDNGP4tCgyDyHTrZAhmWiEK" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 7</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1ShwDrGKN0r1Q5WMrz1saX_KYFPDx1RdV" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 8</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1uyYxuJmbniDOLy5k9_C7ZcGI1yTwvdgx" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 9</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=18RLPOB99gTjDZGqbPmanEIQ-nKFxIoa9" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 10</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1oMr4u1WJLiFxLLbMzAP3_40umU_Y3vq8" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 11</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1LyrE3Yi_xECEqIlwCP3-3FsrVtDBqjFs" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 12</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1fXUzZE1pIa-m1XtgD7giY-uiikdknZbc" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 13</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1TF_rBm31Ww8AszjQud4OCQP7SvWG2UK-" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 14</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=12ckOq7FvW_tAIteDVxs11hNwpXw1mGmE" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 15</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1u0Gcj0M_Et5vXtBC1VUJeSJdg7VsqMCu" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 16</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1og4IiBkpgsxz2-zZF0TWCRRncWoW8eOB" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 17</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1qsJ-nLKY4V0-jQLoMxLxFOeVfD1u7rfg" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 19</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=137H1eOM8qQoWZPDPi0QHyyKaiAbjMR1Q" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 20</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1327Yis-EDSEvKPxZu-H5wSA3mUC5IEXC" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 21</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1Ydo02tIquSSqO-cuF5fJ5jVBuI-X3rLj" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <div class="week-box">
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">ÇALIŞMA 22</h4>
+                    <p style="font-size: 0.8rem; color: #888;">Dikte / Egzersiz</p>
+                    <hr>
+                    <audio controls style="width: 100%; margin-top:10px;">
+                        <source src="https://docs.google.com/uc?export=download&id=1pdHx7gHYkg1sEfu01AfVTxbpHQJ3GCOS" type="audio/mpeg">
+                    </audio>
+                </div>
+
             </div>
         </div>
 
