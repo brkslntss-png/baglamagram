@@ -40,6 +40,8 @@
             --box-bg: rgba(255, 255, 255, 0.03);
             --text: #ffffff;
             --text-secondary: #b0b0b0;
+            --spotify: #1DB954;
+            --youtube: #FF0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -100,6 +102,23 @@
         .hero {
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 80px 20px 40px; position: relative;
+            /* DÜZELTME: Işık hüzmesi için overflow kontrolü */
+            overflow: hidden; 
+        }
+
+        /* DÜZELTME: Hafif Sarı Işık Hüzmesi Geri Eklendi */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            /* Hafif sarı/altın radyal gradyan */
+            background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
         }
 
         .name-container {
@@ -137,7 +156,7 @@
         .btn-secondary { border-color: var(--text-secondary); color: var(--text-secondary); }
         .btn-secondary::before { background: var(--text-secondary); }
 
-        /* --- İSTATİSTİK PANELİ (RAKAMLARLA MAHMUT BURAK) --- */
+        /* --- İSTATİSTİK PANELİ --- */
         .stats-section {
             background: rgba(0, 0, 0, 0.5); border-top: 1px solid rgba(255,255,255,0.05);
             border-bottom: 1px solid rgba(255,255,255,0.05); padding: 40px 0; margin-bottom: 60px;
@@ -162,7 +181,7 @@
         .quote-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; display: block;}
         .quote-line { width: 40px; height: 2px; background: var(--accent); margin: 0 auto; opacity: 0.5; }
 
-        /* --- KREATİF KÖŞE (FOTOĞRAF & VİDEO) --- */
+        /* --- KREATİF KÖŞE (VİDEO GALERİSİ) --- */
         .creative-section {
             max-width: 1200px; margin: 0 auto 80px; padding: 0 20px;
         }
@@ -173,16 +192,16 @@
         .creative-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
         }
-        .creative-item {
-            position: relative; overflow: hidden; aspect-ratio: 4/3; border: 1px solid #333;
+        /* DÜZELTME: Video kapsayıcıları için stil */
+        .video-container {
+            position: relative; padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0; overflow: hidden; border: 1px solid #333;
         }
-        .creative-item img {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
-            filter: grayscale(100%);
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
         }
-        .creative-item:hover img { transform: scale(1.1); filter: grayscale(0%); }
 
-        /* --- INSTAGRAM FEED (MANUEL TASARIM) --- */
+        /* --- INSTAGRAM FEED --- */
         .instagram-section {
             background: #080808; padding: 60px 20px; text-align: center;
         }
@@ -218,12 +237,33 @@
         }
         .social-wrapper { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
         .social-item { display: flex; flexDirection: column; align-items: center; gap: 8px; textDecoration: none; color: #888; fontSize: 0.8rem; transition: 0.3s; }
-        .social-icon-box { fontSize: 24px; width: 50px; height: 50px; display: flex; alignItems: center; justifyContent: center; border: 1px solid #333; borderRadius: 50%; }
+        
+        /* Footer İkon Kutusu */
+        .social-icon-box {
+            font-size: 1.2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #333;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+
         .social-item:hover .social-icon-box { borderColor: var(--accent); transform: translateY(-5px); }
         .social-item:hover { color: var(--text); }
-        .fa-instagram { color: #fff; } .social-item:hover .fa-instagram { color: #E1306C; }
-        .fa-spotify { color: var(--spotify); } .social-item:hover .fa-spotify { color: var(--spotify); }
-        .fa-youtube { color: var(--youtube); } .social-item:hover .fa-youtube { color: var(--youtube); }
+        
+        /* DÜZELTME: Footer İkonlarının Marka Renkleri Geri Getirildi */
+        .fa-instagram { color: #fff; } 
+        .social-item:hover .fa-instagram { color: #E1306C; /* Instagram Rengi */ }
+        
+        .fa-spotify { color: #fff; } 
+        .social-item:hover .fa-spotify { color: var(--spotify); /* Spotify Rengi */ }
+        
+        .fa-youtube { color: #fff; } 
+        .social-item:hover .fa-youtube { color: var(--youtube); /* YouTube Rengi */ }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
@@ -236,7 +276,9 @@
             nav ul.aktif { display: flex; }
             .cta-buttons { flex-direction: column; width: 80%; }
             .stats-grid { gap: 40px; }
-            .creative-grid, .insta-grid { grid-template-columns: repeat(2, 1fr); }
+            /* DÜZELTME: Videolar mobilde alt alta */
+            .creative-grid { grid-template-columns: 1fr; } 
+            .insta-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -278,10 +320,6 @@
                 <span class="stat-label">ÖZGÜN ESER & ŞİİR</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">TRT</span>
-                <span class="stat-label">GENÇLİK KOROSU</span>
-            </div>
-            <div class="stat-item">
                 <span class="stat-number">10+</span>
                 <span class="stat-label">SAHNE PERFORMANSI</span>
             </div>
@@ -295,11 +333,16 @@
     </section>
 
     <section class="creative-section">
-        <h2 class="section-title">KREATİF KÖŞE</h2>
-        <div class="creative-grid">
-            <div class="creative-item"><img src="https://i.hizliresim.com/olj28le.jpg" alt="Fotoğraf 1"></div>
-            <div class="creative-item"><img src="https://i.hizliresim.com/6vp28ri.JPG" alt="Fotoğraf 2"></div>
-            <div class="creative-item"><img src="https://i.hizliresim.com/h6g4amm.jpg" alt="Fotoğraf 3"></div>
+        <h2 class="section-title">PERFORMANSLAR</h2> <div class="creative-grid">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/SvliCP5Wznw?si=SVzAKtUlTDZbdhXH" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/DfzEr4qozlI?si=gAjhqeyXeVJSSQYk" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/v39ygvfSdGE?si=mjBvBVh6PldABEUp" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
         </div>
     </section>
 
@@ -309,6 +352,7 @@
             <br>
             <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-link">@baglamagram</a>
         </div>
+        
         <div class="insta-grid">
             <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
                 <img src="https://i.hizliresim.com/olj28le.jpg" alt="Insta 1">
@@ -327,7 +371,7 @@
                 <div class="insta-overlay"><i class="fas fa-heart"></i></div>
             </a>
         </div>
-    </section>
+        </section>
 
     <footer>
         <div class="social-wrapper">
@@ -355,21 +399,11 @@
         }
 
         // --- GÜNÜN SÖZÜ OTOMASYONU ---
-        // Buraya istediğin kadar söz ekleyebilirsin.
         const sozler = [
-            "Sabırla Bekleyen, taş üstüne gül açtırır. - Mahmut Burak ASLANTAŞ",
+            "Sanatsız kalan bir milletin, hayat damarlarından biri kopmuş demektir. - M.K. Atatürk",
             "Müziğin olduğu yerde kötülük barınmaz. - Cervantes",
             "Gönül kimi severse, aşk onda güzeldir. - Neşet Ertaş",
-            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
-            "Yüksek uçan alçak konar, gurur insanı tez yakar.",
-            "Hüzün de bir misafirdir; gelir, geçer, izi kalır. - Mahmut Burak ASLANTAŞ",
-            "Gülü incitme dalında, sözü incitme dilinde. - Mahmut Burak ASLANTAŞ",
-            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
-            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
-            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
-            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
-            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
-            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
+            "Türküler, şiirlerin kanatlanmış halidir.",
             "Bağlama, Anadolu'nun sesidir; duymasını bilene çok şey anlatır.",
             "Sanat, görüneni tekrarlamak değil; görünür kılmaktır. - Paul Klee",
             "Yoruldum artık sevmekten, yar derdi ile yaş dökmekten... - M.B. Aslantaş",
@@ -378,18 +412,13 @@
 
         function gununSozunuGetir() {
             const bugun = new Date();
-            // Yılın kaçıncı günü olduğunu hesapla (0-365 arası)
             const baslangic = new Date(bugun.getFullYear(), 0, 0);
             const fark = bugun - baslangic;
             const gunSayisi = Math.floor(fark / (1000 * 60 * 60 * 24));
-            
-            // Gün sayısına göre sıradaki sözü seç (Modül aritmetiği)
             const secilenSoz = sozler[gunSayisi % sozler.length];
-            
             document.getElementById("gununSozu").innerText = secilenSoz;
         }
 
-        // Sayfa yüklendiğinde sözü getir
         gununSozunuGetir();
     </script>
 
