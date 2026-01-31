@@ -87,10 +87,18 @@
             cursor: pointer; position: absolute; right: 20px;
         }
 
+        /* --- ANIMASYONLAR --- */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         /* --- SAYFA İÇERİĞİ --- */
         .page-header {
             text-align: center;
             padding: 80px 0 40px;
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0; /* Animasyon başlayana kadar gizli */
         }
         
         .page-header h1 {
@@ -114,6 +122,9 @@
             margin: 0 auto;
             padding: 0 20px;
             width: 100%;
+            /* ANİMASYON EKLENDİ */
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            opacity: 0;
         }
 
         /* BÖLÜM 1: Spotlight (Öne Çıkan) */
