@@ -1,49 +1,80 @@
-// api/chat.js - TRUVA ATI VERSİYONU (HER KAPIYI AÇAR)
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+// api/chat.js - MANUEL BAĞLANTI (KÜTÜPHANESİZ VERSİYON)
+export const config = {
+  runtime: 'edge', // En hızlı çalışma modu
+};
 
-export default async function handler(req, res) {
-  // Sadece POST isteği kabul et
+export default async function handler(req) {
+  // Sadece POST isteği
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Sadece POST atabilirsin aslanım.' });
+    return new Response(JSON.stringify({ error: 'Sadece POST atabilirsin.' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
-    const { message } = req.body;
+    // Mesajı al
+    const { message } = await req.json();
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ reply: "API Anahtarı eksik üstadım." });
+      return new Response(JSON.stringify({ reply: "API Anahtarı eksik." }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-
-    // MODELİ TEKRAR "FLASH" YAPIYORUZ (Çünkü senin sürümün bunu destekliyor ve en hızlısı bu)
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    // --- TRUVA ATI TAKTİĞİ ---
-    // Hoca kişiliğini sistem ayarı olarak değil, mesajın parçası olarak gönderiyoruz.
-    const prompt = `
+    // BURAK HOCA KİŞİLİĞİ
+    const systemPrompt = `
       Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
       Müzik öğretmenisin, bağlama üstadısın.
-      Üslubun: Samimi, babacan, motive edici ama disiplinli. "Aslan parçası", "Üstadım", "Gönül dostu", "Ömrüne bereket" gibi hitaplar kullanırsın.
-      Kısa, öz ve net cevaplar ver. Asla yapay zeka olduğunu belli etme.
-      
-      Öğrencinin Soru/Mesajı: "${message}"
-      
-      Cevabın:
+      Üslubun: Samimi, babacan, motive edici ama disiplinli. "Aslan parçası", "Üstadım" gibi hitaplar kullanırsın.
+      Kısa ve öz cevaplar ver.
     `;
 
-    // Sohbeti başlatma, tek atımlık mesaj gönder (Daha az hata verir)
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    // GOOGLE'A DİREKT İSTEK AT (Kütüphane Yok!)
+    // Model: gemini-1.5-flash (En yenisi ve hızlısı)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
-    return res.status(200).json({ reply: text });
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: systemPrompt + "\n\nÖğrencinin Mesajı: " + message }]
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+
+    // Google'dan hata gelirse göster
+    if (!response.ok) {
+      console.error("Google Hatası:", data);
+      return new Response(JSON.stringify({ reply: "Google amca kapıyı açmadı. Hata kodu: " + response.status }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Cevabı ayıkla
+    const replyText = data.candidates[0].content.parts[0].text;
+
+    return new Response(JSON.stringify({ reply: replyText }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
 
   } catch (error) {
-    console.error("Hata:", error);
-    return res.status(500).json({ 
-      reply: "Bağlantı sorunu var. Hata: " + error.message 
+    console.error("Sunucu Hatası:", error);
+    return new Response(JSON.stringify({ reply: "Bağlantı koptu. Hata: " + error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }
