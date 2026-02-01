@@ -105,7 +105,7 @@
             overflow: hidden; 
         }
 
-        /* Işık Hüzmesi Efekti (Geri Geldi) */
+        /* Işık Hüzmesi Efekti */
         .hero::before {
             content: '';
             position: absolute;
@@ -198,8 +198,9 @@
         .quote-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; display: block;}
         .quote-line { width: 40px; height: 2px; background: var(--accent); margin: 0 auto; opacity: 0.5; }
 
-        /* --- KREATİF KÖŞE (BÜYÜK VİDEOLAR) --- */
+        /* --- KREATİF KÖŞE (BÜYÜK VİDEOLAR - GÜNCELLENDİ) --- */
         .creative-section {
+            /* Daha geniş bir alana yayılması için max-width artırıldı */
             max-width: 1400px; margin: 0 auto 80px; padding: 0 20px;
         }
         .section-title {
@@ -208,9 +209,10 @@
         }
         .creative-grid {
             display: grid;
-            /* Videoları büyütmek için 2 sütun (bilgisayarda) */
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 40px;
+            /* DÜZELTME: Yan yana 3 büyük video için 3 sütun */
+            grid-template-columns: repeat(3, 1fr); 
+            /* Boşluk azaltıldı, videolar büyüdü */
+            gap: 20px;
         }
         .video-container {
             position: relative; padding-bottom: 56.25%; /* 16:9 aspect ratio */
@@ -220,10 +222,6 @@
         }
         .video-container iframe {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
-        }
-        /* 3. video ortada dursun diye genişletme (isteğe bağlı, şu an normal gridde) */
-        .video-container:last-child {
-             grid-column: span 1; 
         }
 
         /* --- INSTAGRAM FEED --- */
@@ -279,7 +277,6 @@
         .social-item:hover .social-icon-box { borderColor: var(--accent); transform: translateY(-5px); }
         .social-item:hover { color: var(--text); }
         
-        /* Footer İkon Renkleri (Artık bozuk değil) */
         .fa-instagram { color: #fff; } 
         .social-item:hover .fa-instagram { color: #E1306C; }
         
@@ -292,7 +289,6 @@
         /* RESPONSIVE */
         @media (max-width: 900px) {
             .creative-grid { grid-template-columns: 1fr; } /* Mobilde videolar kocaman tek sıra */
-            .video-container:last-child { grid-column: auto; }
         }
 
         @media (max-width: 768px) {
