@@ -1,10 +1,9 @@
-// api/chat.js - LATEST SÜRÜM (İSİM KAVGASINI BİTİREN KOD)
 export const config = {
     runtime: 'edge',
 };
 
 export default async function handler(req) {
-    // 1. CORS AYARLARI (Domainden gelen 405'i engeller)
+    // CORS HEADERLARI (405 YOK, DOMAIN ÇALIŞIYOR)
     const headers = {
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Origin': '*', 
@@ -46,10 +45,9 @@ export default async function handler(req) {
             }
         }
 
-        // --- KRİTİK DÜZELTME BURADA ---
-        // 'gemini-1.5-flash' yerine 'gemini-1.5-flash-latest' kullanıyoruz.
-        // Google bu sayede en güncel versiyonu otomatik seçer.
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+        // --- İŞTE ÇALIŞAN MODEL BU: gemini-2.5-flash ---
+        // Eğer "Quota exceeded" verirse SAKIN KODU DEĞİŞTİRME. Sadece bekle.
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
         
         const googleResponse = await fetch(url, {
             method: 'POST',
@@ -61,9 +59,9 @@ export default async function handler(req) {
 
         const data = await googleResponse.json();
 
+        // Kota Hatasını (429) veya Diğer Hataları Yakala
         if (!googleResponse.ok) {
-            // Hata mesajını olduğu gibi basıyoruz ki görelim
-            return new Response(JSON.stringify({ reply: "Google Hatası: " + (data.error?.message || "Bilinmiyor") }), { status: 500, headers });
+            return new Response(JSON.stringify({ reply: "Google Mesajı: " + (data.error?.message || "Bilinmiyor") }), { status: 500, headers });
         }
 
         const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cevap yok.";
