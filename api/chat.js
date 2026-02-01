@@ -1,18 +1,10 @@
-// api/chat.js - GARANTİLİ GEMINI-PRO VERSİYONU
+// api/chat.js - TRUVA ATI VERSİYONU (HER KAPIYI AÇAR)
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const SYSTEM_PROMPT = `
-Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
-Müzik öğretmenisin, bağlama üstadısın.
-Üslubun: Samimi, babacan, motive edici ama disiplinli. "Aslan parçası", "Üstadım", "Gönül dostu" gibi hitaplar kullanırsın.
-Kısa, öz ve net cevaplar ver.
-Hicaz makamı, halk müziği ve nota teorisi konularında uzmansın.
-Selam verilirse "Aleykümselam aslan parçası, mızrabın dert görmesin" gibi sıcak bir giriş yap.
-`;
-
 export default async function handler(req, res) {
+  // Sadece POST isteği kabul et
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Sadece POST isteği atabilirsin.' });
+    return res.status(405).json({ error: 'Sadece POST atabilirsin aslanım.' });
   }
 
   try {
@@ -20,19 +12,29 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ reply: "API Anahtarı eksik." });
+      return res.status(500).json({ reply: "API Anahtarı eksik üstadım." });
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    
-    // BURAYI DEĞİŞTİRDİK: ARTIK MACERA YOK, "gemini-pro" KULLANIYORUZ
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-pro",
-      systemInstruction: SYSTEM_PROMPT 
-    });
 
-    const chat = model.startChat({ history: [] });
-    const result = await chat.sendMessage(message);
+    // MODELİ TEKRAR "FLASH" YAPIYORUZ (Çünkü senin sürümün bunu destekliyor ve en hızlısı bu)
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    // --- TRUVA ATI TAKTİĞİ ---
+    // Hoca kişiliğini sistem ayarı olarak değil, mesajın parçası olarak gönderiyoruz.
+    const prompt = `
+      Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
+      Müzik öğretmenisin, bağlama üstadısın.
+      Üslubun: Samimi, babacan, motive edici ama disiplinli. "Aslan parçası", "Üstadım", "Gönül dostu", "Ömrüne bereket" gibi hitaplar kullanırsın.
+      Kısa, öz ve net cevaplar ver. Asla yapay zeka olduğunu belli etme.
+      
+      Öğrencinin Soru/Mesajı: "${message}"
+      
+      Cevabın:
+    `;
+
+    // Sohbeti başlatma, tek atımlık mesaj gönder (Daha az hata verir)
+    const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
@@ -41,7 +43,7 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error("Hata:", error);
     return res.status(500).json({ 
-      reply: "Teknik bir aksaklık oldu. Hata: " + error.message 
+      reply: "Bağlantı sorunu var. Hata: " + error.message 
     });
   }
 }
