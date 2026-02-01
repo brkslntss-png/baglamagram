@@ -1,90 +1,83 @@
-// api/chat.js - SAF JAVASCRIPT (KÜTÜPHANESİZ & CORS AÇIK)
+// api/chat.js - ESNEK VE SAĞLAM MOTOR
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 export default async function handler(req, res) {
-  // 1. CORS İZİNLERİ (Buraya kim gelirse gelsin izin veriyoruz)
+  // 1. CORS AYARLARI (Herkes geçsin)
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Herkese açık
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
-  // Tarayıcı "Girebilir miyim?" diye sorarsa (OPTIONS), "Evet" de ve bitir.
+  // 2. Tarayıcı Kontrolü (OPTIONS)
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    res.status(200).end();
+    return;
   }
 
-  // Sadece POST isteği
+  // 3. Eğer tarayıcıdan direkt girersen (GET), "Yaşıyorum" desin.
+  if (req.method === 'GET') {
+    return res.status(200).json({ 
+      durum: "Online", 
+      mesaj: "BurakAI Hoca görevinin başında aslan parçası. Ama konuşmak için arayüzü kullanmalısın." 
+    });
+  }
+
+  // 4. Sadece POST isteğini işleme al
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Sadece POST atabilirsin.' });
+    return res.status(405).json({ error: 'Sadece POST isteği kabul edilir.' });
   }
 
   try {
-    const { message, image } = req.body;
+    // Veriyi al (Vercel Node.js modunda req.body kullanılır)
+    const { message, image } = req.body || {}; 
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ reply: "API Anahtarı bulunamadı!" });
+      return res.status(500).json({ reply: "API Anahtarı eksik!" });
     }
 
-    // --- GOOGLE'A GÖNDERİLECEK PAKETİ HAZIRLA ---
-    // Burak Hoca'nın Kişiliği
-    const systemPrompt = `
-      Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
-      Müzik öğretmenisin, bağlama üstadısın.
-      Üslubun: Samimi, babacan, motive edici. "Aslan parçası", "Evladım" gibi hitaplar kullan.
-      Görevin: Gelen mesajı veya FOTOĞRAFI bir hoca gözüyle yorumla.
-      Öğrencinin Mesajı: "${message || 'Fotoğraf gönderdim hocam.'}"
-    `;
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ 
+        model: "gemini-2.5-flash",
+        systemInstruction: {
+            role: "system",
+            parts: [{ text: `
+                Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
+                Müzik öğretmenisin, bağlama üstadısın.
+                Üslubun: Samimi, babacan, motive edici. "Aslan parçası", "Evladım", "Gönül dostu" gibi hitaplar kullan.
+                Görevin: Gelen mesajı veya FOTOĞRAFI bir hoca gözüyle incele.
+                Cevapların öğretici ve sıcak olsun. Asla yapay zeka olduğunu belli etme.
+            `}]
+        }
+    });
 
-    // İçerik parçaları
-    let contentsParts = [{ text: systemPrompt }];
+    let parts = [];
+    if (message) parts.push({ text: message });
+    else parts.push({ text: "Hocam şu fotoğrafa bir bak." });
 
-    // Resim varsa pakete ekle (Base64 temizliği yaparak)
     if (image) {
       try {
-        const base64Data = image.split(',')[1]; // "data:image/jpeg;base64," kısmını at
-        const mimeType = image.split(';')[0].split(':')[1]; // "image/jpeg" kısmını al
-        
-        contentsParts.push({
-          inlineData: {
-            mimeType: mimeType,
-            data: base64Data
-          }
+        const base64Data = image.split(',')[1];
+        const mimeType = image.split(';')[0].split(':')[1];
+        parts.push({
+          inlineData: { mimeType: mimeType, data: base64Data }
         });
       } catch (e) {
-        console.error("Resim işleme hatası:", e);
+        console.error("Resim hatası:", e);
       }
     }
 
-    // --- FETCH İLE GOOGLE'A BAĞLAN (Kütüphanesiz) ---
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const result = await model.generateContent(parts);
+    const response = await result.response;
+    const text = response.text();
 
-    const googleResponse = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: contentsParts }]
-      })
-    });
-
-    const data = await googleResponse.json();
-
-    // Google hata verdiyse
-    if (!googleResponse.ok) {
-      return res.status(500).json({ 
-        reply: "Google amca cevap vermedi. Hata: " + (data.error?.message || "Bilinmiyor") 
-      });
-    }
-
-    // Cevabı al
-    const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Bir şeyler ters gitti, cevap alamadım.";
-
-    // Cevabı gönder
-    return res.status(200).json({ reply: replyText });
+    return res.status(200).json({ reply: text });
 
   } catch (error) {
-    console.error("Sunucu Hatası:", error);
-    return res.status(500).json({ reply: "Sunucu hatası oluştu evladım: " + error.message });
+    console.error("Hata:", error);
+    return res.status(500).json({ reply: "Hata oluştu: " + error.message });
   }
 }
