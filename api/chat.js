@@ -1,62 +1,55 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// api/chat.js - GÜNCEL VE SAĞLAM VERSİYON
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-export const config = {
-  runtime: 'edge', // Hızlı çalışması için Edge fonksiyonu kullanıyoruz
-};
-
-const GEN_AI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
+// BurakAI Hoca'nın Kişilik Ayarı (System Instruction)
 const SYSTEM_PROMPT = `
-Sen "Baglamagram" portalının dijital mentoru BurakAI Hoca'sın. Müzik öğretmeni Mahmut Burak Aslantaş'ın dijital ikizisin.
-
-ÜSLUP:
-- Asla "Kullanıcı" deme. "Merhabalar üstadım", "Aslan parçası", "Gönül dostu" gibi hitaplar kullan.
-- "Ömrüne bereket", "Yüreğine sağlık" gibi dualı ve bizden konuş.
-- Konu dışına çıkılırsa 1 dk sohbet et, sonra "Vakit nakit değil candır, hadi saza dönelim" diye bağla.
-
-GÖREVLER:
-1. Video Analizi: Mızrap yönü, ritim (saniye ver), doğru perde basımı (pitch) kontrolü yap.
-2. Fotoğraf: Nota okuma veya tutuş bozukluğunu düzelt.
-3. Konu Anlatımı: Bir konuyu parça parça anlat, her parçada "Anladın mı aslan parçası?" diye sor.
-4. Soru-Cevap: Müzikal her soruyu cevapla.
+Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
+Müzik öğretmenisin, bağlama üstadısın.
+Üslubun: Samimi, babacan, motive edici ama disiplinli. "Aslan parçası", "Üstadım", "Gönül dostu", "Ömrüne bereket" gibi hitaplar kullanırsın.
+Asla robot gibi konuşma. Kısa, öz ve net cevaplar ver.
+Hicaz makamı, halk müziği ve nota teorisi konularında uzmansın.
+Biri sana selam verirse "Aleykümselam aslan parçası, mızrabın dert görmesin" gibi sıcak bir giriş yap.
 `;
 
-export default async function handler(req) {
+export default async function handler(req, res) {
+  // Sadece POST isteklerine cevap ver
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Sadece POST isteği atabilirsin aslanım.' });
+  }
+
   try {
-    // Sadece POST isteklerini kabul et
-    if (req.method !== 'POST') return new Response("Method not allowed", { status: 405 });
+    const { message } = req.body;
 
-    const data = await req.json();
-    const userMessage = data.message || "Merhaba hocam";
-    const userImage = data.image; // Base64 formatında resim (varsa)
-
-    const model = GEN_AI.getGenerativeModel({ 
-      model: "gemini-1.5-flash", 
-      systemInstruction: SYSTEM_PROMPT
-    });
-
-    let promptParts = [userMessage];
-    
-    // Eğer resim varsa analize ekle
-    if (userImage) {
-      promptParts.push({
-        inlineData: {
-          data: userImage.split(',')[1], // "data:image/jpeg;base64," kısmını at
-          mimeType: "image/jpeg"
-        }
-      });
+    // API Anahtarını Kontrol Et
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.error("API Anahtarı Bulunamadı!");
+      return res.status(500).json({ reply: "API Anahtarı eksik, Vercel ayarlarını kontrol et üstadım." });
     }
 
-    const result = await model.generateContent(promptParts);
+    // Google AI Bağlantısını Kur (Yeni Sürüme Uygun)
+    const genAI = new GoogleGenerativeAI(apiKey);
+    
+    // Modeli Seç (FLASH modeli - Hızlı ve Hatasız)
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      systemInstruction: SYSTEM_PROMPT 
+    });
+
+    // Sohbeti Başlat ve Mesajı Gönder
+    const chat = model.startChat({ history: [] });
+    const result = await chat.sendMessage(message);
     const response = await result.response;
     const text = response.text();
 
-    return new Response(JSON.stringify({ reply: text }), {
-      headers: { 'Content-Type': 'application/json' }
-    });
+    // Cevabı Frontend'e Gönder
+    return res.status(200).json({ reply: text });
 
   } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ reply: "Şu an akort yapıyorum aslan parçası, birazdan tekrar dene. (Teknik Hata)" }), { status: 500 });
+    console.error("Hata Oluştu:", error);
+    // Hatanın detayını frontend'e de gönderelim ki ne olduğunu görelim
+    return res.status(500).json({ 
+      reply: "Bir teknik arıza var aslan parçası. Hata detayı: " + error.message 
+    });
   }
 }
