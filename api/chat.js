@@ -1,4 +1,4 @@
-// api/chat.js - FİNAL VERSİYON (YENİ ANAHTAR İÇİN)
+// api/chat.js - GARANTİLİ GEMINI-PRO VERSİYONU
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const SYSTEM_PROMPT = `
@@ -20,14 +20,14 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ reply: "API Anahtarı Vercel'de eksik." });
+      return res.status(500).json({ reply: "API Anahtarı eksik." });
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // YENİ ANAHTARLAR "FLASH" İLE MÜKEMMEL ÇALIŞIR
+    // BURAYI DEĞİŞTİRDİK: ARTIK MACERA YOK, "gemini-pro" KULLANIYORUZ
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-pro",
       systemInstruction: SYSTEM_PROMPT 
     });
 
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error("Hata:", error);
     return res.status(500).json({ 
-      reply: "Google amca izin vermedi. Hata: " + error.message 
+      reply: "Teknik bir aksaklık oldu. Hata: " + error.message 
     });
   }
 }
