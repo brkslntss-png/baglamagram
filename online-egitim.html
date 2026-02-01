@@ -404,7 +404,7 @@
                                 <button class="chat-action-btn" title="Fotoğraf Yükle"><i class="fas fa-camera"></i></button>
                                 <button class="chat-action-btn" title="Video Yükle"><i class="fas fa-video"></i></button>
                                 <input type="text" class="chat-input" placeholder="Bir soru sor..." id="aiUserInput">
-                                <button class="chat-send-btn" onclick="fakeSendMessage()"><i class="fas fa-paper-plane"></i></button>
+                                <button class="chat-send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </div>
                     </div>
@@ -725,30 +725,56 @@
         }
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
 
-        // FAKE CHAT FONKSİYONU (TEST İÇİN)
-        function fakeSendMessage() {
+        // --- GERÇEK API BAĞLANTISI (YENİ EKLENDİ) ---
+        async function sendMessage() {
             const input = document.getElementById("aiUserInput");
             const box = document.getElementById("aiChatBox");
-            if(input.value.trim() === "") return;
+            const msgText = input.value.trim();
+            
+            if(msgText === "") return;
 
-            // Kullanıcı Mesajı
+            // 1. Öğrencinin mesajını ekrana bas
             const userMsg = document.createElement("div");
             userMsg.className = "chat-message user";
-            userMsg.innerHTML = "<strong>Sen:</strong><br>" + input.value;
+            userMsg.innerHTML = "<strong>Sen:</strong><br>" + msgText;
             box.appendChild(userMsg);
             
-            // Otomatik Kaydırma
-            box.scrollTop = box.scrollHeight;
-            input.value = "";
+            input.value = ""; // Kutuyu temizle
+            box.scrollTop = box.scrollHeight; // Aşağı kaydır
 
-            // Yapay Zeka Cevabı (Simülasyon)
-            setTimeout(() => {
+            // 2. "Burak Hoca Yazıyor..." animasyonu ekle
+            const loadingBubble = document.createElement("div");
+            loadingBubble.className = "chat-message ai";
+            loadingBubble.id = "loadingBubble";
+            loadingBubble.innerHTML = "<em>Burak Hoca mızrabını düzeltiyor... (Yazıyor)</em>";
+            box.appendChild(loadingBubble);
+            box.scrollTop = box.scrollHeight;
+
+            try {
+                // 3. Mesajı Vercel üzerindeki yapay zekaya gönder
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msgText })
+                });
+
+                const data = await response.json();
+                
+                // 4. "Yazıyor" yazısını kaldır ve gerçek cevabı bas
+                document.getElementById("loadingBubble").remove();
+                
                 const aiMsg = document.createElement("div");
                 aiMsg.className = "chat-message ai";
-                aiMsg.innerHTML = "<strong>BurakAI Hoca:</strong><br>Şu an mızrabımı akort ediyorum (API henüz bağlı değil), ama sorunu not ettim! Çok yakında burada canlı canlı cevaplayacağım.";
+                // Satır başlarını HTML formatına (<br>) çevir
+                aiMsg.innerHTML = "<strong>BurakAI Hoca:</strong><br>" + data.reply.replace(/\n/g, "<br>");
                 box.appendChild(aiMsg);
-                box.scrollTop = box.scrollHeight;
-            }, 1000);
+
+            } catch (err) {
+                document.getElementById("loadingBubble").innerHTML = "Bağlantı koptu aslan parçası, internetini kontrol et.";
+                console.error(err);
+            }
+            
+            box.scrollTop = box.scrollHeight;
         }
     </script>
 </body>
