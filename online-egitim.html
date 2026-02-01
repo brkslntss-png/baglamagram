@@ -130,7 +130,10 @@
         .dash-card { background: #111; border: 1px solid #333; padding: 40px; text-align: center; border-radius: 8px; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
         .dash-card:hover { border-color: var(--accent); transform: translateY(-5px); }
         .dash-card i { font-size: 3rem; color: var(--accent); margin-bottom: 20px; }
+        
+        /* Bağlama İkonu için Özel Stil (Beyaz) - Görüntü filtresi */
         .custom-icon { width: 80px; height: auto; margin-bottom: 20px; filter: grayscale(100%) brightness(200%); transition: 0.3s; display: block; margin-left: auto; margin-right: auto;}
+        
         .dash-card:hover .custom-icon { filter: none; }
         .ai-card { border: 1px solid var(--accent); box-shadow: 0 0 15px rgba(197, 160, 89, 0.1); background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%); }
         .ai-badge { position: absolute; top: 10px; right: 10px; background: var(--accent); color: black; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; z-index: 2; }
@@ -214,8 +217,18 @@
                 <div style="width: 60px; height: 2px; background: var(--accent); margin: 15px auto;"></div>
             </div>
             <div class="features-grid">
-                <div class="feature-card"><i class="fas fa-home"></i><h4>Evin Ortamında Ders Rahatlığı</h4><p>İşten eve döndüğünüzde, trafiğe girmeden ve kurs saatlerine yetişme stresi yaşamadan bağlamanızı elinize alın.</p></div>
-                <div class="feature-card"><i class="fas fa-moon"></i><h4>Mesai Sonrası Sanat</h4><p>Çoğu kurs akşam 19:00'da kapılarını kapatır. Biz ise tam o saatlerde başlıyoruz.</p></div>
+                <div class="feature-card">
+                    <i class="fas fa-robot"></i>
+                    <h4>BurakAI ile Eğitim</h4>
+                    <p>Yapay zeka destekli müzik öğretmeniniz BurakAI ile eğitimde yeni bir dönem. Bu teknolojiyi kullanmak ve derslerinize entegre etmek için aşağıdaki formu doldurarak ders paketlerimizi satın alabilirsiniz.</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-moon"></i>
+                    <h4>Mesai Sonrası Sanat</h4>
+                    <p>Çoğu kurs akşam 19:00'da kapılarını kapatır. Biz ise tam o saatlerde başlıyoruz. İşten eve döndüğünüzde, trafiğe girmeden ve kurs saatlerine yetişme stresi yaşamadan bağlamanızı elinize alın.</p>
+                </div>
+
                 <div class="feature-card"><i class="fas fa-user-tie"></i><h4>Premium Öğrenci Portalı</h4><p>Bu bölümde, yalnızca kendinize özel verilen şifre ile erişebileceğiniz ders materyalleri yer almaktadır. Tüm içerikler, öğrenme sürecini desteklemek amacıyla sesli ve görsel materyallerle hazırlanmıştır. Materyaller düzenli olarak güncellenmekte ve seviyelere göre yapılandırılmaktadır.</p></div>
                 <div class="feature-card"><i class="fab fa-whatsapp"></i><h4>Kesintisiz İletişim</h4><p>Ders bittiğinde bağımız kopmaz, Dilediğiniz zaman WhatsApp üzerinden ödevlerinizi gönderip, kafanıza takılan soruları sorup, videolarınızı gönderebilirsiniz. Bu özelliğe sadece öğrenci portalı üzerinden erişim sağlayabilirsiniz.</p></div>
             </div>
@@ -257,7 +270,7 @@
                             <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
                         </a>
                         <a onclick="sayfaGoster('ai-mentor-view')" class="menu-link" style="color: var(--accent);">
-                            <i class="fas fa-robot"></i> <span>BurakAI Hoca</span>
+                            <i class="fas fa-robot"></i> <span>BurakAI Hoca (beta)</span>
                         </a>
                     </div>
 
@@ -284,7 +297,7 @@
                             <div class="dash-card ai-card" onclick="sayfaGoster('ai-mentor-view')">
                                 <span class="ai-badge">YENİ</span>
                                 <i class="fas fa-robot"></i>
-                                <h3>BurakAI Hoca</h3>
+                                <h3>BurakAI Hoca (beta)</h3>
                                 <p style="font-size: 0.9rem; opacity: 0.9;">Yapay Zeka Entegrasyonlu İlk Müzik Eğitim Platformu.</p>
                                 <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">İcranı yükle, anında yorumla.</p>
                             </div>
@@ -296,10 +309,7 @@
                             </div>
                         </div>
 
-                        <a href="https://wa.me/905335060921" target="_blank" class="dash-whatsapp-btn">
-                            <i class="fab fa-whatsapp"></i> WhatsApp ile İletişime Geç
-                        </a>
-                    </div>
+                        </div>
 
                     <div id="ai-mentor-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
@@ -539,7 +549,8 @@
                 try {
                     let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
                     let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
-                    formatliAd = gercekAd.charAt(0).toUpperCase() + gercekAd.slice(1).toLowerCase();
+                    // Adın her kelimesinin baş harfini büyük yap
+                    formatliAd = gercekAd.toLowerCase().split(' ').map(kelime => kelime.charAt(0).toUpperCase() + kelime.slice(1)).join(' ');
                     formatliSoyad = gercekSoyad.toUpperCase();
                 } catch (err) {
                     console.log("İsim çözme hatası");
