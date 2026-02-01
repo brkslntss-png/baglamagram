@@ -1,24 +1,22 @@
+// api/chat.js - LATEST SÜRÜM (İSİM KAVGASINI BİTİREN KOD)
 export const config = {
     runtime: 'edge',
 };
 
 export default async function handler(req) {
-    // CORS HEADERLARI (405 HATASINI ÇÖZEN KISIM BURASI)
+    // 1. CORS AYARLARI (Domainden gelen 405'i engeller)
     const headers = {
         'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Allow-Origin': '*', // HER YERDEN İZİN VER
+        'Access-Control-Allow-Origin': '*', 
         'Access-Control-Allow-Methods': 'GET, OPTIONS, PATCH, DELETE, POST, PUT',
         'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
         'Content-Type': 'application/json'
     };
 
-    // 1. Tarayıcı ön kontrol (OPTIONS) yaparsa "TAMAM" de ve çık.
-    // (Bunu yapmadığımız için 405 veriyordu)
     if (req.method === 'OPTIONS') {
         return new Response(null, { status: 200, headers });
     }
 
-    // 2. Sadece POST
     if (req.method !== 'POST') {
         return new Response(JSON.stringify({ error: 'Sadece POST atabilirsin.' }), { status: 405, headers });
     }
@@ -48,8 +46,10 @@ export default async function handler(req) {
             }
         }
 
-        // MODEL ADI: gemini-1.5-flash (En güncel ve stabil olanı)
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // --- KRİTİK DÜZELTME BURADA ---
+        // 'gemini-1.5-flash' yerine 'gemini-1.5-flash-latest' kullanıyoruz.
+        // Google bu sayede en güncel versiyonu otomatik seçer.
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
         
         const googleResponse = await fetch(url, {
             method: 'POST',
@@ -62,6 +62,7 @@ export default async function handler(req) {
         const data = await googleResponse.json();
 
         if (!googleResponse.ok) {
+            // Hata mesajını olduğu gibi basıyoruz ki görelim
             return new Response(JSON.stringify({ reply: "Google Hatası: " + (data.error?.message || "Bilinmiyor") }), { status: 500, headers });
         }
 
