@@ -1,4 +1,6 @@
-// api/chat.js - STANDART NODE.JS VERSİYONU (DAHA SAĞLAM)
+// api/chat.js - KÜTÜPHANE DESTEKLİ SAĞLAM MOTOR
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 export default async function handler(req, res) {
   // Sadece POST isteği kabul et
   if (req.method !== 'POST') {
@@ -6,7 +8,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Vercel standart modda "req.body"yi otomatik çözer
     const { message, image } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
@@ -14,29 +15,43 @@ export default async function handler(req, res) {
       return res.status(500).json({ reply: "API Anahtarı eksik!" });
     }
 
-    // --- BURAK HOCA KİŞİLİĞİ ---
-    const systemPrompt = `
-      Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
-      Müzik öğretmenisin, bağlama üstadısın.
-      
-      GÖREVİN:
-      1. Üslubun: Samimi, babacan, motive edici. "Aslan parçası", "Evladım", "Gönül dostu" gibi hitaplar kullan.
-      2. Gelen mesajı veya FOTOĞRAFI bir hoca gözüyle yorumla.
-      3. Cevapların öğretici, detaylı ve sıcak olsun.
-      4. Asla yapay zeka olduğunu belli etme.
-      
-      Öğrencinin Mesajı: "${message || 'Fotoğraf gönderdim hocam.'}"
-    `;
+    // Google Kütüphanesini Başlat
+    const genAI = new GoogleGenerativeAI(apiKey);
+    
+    // MODEL: GEMINI 2.5 FLASH (En hızlı ve güçlüsü)
+    const model = genAI.getGenerativeModel({ 
+        model: "gemini-2.5-flash",
+        systemInstruction: {
+            role: "system",
+            parts: [{ text: `
+                Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
+                Müzik öğretmenisin, bağlama üstadısın.
+                Üslubun: Samimi, babacan, motive edici. "Aslan parçası", "Evladım", "Gönül dostu" gibi hitaplar kullan.
+                Görevin: Gelen mesajı veya FOTOĞRAFI bir hoca gözüyle incele.
+                Eğer bir nota veya bağlama fotoğrafı gelirse detaylı teknik yorum yap.
+                Cevapların öğretici ve sıcak olsun. Asla yapay zeka olduğunu belli etme.
+            `}]
+        }
+    });
 
-    // İçerik Paketini Hazırla
-    let contentsParts = [{ text: systemPrompt }];
+    // Gönderilecek parçaları hazırla
+    let parts = [];
+    
+    // Mesaj varsa ekle
+    if (message) {
+        parts.push({ text: message });
+    } else {
+        parts.push({ text: "Hocam şu fotoğrafa bir bakar mısın?" });
+    }
 
-    // Eğer Resim Geldiyse Pakete Ekle
+    // Resim varsa ekle (Formatı ayarla)
     if (image) {
       try {
+        // Base64 başlığını temizle (data:image/jpeg;base64, kısmını at)
         const base64Data = image.split(',')[1];
         const mimeType = image.split(';')[0].split(':')[1];
-        contentsParts.push({
+        
+        parts.push({
           inlineData: {
             mimeType: mimeType,
             data: base64Data
@@ -47,33 +62,17 @@ export default async function handler(req, res) {
       }
     }
 
-    // MODEL: GEMINI 2.5 FLASH (Listende çıkan en güçlü model)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // Google'a Gönder
+    const result = await model.generateContent(parts);
+    const response = await result.response;
+    const text = response.text();
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: contentsParts }]
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Google Hatası:", data);
-      return res.status(500).json({ 
-        reply: "Google amca şu an cevap veremiyor. Hata: " + (data.error?.message || "Bilinmiyor")
-      });
-    }
-
-    const replyText = data.candidates[0].content.parts[0].text;
-
-    // Başarılı Cevap
-    return res.status(200).json({ reply: replyText });
+    return res.status(200).json({ reply: text });
 
   } catch (error) {
-    console.error("Sunucu Hatası:", error);
-    return res.status(500).json({ reply: "Bağlantı koptu aslan parçası. Biraz bekleyip tekrar dene." });
+    console.error("Hata:", error);
+    return res.status(500).json({ 
+        reply: "Teknik bir arıza oldu aslan parçası. Hata detayı: " + error.message 
+    });
   }
 }
