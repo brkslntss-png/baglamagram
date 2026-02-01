@@ -34,6 +34,7 @@
             --text: #ffffff;
             --text-secondary: #b0b0b0;
             --whatsapp-green: #25d366;
+            --ai-purple: #9d4edd; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -80,12 +81,10 @@
             max-width: 1400px; 
             margin: 0 auto; 
             width: 100%;
-            /* ANİMASYON EKLENDİ */
             animation: fadeInUp 1s ease-out forwards; 
             opacity: 0; 
         }
         
-        /* ANİMASYON KEYFRAMES */
         @keyframes fadeInUp {
             0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -161,7 +160,7 @@
             font-weight: normal;
         }
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .dash-card { background: #111; border: 1px solid #333; padding: 40px; text-align: center; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .dash-card { background: #111; border: 1px solid #333; padding: 40px; text-align: center; border-radius: 8px; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
         .dash-card:hover { border-color: var(--accent); transform: translateY(-5px); }
         .dash-card i { font-size: 3rem; color: var(--accent); margin-bottom: 20px; }
         .dash-card h3 { color: #fff; margin-bottom: 10px; }
@@ -169,6 +168,36 @@
         /* ÖZEL BAĞLAMA İKONU İÇİN */
         .custom-icon { width: 80px; height: auto; margin-bottom: 20px; filter: grayscale(100%) brightness(200%); transition: 0.3s; display: block; margin-left: auto; margin-right: auto;}
         .dash-card:hover .custom-icon { filter: none; }
+
+        /* BURAK AI HOCA KART STİLLERİ (Sadece Dashboard'da görünür) */
+        .ai-card {
+            border: 1px solid var(--accent);
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.1);
+            background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
+        }
+        .ai-card::before {
+            content: '';
+            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(197, 160, 89, 0.1) 0%, transparent 70%);
+            animation: pulseGlow 4s infinite;
+        }
+        @keyframes pulseGlow { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 0.5; } }
+        .ai-badge {
+            position: absolute; top: 10px; right: 10px; background: var(--accent); color: black;
+            font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; z-index: 2;
+        }
+
+        /* CHAT ARAYÜZ STİLLERİ */
+        .chat-container { display: flex; flex-direction: column; height: 60vh; border: 1px solid #333; border-radius: 10px; overflow: hidden; background: #000; }
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .chat-message { max-width: 80%; padding: 10px 15px; border-radius: 10px; font-size: 0.95rem; line-height: 1.4; }
+        .chat-message.ai { align-self: flex-start; background: #222; border-left: 3px solid var(--accent); color: #ddd; }
+        .chat-message.user { align-self: flex-end; background: var(--accent); color: #000; }
+        .chat-input-area { padding: 15px; background: #111; border-top: 1px solid #333; display: flex; gap: 10px; align-items: center; }
+        .chat-input { flex: 1; background: #222; border: 1px solid #333; color: white; padding: 10px; border-radius: 5px; outline: none; }
+        .chat-action-btn { background: transparent; border: 1px solid #444; color: var(--accent); padding: 10px; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        .chat-action-btn:hover { background: #222; border-color: var(--accent); }
+        .chat-send-btn { background: var(--accent); color: black; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
         /* DASHBOARD WHATSAPP BUTTON */
         .dash-whatsapp-btn {
@@ -178,7 +207,7 @@
         }
         .dash-whatsapp-btn:hover { background: #1ebc57; transform: translateY(-2px); }
 
-        /* GRIDLER - (4 Sütunlu) */
+        /* GRIDLER */
         .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .cat-box { background: #151515; padding: 30px; border-left: 3px solid var(--accent); cursor: pointer; transition: 0.3s; }
         .cat-box:hover { background: #222; }
@@ -237,7 +266,7 @@
                 <li><a href="notalar.html">NOTALAR</a></li>
                 <li><a href="siirler.html">ŞİİRLER</a></li>
                 <li><a href="konserler.html">KONSERLER</a></li>
-            </ul>
+                </ul>
         </div>
     </nav>
 
@@ -312,6 +341,9 @@
                         <a onclick="sayfaGoster('exam-categories-view')" class="menu-link">
                             <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
                         </a>
+                        <a onclick="sayfaGoster('ai-mentor-view')" class="menu-link" style="color: var(--accent);">
+                            <i class="fas fa-robot"></i> <span>BurakAI Hoca</span>
+                        </a>
                     </div>
 
                     <a href="https://wa.me/905335060921" target="_blank" class="whatsapp-sidebar-btn">
@@ -333,6 +365,15 @@
                                 <h3>BAĞLAMA EĞİTİMİ</h3>
                                 <p>Ders notları, notalar ve egzersizler.</p>
                             </div>
+
+                            <div class="dash-card ai-card" onclick="sayfaGoster('ai-mentor-view')">
+                                <span class="ai-badge">YENİ</span>
+                                <i class="fas fa-robot"></i>
+                                <h3>BurakAI Hoca</h3>
+                                <p style="font-size: 0.9rem; opacity: 0.9;">Yapay Zeka Entegrasyonlu İlk Müzik Eğitim Platformu.</p>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">İcranı yükle, anında yorumla.</p>
+                            </div>
+
                             <div class="dash-card" onclick="sayfaGoster('exam-categories-view')">
                                 <i class="fas fa-graduation-cap"></i>
                                 <h3>YETENEK SINAVI HAZIRLIK</h3>
@@ -343,6 +384,29 @@
                         <a href="https://wa.me/905335060921" target="_blank" class="dash-whatsapp-btn">
                             <i class="fab fa-whatsapp"></i> WhatsApp ile İletişime Geç
                         </a>
+                    </div>
+
+                    <div id="ai-mentor-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>BurakAI Hoca</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#666; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <p style="color: #888; margin-bottom: 20px;">Bağlamanı eline al, videonu veya sorunu gönder. Ben her zaman buradayım.</p>
+                        
+                        <div class="chat-container">
+                            <div class="chat-box" id="aiChatBox">
+                                <div class="chat-message ai">
+                                    <strong>BurakAI Hoca:</strong><br>
+                                    Selam! Hoş geldin. Bugün hangi parça üzerinde çalışıyoruz? İster bir nota fotoğrafı at, ister çaldığın videoyu gönder, birlikte bakalım. Sazına sağlık şimdiden!
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <button class="chat-action-btn" title="Fotoğraf Yükle"><i class="fas fa-camera"></i></button>
+                                <button class="chat-action-btn" title="Video Yükle"><i class="fas fa-video"></i></button>
+                                <input type="text" class="chat-input" placeholder="Bir soru sor..." id="aiUserInput">
+                                <button class="chat-send-btn" onclick="fakeSendMessage()"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="baglama-menu-view" class="view-section">
@@ -435,11 +499,11 @@
     <script>
         // --- 1. ÖĞRENCİ VERİTABANI (YENİLENMİŞ VE TEMİZLENMİŞ) ---
         const ogrenciler = {
-            "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },           
-            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },    
-            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },   
+            "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },            
+            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },     
+            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },    
             "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3R1xJ8=", soyad: "UEFJTlRFUg==" }, 
-            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }    
+            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }     
         };
 
         // --- 2. DİKTE SES DOSYALARI ---
@@ -660,6 +724,32 @@
             }
         }
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
+
+        // FAKE CHAT FONKSİYONU (TEST İÇİN)
+        function fakeSendMessage() {
+            const input = document.getElementById("aiUserInput");
+            const box = document.getElementById("aiChatBox");
+            if(input.value.trim() === "") return;
+
+            // Kullanıcı Mesajı
+            const userMsg = document.createElement("div");
+            userMsg.className = "chat-message user";
+            userMsg.innerHTML = "<strong>Sen:</strong><br>" + input.value;
+            box.appendChild(userMsg);
+            
+            // Otomatik Kaydırma
+            box.scrollTop = box.scrollHeight;
+            input.value = "";
+
+            // Yapay Zeka Cevabı (Simülasyon)
+            setTimeout(() => {
+                const aiMsg = document.createElement("div");
+                aiMsg.className = "chat-message ai";
+                aiMsg.innerHTML = "<strong>BurakAI Hoca:</strong><br>Şu an mızrabımı akort ediyorum (API henüz bağlı değil), ama sorunu not ettim! Çok yakında burada canlı canlı cevaplayacağım.";
+                box.appendChild(aiMsg);
+                box.scrollTop = box.scrollHeight;
+            }, 1000);
+        }
     </script>
 </body>
 </html>
