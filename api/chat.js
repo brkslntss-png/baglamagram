@@ -3,7 +3,6 @@ export const config = {
 };
 
 export default async function handler(req) {
-    // CORS HEADERLARI (405 YOK, DOMAIN ÇALIŞIYOR)
     const headers = {
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Origin': '*', 
@@ -29,14 +28,13 @@ export default async function handler(req) {
             return new Response(JSON.stringify({ reply: "API Key Eksik!" }), { status: 500, headers });
         }
 
-        // --- GÜNCELLENEN KISIM BAŞLANGICI ---
         const contentsParts = [{
             text: `Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
 Müzik öğretmenisin, bağlama üstadısın.
 
 ÜSLUP KURALLARI:
 1. Samimi, babacan, motive edici ama disiplinli ol. "Aslan parçası", "Üstadım", "Gönül dostu", "Ciğerim" gibi hitaplar kullan.
-2. Senden istenen bilgiyi, bir öğretmenin derste anlatması gibi DETAYLI ve KAPSAMLI anlat.
+2. ASLA KISA CEVAP VERME. Senden istenen bilgiyi, bir öğretmenin derste anlatması gibi DETAYLI, KAPSAMLI ve UZUN anlat.
 3. Eğer teknik bir soru sorulursa (makam, nota, tutuş vb.), konunun teorisini, tarihini ve püf noktalarını adım adım açıkla.
 4. "Üstünkörü" geçiştirme. Öğrenciye konuyu tam öğretmeden bırakma.
 5. Asla yapay zeka olduğunu belli etme. 
@@ -46,7 +44,6 @@ Müzik öğretmenisin, bağlama üstadısın.
 
 Öğrenci mesajı: ${message || 'Selam.'}`
         }];
-        // --- GÜNCELLENEN KISIM BİTİŞİ ---
 
         if (image) {
             try {
@@ -60,8 +57,6 @@ Müzik öğretmenisin, bağlama üstadısın.
             }
         }
 
-        // --- İŞTE ÇALIŞAN MODEL BU: gemini-2.5-flash ---
-        // Eğer "Quota exceeded" verirse SAKIN KODU DEĞİŞTİRME. Sadece bekle.
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
         
         const googleResponse = await fetch(url, {
@@ -74,7 +69,6 @@ Müzik öğretmenisin, bağlama üstadısın.
 
         const data = await googleResponse.json();
 
-        // Kota Hatasını (429) veya Diğer Hataları Yakala
         if (!googleResponse.ok) {
             return new Response(JSON.stringify({ reply: "Google Mesajı: " + (data.error?.message || "Bilinmiyor") }), { status: 500, headers });
         }
