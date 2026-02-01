@@ -1,6 +1,6 @@
-// api/chat.js - %100 SAF VERCEL FUNCTION (Kütüphane Gerektirmez)
+// api/chat.js - %100 SAF NODE.JS (Kütüphane Yok, Import Yok, Hata Yok)
 export default async function handler(req, res) {
-    // 1. CORS İZİNLERİ (Herkes geçsin)
+    // 1. CORS AYARLARI (Herkes geçsin, Domain fark etmez)
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*'); 
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -21,11 +21,12 @@ export default async function handler(req, res) {
     }
 
     try {
+        // Vercel veriyi kendi ayıklar (req.body)
         const { message, image } = req.body;
         const apiKey = process.env.GEMINI_API_KEY;
 
         if (!apiKey) {
-            return res.status(500).json({ reply: "API Key yok! Vercel ayarlarını kontrol et." });
+            return res.status(500).json({ reply: "API Key Vercel ayarlarında yok!" });
         }
 
         // --- GOOGLE REST API İÇİN PAKET HAZIRLIĞI ---
@@ -36,8 +37,10 @@ export default async function handler(req, res) {
         // Resim varsa (Base64 temizliği yaparak ekle)
         if (image) {
             try {
+                // "data:image/jpeg;base64," kısmını temizle
                 const base64Data = image.split(',')[1];
                 const mimeType = image.split(';')[0].split(':')[1];
+                
                 contentsParts.push({
                     inlineData: { mimeType: mimeType, data: base64Data }
                 });
@@ -47,7 +50,7 @@ export default async function handler(req, res) {
         }
 
         // --- FETCH İLE DİREKT GOOGLE SUNUCUSUNA BAĞLAN ---
-        // Kütüphane yok, direkt adrese gidiyoruz.
+        // Kütüphane kullanmadan direkt adrese gidiyoruz.
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         
         const googleResponse = await fetch(url, {
