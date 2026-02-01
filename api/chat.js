@@ -1,80 +1,80 @@
-// api/chat.js - SAF JAVASCRIPT MOTOR (KÜTÜPHANESİZ & SAĞLAM)
-export default async function handler(req, res) {
-  // 1. CORS AYARLARI (Herkes geçsin)
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*'); 
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+// api/chat.js - %100 SAF KOD (Kütüphane Yok, Hata Yok)
+export const config = {
+    runtime: 'edge', // Vercel Edge Runtime (Daha hızlı ve Timeout yemez)
+};
 
-  // 2. Tarayıcı Kontrolü (OPTIONS)
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  // 3. GET İsteği (Tarayıcıdan girince çalışıp çalışmadığını görmek için)
-  if (req.method === 'GET') {
-    return res.status(200).json({ durum: "Online", mesaj: "Motor çalışıyor aslan parçası." });
-  }
-
-  // 4. Sadece POST isteği
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Sadece POST kabul edilir.' });
-  }
-
-  try {
-    const { message, image } = req.body;
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    if (!apiKey) {
-      return res.status(500).json({ reply: "API Anahtarı Vercel ayarlarında eksik!" });
-    }
-
-    // Google'a Gönderilecek Paket
-    const requestBody = {
-      contents: [{
-        role: "user",
-        parts: []
-      }]
+export default async function handler(req) {
+    // 1. CORS AYARLARI (Herkes geçsin)
+    const headers = {
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Origin': '*', // Tüm sitelere izin ver
+        'Access-Control-Allow-Methods': 'GET, OPTIONS, PATCH, DELETE, POST, PUT',
+        'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+        'Content-Type': 'application/json'
     };
 
-    // Metin Ekle
-    requestBody.contents[0].parts.push({
-      text: `Sen "BurakAI Hoca"sın. Müzik öğretmenisin. Üslubun samimi ve babacan. Gelen mesajı veya notayı yorumla. Asla yapay zeka olduğunu söyleme. Öğrenci mesajı: ${message || 'Fotoğraf attım.'}`
-    });
+    // 2. Tarayıcı "Girebilir miyim?" (OPTIONS) derse "Evet" de.
+    if (req.method === 'OPTIONS') {
+        return new Response(null, { status: 200, headers });
+    }
 
-    // Resim Ekle (Varsa)
-    if (image) {
-      try {
-        const base64Data = image.split(',')[1];
-        const mimeType = image.split(';')[0].split(':')[1];
-        requestBody.contents[0].parts.push({
-          inlineData: { mimeType: mimeType, data: base64Data }
+    // 3. Sadece POST isteği kabul et
+    if (req.method !== 'POST') {
+        return new Response(JSON.stringify({ error: 'Sadece POST atabilirsin.' }), { status: 405, headers });
+    }
+
+    try {
+        const body = await req.json();
+        const { message, image } = body;
+        const apiKey = process.env.GEMINI_API_KEY;
+
+        if (!apiKey) {
+            return new Response(JSON.stringify({ reply: "API Anahtarı Vercel ayarlarında eksik!" }), { status: 500, headers });
+        }
+
+        // --- GOOGLE'A GÖNDERİLECEK PAKETİ HAZIRLA ---
+        const requestBody = {
+            contents: [{
+                role: "user",
+                parts: [{
+                    text: `Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin. Müzik öğretmenisin. Üslubun samimi ve babacan. Asla yapay zeka olduğunu söyleme. Öğrenci mesajı: ${message || 'Fotoğraf attım.'}`
+                }]
+            }]
+        };
+
+        // Resim varsa pakete ekle
+        if (image) {
+            try {
+                const base64Data = image.split(',')[1];
+                const mimeType = image.split(';')[0].split(':')[1];
+                requestBody.contents[0].parts.push({
+                    inlineData: { mimeType: mimeType, data: base64Data }
+                });
+            } catch (e) {
+                console.error("Resim hatası:", e);
+            }
+        }
+
+        // --- FETCH İLE GOOGLE'A BAĞLAN ---
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        
+        const googleResponse = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
         });
-      } catch (e) {
-        console.error("Resim hatası:", e);
-      }
+
+        const data = await googleResponse.json();
+
+        if (!googleResponse.ok) {
+            return new Response(JSON.stringify({ reply: "Google amca cevap vermedi: " + (data.error?.message || "Bilinmiyor") }), { status: 500, headers });
+        }
+
+        const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cevap alınamadı.";
+        
+        return new Response(JSON.stringify({ reply: replyText }), { status: 200, headers });
+
+    } catch (error) {
+        return new Response(JSON.stringify({ reply: "Sunucu hatası: " + error.message }), { status: 500, headers });
     }
-
-    // Google'a Fetch İle Bağlan (Kütüphanesiz)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    
-    const googleResponse = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody)
-    });
-
-    const data = await googleResponse.json();
-
-    if (!googleResponse.ok) {
-      return res.status(500).json({ reply: "Google amca kızdı: " + (data.error?.message || "Bilinmeyen hata") });
-    }
-
-    const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cevap alınamadı.";
-    
-    return res.status(200).json({ reply: replyText });
-
-  } catch (error) {
-    return res.status(500).json({ reply: "Sunucu hatası: " + error.message });
-  }
 }
