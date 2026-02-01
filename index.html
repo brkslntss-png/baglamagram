@@ -120,7 +120,7 @@
         }
 
         .name-container {
-            border: 1px solid rgba(197, 160, 89, 0.3); padding: 40px 60px; margin-bottom: 20px;
+            border: 1px solid rgba(197, 160, 89, 0.3); padding: 40px 60px; margin-bottom: 30px;
             position: relative; animation: fadeIn 1.5s ease-in-out;
         }
 
@@ -198,10 +198,12 @@
         .quote-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; display: block;}
         .quote-line { width: 40px; height: 2px; background: var(--accent); margin: 0 auto; opacity: 0.5; }
 
-        /* --- KREATİF KÖŞE (BÜYÜK VİDEOLAR - GÜNCELLENDİ) --- */
+        /* --- KREATİF KÖŞE (TAMİR EDİLDİ) --- */
         .creative-section {
-            /* Daha geniş bir alana yayılması için max-width artırıldı */
-            max-width: 1400px; margin: 0 auto 80px; padding: 0 20px;
+            width: 100%;
+            max-width: 100%; /* Sınır kaldırıldı */
+            margin: 0 auto 80px; 
+            padding: 0 5%; /* Kenarlardan biraz boşluk */
         }
         .section-title {
             text-align: center; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent);
@@ -209,19 +211,26 @@
         }
         .creative-grid {
             display: grid;
-            /* DÜZELTME: Yan yana 3 büyük video için 3 sütun */
-            grid-template-columns: repeat(3, 1fr); 
-            /* Boşluk azaltıldı, videolar büyüdü */
+            grid-template-columns: repeat(3, 1fr); /* 3 eşit parça */
             gap: 20px;
         }
-        .video-container {
-            position: relative; padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0; overflow: hidden; border: 1px solid #333;
+        
+        /* Video Kutusu Ayarları */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
             background: #000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333;
         }
-        .video-container iframe {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
 
         /* --- INSTAGRAM FEED --- */
@@ -286,11 +295,7 @@
         .fa-youtube { color: #fff; } 
         .social-item:hover .fa-youtube { color: var(--youtube); }
 
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            .creative-grid { grid-template-columns: 1fr; } /* Mobilde videolar kocaman tek sıra */
-        }
-
+        /* RESPONSIVE (Mobil Ayarlar) */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
             .menu-toggle { display: block; }
@@ -301,6 +306,10 @@
             nav ul.aktif { display: flex; }
             .cta-buttons { flex-direction: column; width: 80%; }
             .stats-grid { gap: 40px; }
+            
+            /* Mobilde videolar alt alta ve büyük olsun */
+            .creative-grid { grid-template-columns: 1fr; } 
+            
             .insta-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
@@ -363,14 +372,14 @@
     <section class="creative-section">
         <h2 class="section-title">KREATİF KÖŞE</h2>
         <div class="creative-grid">
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/SvliCP5Wznw?si=SVzAKtUlTDZbdhXH" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/SvliCP5Wznw" allowfullscreen></iframe>
             </div>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/DfzEr4qozlI?si=gAjhqeyXeVJSSQYk" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/DfzEr4qozlI" allowfullscreen></iframe>
             </div>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/v39ygvfSdGE?si=mjBvBVh6PldABEUp" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/v39ygvfSdGE" allowfullscreen></iframe>
             </div>
         </div>
     </section>
@@ -384,11 +393,11 @@
         
         <div class="insta-grid">
             <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
-                <img src="https://i.hizliresim.com/ne9q1cu.jpg" alt="Insta 1">
+                <img src="https://i.hizliresim.com/olj28le.jpg" alt="Insta 1">
                 <div class="insta-overlay"><i class="fas fa-heart"></i></div>
             </a>
             <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
-                <img src="https://i.hizliresim.com/ps617qs.JPG" alt="Insta 2">
+                <img src="https://i.hizliresim.com/6vp28ri.JPG" alt="Insta 2">
                 <div class="insta-overlay"><i class="fas fa-heart"></i></div>
             </a>
             <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
@@ -396,7 +405,7 @@
                 <div class="insta-overlay"><i class="fas fa-heart"></i></div>
             </a>
             <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
-                <img src="https://i.hizliresim.com/l1dfhwg.jpg" alt="Insta 4">
+                <img src="https://i.hizliresim.com/hcxh8kf.JPG" alt="Insta 4">
                 <div class="insta-overlay"><i class="fas fa-heart"></i></div>
             </a>
         </div>
