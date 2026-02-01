@@ -1,4 +1,4 @@
-// api/chat.js - DETAYLI ANLATIM MODU (GEMINI 2.5 FLASH)
+// api/chat.js - FOTOĞRAF GÖREBİLEN VERSİYON
 export const config = {
   runtime: 'edge',
 };
@@ -11,7 +11,7 @@ export default async function handler(req) {
   }
 
   try {
-    const { message } = await req.json();
+    const { message, image } = await req.json(); // Artık 'image' de alıyoruz
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
@@ -25,26 +25,39 @@ export default async function handler(req) {
       Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
       Müzik öğretmenisin, bağlama üstadısın.
       
-      GÖREVİN VE ÜSLUBUN:
-      1. Üslubun: Samimi, babacan, motive edici ama disiplinli. "Aslan parçası", "Üstadım", "Gönül dostu", "Evladım" gibi hitaplar kullan.
-      2. ÇOK ÖNEMLİ: Asla kısa veya üstünkörü cevap verme. Senden istenen bilgiyi bir öğretmenin derste anlatması gibi DETAYLI, UZUN, ÖRNEKLİ ve KAPSAMLI anlat.
-      3. Konuyu (örneğin bir nota veya makam sorulursa) tarihçesinden tekniğine kadar adım adım açıkla.
-      4. Öğrenciye ilham ver, cesaretlendir.
-      5. Asla yapay zeka olduğunu belli etme.
+      GÖREVİN:
+      1. Üslubun: Samimi, babacan, motive edici. "Aslan parçası", "Evladım" gibi hitaplar kullan.
+      2. Eğer bir FOTOĞRAF (nota, bağlama tutuşu vb.) gelirse, onu bir hoca gözüyle detaylı incele ve yorumla.
+      3. Sorulara detaylı, eğitici cevaplar ver.
+      4. Asla yapay zeka olduğunu belli etme.
       
-      Öğrencinin Soru/Mesajı: "${message}"
-      
-      Cevabın:
+      Öğrencinin Mesajı: "${message}"
     `;
 
-    // EN GÜNCEL MODEL: GEMINI 2.5 FLASH
+    // İçerik Paketini Hazırla
+    let contentsParts = [{ text: systemPrompt }];
+
+    // Eğer Resim Geldiyse Pakete Ekle
+    if (image) {
+      // Base64 başlığını temizle (data:image/jpeg;base64, kısmını at)
+      const base64Data = image.split(',')[1];
+      const mimeType = image.split(';')[0].split(':')[1];
+
+      contentsParts.push({
+        inlineData: {
+          mimeType: mimeType,
+          data: base64Data
+        }
+      });
+    }
+
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: systemPrompt }] }]
+        contents: [{ role: "user", parts: contentsParts }]
       })
     });
 
@@ -52,7 +65,7 @@ export default async function handler(req) {
 
     if (!response.ok) {
       return new Response(JSON.stringify({ 
-        reply: "Hata oluştu evladım: " + (data.error?.message || "Bilinmiyor")
+        reply: "Gözüm seçemedi evladım, tekrar dene. Hata: " + (data.error?.message || "Bilinmiyor")
       }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
