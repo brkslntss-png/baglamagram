@@ -727,8 +727,8 @@
             box.scrollTop = box.scrollHeight;
 
             try {
-                // 2. ADIM: TAM ADRES (ABSOLUTE PATH) KULLANILIYOR
-                const response = await fetch('https://baglamagram.vercel.app/api/chat', {
+                // 2. ADIM: TAM URL DEĞİL, RELATIVE PATH KULLAN (ÇÜNKÜ VERCEL.JSON VAR)
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -736,6 +736,10 @@
                         image: imageToSend 
                     })
                 });
+
+                if (!response.ok) {
+                    throw new Error(`Sunucu Hatası: ${response.status}`);
+                }
 
                 const data = await response.json();
                 document.getElementById("loadingBubble").remove();
@@ -746,7 +750,7 @@
                 box.appendChild(aiMsg);
 
             } catch (err) {
-                document.getElementById("loadingBubble").innerHTML = "Bağlantı koptu aslan parçası.";
+                document.getElementById("loadingBubble").innerHTML = "Hata oluştu aslan parçası: " + err.message;
                 console.error(err);
             }
             
