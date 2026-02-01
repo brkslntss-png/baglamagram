@@ -31,7 +31,7 @@ export default async function handler(req) {
     const userImage = data.image; // Base64 formatında resim (varsa)
 
     const model = GEN_AI.getGenerativeModel({ 
-      model: "gemini-1.5-pro", // Veya "gemini-1.5-flash" (daha hızlı)
+      model: "gemini-1.5-flash", 
       systemInstruction: SYSTEM_PROMPT
     });
 
