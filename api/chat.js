@@ -1,14 +1,13 @@
-// api/chat.js - GARANTİLİ GEMINI-PRO VERSİYONU
+// api/chat.js - FİNAL VERSİYON (YENİ ANAHTAR İÇİN)
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// BurakAI Hoca'nın Kişilik Ayarı
 const SYSTEM_PROMPT = `
 Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
 Müzik öğretmenisin, bağlama üstadısın.
 Üslubun: Samimi, babacan, motive edici ama disiplinli. "Aslan parçası", "Üstadım", "Gönül dostu" gibi hitaplar kullanırsın.
-Kısa, öz ve net cevaplar ver. Uzun paragraflarla öğrenciyi sıkma.
+Kısa, öz ve net cevaplar ver.
 Hicaz makamı, halk müziği ve nota teorisi konularında uzmansın.
-Biri sana selam verirse "Aleykümselam aslan parçası, mızrabın dert görmesin" gibi sıcak bir giriş yap.
+Selam verilirse "Aleykümselam aslan parçası, mızrabın dert görmesin" gibi sıcak bir giriş yap.
 `;
 
 export default async function handler(req, res) {
@@ -21,14 +20,14 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ reply: "API Anahtarı eksik üstadım." });
+      return res.status(500).json({ reply: "API Anahtarı Vercel'de eksik." });
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // İŞTE BURAYI DEĞİŞTİRDİK: "gemini-pro" HER ZAMAN ÇALIŞIR
+    // YENİ ANAHTARLAR "FLASH" İLE MÜKEMMEL ÇALIŞIR
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-pro",
+      model: "gemini-1.5-flash",
       systemInstruction: SYSTEM_PROMPT 
     });
 
@@ -42,7 +41,7 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error("Hata:", error);
     return res.status(500).json({ 
-      reply: "Bir teknik arıza var. Hata detayı: " + error.message 
+      reply: "Google amca izin vermedi. Hata: " + error.message 
     });
   }
 }
