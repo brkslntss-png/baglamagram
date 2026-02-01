@@ -1,23 +1,17 @@
-// api/chat.js - FOTOĞRAF GÖREBİLEN VERSİYON
-export const config = {
-  runtime: 'edge',
-};
-
-export default async function handler(req) {
+// api/chat.js - STANDART NODE.JS VERSİYONU (DAHA SAĞLAM)
+export default async function handler(req, res) {
+  // Sadece POST isteği kabul et
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Sadece POST atabilirsin aslanım.' }), {
-      status: 405, headers: { 'Content-Type': 'application/json' }
-    });
+    return res.status(405).json({ error: 'Sadece POST atabilirsin aslanım.' });
   }
 
   try {
-    const { message, image } = await req.json(); // Artık 'image' de alıyoruz
+    // Vercel standart modda "req.body"yi otomatik çözer
+    const { message, image } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return new Response(JSON.stringify({ reply: "API Anahtarı eksik!" }), {
-        status: 200, headers: { 'Content-Type': 'application/json' }
-      });
+      return res.status(500).json({ reply: "API Anahtarı eksik!" });
     }
 
     // --- BURAK HOCA KİŞİLİĞİ ---
@@ -26,12 +20,12 @@ export default async function handler(req) {
       Müzik öğretmenisin, bağlama üstadısın.
       
       GÖREVİN:
-      1. Üslubun: Samimi, babacan, motive edici. "Aslan parçası", "Evladım" gibi hitaplar kullan.
-      2. Eğer bir FOTOĞRAF (nota, bağlama tutuşu vb.) gelirse, onu bir hoca gözüyle detaylı incele ve yorumla.
-      3. Sorulara detaylı, eğitici cevaplar ver.
+      1. Üslubun: Samimi, babacan, motive edici. "Aslan parçası", "Evladım", "Gönül dostu" gibi hitaplar kullan.
+      2. Gelen mesajı veya FOTOĞRAFI bir hoca gözüyle yorumla.
+      3. Cevapların öğretici, detaylı ve sıcak olsun.
       4. Asla yapay zeka olduğunu belli etme.
       
-      Öğrencinin Mesajı: "${message}"
+      Öğrencinin Mesajı: "${message || 'Fotoğraf gönderdim hocam.'}"
     `;
 
     // İçerik Paketini Hazırla
@@ -39,18 +33,21 @@ export default async function handler(req) {
 
     // Eğer Resim Geldiyse Pakete Ekle
     if (image) {
-      // Base64 başlığını temizle (data:image/jpeg;base64, kısmını at)
-      const base64Data = image.split(',')[1];
-      const mimeType = image.split(';')[0].split(':')[1];
-
-      contentsParts.push({
-        inlineData: {
-          mimeType: mimeType,
-          data: base64Data
-        }
-      });
+      try {
+        const base64Data = image.split(',')[1];
+        const mimeType = image.split(';')[0].split(':')[1];
+        contentsParts.push({
+          inlineData: {
+            mimeType: mimeType,
+            data: base64Data
+          }
+        });
+      } catch (e) {
+        console.error("Resim işleme hatası:", e);
+      }
     }
 
+    // MODEL: GEMINI 2.5 FLASH (Listende çıkan en güçlü model)
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
@@ -64,20 +61,19 @@ export default async function handler(req) {
     const data = await response.json();
 
     if (!response.ok) {
-      return new Response(JSON.stringify({ 
-        reply: "Gözüm seçemedi evladım, tekrar dene. Hata: " + (data.error?.message || "Bilinmiyor")
-      }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      console.error("Google Hatası:", data);
+      return res.status(500).json({ 
+        reply: "Google amca şu an cevap veremiyor. Hata: " + (data.error?.message || "Bilinmiyor")
+      });
     }
 
     const replyText = data.candidates[0].content.parts[0].text;
 
-    return new Response(JSON.stringify({ reply: replyText }), {
-      status: 200, headers: { 'Content-Type': 'application/json' }
-    });
+    // Başarılı Cevap
+    return res.status(200).json({ reply: replyText });
 
   } catch (error) {
-    return new Response(JSON.stringify({ reply: "Bağlantı koptu. Hata: " + error.message }), {
-      status: 500, headers: { 'Content-Type': 'application/json' }
-    });
+    console.error("Sunucu Hatası:", error);
+    return res.status(500).json({ reply: "Bağlantı koptu aslan parçası. Biraz bekleyip tekrar dene." });
   }
 }
