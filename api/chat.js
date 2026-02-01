@@ -1,6 +1,6 @@
-// api/chat.js - GARANTİLİ NODE.JS SÜRÜMÜ
-module.exports = async (req, res) => {
-    // 1. CORS AYARLARI (En Tepede - Çökse bile bunları göndermeye çalışır)
+// api/chat.js - %100 SAF VERCEL FUNCTION (Kütüphane Gerektirmez)
+export default async function handler(req, res) {
+    // 1. CORS İZİNLERİ (Herkes geçsin)
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*'); 
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -9,37 +9,31 @@ module.exports = async (req, res) => {
         'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
     );
 
-    // 2. Tarayıcı Kontrolü (OPTIONS)
+    // 2. Tarayıcı ön kontrol (OPTIONS) yaparsa "Tamam" de.
     if (req.method === 'OPTIONS') {
         res.status(200).end();
         return;
     }
 
-    // 3. Test için GET isteği (Tarayıcıdan linke tıklayınca çalışıyor mu?)
-    if (req.method === 'GET') {
-        return res.status(200).json({ durum: "ÇALIŞIYOR", mesaj: "Motor sağlam aslan parçası." });
-    }
-
-    // 4. Sadece POST kabul et
+    // 3. Sadece POST kabul et
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Sadece POST atabilirsin.' });
+        return res.status(405).json({ error: 'Sadece POST isteği kabul edilir.' });
     }
 
     try {
         const { message, image } = req.body;
         const apiKey = process.env.GEMINI_API_KEY;
 
-        // KONTROL: API KEY VAR MI?
         if (!apiKey) {
-            return res.status(200).json({ reply: "HATA: Vercel ayarlarında API Anahtarı (GEMINI_API_KEY) girilmemiş!" });
+            return res.status(500).json({ reply: "API Key yok! Vercel ayarlarını kontrol et." });
         }
 
-        // Google'a Gönderilecek Paket
+        // --- GOOGLE REST API İÇİN PAKET HAZIRLIĞI ---
         const contentsParts = [{
-            text: `Sen BurakAI Hoca'sın. Müzik öğretmenisin. Üslubun samimi. Gelen mesajı veya notayı yorumla. Öğrenci: ${message || 'Görsel gönderdim.'}`
+            text: `Sen BurakAI Hoca'sın. Müzik öğretmenisin. Üslubun samimi ve babacan. Asla yapay zeka olduğunu söyleme. Öğrenci mesajı: ${message || 'Görsel gönderdim.'}`
         }];
 
-        // Resim varsa ekle
+        // Resim varsa (Base64 temizliği yaparak ekle)
         if (image) {
             try {
                 const base64Data = image.split(',')[1];
@@ -48,12 +42,15 @@ module.exports = async (req, res) => {
                     inlineData: { mimeType: mimeType, data: base64Data }
                 });
             } catch (e) {
-                console.error("Resim hatası:", e);
+                console.error("Resim işleme hatası:", e);
             }
         }
 
-        // Node.js 18+ için built-in fetch kullanımı
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        // --- FETCH İLE DİREKT GOOGLE SUNUCUSUNA BAĞLAN ---
+        // Kütüphane yok, direkt adrese gidiyoruz.
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        
+        const googleResponse = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -61,20 +58,17 @@ module.exports = async (req, res) => {
             })
         });
 
-        const data = await response.json();
+        const data = await googleResponse.json();
 
-        // Google Hata Döndürdüyse
-        if (!response.ok) {
-            return res.status(200).json({ reply: "Google Hatası: " + (data.error?.message || "Bilinmiyor") });
+        if (!googleResponse.ok) {
+            return res.status(500).json({ reply: "Google Hata Verdi: " + (data.error?.message || "Bilinmiyor") });
         }
 
-        const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cevap yok.";
+        const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cevap boş döndü.";
         
-        // BAŞARILI SONUÇ
         return res.status(200).json({ reply: replyText });
 
     } catch (error) {
-        // KOD PATLARSA BURAYA DÜŞER VE HATAYI YAZAR
-        return res.status(200).json({ reply: "SİSTEM HATASI: " + error.message });
+        return res.status(500).json({ reply: "Sunucu içi hata: " + error.message });
     }
-};
+}
