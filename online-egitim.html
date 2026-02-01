@@ -115,6 +115,9 @@
         .chat-action-btn { background: transparent; border: 1px solid #444; color: var(--accent); padding: 10px; border-radius: 5px; cursor: pointer; transition: 0.2s; position: relative; }
         .chat-action-btn:hover { background: #222; border-color: var(--accent); }
         .chat-send-btn { background: var(--accent); color: black; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        /* Yeni eklenen ses kapatma butonu stili */
+        .chat-mute-btn { background: transparent; border: 1px solid #555; color: #888; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+        .chat-mute-btn:hover { border-color: red; color: red; }
         
         /* RESİM ÖNİZLEME ALANI */
         #imagePreviewContainer { display: none; position: absolute; bottom: 70px; left: 20px; background: #222; padding: 10px; border: 1px solid var(--accent); border-radius: 5px; z-index: 10; }
@@ -327,7 +330,13 @@
                                 <button class="chat-action-btn" title="Video Yükle" onclick="alert('Video özelliği yakında gelecek aslan parçası. Şimdilik fotoğraf gönderebilirsin.')">
                                     <i class="fas fa-video"></i>
                                 </button>
+                                
                                 <input type="text" class="chat-input" placeholder="Bir soru sor..." id="aiUserInput">
+                                
+                                <button class="chat-mute-btn" title="Okumayı Durdur" onclick="window.speechSynthesis.cancel()">
+                                    <i class="fas fa-volume-mute"></i>
+                                </button>
+                                
                                 <button class="chat-send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </div>
@@ -421,13 +430,13 @@
     </footer>
 
     <script>
-        // --- 1. ÖĞRENCİ VERİTABANI (YENİLENMİŞ VE TEMİZLENMİŞ) ---
+        // --- 1. ÖĞRENCİ VERİTABANI ---
         const ogrenciler = {
             "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },            
-            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },      
-            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },     
+            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },       
+            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },      
             "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3R1xJ8=", soyad: "UEFJTlRFUg==" }, 
-            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }      
+            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }       
         };
 
         // --- 2. DİKTE SES DOSYALARI ---
@@ -512,12 +521,10 @@
         });
 
         function sistemeGiris() {
-            // Şifrenin başındaki ve sonundaki boşlukları otomatik temizle (.trim())
             const hamSifre = document.getElementById("studentPass").value.trim();
             let sifre = "";
             
             try {
-                // Şifreyi Base64'e çevir
                 sifre = btoa(unescape(encodeURIComponent(hamSifre)));
             } catch (e) {
                 console.log("Şifre çevrim hatası");
@@ -530,7 +537,6 @@
                 let formatliSoyad = "";
 
                 try {
-                    // İsimleri Base64'ten çöz
                     let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
                     let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
                     formatliAd = gercekAd.charAt(0).toUpperCase() + gercekAd.slice(1).toLowerCase();
@@ -566,7 +572,6 @@
             else sayfaGoster('dashboard-view', false);
         };
 
-        // MATERYAL AÇMA FONKSİYONU
         function materyalAc(kategori) {
             document.getElementById("mat-category-title").innerText = kategori;
             const container = document.getElementById("materials-container");
@@ -629,24 +634,36 @@
         }
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
 
-        // --- YENİ EKLENEN FOTOĞRAF VE CHAT MANTIĞI ---
+        // --- YENİ EKLENEN FOTOĞRAF, CHAT VE SESLENDİRME MANTIĞI ---
         let selectedImageBase64 = null;
+
+        // --- SESLENDİRME FONKSİYONU (YENİ) ---
+        function metniSeslendir(htmlMetin) {
+            let temizMetin = htmlMetin.replace(/<[^>]*>?/gm, ''); // HTML etiketlerini temizle
+            
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Önceki konuşmayı durdur
+
+                let ses = new SpeechSynthesisUtterance(temizMetin);
+                ses.lang = 'tr-TR';
+                ses.rate = 1.0; 
+                
+                window.speechSynthesis.speak(ses);
+            }
+        }
 
         function triggerFileUpload() {
             document.getElementById('fileInput').click();
         }
 
-        // 1. ADIM: RESMİ SEÇ VE TARAYICIDA SIKIŞTIR (Küçült)
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(event) {
-                // Resmi bir Image nesnesine yükle
                 const img = new Image();
                 img.onload = function() {
-                    // Canvas oluştur ve resmi yeniden boyutlandır (Maks 800px genişlik)
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
@@ -671,10 +688,8 @@
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Sıkıştırılmış Base64 verisini al (JPEG kalitesi 0.7)
                     selectedImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
 
-                    // Önizlemeyi göster
                     const imgPreview = document.getElementById('imagePreview');
                     imgPreview.src = selectedImageBase64;
                     document.getElementById('imagePreviewContainer').style.display = 'block';
@@ -727,8 +742,7 @@
             box.scrollTop = box.scrollHeight;
 
             try {
-                // 2. ADIM: TAM URL DEĞİL, RELATIVE PATH KULLAN
-               const response = await fetch('https://baglamagram.vercel.app/api/chat', {
+                const response = await fetch('https://baglamagram.vercel.app/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -737,7 +751,6 @@
                     })
                 });
 
-                // Hata varsa JSON olarak detayını alalım
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
                     throw new Error(errorData.reply || errorData.error || `Sunucu Hatası: ${response.status}`);
@@ -748,12 +761,18 @@
                 
                 const aiMsg = document.createElement("div");
                 aiMsg.className = "chat-message ai";
-                // Gelen cevapta "HATA" kelimesi varsa kırmızı yapalım
+                
                 if (data.reply && (data.reply.includes("HATA") || data.reply.includes("Hatası"))) {
-                     aiMsg.style.color = "red";
+                        aiMsg.style.color = "red";
                 }
+                
                 aiMsg.innerHTML = "<strong>BurakAI Hoca:</strong><br>" + (data.reply ? data.reply.replace(/\n/g, "<br>") : "Cevap boş geldi.");
                 box.appendChild(aiMsg);
+
+                // --- SESLENDİRMEYİ TETİKLE ---
+                if(data.reply) {
+                    metniSeslendir(data.reply);
+                }
 
             } catch (err) {
                 document.getElementById("loadingBubble").innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
