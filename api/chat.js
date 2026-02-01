@@ -1,20 +1,18 @@
-// api/chat.js - GEMINI 2.5 FLASH (SENİN İSTEDİĞİN SÜRÜM)
+// api/chat.js - GEMINI 1.5 FLASH (KOTA DOSTU & HIZLI)
 export default async function handler(req, res) {
-    // 1. CORS AYARLARI (Manuel ve Kesin)
+    // 1. CORS AYARLARI (Domain Engelini Kaldırmak İçin)
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*'); 
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
-    // 2. Tarayıcı ön kontrolü
     if (req.method === 'OPTIONS') {
         res.status(200).end();
         return;
     }
 
-    // 3. Sadece POST
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Sadece POST atabilirsin.' });
+        return res.status(405).json({ error: 'Sadece POST isteği kabul edilir.' });
     }
 
     try {
@@ -42,9 +40,10 @@ export default async function handler(req, res) {
             }
         }
 
-        // --- MODEL DÜZELTİLDİ: GEMINI 2.5 FLASH ---
-        // Senin en başta kullandığın ve çalışan sürüm.
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        // --- MODEL DEĞİŞİKLİĞİ: 1.5 FLASH ---
+        // 2.5 sürümünün kotası dolduğu için 1.5 Flash kullanıyoruz. 
+        // Bu modelin ücretsiz kotası çok yüksektir (Dakikada 15 istek).
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         
         const googleResponse = await fetch(url, {
             method: 'POST',
@@ -56,10 +55,8 @@ export default async function handler(req, res) {
 
         const data = await googleResponse.json();
 
-        // Google Hata Verirse Detayını Gör
         if (!googleResponse.ok) {
-            console.error("Google Hatası:", data);
-            return res.status(500).json({ reply: "Google Hata Verdi: " + (data.error?.message || "Model adı veya API key sorunu.") });
+            return res.status(500).json({ reply: "Google Hatası: " + (data.error?.message || "Bilinmiyor") });
         }
 
         const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cevap boş döndü.";
