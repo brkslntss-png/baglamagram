@@ -1,70 +1,43 @@
-// api/chat.js - GARANTİLİ MANUEL BAĞLANTI (GEMINI PRO)
+// api/chat.js - DEDEKTİF MODU (LİSTELEME)
 export const config = {
   runtime: 'edge',
 };
 
 export default async function handler(req) {
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Sadece POST isteği atabilirsin.' }), {
-      status: 405, headers: { 'Content-Type': 'application/json' }
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    return new Response(JSON.stringify({ reply: "API Anahtarı Yok!" }), {
+      status: 200, headers: { 'Content-Type': 'application/json' }
     });
   }
 
+  // SOHBET ETMİYORUZ, LİSTE İSTİYORUZ
+  const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+
   try {
-    const { message } = await req.json();
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    if (!apiKey) {
-      return new Response(JSON.stringify({ reply: "API Anahtarı eksik!" }), {
-        status: 200, headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    // BURAK HOCA KİŞİLİĞİ
-    const systemPrompt = `
-      Sen "BurakAI Hoca"sın. Mahmut Burak Aslantaş'ın dijital ikizisin.
-      Müzik öğretmenisin, bağlama üstadısın.
-      Üslubun: Samimi, babacan, motive edici ama disiplinli. "Aslan parçası", "Üstadım", "Gönül dostu" gibi hitaplar kullanırsın.
-      Kısa, öz ve net cevaplar ver.
-      Öğrencinin mesajı aşağıdadır.
-    `;
-
-    // DİKKAT: URL ARTIK "gemini-pro". BU MODEL HERKESTE VARDIR.
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: systemPrompt + "\n\nÖğrenci: " + message }]
-          }
-        ]
-      })
-    });
-
+    const response = await fetch(url, { method: 'GET' });
     const data = await response.json();
 
-    // Hata varsa göster
     if (!response.ok) {
       return new Response(JSON.stringify({ 
-        reply: "HATA: " + (data.error?.message || "Bilinmeyen bir sorun oluştu.")
-      }), {
-        status: 200, headers: { 'Content-Type': 'application/json' }
-      });
+        reply: "HATA: " + JSON.stringify(data, null, 2) 
+      }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const replyText = data.candidates[0].content.parts[0].text;
+    // Sadece mesaj üretebilen modelleri filtrele
+    const models = data.models
+      ?.filter(m => m.supportedGenerationMethods.includes("generateContent"))
+      .map(m => m.name) // Örn: models/gemini-pro
+      .join("\n");
 
-    return new Response(JSON.stringify({ reply: replyText }), {
-      status: 200, headers: { 'Content-Type': 'application/json' }
-    });
+    return new Response(JSON.stringify({ 
+      reply: models ? "İŞTE SENİN LİSTEN:\n" + models : "LİSTE BOŞ! (Google AI Studio'da API kapalı olabilir)" 
+    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
-    return new Response(JSON.stringify({ reply: "Sunucu hatası: " + error.message }), {
-      status: 200, headers: { 'Content-Type': 'application/json' }
+    return new Response(JSON.stringify({ reply: "Bağlantı Hatası: " + error.message }), { 
+      status: 200, headers: { 'Content-Type': 'application/json' } 
     });
   }
 }
