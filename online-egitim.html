@@ -727,7 +727,7 @@
             box.scrollTop = box.scrollHeight;
 
             try {
-                // 2. ADIM: TAM URL DEĞİL, RELATIVE PATH KULLAN (ÇÜNKÜ VERCEL.JSON VAR)
+                // 2. ADIM: TAM URL DEĞİL, RELATIVE PATH KULLAN
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -737,8 +737,10 @@
                     })
                 });
 
+                // Hata varsa JSON olarak detayını alalım
                 if (!response.ok) {
-                    throw new Error(`Sunucu Hatası: ${response.status}`);
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.reply || errorData.error || `Sunucu Hatası: ${response.status}`);
                 }
 
                 const data = await response.json();
@@ -746,11 +748,15 @@
                 
                 const aiMsg = document.createElement("div");
                 aiMsg.className = "chat-message ai";
-                aiMsg.innerHTML = "<strong>BurakAI Hoca:</strong><br>" + (data.reply ? data.reply.replace(/\n/g, "<br>") : "Bir sorun oldu.");
+                // Gelen cevapta "HATA" kelimesi varsa kırmızı yapalım
+                if (data.reply && (data.reply.includes("HATA") || data.reply.includes("Hatası"))) {
+                     aiMsg.style.color = "red";
+                }
+                aiMsg.innerHTML = "<strong>BurakAI Hoca:</strong><br>" + (data.reply ? data.reply.replace(/\n/g, "<br>") : "Cevap boş geldi.");
                 box.appendChild(aiMsg);
 
             } catch (err) {
-                document.getElementById("loadingBubble").innerHTML = "Hata oluştu aslan parçası: " + err.message;
+                document.getElementById("loadingBubble").innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
                 console.error(err);
             }
             
