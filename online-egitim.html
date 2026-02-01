@@ -5,43 +5,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Eğitim | Mahmut Burak ASLANTAŞ</title>
-    
     <meta name="description" content="Mahmut Burak ASLANTAŞ ile profesyonel online bağlama eğitimi.">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&family=Lato&display=swap" rel="stylesheet">
+
+    <script src='https://meet.jit.si/external_api.js'></script>
 
     <style>
         /* ============================================================
-           TEMEL AYARLAR VE RENK PALETİ
+           TEMEL AYARLAR (ORİJİNAL KODDAN KORUNDU)
            ============================================================ */
         :root {
-            /* 1. ESKİ TASARIM (LANDING) RENKLERİ */
+            /* Landing Renkleri */
             --primary: #000000;
-            --accent: #c5a059;        /* Orijinal Tok Altın */
+            --accent: #c5a059;
             --bg-dark: #0f0f0f;
             --bg-sidebar: #151515;
             --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
             
-            /* 2. YENİ TASARIM (PORTAL) RENKLERİ */
-            --yellow-portal: #ffd700; /* Canlı Normal Sarı */
+            /* Portal Renkleri */
+            --yellow-portal: #ffd700;
             --portal-glow: rgba(255, 215, 0, 0.3);
             --glass-bg: rgba(20, 20, 20, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
             
-            /* ORTAK */
+            /* Ortak */
             --text: #ffffff;
             --text-secondary: #b0b0b0;
             --whatsapp-green: #25d366;
-            --ai-purple: #9d4edd; 
+            --ai-purple: #9d4edd;
             --sidebar-width: 280px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            /* Varsayılan: ESKİ TASARIM FONT VE ZEMİNİ */
             font-family: 'Montserrat', sans-serif; 
             font-weight: 300;
             background: var(--bg-dark);
@@ -52,15 +51,14 @@
             transition: background 0.5s ease;
         }
 
-        /* PORTAL AKTİF OLUNCA BODY DEĞİŞİR */
         body.portal-active {
-            font-family: 'Poppins', sans-serif; /* Modern Font */
+            font-family: 'Poppins', sans-serif;
             background-color: #050505;
             background-image: radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.03) 0%, transparent 20%),
                               radial-gradient(circle at 90% 80%, rgba(157, 78, 221, 0.05) 0%, transparent 20%);
         }
 
-        /* --- MENÜ (NAV - ORİJİNAL HALİ KORUNDU) --- */
+        /* --- MENÜ (ORİJİNAL - DOKUNULMADI) --- */
         nav { background: rgba(0, 0, 0, 0.95); padding: 20px 0; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(197, 160, 89, 0.2); }
         .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
         nav ul { display: flex; list-style: none; gap: 40px; padding: 0 20px; }
@@ -68,17 +66,10 @@
         nav a:hover, nav a.active { color: var(--accent); }
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
 
-        /* ============================================================
-           BÖLÜM 1: PUBLIC CONTENT (ESKİ TASARIM - BİREBİR)
-           ============================================================ */
-        
-        /* GİRİŞ BUTONU (TEK FARK: İÇİ DOLU) */
+        /* --- LANDING CONTENT (ORİJİNAL - DOKUNULMADI) --- */
         .portal-login-btn-container { text-align: center; margin: 40px 0; display: flex; justify-content: center; }
         .portal-btn {
-            background: var(--accent); /* DOLU RENK */
-            border: 1px solid var(--accent); 
-            color: #000; /* SİYAH YAZI */
-            padding: 20px 40px;
+            background: var(--accent); border: 1px solid var(--accent); color: #000; padding: 20px 40px;
             font-family: 'Playfair Display', serif; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;
             cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 20px;
             border-radius: 5px; box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
@@ -86,15 +77,13 @@
         .portal-btn:hover { background: #e0c060; transform: translateY(-3px); }
         .icon-stack { position: relative; display: inline-block; width: 40px; height: 40px; }
         .icon-stack .fa-laptop { font-size: 36px; }
-        .icon-stack .fa-music { position: absolute; font-size: 14px; top: 50%; left: 50%; transform: translate(-50%, -60%); color: #000; } /* İkon Siyah */
+        .icon-stack .fa-music { position: absolute; font-size: 14px; top: 50%; left: 50%; transform: translate(-50%, -60%); color: #000; }
 
-        /* ESKİ SAYFA İÇERİĞİ */
         .page-content { flex: 1; padding: 20px; max-width: 1400px; margin: 0 auto; width: 100%; animation: fadeInUp 1s ease-out forwards; opacity: 0; }
         @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         
         h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
 
-        /* ESKİ KARTLAR */
         .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-bottom: 50px; }
         .feature-card { background: rgba(255, 255, 255, 0.03); padding: 30px; border-left: 2px solid var(--accent); transition: transform 0.3s; }
         .feature-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
@@ -107,20 +96,17 @@
         .btn { padding: 12px 30px; border: 1px solid var(--accent); color: var(--accent); background: transparent; text-transform: uppercase; cursor: pointer; transition: 0.3s; font-weight: bold; }
         .btn:hover { background: var(--accent); color: #000; }
 
-        /* ESKİ POPUP */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; justify-content: center; align-items: center; flex-direction: column; animation: fadeIn 0.3s; }
         .login-box { border: 1px solid var(--accent); padding: 40px; text-align: center; background: #111; box-shadow: 0 0 30px rgba(197, 160, 89, 0.3); width: 90%; max-width: 400px; position: relative; }
         .close-login { position: absolute; top: 10px; right: 15px; color: #fff; font-size: 1.5rem; cursor: pointer; }
 
-
         /* ============================================================
-           BÖLÜM 2: ÖĞRENCİ PORTALI (YENİ MODERN TASARIM)
+           2. ÖĞRENCİ PORTALI STİLLERİ (SIDEBAR DÜZELTİLDİ)
            ============================================================ */
-        
         #student-portal { display: none; width: 100%; min-height: 80vh; margin-top: 30px; }
         .portal-layout { display: flex; gap: 30px; min-height: 80vh; }
         
-        /* Sidebar (YENİ) */
+        /* SIDEBAR TAŞMA SORUNU DÜZELTİLDİ */
         .sidebar { 
             width: var(--sidebar-width); 
             background: var(--glass-bg); 
@@ -129,61 +115,40 @@
             border: 1px solid var(--glass-border); border-radius: 24px; 
             display: flex; flex-direction: column; 
             transition: all 0.3s ease; 
-            height: calc(100vh - 120px); position: sticky; top: 100px;
+            /* Yükseklik ekranın %85'i olsun, taşarsa kaydırılsın */
+            max-height: 85vh; 
+            position: sticky; top: 100px;
+            overflow-y: auto; /* İçerik çoksa kaydırma çubuğu çıkar */
         }
+        /* Scrollbar'ı gizle ama çalışsın */
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
         .sidebar.collapsed { width: 90px; padding: 30px 15px; }
         .sidebar.collapsed .user-info, .sidebar.collapsed .menu-title { display: none; }
         .sidebar.collapsed .menu-link span, .sidebar.collapsed .whatsapp-sidebar-btn span { display: none; }
         .sidebar.collapsed .menu-link { justify-content: center; padding: 15px 0; }
-        .hamburger-btn { font-size: 1.5rem; color: var(--yellow-portal); cursor: pointer; margin-bottom: 30px; align-self: flex-end; }
+        .hamburger-btn { font-size: 1.5rem; color: var(--yellow-portal); cursor: pointer; margin-bottom: 20px; align-self: flex-end; }
         
-        .user-info { margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; text-align: center; }
-        .user-name { color: var(--yellow-portal); font-family: 'Lato', sans-serif; font-size: 1.5rem; font-weight: normal; line-height: 1.2; margin-bottom: 5px; }
-        .premium-badge { 
-            font-size: 0.65rem; color: #000; background: var(--yellow-portal); 
-            padding: 4px 10px; border-radius: 20px; display: inline-block; 
-            letter-spacing: 1px; text-transform: uppercase; font-weight: bold; 
-            box-shadow: 0 0 10px var(--portal-glow);
-        }
+        .user-info { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; text-align: center; }
+        .user-name { color: var(--yellow-portal); font-family: 'Lato', sans-serif; font-size: 1.4rem; font-weight: normal; line-height: 1.2; margin-bottom: 5px; }
+        .premium-badge { font-size: 0.65rem; color: #000; background: var(--yellow-portal); padding: 4px 10px; border-radius: 20px; display: inline-block; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; box-shadow: 0 0 10px var(--portal-glow); }
         
-        .menu-link { 
-            display: flex; align-items: center; gap: 15px; 
-            color: #ccc; text-decoration: none; padding: 14px 18px; 
-            margin-bottom: 8px; border-radius: 12px; transition: 0.3s; cursor: pointer; 
-            font-size: 0.95rem; border: 1px solid transparent;
-        }
+        .menu-link { display: flex; align-items: center; gap: 15px; color: #ccc; text-decoration: none; padding: 12px 15px; margin-bottom: 5px; border-radius: 12px; transition: 0.3s; cursor: pointer; font-size: 0.95rem; border: 1px solid transparent; }
         .menu-link:hover { background: rgba(255, 255, 255, 0.05); color: #fff; transform: translateX(5px); }
-        .menu-link.active { 
-            background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, transparent 100%);
-            color: var(--yellow-portal); border-left: 3px solid var(--yellow-portal);
-            border-radius: 4px 12px 12px 4px;
-        }
+        .menu-link.active { background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, transparent 100%); color: var(--yellow-portal); border-left: 3px solid var(--yellow-portal); border-radius: 4px 12px 12px 4px; }
         
-        .whatsapp-sidebar-btn { 
-            display: flex; align-items: center; gap: 15px; 
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); 
-            color: white; padding: 15px; border-radius: 15px; 
-            text-decoration: none; font-weight: 600; margin-top: auto; 
-            transition: 0.3s; justify-content: center; 
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
-        }
+        .whatsapp-sidebar-btn { display: flex; align-items: center; gap: 15px; background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); color: white; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 600; margin-top: auto; transition: 0.3s; justify-content: center; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2); }
         .whatsapp-sidebar-btn:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4); }
 
-        /* Portal Content (YENİ) */
         .portal-content { flex: 1; border-radius: 24px; padding: 10px; }
         .view-section { display: none; animation: fadeIn 0.5s; }
         .view-section.active { display: block; }
         
-        /* Dashboard Kartları (YENİ - SARI) */
         .dashboard-header h1 { font-family: 'Lato', sans-serif; color: var(--yellow-portal); margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; font-weight: normal; letter-spacing: 1px; }
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
         
-        .dash-card { 
-            background: var(--glass-bg); backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border); padding: 40px 30px; text-align: center; 
-            border-radius: 20px; cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
-            position: relative; overflow: hidden; 
-        }
+        .dash-card { background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 40px 30px; text-align: center; border-radius: 20px; cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; overflow: hidden; }
         .dash-card:hover { transform: translateY(-8px); border-color: var(--yellow-portal); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
         .dash-card i { font-size: 3.5rem; color: var(--yellow-portal); margin-bottom: 20px; transition: 0.3s; }
         .dash-card:hover i { transform: scale(1.1); text-shadow: 0 0 20px var(--portal-glow); }
@@ -195,13 +160,14 @@
         .ai-card i { color: var(--ai-purple) !important; }
         .ai-badge { position: absolute; top: 15px; right: 15px; background: var(--ai-purple); color: white; font-size: 0.65rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; z-index: 2; box-shadow: 0 0 10px rgba(157, 78, 221, 0.5); }
 
-        /* Modern Chat (YENİ) */
+        /* Chat & Input Düzeltmeleri */
         .chat-container { display: flex; flex-direction: column; height: 65vh; border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(10px); }
         .chat-box { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
         .chat-message { max-width: 75%; padding: 15px 20px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .chat-message.ai { align-self: flex-start; background: rgba(40, 40, 40, 0.9); border-bottom-left-radius: 2px; color: #eee; border: 1px solid rgba(255,255,255,0.05); }
         .chat-message.ai strong { color: var(--yellow-portal); }
         .chat-message.user { align-self: flex-end; background: linear-gradient(135deg, var(--yellow-portal) 0%, #b8860b 100%); color: #000; border-bottom-right-radius: 2px; font-weight: 500; }
+        
         .chat-input-area { padding: 20px; background: rgba(20, 20, 20, 0.9); border-top: 1px solid var(--glass-border); display: flex; gap: 12px; align-items: center; }
         .chat-input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid #444; color: white; padding: 12px 20px; border-radius: 30px; outline: none; transition: 0.3s; }
         .chat-input:focus { border-color: var(--yellow-portal); background: rgba(255, 255, 255, 0.1); }
@@ -211,7 +177,7 @@
         .chat-send-btn { background: var(--yellow-portal); color: black; border: none; width: 45px; height: 45px; border-radius: 50%; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--portal-glow); transition: 0.3s; }
         .chat-send-btn:hover { transform: scale(1.1); }
 
-        /* Portal Diğer Elemanlar (YENİ) */
+        /* Portal Diğer Elemanlar */
         .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .cat-box { background: var(--glass-bg); padding: 30px; border-radius: 12px; border-left: 4px solid var(--yellow-portal); cursor: pointer; transition: 0.3s; border: 1px solid var(--glass-border); border-left-width: 4px; }
         .cat-box:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(5px); }
@@ -229,13 +195,27 @@
         .image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; justify-content: center; align-items: center; }
         .image-modal img { max-width: 90%; max-height: 90%; border: 3px solid var(--yellow-portal); border-radius: 10px; }
         .close-modal { position: absolute; top: 30px; right: 40px; color: #fff; font-size: 3rem; cursor: pointer; }
-        #imagePreviewContainer { display: none; position: absolute; bottom: 85px; left: 30px; background: rgba(0,0,0,0.8); padding: 10px; border: 1px solid var(--yellow-portal); border-radius: 10px; z-index: 10; backdrop-filter: blur(5px); }
+        
+        /* DÜZELTME: Önizleme Container */
+        #imagePreviewContainer { 
+            display: none; /* Varsayılan Gizli */
+            position: absolute; bottom: 85px; left: 30px; 
+            background: rgba(0,0,0,0.8); padding: 10px; 
+            border: 1px solid var(--yellow-portal); border-radius: 10px; 
+            z-index: 10; backdrop-filter: blur(5px); 
+        }
         #imagePreview { max-width: 120px; max-height: 120px; display: block; border-radius: 5px; }
         #removeImage { color: #ff4d4d; cursor: pointer; text-align: center; display: block; margin-top: 8px; font-size: 0.85rem; font-weight: bold; }
 
+        /* CANLI DERS KARTI (YENİ) */
+        .live-class-card { border-color: rgba(255, 0, 0, 0.3); }
+        .live-class-card:hover { border-color: red; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
+        .live-class-card i { color: #ff4d4d; }
+        #meet-frame { width: 100%; height: 600px; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); }
+
         @media (max-width: 900px) {
             .portal-layout { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; top: 0; padding: 20px; border-radius: 0; border: none; border-bottom: 1px solid var(--glass-border); background: var(--bg-dark); }
+            .sidebar { width: 100%; height: auto; position: relative; top: 0; padding: 20px; border-radius: 0; border: none; border-bottom: 1px solid var(--glass-border); background: var(--bg-dark); max-height: none; }
             .sidebar.collapsed { height: 70px; overflow: hidden; padding: 15px 20px; }
             .portal-content { width: 100%; padding: 10px; }
             .features-grid { grid-template-columns: 1fr; }
@@ -350,6 +330,9 @@
                         <a onclick="sayfaGoster('exam-categories-view')" class="menu-link">
                             <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
                         </a>
+                        <a onclick="startLiveClass()" class="menu-link">
+                             <i class="fas fa-video"></i> <span>Canlı Ders</span>
+                        </a>
                         <a onclick="sayfaGoster('ai-mentor-view')" class="menu-link" style="color: var(--accent);">
                             <i class="fas fa-robot"></i> <span>BurakAI Hoca (beta)</span>
                         </a>
@@ -388,6 +371,12 @@
                                 <h3>YETENEK SINAVI HAZIRLIK</h3>
                                 <p>Dikte çalışmaları, soru çözümleri.</p>
                             </div>
+                            
+                            <div class="dash-card live-class-card" onclick="startLiveClass()">
+                                <i class="fas fa-video"></i>
+                                <h3>CANLI DERS</h3>
+                                <p>Sanal sınıfa bağlanarak canlı derse katılın.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -401,7 +390,7 @@
                         <div class="chat-container">
                             <div class="chat-box" id="aiChatBox">
                                 <div class="chat-message ai">
-                                    <strong style="color: var(--accent);">BurakAI Hoca:</strong><br>
+                                    <strong style="color: var(--accent); font-family: 'Playfair Display', serif;">BurakAI Hoca:</strong><br>
                                     Gel bakalım evladım, hoş geldin. Sazın kucağındaysa, gönlün de aşka hazırsa aşamayacağımız yokuş yok. 'Yorulduk' demek yok, 'yapamıyorum' demek yok. Ben senin her adımda yanındayım. Hadi bismillah diyelim, sor bakalım kafana takılan şey nedir?
                                 </div>
                             </div>
@@ -430,6 +419,14 @@
                                 <button class="chat-send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div id="live-class-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Sanal Sınıf</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← Geri</button>
+                        </div>
+                        <div id="meet-frame"></div>
                     </div>
 
                     <div id="baglama-menu-view" class="view-section">
@@ -588,7 +585,7 @@
             { ad: "Değmen Benim Gamlı Yaslı Gönlüme", dosya: "o.jpg" },
             { ad: "Denizin Dibinde Hatçam", dosya: "p.jpg" },
             { ad: "Kütahyanın Pınarları", dosya: "r.jpg" },
-            { ad: "Dostum Dostum", dosya: "s.png?v=1" }, 
+            { ad: "Dostum Dostum", dosya: "s.png?v=1" }, 
             { ad: "Han Sarhoş Hancı Sarhoş", dosya: "t.jpg" },
             { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
         ];
@@ -669,7 +666,7 @@
         function materyalAc(kategori) {
             document.getElementById("mat-category-title").innerText = kategori;
             const container = document.getElementById("materials-container");
-            container.innerHTML = ""; 
+            container.innerHTML = ""; 
 
             if (kategori === 'Teorik Bilgi') {
                 dersNotlariDosyalari.forEach(item => {
@@ -696,7 +693,7 @@
             if (kategoriAdi === "Dikte Soruları") {
                 for (let i = 1; i <= 22; i++) {
                     if (i === 18) continue;
-                    let driveId = dikteVerileri[i] || ""; 
+                    let driveId = dikteVerileri[i] || ""; 
                     listeContainer.innerHTML += `<div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', 'Çalışma ${i}')"><span style="color:#fff; font-weight:500;">Çalışma ${i}</span><i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i></div>`;
                 }
             } else {
@@ -709,7 +706,7 @@
             document.getElementById("exam-detail-title").innerText = baslik;
             let embedUrl = audioId ? "https://drive.google.com/file/d/" + audioId + "/preview" : "";
             document.getElementById("exam-audio-player").src = embedUrl;
-            document.getElementById("current-answer-img").value = "./dikte-cevaplar/calisma-" + no + ".png"; 
+            document.getElementById("current-answer-img").value = "./dikte-cevaplar/calisma-" + no + ".png"; 
             sayfaGoster("exam-detail-view");
         }
 
@@ -728,8 +725,31 @@
         }
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
 
+        // --- CANLI DERS (JITSI MEET) ---
+        function startLiveClass() {
+            const domain = 'meet.jit.si';
+            const options = {
+                roomName: 'BurakHocaBaglamaSinifi',
+                width: '100%',
+                height: 600,
+                parentNode: document.querySelector('#meet-frame'),
+                lang: 'tr',
+                configOverwrite: { 
+                    startWithAudioMuted: true,
+                    prejoinPageEnabled: false
+                }
+            };
+            
+            if(document.querySelector('#meet-frame').innerHTML === "") {
+                const api = new JitsiMeetExternalAPI(domain, options);
+            }
+            
+            sayfaGoster('live-class-view');
+        }
+
         // --- YENİ EKLENEN FOTOĞRAF, CHAT VE SESLENDİRME MANTIĞI ---
         let selectedImageBase64 = null;
+        let lastAiResponse = "";
 
         // --- SESLENDİRME FONKSİYONU (YENİ) ---
         function metniSeslendir(htmlMetin) {
@@ -740,18 +760,19 @@
 
                 let ses = new SpeechSynthesisUtterance(temizMetin);
                 ses.lang = 'tr-TR';
-                ses.rate = 1.0; 
+                ses.rate = 1.0; 
                 
-                // Konuşma bittiğinde event listener eklenebilir ama şu an basit tutuyoruz
                 window.speechSynthesis.speak(ses);
             }
         }
 
-        // SESLENDİRME TETİKLEYİCİ BUTON İÇİN FONKSİYON
-        // (Bu fonksiyonu chat-mute-btn'e bağlayacağız)
-        // NOT: Mevcut kodda chat-mute-btn "Okumayı Durdur" (cancel) yapıyor.
-        // Eğer "Tekrar Oku" isteniyorsa son cevabı saklamamız gerek.
-        // Şimdilik sadece "Durdur" mantığını koruyorum. İsteğe göre "Son mesajı oku" da eklenebilir.
+        function toggleSpeech() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            } else if (lastAiResponse) {
+                metniSeslendir(lastAiResponse);
+            }
+        }
 
         function triggerFileUpload() {
             document.getElementById('fileInput').click();
@@ -809,7 +830,7 @@
         // Enter tuşu ile mesaj gönderme
         document.getElementById("aiUserInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
-                event.preventDefault(); // Form submit veya varsayılan davranışı engelle
+                event.preventDefault(); 
                 sendMessage();
             }
         });
@@ -854,9 +875,9 @@
                 const response = await fetch('https://baglamagram.vercel.app/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        message: msgText || "Şu gönderdiğim görsele bir bak hocam.", 
-                        image: imageToSend 
+                    body: JSON.stringify({ 
+                        message: msgText || "Şu gönderdiğim görsele bir bak hocam.", 
+                        image: imageToSend 
                     })
                 });
 
@@ -875,15 +896,10 @@
                         aiMsg.style.color = "red";
                 }
                 
-                // --- DÜZENLEME 2: BurakAI Font ve Başlık Rengi ---
-                // Strong etiketine stil eklendi.
+                lastAiResponse = data.reply;
+
                 aiMsg.innerHTML = "<strong style='color: var(--accent); font-family: \"Playfair Display\", serif;'>BurakAI Hoca:</strong><br>" + (data.reply ? data.reply.replace(/\n/g, "<br>") : "Cevap boş geldi.");
                 box.appendChild(aiMsg);
-
-                // --- DÜZENLEME 1: OTOMATİK OKUMA İPTAL EDİLDİ ---
-                // Buradaki metniSeslendir() çağrısı kaldırıldı. 
-                // Artık kullanıcı manuel olarak okutmalı (veya mute butonu işlevi değiştirilmeli)
-                // if(data.reply) { metniSeslendir(data.reply); } -> SİLİNDİ
 
             } catch (err) {
                 document.getElementById("loadingBubble").innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
