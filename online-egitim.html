@@ -213,6 +213,160 @@
         .live-class-card i { color: #ff4d4d; }
         #meet-frame { width: 100%; height: 600px; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); }
 
+        /* --- METRONOM STİLLERİ --- */
+        .metronome-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .beat-dots {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            height: 30px;
+        }
+
+        .beat-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #444;
+            transition: all 0.1s;
+        }
+
+        .beat-dot.active {
+            background: var(--yellow-portal);
+            box-shadow: 0 0 15px var(--yellow-portal);
+            transform: scale(1.3);
+            border-color: #fff;
+        }
+
+        .bpm-display-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .bpm-value-box {
+            font-family: 'Lato', sans-serif;
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--text);
+            width: 180px;
+            line-height: 1;
+        }
+
+        .bpm-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .bpm-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .bpm-btn:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .slider-container {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .bpm-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .bpm-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--yellow-portal);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .bpm-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .select-wrapper select {
+            padding: 15px 20px;
+            border-radius: 30px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--accent);
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .play-btn {
+            padding: 15px 40px;
+            border-radius: 30px;
+            background: var(--yellow-portal);
+            color: #000;
+            border: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .play-btn.playing {
+            background: #ff4d4d; /* Durdurma rengi */
+            color: white;
+        }
+
+
         @media (max-width: 900px) {
             .portal-layout { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: relative; top: 0; padding: 20px; border-radius: 0; border: none; border-bottom: 1px solid var(--glass-border); background: var(--bg-dark); max-height: none; }
@@ -330,6 +484,12 @@
                         <a onclick="sayfaGoster('exam-categories-view')" class="menu-link">
                             <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
                         </a>
+                        
+                        <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title">ARAÇLAR</div>
+                        <a onclick="sayfaGoster('metronome-view')" class="menu-link">
+                            <i class="fas fa-stopwatch"></i> <span>Metronom</span>
+                        </a>
+
                         <a onclick="startLiveClass()" class="menu-link">
                              <i class="fas fa-video"></i> <span>Canlı Ders</span>
                         </a>
@@ -420,7 +580,53 @@
                             </div>
                         </div>
                     </div>
-                    
+
+                    <div id="metronome-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Metronom</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+
+                        <div class="metronome-container">
+                            <div class="beat-dots" id="beatDots">
+                                <div class="beat-dot active"></div>
+                                <div class="beat-dot"></div>
+                                <div class="beat-dot"></div>
+                                <div class="beat-dot"></div>
+                            </div>
+
+                            <div class="bpm-display-area">
+                                <button class="bpm-btn" onclick="changeBpm(-1)">-</button>
+                                <div class="bpm-value-box">
+                                    <span id="bpmDisplay">100</span>
+                                    <span class="bpm-label">BPM</span>
+                                </div>
+                                <button class="bpm-btn" onclick="changeBpm(1)">+</button>
+                            </div>
+
+                            <div class="slider-container">
+                                <input type="range" min="40" max="240" value="100" class="bpm-slider" id="bpmSlider" oninput="updateBpmFromSlider(this.value)">
+                            </div>
+
+                            <div class="controls-row">
+                                <div class="select-wrapper">
+                                    <select id="measureSelect" onchange="createDots()">
+                                        <option value="2">2/4 (Halay/Oyun)</option>
+                                        <option value="3">3/4 (Vals/Semah)</option>
+                                        <option value="4" selected>4/4 (Deyiş)</option>
+                                        <option value="5">5/8 (Aksak)</option>
+                                        <option value="6">6/8 (Azeri)</option>
+                                        <option value="7">7/8 (Karadeniz/Devr-i Turan)</option>
+                                        <option value="9">9/8 (Roman/Zeybek)</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="play-btn" id="playBtn" onclick="toggleMetronome()">
+                                    <i class="fas fa-play"></i> BAŞLAT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <div id="live-class-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2>Sanal Sınıf</h2>
@@ -520,10 +726,10 @@
         // --- 1. ÖĞRENCİ VERİTABANI ---
         const ogrenciler = {
             "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },            
-            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },       
+            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },        
             "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },      
             "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3R1xJ8=", soyad: "UEFJTlRFUg==" }, 
-            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }       
+            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }        
         };
 
         // --- 2. DİKTE SES DOSYALARI ---
@@ -585,7 +791,7 @@
             { ad: "Değmen Benim Gamlı Yaslı Gönlüme", dosya: "o.jpg" },
             { ad: "Denizin Dibinde Hatçam", dosya: "p.jpg" },
             { ad: "Kütahyanın Pınarları", dosya: "r.jpg" },
-            { ad: "Dostum Dostum", dosya: "s.png?v=1" }, 
+            { ad: "Dostum Dostum", dosya: "s.png?v=1" }, 
             { ad: "Han Sarhoş Hancı Sarhoş", dosya: "t.jpg" },
             { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
         ];
@@ -666,7 +872,7 @@
         function materyalAc(kategori) {
             document.getElementById("mat-category-title").innerText = kategori;
             const container = document.getElementById("materials-container");
-            container.innerHTML = ""; 
+            container.innerHTML = ""; 
 
             if (kategori === 'Teorik Bilgi') {
                 dersNotlariDosyalari.forEach(item => {
@@ -693,7 +899,7 @@
             if (kategoriAdi === "Dikte Soruları") {
                 for (let i = 1; i <= 22; i++) {
                     if (i === 18) continue;
-                    let driveId = dikteVerileri[i] || ""; 
+                    let driveId = dikteVerileri[i] || ""; 
                     listeContainer.innerHTML += `<div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', 'Çalışma ${i}')"><span style="color:#fff; font-weight:500;">Çalışma ${i}</span><i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i></div>`;
                 }
             } else {
@@ -706,7 +912,7 @@
             document.getElementById("exam-detail-title").innerText = baslik;
             let embedUrl = audioId ? "https://drive.google.com/file/d/" + audioId + "/preview" : "";
             document.getElementById("exam-audio-player").src = embedUrl;
-            document.getElementById("current-answer-img").value = "./dikte-cevaplar/calisma-" + no + ".png"; 
+            document.getElementById("current-answer-img").value = "./dikte-cevaplar/calisma-" + no + ".png"; 
             sayfaGoster("exam-detail-view");
         }
 
@@ -760,7 +966,7 @@
 
                 let ses = new SpeechSynthesisUtterance(temizMetin);
                 ses.lang = 'tr-TR';
-                ses.rate = 1.0; 
+                ses.rate = 1.0; 
                 
                 window.speechSynthesis.speak(ses);
             }
@@ -875,9 +1081,9 @@
                 const response = await fetch('https://baglamagram.vercel.app/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        message: msgText || "Şu gönderdiğim görsele bir bak hocam.", 
-                        image: imageToSend 
+                    body: JSON.stringify({ 
+                        message: msgText || "Şu gönderdiğim görsele bir bak hocam.", 
+                        image: imageToSend 
                     })
                 });
 
@@ -908,6 +1114,130 @@
             
             box.scrollTop = box.scrollHeight;
         }
+
+        // --- METRONOM MANTIĞI (DÜZELTİLDİ: SCRIPT İÇİNE TAŞINDI) ---
+        let audioCtx = null;
+        let isPlaying = false;
+        let tempo = 100;
+        let currentBeat = 0;
+        let nextNoteTime = 0.0;
+        let timerID = null;
+        let beatsPerMeasure = 4;
+        const lookahead = 25.0; // ms
+        const scheduleAheadTime = 0.1; // sn
+
+        function nextNote() {
+            const secondsPerBeat = 60.0 / tempo;
+            nextNoteTime += secondsPerBeat;
+            currentBeat++;
+            if (currentBeat >= beatsPerMeasure) {
+                currentBeat = 0;
+            }
+        }
+
+        function scheduleNote(beatNumber, time) {
+            // Görsel güncelleme için zamanla
+            setTimeout(() => {
+                updateVisuals(beatNumber);
+            }, (time - audioCtx.currentTime) * 1000);
+
+            // Sesi çal
+            const osc = audioCtx.createOscillator();
+            const envelope = audioCtx.createGain();
+
+            // İlk vuruş tiz (tık), diğerleri bas (tok)
+            osc.frequency.value = (beatNumber === 0) ? 1000 : 800;
+
+            envelope.gain.value = 1;
+            envelope.gain.exponentialRampToValueAtTime(1, time + 0.001);
+            envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+
+            osc.connect(envelope);
+            envelope.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.05);
+        }
+
+        function scheduler() {
+            while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
+                scheduleNote(currentBeat, nextNoteTime);
+                nextNote();
+            }
+            timerID = setTimeout(scheduler, lookahead);
+        }
+
+        function toggleMetronome() {
+            const btn = document.getElementById('playBtn');
+            
+            if (isPlaying) {
+                isPlaying = false;
+                clearTimeout(timerID);
+                btn.innerHTML = '<i class="fas fa-play"></i> BAŞLAT';
+                btn.classList.remove('playing');
+                resetVisuals();
+            } else {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                isPlaying = true;
+                currentBeat = 0;
+                nextNoteTime = audioCtx.currentTime + 0.05;
+                scheduler();
+                btn.innerHTML = '<i class="fas fa-stop"></i> DURDUR';
+                btn.classList.add('playing');
+            }
+        }
+
+        function changeBpm(amount) {
+            tempo += amount;
+            if (tempo < 40) tempo = 40;
+            if (tempo > 240) tempo = 240;
+            updateUi();
+        }
+
+        function updateBpmFromSlider(val) {
+            tempo = parseInt(val);
+            updateUi();
+        }
+
+        function updateUi() {
+            document.getElementById('bpmDisplay').innerText = tempo;
+            document.getElementById('bpmSlider').value = tempo;
+        }
+
+        function createDots() {
+            beatsPerMeasure = parseInt(document.getElementById('measureSelect').value);
+            const container = document.getElementById('beatDots');
+            container.innerHTML = '';
+            for (let i = 0; i < beatsPerMeasure; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'beat-dot';
+                container.appendChild(dot);
+            }
+            if(isPlaying) {
+                // Ritim değişirse durdurup yeniden başlatmaya gerek yok, akış devam eder
+                // ama vuruş sırasını sıfırlamak iyi olabilir
+                currentBeat = 0; 
+            }
+        }
+
+        function updateVisuals(beat) {
+            const dots = document.querySelectorAll('.beat-dot');
+            dots.forEach(d => d.classList.remove('active'));
+            if (dots[beat]) {
+                dots[beat].classList.add('active');
+            }
+        }
+
+        function resetVisuals() {
+            document.querySelectorAll('.beat-dot').forEach(d => d.classList.remove('active'));
+        }
+
+        // Sayfa yüklendiğinde noktaları oluştur
+        document.addEventListener('DOMContentLoaded', () => {
+            createDots();
+        });
     </script>
 </body>
 </html>
