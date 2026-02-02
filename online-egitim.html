@@ -14,23 +14,18 @@
 
     <style>
         /* ============================================================
-           TEMEL AYARLAR (ORİJİNAL KODDAN KORUNDU)
+           TEMEL AYARLAR
            ============================================================ */
         :root {
-            /* Landing Renkleri */
             --primary: #000000;
             --accent: #c5a059;
             --bg-dark: #0f0f0f;
             --bg-sidebar: #151515;
             --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
-            
-            /* Portal Renkleri */
             --yellow-portal: #ffd700;
             --portal-glow: rgba(255, 215, 0, 0.3);
             --glass-bg: rgba(20, 20, 20, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
-            
-            /* Ortak */
             --text: #ffffff;
             --text-secondary: #b0b0b0;
             --whatsapp-green: #25d366;
@@ -58,7 +53,7 @@
                               radial-gradient(circle at 90% 80%, rgba(157, 78, 221, 0.05) 0%, transparent 20%);
         }
 
-        /* --- MENÜ (ORİJİNAL - DOKUNULMADI) --- */
+        /* --- MENÜ --- */
         nav { background: rgba(0, 0, 0, 0.95); padding: 20px 0; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(197, 160, 89, 0.2); }
         .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
         nav ul { display: flex; list-style: none; gap: 40px; padding: 0 20px; }
@@ -66,7 +61,7 @@
         nav a:hover, nav a.active { color: var(--accent); }
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
 
-        /* --- LANDING CONTENT (ORİJİNAL - DOKUNULMADI) --- */
+        /* --- LANDING CONTENT --- */
         .portal-login-btn-container { text-align: center; margin: 40px 0; display: flex; justify-content: center; }
         .portal-btn {
             background: var(--accent); border: 1px solid var(--accent); color: #000; padding: 20px 40px;
@@ -101,12 +96,11 @@
         .close-login { position: absolute; top: 10px; right: 15px; color: #fff; font-size: 1.5rem; cursor: pointer; }
 
         /* ============================================================
-           2. ÖĞRENCİ PORTALI STİLLERİ (SIDEBAR DÜZELTİLDİ)
+           PORTAL STİLLERİ
            ============================================================ */
         #student-portal { display: none; width: 100%; min-height: 80vh; margin-top: 30px; }
         .portal-layout { display: flex; gap: 30px; min-height: 80vh; }
         
-        /* SIDEBAR TAŞMA SORUNU DÜZELTİLDİ */
         .sidebar { 
             width: var(--sidebar-width); 
             background: var(--glass-bg); 
@@ -115,12 +109,10 @@
             border: 1px solid var(--glass-border); border-radius: 24px; 
             display: flex; flex-direction: column; 
             transition: all 0.3s ease; 
-            /* Yükseklik ekranın %85'i olsun, taşarsa kaydırılsın */
             max-height: 85vh; 
             position: sticky; top: 100px;
-            overflow-y: auto; /* İçerik çoksa kaydırma çubuğu çıkar */
+            overflow-y: auto; 
         }
-        /* Scrollbar'ı gizle ama çalışsın */
         .sidebar::-webkit-scrollbar { width: 4px; }
         .sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 
@@ -160,7 +152,6 @@
         .ai-card i { color: var(--ai-purple) !important; }
         .ai-badge { position: absolute; top: 15px; right: 15px; background: var(--ai-purple); color: white; font-size: 0.65rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; z-index: 2; box-shadow: 0 0 10px rgba(157, 78, 221, 0.5); }
 
-        /* Chat & Input Düzeltmeleri */
         .chat-container { display: flex; flex-direction: column; height: 65vh; border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(10px); }
         .chat-box { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
         .chat-message { max-width: 75%; padding: 15px 20px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
@@ -177,7 +168,6 @@
         .chat-send-btn { background: var(--yellow-portal); color: black; border: none; width: 45px; height: 45px; border-radius: 50%; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--portal-glow); transition: 0.3s; }
         .chat-send-btn:hover { transform: scale(1.1); }
 
-        /* Portal Diğer Elemanlar */
         .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .cat-box { background: var(--glass-bg); padding: 30px; border-radius: 12px; border-left: 4px solid var(--yellow-portal); cursor: pointer; transition: 0.3s; border: 1px solid var(--glass-border); border-left-width: 4px; }
         .cat-box:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(5px); }
@@ -191,15 +181,12 @@
         .answer-key-btn { background: rgba(0,0,0,0.3); color: #fff; padding: 20px; width: 100%; text-align: center; border: 1px dashed var(--yellow-portal); border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: 0.3s; margin-top: 30px; }
         .answer-key-btn:hover { background: var(--yellow-portal); color: #000; border-style: solid; }
 
-        /* Modal (Ortak) */
         .image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; justify-content: center; align-items: center; }
         .image-modal img { max-width: 90%; max-height: 90%; border: 3px solid var(--yellow-portal); border-radius: 10px; }
         .close-modal { position: absolute; top: 30px; right: 40px; color: #fff; font-size: 3rem; cursor: pointer; }
         
-        /* DÜZELTME: Önizleme Container */
         #imagePreviewContainer { 
-            display: none; /* Varsayılan Gizli */
-            position: absolute; bottom: 85px; left: 30px; 
+            display: none; position: absolute; bottom: 85px; left: 30px; 
             background: rgba(0,0,0,0.8); padding: 10px; 
             border: 1px solid var(--yellow-portal); border-radius: 10px; 
             z-index: 10; backdrop-filter: blur(5px); 
@@ -207,7 +194,6 @@
         #imagePreview { max-width: 120px; max-height: 120px; display: block; border-radius: 5px; }
         #removeImage { color: #ff4d4d; cursor: pointer; text-align: center; display: block; margin-top: 8px; font-size: 0.85rem; font-weight: bold; }
 
-        /* CANLI DERS KARTI (YENİ) */
         .live-class-card { border-color: rgba(255, 0, 0, 0.3); }
         .live-class-card:hover { border-color: red; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
         .live-class-card i { color: #ff4d4d; }
@@ -215,157 +201,36 @@
 
         /* --- METRONOM STİLLERİ --- */
         .metronome-container {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 40px; max-width: 600px; margin: 20px auto; text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
         }
+        .beat-dots { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; height: 30px; }
+        .beat-dot { width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid #444; transition: all 0.1s; }
+        .beat-dot.active { background: var(--yellow-portal); box-shadow: 0 0 15px var(--yellow-portal); transform: scale(1.3); border-color: #fff; }
+        .bpm-display-area { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .bpm-value-box { font-family: 'Lato', sans-serif; font-size: 4rem; font-weight: 300; color: var(--text); width: 180px; line-height: 1; }
+        .bpm-label { display: block; font-size: 0.9rem; color: var(--accent); letter-spacing: 2px; margin-top: 5px; }
+        .bpm-btn { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--accent); background: transparent; color: var(--accent); font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
+        .bpm-btn:hover { background: var(--accent); color: #000; }
+        .slider-container { width: 100%; margin-bottom: 40px; }
+        .bpm-slider { -webkit-appearance: none; width: 100%; height: 6px; background: #333; border-radius: 5px; outline: none; }
+        .bpm-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--yellow-portal); cursor: pointer; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); transition: transform 0.2s; }
+        .bpm-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        .controls-row { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; }
+        .select-wrapper select { padding: 15px 20px; border-radius: 30px; background: rgba(0,0,0,0.4); border: 1px solid var(--accent); color: #fff; font-size: 1rem; cursor: pointer; outline: none; }
+        .play-btn { padding: 15px 40px; border-radius: 30px; background: var(--yellow-portal); color: #000; border: none; font-weight: bold; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); transition: 0.3s; }
+        .play-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+        .play-btn.playing { background: #ff4d4d; color: white; }
 
-        .beat-dots {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            height: 30px;
-        }
-
-        .beat-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid #444;
-            transition: all 0.1s;
-        }
-
-        .beat-dot.active {
-            background: var(--yellow-portal);
-            box-shadow: 0 0 15px var(--yellow-portal);
-            transform: scale(1.3);
-            border-color: #fff;
-        }
-
-        .bpm-display-area {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .bpm-value-box {
-            font-family: 'Lato', sans-serif;
-            font-size: 4rem;
-            font-weight: 300;
-            color: var(--text);
-            width: 180px;
-            line-height: 1;
-        }
-
-        .bpm-label {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--accent);
-            letter-spacing: 2px;
-            margin-top: 5px;
-        }
-
-        .bpm-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 1px solid var(--accent);
-            background: transparent;
-            color: var(--accent);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .bpm-btn:hover {
-            background: var(--accent);
-            color: #000;
-        }
-
-        .slider-container {
-            width: 100%;
-            margin-bottom: 40px;
-        }
-
-        .bpm-slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 6px;
-            background: #333;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .bpm-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--yellow-portal);
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            transition: transform 0.2s;
-        }
-
-        .bpm-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-
-        .controls-row {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .select-wrapper select {
-            padding: 15px 20px;
-            border-radius: 30px;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--accent);
-            color: #fff;
-            font-size: 1rem;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .play-btn {
-            padding: 15px 40px;
-            border-radius: 30px;
-            background: var(--yellow-portal);
-            color: #000;
-            border: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-            transition: 0.3s;
-        }
-
-        .play-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-        }
-
-        .play-btn.playing {
-            background: #ff4d4d; /* Durdurma rengi */
-            color: white;
-        }
-
+        /* --- AKORT CİHAZI STİLLERİ --- */
+        .tuner-container { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; max-width: 500px; margin: 20px auto; text-align: center; box-shadow: 0 0 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+        #tunerGauge { width: 100%; max-width: 400px; height: auto; margin-bottom: 10px; }
+        .note-display { font-family: 'Lato', sans-serif; font-weight: bold; color: var(--text); text-shadow: 0 0 20px rgba(255, 215, 0, 0.2); margin-bottom: 5px; }
+        #noteName { font-size: 5rem; color: var(--yellow-portal); }
+        #noteOctave { font-size: 2rem; color: var(--text-secondary); }
+        .frequency-display { font-family: 'Montserrat', sans-serif; color: var(--accent); font-size: 1.2rem; letter-spacing: 1px; }
+        .tuner-btn-active { background: #ff4d4d !important; color: white !important; box-shadow: 0 0 20px rgba(255, 77, 77, 0.4) !important; }
 
         @media (max-width: 900px) {
             .portal-layout { flex-direction: column; }
@@ -488,6 +353,9 @@
                         <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title">ARAÇLAR</div>
                         <a onclick="sayfaGoster('metronome-view')" class="menu-link">
                             <i class="fas fa-stopwatch"></i> <span>Metronom</span>
+                        </a>
+                        <a onclick="sayfaGoster('tuner-view')" class="menu-link">
+                            <i class="fas fa-microphone-lines"></i> <span>Akort Cihazı</span>
                         </a>
 
                         <a onclick="startLiveClass()" class="menu-link">
@@ -624,6 +492,50 @@
                                 <button class="play-btn" id="playBtn" onclick="toggleMetronome()">
                                     <i class="fas fa-play"></i> BAŞLAT
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tuner-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Akort Cihazı</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+
+                        <div class="tuner-container">
+                            <canvas id="tunerGauge" width="400" height="250"></canvas>
+                            
+                            <div class="note-display">
+                                <span id="noteName">--</span>
+                                <span id="noteOctave"></span>
+                            </div>
+                            
+                            <div class="frequency-display">
+                                <span id="frequencyValue">0.0</span> Hz
+                            </div>
+
+                            <p id="tunerStatus" style="color:#888; font-size: 0.9rem; margin: 15px 0;">Başlamak için butona bas ve teline vur.</p>
+
+                            <button class="play-btn" id="tunerBtn" onclick="toggleTuner()">
+                                <i class="fas fa-microphone"></i> AKORTU BAŞLAT
+                            </button>
+                            
+                            <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div>
+                                    <h4 style="color:var(--accent); font-size: 0.85rem; margin-bottom:5px;">KISA SAP</h4>
+                                    <p style="font-size: 0.8rem; color: #ccc; line-height: 1.4;">
+                                        Alt: <strong>F (Fa)</strong> / E (Mi)<br>
+                                        Orta: <strong>Bb (Si Bemol)</strong> / A (La)<br>
+                                        Üst: <strong>C (Do)</strong> / B (Si)
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 style="color:var(--accent); font-size: 0.85rem; margin-bottom:5px;">UZUN SAP</h4>
+                                    <p style="font-size: 0.8rem; color: #ccc; line-height: 1.4;">
+                                        Alt: <strong>Si (A) / Do (C)</strong><br>
+                                        Orta: <strong>Mi (E) / Fa (F)</strong><br>
+                                        Üst: <strong>La (A) / La# (A#)</strong>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -832,7 +744,6 @@
                 try {
                     let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
                     let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
-                    // Adın her kelimesinin baş harfini büyük yap
                     formatliAd = gercekAd.toLowerCase().split(' ').map(kelime => kelime.charAt(0).toUpperCase() + kelime.slice(1)).join(' ');
                     formatliSoyad = gercekSoyad.toUpperCase();
                 } catch (err) {
@@ -848,7 +759,6 @@
                 document.getElementById("public-content").style.display = "none";
                 document.getElementById("student-portal").style.display = "block";
                 
-                // BODY CLASS DEĞİŞTİR (Arka plan geçişi için)
                 document.body.classList.add("portal-active");
 
                 history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
@@ -931,7 +841,6 @@
         }
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
 
-        // --- CANLI DERS (JITSI MEET) ---
         function startLiveClass() {
             const domain = 'meet.jit.si';
             const options = {
@@ -957,17 +866,13 @@
         let selectedImageBase64 = null;
         let lastAiResponse = "";
 
-        // --- SESLENDİRME FONKSİYONU (YENİ) ---
         function metniSeslendir(htmlMetin) {
-            let temizMetin = htmlMetin.replace(/<[^>]*>?/gm, ''); // HTML etiketlerini temizle
-            
+            let temizMetin = htmlMetin.replace(/<[^>]*>?/gm, ''); 
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Önceki konuşmayı durdur
-
+                window.speechSynthesis.cancel(); 
                 let ses = new SpeechSynthesisUtterance(temizMetin);
                 ses.lang = 'tr-TR';
                 ses.rate = 1.0; 
-                
                 window.speechSynthesis.speak(ses);
             }
         }
@@ -1033,7 +938,6 @@
             document.getElementById('imagePreviewContainer').style.display = 'none';
         }
 
-        // Enter tuşu ile mesaj gönderme
         document.getElementById("aiUserInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault(); 
@@ -1136,16 +1040,13 @@
         }
 
         function scheduleNote(beatNumber, time) {
-            // Görsel güncelleme için zamanla
             setTimeout(() => {
                 updateVisuals(beatNumber);
             }, (time - audioCtx.currentTime) * 1000);
 
-            // Sesi çal
             const osc = audioCtx.createOscillator();
             const envelope = audioCtx.createGain();
 
-            // İlk vuruş tiz (tık), diğerleri bas (tok)
             osc.frequency.value = (beatNumber === 0) ? 1000 : 800;
 
             envelope.gain.value = 1;
@@ -1216,8 +1117,6 @@
                 container.appendChild(dot);
             }
             if(isPlaying) {
-                // Ritim değişirse durdurup yeniden başlatmaya gerek yok, akış devam eder
-                // ama vuruş sırasını sıfırlamak iyi olabilir
                 currentBeat = 0; 
             }
         }
@@ -1234,10 +1133,228 @@
             document.querySelectorAll('.beat-dot').forEach(d => d.classList.remove('active'));
         }
 
-        // Sayfa yüklendiğinde noktaları oluştur
+        // --- AKORT CİHAZI (TUNER) MANTIĞI ---
+        let tunerAudioCtx = null;
+        let analyser = null;
+        let rafID = null;
+        let isTunerRunning = false;
+        let mediaStreamSource = null;
+        const tunerCanvas = document.getElementById('tunerGauge');
+        const tunerCtx = tunerCanvas.getContext('2d');
+        
+        const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+        function toggleTuner() {
+            const btn = document.getElementById('tunerBtn');
+            const status = document.getElementById('tunerStatus');
+
+            if (isTunerRunning) {
+                isTunerRunning = false;
+                window.cancelAnimationFrame(rafID);
+                if(tunerAudioCtx) tunerAudioCtx.suspend();
+                if(mediaStreamSource) mediaStreamSource.disconnect();
+                
+                btn.innerHTML = '<i class="fas fa-microphone"></i> AKORTU BAŞLAT';
+                btn.classList.remove('tuner-btn-active');
+                status.innerText = "Akort cihazı durduruldu.";
+                status.style.color = "#888";
+                
+                drawGauge(0, false); 
+            } else {
+                startTuner();
+                btn.innerHTML = '<i class="fas fa-stop"></i> DURDUR';
+                btn.classList.add('tuner-btn-active');
+                status.innerText = "Mikrofon dinleniyor...";
+                status.style.color = "var(--yellow-portal)";
+            }
+        }
+
+        async function startTuner() {
+            if (!tunerAudioCtx) {
+                tunerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            await tunerAudioCtx.resume();
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                isTunerRunning = true;
+                
+                analyser = tunerAudioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                mediaStreamSource = tunerAudioCtx.createMediaStreamSource(stream);
+                mediaStreamSource.connect(analyser);
+                
+                updatePitch();
+            } catch (err) {
+                console.error(err);
+                alert("Mikrofon erişim hatası! Lütfen izin verin.");
+                toggleTuner();
+            }
+        }
+
+        function updatePitch() {
+            if (!isTunerRunning) return;
+
+            const bufferLength = analyser.fftSize;
+            const buffer = new Float32Array(bufferLength);
+            analyser.getFloatTimeDomainData(buffer);
+
+            const frequency = autoCorrelate(buffer, tunerAudioCtx.sampleRate);
+
+            if (frequency > -1) {
+                const note = getNote(frequency);
+                const cents = getCents(frequency, note);
+                
+                document.getElementById('noteName').innerText = noteStrings[note % 12];
+                document.getElementById('noteOctave').innerText = Math.floor(note / 12) - 1;
+                document.getElementById('frequencyValue').innerText = frequency.toFixed(1);
+                
+                drawGauge(cents, true);
+            }
+
+            rafID = window.requestAnimationFrame(updatePitch);
+        }
+
+        function autoCorrelate(buf, sampleRate) {
+            let SIZE = buf.length;
+            let rms = 0;
+            for (let i = 0; i < SIZE; i++) {
+                const val = buf[i];
+                rms += val * val;
+            }
+            rms = Math.sqrt(rms / SIZE);
+            if (rms < 0.01) return -1;
+
+            let r1 = 0, r2 = SIZE - 1, thres = 0.2;
+            for (let i = 0; i < SIZE / 2; i++) {
+                if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+            }
+            for (let i = 1; i < SIZE / 2; i++) {
+                if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+            }
+
+            buf = buf.slice(r1, r2);
+            SIZE = buf.length;
+
+            const c = new Array(SIZE).fill(0);
+            for (let i = 0; i < SIZE; i++) {
+                for (let j = 0; j < SIZE - i; j++) {
+                    c[i] = c[i] + buf[j] * buf[j + i];
+                }
+            }
+
+            let d = 0;
+            while (c[d] > c[d + 1]) d++;
+            let maxval = -1, maxpos = -1;
+            for (let i = d; i < SIZE; i++) {
+                if (c[i] > maxval) {
+                    maxval = c[i];
+                    maxpos = i;
+                }
+            }
+            let T0 = maxpos;
+
+            const x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+            const a = (x1 + x3 - 2 * x2) / 2;
+            const b = (x3 - x1) / 2;
+            if (a) T0 = T0 - b / (2 * a);
+
+            return sampleRate / T0;
+        }
+
+        function getNote(frequency) {
+            const note = 12 * (Math.log(frequency / 440) / Math.log(2));
+            return Math.round(note) + 69;
+        }
+
+        function getCents(frequency, note) {
+            return Math.floor(1200 * Math.log(frequency / frequencyFromNoteNumber(note)) / Math.log(2));
+        }
+
+        function frequencyFromNoteNumber(note) {
+            return 440 * Math.pow(2, (note - 69) / 12);
+        }
+
+        function drawGauge(cents, hasSignal) {
+            const w = tunerCanvas.width;
+            const h = tunerCanvas.height;
+            const cx = w / 2;
+            const cy = h - 40;
+            const radius = 180;
+
+            tunerCtx.clearRect(0, 0, w, h);
+
+            tunerCtx.beginPath();
+            tunerCtx.arc(cx, cy, radius, Math.PI, 2 * Math.PI);
+            tunerCtx.lineWidth = 5;
+            tunerCtx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+            tunerCtx.stroke();
+
+            tunerCtx.beginPath();
+            tunerCtx.arc(cx, cy, radius, 1.45 * Math.PI, 1.55 * Math.PI);
+            tunerCtx.lineWidth = 10;
+            tunerCtx.strokeStyle = "rgba(37, 211, 102, 0.5)"; 
+            tunerCtx.stroke();
+
+            for (let i = -50; i <= 50; i += 10) {
+                const angle = map(i, -50, 50, Math.PI, 2 * Math.PI);
+                const x1 = cx + Math.cos(angle) * (radius - 10);
+                const y1 = cy + Math.sin(angle) * (radius - 10);
+                const x2 = cx + Math.cos(angle) * radius;
+                const y2 = cy + Math.sin(angle) * radius;
+                
+                tunerCtx.beginPath();
+                tunerCtx.moveTo(x1, y1);
+                tunerCtx.lineTo(x2, y2);
+                tunerCtx.lineWidth = (i === 0) ? 3 : 1;
+                tunerCtx.strokeStyle = (i === 0) ? "#ffd700" : "#666";
+                tunerCtx.stroke();
+            }
+
+            let safeCents = Math.max(-50, Math.min(50, cents));
+            
+            if (!hasSignal) safeCents = -90; 
+
+            const needleAngle = map(safeCents, -50, 50, Math.PI, 2 * Math.PI);
+            
+            let needleColor = "#c5a059"; 
+            if (Math.abs(cents) < 5 && hasSignal) needleColor = "#25d366"; 
+            else if (Math.abs(cents) > 20 && hasSignal) needleColor = "#ff4d4d"; 
+
+            const nx = cx + Math.cos(needleAngle) * (radius - 20);
+            const ny = cy + Math.sin(needleAngle) * (radius - 20);
+
+            tunerCtx.beginPath();
+            tunerCtx.moveTo(cx, cy);
+            tunerCtx.lineTo(nx, ny);
+            tunerCtx.lineWidth = 4;
+            tunerCtx.strokeStyle = needleColor;
+            tunerCtx.lineCap = "round";
+            tunerCtx.stroke();
+
+            tunerCtx.beginPath();
+            tunerCtx.arc(cx, cy, 10, 0, 2 * Math.PI);
+            tunerCtx.fillStyle = needleColor;
+            tunerCtx.fill();
+            
+            tunerCtx.font = "14px Montserrat";
+            tunerCtx.fillStyle = "#aaa";
+            tunerCtx.textAlign = "center";
+            tunerCtx.fillText("-50", cx - radius + 20, cy);
+            tunerCtx.fillText("+50", cx + radius - 20, cy);
+            tunerCtx.fillText("0", cx, cy - radius - 15);
+        }
+
+        function map(value, x1, y1, x2, y2) {
+            return (value - x1) * (y2 - x2) / (y1 - x1) + x2;
+        }
+
+        // --- ORTAK BAŞLANGIÇ ---
         document.addEventListener('DOMContentLoaded', () => {
-            createDots();
+            createDots(); // Metronom başlat
+            drawGauge(0, false); // Tuner ibresini sıfırla
         });
+
     </script>
 </body>
 </html>
