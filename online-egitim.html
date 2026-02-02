@@ -291,14 +291,20 @@
     </nav>
 
     <div id="login-overlay">
-        <div class="login-box">
-            <span class="close-login" onclick="girisKapat()">×</span>
-            <h3>ÖĞRENCİ GİRİŞİ</h3>
-            <p style="color: #888; margin-bottom: 20px; font-size: 0.9rem;">Sisteme erişmek için şifrenizi girin.</p>
-            <input type="password" id="studentPass" placeholder="Şifreniz">
-            <button onclick="sistemeGiris()" class="btn" style="background: var(--accent); color: black;">GİRİŞ YAP</button>
-            <p id="loginError" style="color: red; display: none; margin-top: 10px;">Hatalı şifre!</p>
-        </div>
+      
+  <div class="login-box">
+    <span class="close-login" onclick="girisKapat()">×</span>
+    <h3 style="color: var(--accent); margin-bottom: 20px;">ÖĞRENCİ PORTALI</h3>
+    
+    <input type="email" id="emailInput" placeholder="E-posta Adresiniz" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    
+    <input type="password" id="passwordInput" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 20px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    
+    <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;">GİRİŞ YAP</button>
+    
+    <p id="loginStatus" style="margin-top: 15px; font-size: 0.9rem; min-height: 20px;"></p>
+</div>
+ 
     </div>
 
     <div class="page-content">
@@ -1404,14 +1410,9 @@
 
     </script>
 <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
     apiKey: "AIzaSyBIx9TujKPX82NaWXGh2QTxyG6TEQ-abi8",
     authDomain: "baglamagram-portal.firebaseapp.com",
@@ -1422,9 +1423,85 @@
     measurementId: "G-RD5H01SSTH"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+
+  // --- İSİM LİSTESİ ---
+  const ogrenciListesi = {
+      "gokboy09@gmail.com": { ad: "Gökhan", soyad: "BOY" },
+      "brkslntss@gmail.com": { ad: "Burak", soyad: "ASLANTAŞ" }
+  };
+
+  const loginBtn = document.getElementById('firebaseLoginBtn');
+  const emailInput = document.getElementById('emailInput');
+  const passInput = document.getElementById('passwordInput');
+  
+  // --- YENİ EKLENEN KISIM: ENTER TUŞU DESTEĞİ ---
+  function enterKontrol(e) {
+      if (e.key === "Enter") {
+          loginBtn.click(); // Enter'a basınca butona tıklanmış say
+      }
+  }
+
+  // Hem e-posta hem şifre kutusunda Enter'a basılırsa çalışsın
+  if(emailInput) emailInput.addEventListener("keyup", enterKontrol);
+  if(passInput) passInput.addEventListener("keyup", enterKontrol);
+  // ------------------------------------------------
+
+  if(loginBtn) {
+      loginBtn.addEventListener('click', () => {
+          const email = emailInput.value;
+          const pass = passInput.value;
+          const status = document.getElementById('loginStatus');
+
+          status.style.color = "yellow";
+          status.innerText = "Bilgiler kontrol ediliyor...";
+
+          signInWithEmailAndPassword(auth, email, pass)
+            .then((userCredential) => {
+                status.style.color = "#4CAF50"; 
+                status.innerText = "Giriş Başarılı! Yönlendiriliyorsun...";
+
+                setTimeout(() => {
+                    document.getElementById("login-overlay").style.display = "none";
+                    document.getElementById("portal-entry-btn-section").style.display = "none";
+                    document.getElementById("public-content").style.display = "none";
+                    document.getElementById("student-portal").style.display = "block";
+                    
+                    document.body.classList.add("portal-active");
+
+                    // İsim Ayarlama
+                    const girisYapanMail = userCredential.user.email;
+                    let ogrenci = ogrenciListesi[girisYapanMail];
+
+                    if (ogrenci) {
+                        document.getElementById("displayAd").innerText = ogrenci.ad;
+                        document.getElementById("displaySoyad").innerText = ogrenci.soyad;
+                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + ogrenci.ad + "!";
+                    } else {
+                        const varsayilanAd = girisYapanMail.split('@')[0];
+                        document.getElementById("displayAd").innerText = varsayilanAd;
+                        document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
+                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
+                    }
+                    
+                    history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
+                }, 1500);
+            })
+            .catch((error) => {
+                status.style.color = "#ff4d4d";
+                console.error(error);
+                if (error.code === "auth/invalid-credential") {
+                    status.innerText = "E-posta veya şifre hatalı!";
+                } else if (error.code === "auth/network-request-failed") {
+                    status.innerText = "İnternet bağlantını kontrol et.";
+                } else {
+                    status.innerText = "Hata oluştu.";
+                }
+            });
+      });
+  }
+</script>
 </script>
     
 </body>
