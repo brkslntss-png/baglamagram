@@ -156,7 +156,9 @@
         .view-section.active { display: block; }
         
         .dashboard-header h1 { font-family: 'Lato', sans-serif; color: var(--yellow-portal); margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; font-weight: normal; letter-spacing: 1px; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        
+        /* GÜNCELLEME: Grid yapısını 3 sütuna çıkarttık */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         
         .dash-card { background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 40px 30px; text-align: center; border-radius: 20px; cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; overflow: hidden; }
         .dash-card:hover { transform: translateY(-8px); border-color: var(--yellow-portal); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
@@ -260,6 +262,9 @@
             nav ul.aktif { display: flex; }
             .menu-toggle { display: block; position: static; }
             .chat-container { height: 50vh; }
+            
+            /* Mobilde grid tek sütuna düşsün */
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
 
         footer { background: #050505; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
@@ -287,7 +292,7 @@
     </nav>
 
     <div id="login-overlay">
-       
+        
   <div class="login-box">
     <span class="close-login" onclick="girisKapat()">×</span>
     <h3 style="color: var(--accent); margin-bottom: 20px;">ÖĞRENCİ PORTALI</h3>
@@ -386,6 +391,9 @@
                         <a onclick="sayfaGoster('exam-categories-view')" class="menu-link">
                             <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
                         </a>
+                        <a onclick="sayfaGoster('fun-learning-view')" class="menu-link">
+                            <i class="fas fa-gamepad"></i> <span>Eğlenerek Öğren</span>
+                        </a>
                         
                         <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title">ARAÇLAR</div>
                         <a onclick="sayfaGoster('metronome-view')" class="menu-link">
@@ -437,6 +445,12 @@
                                 <p>Dikte çalışmaları, soru çözümleri.</p>
                             </div>
                             
+                            <div class="dash-card" onclick="sayfaGoster('fun-learning-view')">
+                                <i class="fas fa-gamepad"></i>
+                                <h3>EĞLENEREK ÖĞREN</h3>
+                                <p>Bilgi yarışması ve eğitici oyunlar.</p>
+                            </div>
+
                             <div class="dash-card live-class-card" onclick="startLiveClass()">
                                 <i class="fas fa-video"></i>
                                 <h3>CANLI DERS</h3>
@@ -633,6 +647,35 @@
                             <div class="cat-box" onclick="yetenekKategoriAc('Solfej Notaları')"><span class="cat-title">Solfej Notaları</span><span class="cat-desc">Deşifre ve okuma.</span></div>
                             <div class="cat-box" onclick="yetenekKategoriAc('Ezgi Tekrarı Soruları')"><span class="cat-title">Ezgi Tekrarı Soruları</span><span class="cat-desc">Melodik hafıza çalışmaları.</span></div>
                         </div>
+                    </div>
+                    
+                    <div id="fun-learning-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Eğlenerek Öğren</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <br>
+                        <div class="category-grid">
+                            <div class="cat-box" onclick="sayfaGoster('quiz-game-view')">
+                                <span class="cat-title">Bilgi Yarışması</span>
+                                <span class="cat-desc">Halk müziği bilginizi test edin ve yarışın.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-game-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Bilgi Yarışması</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                        </div>
+                        
+                        <iframe 
+                            src="bilgi-yarismasi/oyun.html" 
+                            width="100%" 
+                            height="750" 
+                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+                            title="Bağlamagram Yarışması">
+                        </iframe>
                     </div>
 
                     <div id="exam-list-view" class="view-section">
@@ -1258,11 +1301,12 @@
         function autoCorrelate(buf, sampleRate) {
             let SIZE = buf.length;
             let rms = 0;
+            let rms_sum = 0;
             for (let i = 0; i < SIZE; i++) {
                 const val = buf[i];
-                rms += val * val;
+                rms_sum += val * val;
             }
-            rms = Math.sqrt(rms / SIZE);
+            rms = Math.sqrt(rms_sum / SIZE);
             if (rms < 0.01) return -1;
 
             let r1 = 0, r2 = SIZE - 1, thres = 0.2;
