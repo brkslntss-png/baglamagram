@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSM Bilgi Yarışması - Üstat Seviyesi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f0f0f;
+            --accent: #c5a059;
+            --glass: rgba(30, 30, 30, 0.9);
+            --correct: #27ae60;
+            --wrong: #c0392b;
+            --text: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .bg-pattern {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        #volume-control {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: var(--glass); border: 1px solid var(--accent);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--accent); transition: 0.3s;
+        }
+
+        .game-container {
+            background: var(--glass);
+            width: 90%;
+            max-width: 800px;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        h1 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 2.5rem; }
+        .question-text { font-size: 1.3rem; margin: 30px 0; min-height: 80px; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px; border-radius: 10px; color: #ccc;
+            cursor: pointer; transition: 0.3s;
+        }
+        .option-btn:hover { background: rgba(197, 160, 89, 0.1); border-color: var(--accent); color: #fff; }
+        
+        .correct { background: var(--correct) !important; color: white !important; }
+        .wrong { background: var(--wrong) !important; color: white !important; }
+
+        .btn-main {
+            background: var(--accent); color: #000; border: none;
+            padding: 15px 40px; font-weight: bold; border-radius: 30px;
+            cursor: pointer; transition: 0.3s; margin-top: 20px;
+        }
+
+        /* --- SAYAÇ STİLİ --- */
+        .timer-badge {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.6);
+            border: 4px solid #1a1a1a;
+            z-index: 10;
+        }
+        
+        /* Süre azalınca yanıp sönme efekti */
+        .timer-warning {
+            background: var(--wrong) !important;
+            color: white !important;
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse { from { box-shadow: 0 0 10px var(--wrong); } to { box-shadow: 0 0 30px var(--wrong); } }
+        
+        #game-screen, #result-screen { display: none; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/tsm-oyun.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="snd-correct"><source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+    <audio id="snd-wrong"><source src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"></audio>
+
+    <div id="volume-control" onclick="toggleMusic()">
+        <i id="volume-icon" class="fas fa-volume-up"></i>
+    </div>
+
+    <div id="start-screen" class="game-container">
+        <i class="fas fa-music" style="font-size: 4rem; color: var(--accent); margin-bottom: 20px;"></i>
+        <h1>Türk Sanat Müziği<br>Bilgi Yarışması</h1>
+        <p style="color:#aaa; margin-bottom:30px;">
+            Her soru için <strong>30 saniyeniz</strong> var.<br>
+            Süre biterse soru yanlış sayılır!<br>
+            <br>
+            Baglamagram Games
+        </p>
+        <button class="btn-main" onclick="startGame()">YARIŞMAYA BAŞLA</button>
+    </div>
+
+    <div id="game-screen" class="game-container">
+        <div id="timer" class="timer-badge">30</div>
+
+        <div style="display:flex; justify-content: space-between; color: #888; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+            <span>Soru: <span id="q-index">1</span> / 10</span>
+            <div style="color: var(--accent); font-weight: bold;">Puan: <span id="score">0</span></div>
+        </div>
+        <div class="question-text" id="question-text">Soru yükleniyor...</div>
+        <div class="options-grid" id="options-area"></div>
+    </div>
+
+    <div id="result-screen" class="game-container">
+        <i class="fas fa-award" style="font-size: 4rem; color: var(--accent); margin-bottom: 20px;"></i>
+        <h2>Fasıl Tamamlandı</h2>
+        <div style="font-size: 4rem; color:var(--accent); font-weight:bold; margin: 10px 0;" id="final-score">0</div>
+        <p id="feedback-text" style="color:#ccc; margin-bottom: 30px; font-style: italic;"></p>
+        <button class="btn-main" onclick="location.reload()">TEKRAR DENE</button>
+    </div>
+
+    <script>
+        const allQuestions = [
+            { soru: "Türk Müziğinde 'Ana Dizi' kabul edilen dizi hangisidir?", secenekler: ["Çargâh Dizisi", "Rast Dizisi", "Hicaz Dizisi", "Kürdi Dizisi"], dogru: "Çargâh Dizisi" },
+            { soru: "9 komalık tam ses aralığına ne ad verilir?", secenekler: ["Tanini (T)", "Bakiye (B)", "Mücennep (M)", "Artık (A)"], dogru: "Tanini (T)" },
+            { soru: "10 zamanlı olup, 3+2+2+3 şeklinde vurulan usul nedir?", secenekler: ["Aksak Semai", "Düyek", "Sofyan", "Semai"], dogru: "Aksak Semai" },
+            { soru: "100 TL üzerinde resmi olan büyük bestekâr kimdir?", secenekler: ["Itrî", "Dede Efendi", "Hacı Arif Bey", "Tanburi Cemil Bey"], dogru: "Itrî" },
+            { soru: "Arel sistemine göre bir oktav kaç komadır?", secenekler: ["53 Koma", "24 Koma", "9 Koma", "12 Koma"], dogru: "53 Koma" },
+            { soru: "Batı müziğindeki 'La' notasının TSM'deki ana perde karşılığı nedir?", secenekler: ["Dügâh", "Rast", "Buselik", "Hüseyni"], dogru: "Dügâh" },
+            { soru: "Nihavend makamı Batı müziğindeki hangi diziye çok benzer?", secenekler: ["Sol Minör", "La Minör", "Do Majör", "Re Minör"], dogru: "Sol Minör" },
+            { soru: "Mevlevi ayinindeki dört bölüme ne ad verilir?", secenekler: ["Selam", "Hane", "Fasıl", "Teslim"], dogru: "Selam" },
+            { soru: "Segâh makamının karar perdesi (durağı) hangi notadır?", secenekler: ["Si (1 Koma Bemol)", "La", "Sol", "Do"], dogru: "Si (1 Koma Bemol)" },
+            { soru: "Hangisi 'Yaylı' bir TSM çalgısıdır?", secenekler: ["Yaylı Tanbur", "Ud", "Kanun", "Lavta"], dogru: "Yaylı Tanbur" }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let gameQs = [];
+        const bg = document.getElementById('bg-music');
+        
+        // SAYAÇ DEĞİŞKENLERİ
+        let timeLeft = 30;
+        let timerInterval;
+
+        function toggleMusic() {
+            if (bg.paused) { bg.play(); document.getElementById('volume-icon').className = "fas fa-volume-up"; }
+            else { bg.pause(); document.getElementById('volume-icon').className = "fas fa-volume-mute"; }
+        }
+
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+
+            bg.volume = 0.4;
+            bg.play().catch(e => console.log("Otomatik oynatma engellendi."));
+
+            gameQs = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 10);
+            showQuestion();
+        }
+
+        function showQuestion() {
+            // SAYAÇ SIFIRLAMA
+            clearInterval(timerInterval);
+            timeLeft = 30;
+            const timerEl = document.getElementById('timer');
+            timerEl.innerText = timeLeft;
+            timerEl.classList.remove('timer-warning');
+            
+            // SAYAÇ BAŞLATMA
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                
+                // Son 5 saniye uyarısı
+                if (timeLeft <= 5) {
+                    timerEl.classList.add('timer-warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeIsUp(); // Süre bitince çalışacak fonksiyon
+                }
+            }, 1000);
+
+            const q = gameQs[currentQ];
+            document.getElementById('q-index').innerText = currentQ + 1;
+            document.getElementById('question-text').innerText = q.soru;
+            
+            const area = document.getElementById('options-area');
+            area.innerHTML = "";
+            
+            [...q.secenekler].sort(() => 0.5 - Math.random()).forEach(opt => {
+                const b = document.createElement('div');
+                b.className = 'option-btn';
+                b.innerText = opt;
+                b.onclick = () => check(b, opt, q.dogru);
+                area.appendChild(b);
+            });
+        }
+
+        // SÜRE BİTİNCE ÇAĞRILAN FONKSİYON
+        function timeIsUp() {
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach(b => b.style.pointerEvents = 'none'); // Tıklamayı kapat
+            
+            // Doğru cevabı göster (Yanlış sesi çal)
+            const q = gameQs[currentQ];
+            btns.forEach(b => {
+                if(b.innerText === q.dogru) b.classList.add('correct');
+                else b.classList.add('wrong'); // Hepsini kırmızı yap ki süre bittiği anlaşılsın
+            });
+            
+            document.getElementById('snd-wrong').currentTime = 0;
+            document.getElementById('snd-wrong').play().catch(()=>{});
+            
+            document.getElementById('question-text').innerText = "SÜRE DOLDU!"; // Kullanıcıya bilgi ver
+
+            setTimeout(() => {
+                currentQ++;
+                if (currentQ < gameQs.length) showQuestion();
+                else end();
+            }, 2000); // Süre bitince biraz daha uzun bekle (2sn)
+        }
+
+        function check(btn, sel, correct) {
+            clearInterval(timerInterval); // Cevap verilince sayacı durdur
+
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach(b => b.style.pointerEvents = 'none');
+
+            if (sel === correct) {
+                btn.classList.add('correct');
+                score += 10;
+                document.getElementById('snd-correct').currentTime = 0;
+                document.getElementById('snd-correct').play().catch(()=>{});
+            } else {
+                btn.classList.add('wrong');
+                document.getElementById('snd-wrong').currentTime = 0;
+                document.getElementById('snd-wrong').play().catch(()=>{});
+                btns.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
+            }
+
+            document.getElementById('score').innerText = score;
+            setTimeout(() => {
+                currentQ++;
+                if (currentQ < gameQs.length) showQuestion();
+                else end();
+            }, 1200);
+        }
+
+        function end() {
+            clearInterval(timerInterval); // Emin olmak için
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('feedback-text').innerText = score >= 40 ? "Tebrikler üstat!" : "Süreyle yarışmak zordur, tekrar deneyin.";
+        }
+    </script>
+</body>
+</html>
