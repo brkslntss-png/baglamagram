@@ -1670,7 +1670,7 @@
           signInWithEmailAndPassword(auth, email, pass)
             .then((userCredential) => {
                 status.style.color = "#4CAF50"; 
-                status.innerText = "Giriş Başarılı! Yönlendiriliyorsun...";
+                status.innerText = "Premium Öğrenme Ayrıcalığına Hoş Geldin...";
 
                 const girisYapanMail = userCredential.user.email;
                 const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
@@ -1719,7 +1719,7 @@
                 status.style.color = "#ff4d4d";
                 console.error(error);
                 if (error.code === "auth/invalid-credential") {
-                    status.innerText = "E-posta veya şifre hatalı!";
+                    status.innerText = "E-postanız veya şifreniz hatalı! Bilgilerinizi tekrar gözden geçirin";
                 } else {
                     status.innerText = "Hata oluştu.";
                 }
