@@ -15,7 +15,6 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            /* BACKGROUND GÜNCELLENDİ: Çocuklar için renkli gradyan */
             background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
             display: flex;
             flex-direction: column;
@@ -34,7 +33,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Başlangıç ekranının daha net okunması için hafif bir arka plan */
             background: rgba(255, 255, 255, 0.2);
             padding: 40px;
             border-radius: 30px;
@@ -228,6 +226,10 @@
 </head>
 <body>
 
+    <audio id="rock-music" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="start-screen">
         <div class="big-icon">🧩</div>
         <h1 class="game-title">Müzik Hafıza</h1>
@@ -265,9 +267,14 @@
         const timeDisplay = document.getElementById('time-count');
         const startScreen = document.getElementById('start-screen');
         const gameContainer = document.getElementById('game-container');
+        const rockMusic = document.getElementById('rock-music');
 
         // İlk Giriş Fonksiyonu
         function initGame() {
+            // Müzik Başlatma Kodu
+            rockMusic.volume = 0.3; // Ses seviyesini %30'a ayarladık, çok gürültü yapmasın
+            rockMusic.play().catch(e => console.log("Müzik hatası:", e));
+
             startScreen.style.display = 'none';
             gameContainer.style.display = 'flex';
             startGameLogic();
@@ -386,7 +393,10 @@
             setTimeout(() => {
                 const playAgain = confirm(`Harikasın! 🌟\n${moves} hamlede tamamladın.\nTekrar oynamak ister misin?`);
                 if(playAgain) startGameLogic();
-                else initGame(); // Başlangıç ekranına dön
+                else {
+                    // Sayfa yenilenerek başa dönülür
+                    location.reload(); 
+                }
             }, 800);
         }
     </script>
