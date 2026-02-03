@@ -898,16 +898,61 @@
         }
 
         // --- PROFİL FOTOĞRAFI YÜKLEME ---
-        function saveProfilePhoto(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('userAvatar').src = e.target.result;
-                    localStorage.setItem('ogrenciProfilFoto', e.target.result);
+       // --- YENİ saveProfilePhoto FONKSİYONU ---
+function saveProfilePhoto(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // 1. Canvas oluştur
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 2. Boyutlandır
+                const MAX_SIZE = 300; 
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > height) {
+                    if (width > MAX_SIZE) {
+                        height *= MAX_SIZE / width;
+                        width = MAX_SIZE;
+                    }
+                } else {
+                    if (height > MAX_SIZE) {
+                        width *= MAX_SIZE / height;
+                        height = MAX_SIZE;
+                    }
                 }
-                reader.readAsDataURL(input.files[0]);
-            }
+                canvas.width = width;
+                canvas.height = height;
+                
+                // 3. Çiz ve Sıkıştır
+                ctx.drawImage(img, 0, 0, width, height);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.7); 
+                
+                // 4. Ekrana bas
+                document.getElementById('userAvatar').src = dataUrl;
+                
+                // --- İŞTE DÜZELTME BURADA ---
+                // Fotoğrafı "Genel" değil, "Kişiye Özel" kaydediyoruz
+                const aktifMail = localStorage.getItem('aktifKullaniciMail');
+                if (aktifMail) {
+                    localStorage.setItem('foto_' + aktifMail, dataUrl);
+                } else {
+                    // Eğer sistemsel bir hata varsa geçici olarak kaydet
+                    localStorage.setItem('geciciFoto', dataUrl);
+                }
+            };
+            img.src = e.target.result;
         }
+        reader.readAsDataURL(file);
+    }
+}
+
 
         // --- YENİ EKLENEN FOTOĞRAF, CHAT VE SESLENDİRME MANTIĞI ---
         let selectedImageBase64 = null;
@@ -1426,7 +1471,6 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // --- İSİM LİSTESİ ---
   const ogrenciListesi = {
       "gokboy09@gmail.com": { ad: "Gökhan", soyad: "BOY" },
       "brkslntss@gmail.com": { ad: "Burak", soyad: "ASLANTAŞ" }
@@ -1436,17 +1480,11 @@
   const emailInput = document.getElementById('emailInput');
   const passInput = document.getElementById('passwordInput');
   
-  // --- YENİ EKLENEN KISIM: ENTER TUŞU DESTEĞİ ---
   function enterKontrol(e) {
-      if (e.key === "Enter") {
-          loginBtn.click(); // Enter'a basınca butona tıklanmış say
-      }
+      if (e.key === "Enter") loginBtn.click();
   }
-
-  // Hem e-posta hem şifre kutusunda Enter'a basılırsa çalışsın
   if(emailInput) emailInput.addEventListener("keyup", enterKontrol);
   if(passInput) passInput.addEventListener("keyup", enterKontrol);
-  // ------------------------------------------------
 
   if(loginBtn) {
       loginBtn.addEventListener('click', () => {
@@ -1462,18 +1500,19 @@
                 status.style.color = "#4CAF50"; 
                 status.innerText = "Giriş Başarılı! Yönlendiriliyorsun...";
 
+                // --- KRİTİK NOKTA: Giriş yapanı hafızaya not et ---
+                const girisYapanMail = userCredential.user.email;
+                localStorage.setItem('aktifKullaniciMail', girisYapanMail);
+
                 setTimeout(() => {
                     document.getElementById("login-overlay").style.display = "none";
                     document.getElementById("portal-entry-btn-section").style.display = "none";
                     document.getElementById("public-content").style.display = "none";
                     document.getElementById("student-portal").style.display = "block";
-                    
                     document.body.classList.add("portal-active");
 
                     // İsim Ayarlama
-                    const girisYapanMail = userCredential.user.email;
                     let ogrenci = ogrenciListesi[girisYapanMail];
-
                     if (ogrenci) {
                         document.getElementById("displayAd").innerText = ogrenci.ad;
                         document.getElementById("displaySoyad").innerText = ogrenci.soyad;
@@ -1484,6 +1523,16 @@
                         document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
                         document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
                     }
+
+                    // --- FOTOĞRAF AYARLAMA (Kişiye Özel) ---
+                    // Önce varsayılan boş resmi koy
+                    document.getElementById('userAvatar').src = "https://i.hizliresim.com/mlkkkp6.png";
+                    
+                    // Sonra bu kişinin özel fotosu var mı diye bak
+                    const kisiselFoto = localStorage.getItem('foto_' + girisYapanMail);
+                    if (kisiselFoto) {
+                        document.getElementById('userAvatar').src = kisiselFoto;
+                    }
                     
                     history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
                 }, 1500);
@@ -1493,8 +1542,6 @@
                 console.error(error);
                 if (error.code === "auth/invalid-credential") {
                     status.innerText = "E-posta veya şifre hatalı!";
-                } else if (error.code === "auth/network-request-failed") {
-                    status.innerText = "İnternet bağlantını kontrol et.";
                 } else {
                     status.innerText = "Hata oluştu.";
                 }
