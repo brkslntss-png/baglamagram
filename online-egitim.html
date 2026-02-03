@@ -1395,7 +1395,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-  // Storage yerine FIRESTORE (Veritabanı) kütüphanelerini çağırıyoruz
+  // Firestore (Veritabanı) kütüphaneleri
   import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -1410,20 +1410,26 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app); // Veritabanını başlat
+  const db = getFirestore(app);
 
-  function sifreCo(str) {
-      try { return decodeURIComponent(escape(window.atob(str))); } 
-      catch (e) { return str; }
+  // Şifre Çözücü Fonksiyon
+  function sifreCo(sifreliMetin) {
+      try {
+          return decodeURIComponent(escape(window.atob(sifreliMetin)));
+      } catch (e) {
+          console.error("Şifre çözme hatası:", e);
+          return sifreliMetin;
+      }
   }
 
-  // --- ŞİFRELENMİŞ LİSTE ---
+  // Şifreli Öğrenci Listesi
   const ogrenciListesi = {
       "Z29rYm95MDlAZ21haWwuY29t": { ad: "R8OkaGFu", soyad: "Qk9Z" },
       "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "QnVyYWs=", soyad: "QVNMQU5UQcWe" }
   };
 
-  // --- FOTOĞRAF KAYDETME (VERİTABANINA YAZIYOR) ---
+  // --- FOTOĞRAF KAYDETME (VERİTABANINA) ---
+  // Bu fonksiyonu window'a atıyoruz ki HTML'den çağrılabilsin
   window.saveProfilePhoto = function(input) {
     if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -1432,7 +1438,7 @@
         reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
-                // 1. Resmi Küçült
+                // 1. Resmi Küçült (Veritabanına sığması için)
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 
@@ -1448,26 +1454,19 @@
                 canvas.width = width;
                 canvas.height = height;
                 ctx.drawImage(img, 0, 0, width, height);
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.6); // Biraz daha sıkıştırdık (0.6)
+                // Kaliteyi biraz daha düşürdük (0.6) ki hızlı olsun
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
 
-                // 2. Ekrana bas
+                // 2. Ekrana bas (Kullanıcı anında görsün)
                 document.getElementById('userAvatar').src = dataUrl;
 
-                // 3. VERİTABANINA KAYDET (Firestore)
+                // 3. VERİTABANINA KAYDET
                 const user = auth.currentUser;
                 if (user) {
-                    // "kullanicilar" tablosunda, mail adresiyle doküman oluştur
                     const userRef = doc(db, "kullanicilar", user.email);
-                    
-                    // İçine "profil_fotosu" alanını yaz
                     setDoc(userRef, { profil_fotosu: dataUrl }, { merge: true })
-                        .then(() => {
-                            console.log("Fotoğraf veritabanına işlendi!");
-                        })
-                        .catch((error) => {
-                            console.error("Yazma hatası:", error);
-                            alert("Kaydetme başarısız! İnternetini kontrol et.");
-                        });
+                        .then(() => { console.log("Fotoğraf buluta kaydedildi!"); })
+                        .catch((error) => { console.error("Yazma hatası:", error); });
                 }
             };
             img.src = e.target.result;
@@ -1502,6 +1501,9 @@
 
                 const girisYapanMail = userCredential.user.email;
                 const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
+                
+                // Maili yine de hafızada tutalım (yedek olsun)
+                localStorage.setItem('aktifKullaniciMail', girisYapanMail);
 
                 setTimeout(() => {
                     document.getElementById("login-overlay").style.display = "none";
@@ -1510,6 +1512,7 @@
                     document.getElementById("student-portal").style.display = "block";
                     document.body.classList.add("portal-active");
 
+                    // İSİM AYARLAMA
                     let ogrenci = ogrenciListesi[sifreliMail];
                     if (ogrenci) {
                         const gercekAd = sifreCo(ogrenci.ad);
@@ -1524,7 +1527,7 @@
                         document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
                     }
 
-                    // --- FOTOĞRAFI VERİTABANINDAN ÇEK ---
+                    // FOTOĞRAFI VERİTABANINDAN ÇEK
                     document.getElementById('userAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
                     
                     const userRef = doc(db, "kullanicilar", girisYapanMail);
@@ -1533,7 +1536,7 @@
                             document.getElementById('userAvatar').src = docSnap.data().profil_fotosu;
                         }
                     }).catch((error) => {
-                        console.log("Fotoğraf çekilemedi:", error);
+                        console.log("Fotoğraf çekilemedi (Henüz yüklenmemiş olabilir).");
                     });
                     
                     history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
