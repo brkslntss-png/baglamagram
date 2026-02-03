@@ -517,7 +517,7 @@ const tumSorular = [
     {"soru": "Mey enstrümanı gövdesi için en çok hangi ağaç tercih edilir?", "secenekler": ["Erik", "Çam", "Kavak", "Meşe"], "dogru": "Erik"},
     {"soru": "Yaylı bir halk çalgısı olan \"Kabak Kemane\"nin gövdesi neden yapılır?", "secenekler": ["Su Kabağı", "Ceviz Ağacı", "Metal", "Dut Ağacı"], "dogru": "Su Kabağı"},
     {"soru": "Bağlama ailesinin en küçük ve en tiz sesli üyesi hangisidir?", "secenekler": ["Cura", "Tambura", "Divan Sazı", "Meydan Sazı"], "dogru": "Cura"},
-    {"soru": "Sipsi enstrümanında genellikle toplam kaç delik bulunur?", "secenekler": ["6", "12", "3", "9"], "dogru": "6 veya 7"},
+    {"soru": "Sipsi enstrümanında genellikle toplam kaç delik bulunur?", "secenekler": ["6 veya 7", "12 veya 13", "3 veya 4", "9 veya 10"], "dogru": "6 veya 7"},
     {"soru": "Kanun çalgısında ses değiştirmeye yarayan metal mandallara ne ad verilir?", "secenekler": ["Mandal", "Burgu", "Perde", "Eşik"], "dogru": "Mandal"},
     {"soru": "Davul çalarken sağ el ile vurulan kalın çubuğa ne ad verilir?", "secenekler": ["Tokmak", "Çubuk", "Baget", "Mızrap"], "dogru": "Tokmak"},
     {"soru": "Bağlamada notaların yerini belirleyen sap üzerindeki çizgilere ne denir?", "secenekler": ["Perde", "Eşik", "Tel", "Burgu"], "dogru": "Perde"},
