@@ -39,6 +39,70 @@
             min-height: 100vh;
         }
 
+        /* --- DİL SEÇİCİ STİLLERİ (YENİ EKLENDİ) --- */
+        .language-wrapper {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            z-index: 1002;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .lang-btn {
+            background: rgba(0, 0, 0, 0.6); 
+            border: 1px solid var(--accent);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lang-btn:hover {
+            background: rgba(197, 160, 89, 0.2);
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+        }
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 140px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .lang-dropdown a {
+            display: block;
+            padding: 12px 15px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lang-dropdown a:last-child { border-bottom: none; }
+        .lang-dropdown a:hover {
+            background: var(--accent);
+            color: #000;
+        }
+        .lang-dropdown.active {
+            display: block;
+            animation: fadeInDrop 0.3s ease;
+        }
+        @keyframes fadeInDrop {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* --- NAVİGASYON --- */
         nav {
             background: #000000;
@@ -52,6 +116,7 @@
         .nav-container {
             display: flex; justify-content: center; align-items: center; 
             max-width: 1200px; margin: 0 auto; position: relative;
+            padding-right: 100px; /* Dil butonu için pay */
         }
 
         nav ul { 
@@ -171,19 +236,37 @@
 
         @media (max-width: 768px) {
             nav { padding: 15px 0; background: #000; }
-            .menu-toggle { display: block; }
+            .menu-toggle { display: block; right: 20px; }
+            .language-wrapper { top: 20px; right: 70px; }
+            .lang-btn span { display: none; }
+            
             nav ul {
                 display: none; flex-direction: column; position: absolute;
                 top: 100%; left: 0; width: 100%; background: #000;
                 border-bottom: 1px solid var(--accent); padding: 20px 0; gap: 20px;
             }
             nav ul.aktif { display: flex; }
-            .nav-container { flex-direction: column; align-items: flex-start; }
-            .menu-toggle { top: 0; right: 20px; }
+            .nav-container { flex-direction: column; align-items: flex-start; padding-right: 0; }
         }
     </style>
 </head>
 <body>
+
+    <div class="language-wrapper">
+        <button class="lang-btn" onclick="toggleLanguageMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>Language</span>
+        </button>
+        
+        <div class="lang-dropdown" id="langDropdown">
+            <a href="javascript:void(0)" onclick="changeLanguage('tr')">🇹🇷 Türkçe</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('en')">🇬🇧 English</a>
+        </div>
+    </div>
 
     <nav>
         <div class="nav-container">
@@ -192,12 +275,12 @@
             </div>
 
             <ul id="anaMenu">
-                <li><a href="index.html">ANA SAYFA</a></li>
-                <li><a href="hakkinda.html" class="active">HAKKINDA</a></li>
-                <li><a href="online-egitim.html">ONLINE EĞİTİM</a></li>
-                <li><a href="notalar.html">NOTALAR</a></li>
-                <li><a href="siirler.html">ŞİİRLER</a></li>
-                <li><a href="konserler.html">KONSERLER</a></li>
+                <li><a href="index.html" data-lang="menu_home">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html" class="active" data-lang="menu_about">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" data-lang="menu_edu">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html" data-lang="menu_notes">NOTALAR</a></li>
+                <li><a href="siirler.html" data-lang="menu_poems">ŞİİRLER</a></li>
+                <li><a href="konserler.html" data-lang="menu_concerts">KONSERLER</a></li>
             </ul>
         </div>
     </nav>
@@ -208,27 +291,27 @@
         </div>
 
         <div class="bio-content">
-            <h2>Hakkında</h2>
-            <p>
+            <h2 data-lang="bio_title">Hakkında</h2>
+            <p data-lang="bio_p1">
                 Mahmut Burak ASLANTAŞ, 8 Şubat 2002 yılında Birecik'te dünyaya gelmiştir. Müzikal yolculuğuna çocuk yaşlarında bağlama ile başlamıştır. Lise eğitimini Mehmet Adil Çulcuoğlu Anadolu Lisesinde tamamlamıştır. 2021 yılında Adnan Menderes Üniversitesinde Müzik Öğretmenliği bölümünü kazanmıştır. Öğrencilik döneminde okulun çeşitli projelerinde ve konserlerinde yer almıştır. 
             </p>
-            <p>
+            <p data-lang="bio_p2">
                 2024 yılında TRT Türk Halk Müziği Gençlik Korosuna bağlama icracısı olarak katılmıştır. 17 Aralık 2025'te Elzė MARKEVIČIŪTĖ'nin katılımı ile "East to West" projesi kapsamında ilk konserini tamamlamıştır. Aslantaş, müziği sadece bir ses dizisi değil, kültürler arası bir köprü olarak konumlandırmaktadır. Aynı zamanda amatör olarak şiirle uğraşan Aslantaş, şarkı sözü ve yeni beste üretme yolunda çalışmalarını sürdürmektedir.
             </p>
 
             <div class="highlight-box">
-                <h3>Kariyer Özeti</h3>
+                <h3 data-lang="career_title">Kariyer Özeti</h3>
                 <ul>
-                    <li><strong>TRT Gençlik Korosu (2025):</strong> Bağlama icracısı olarak koro bünyesinde aktif görev.</li>
-                    <li><strong>Katıldığı Programlar:</strong> TRT Türkü'de yayınlanan "Genç Nesilden Türküler" programlarında konuk sanatçı ve orkestra üyesi olarak yer aldı.</li>
+                    <li data-lang="career_li1"><strong>TRT Gençlik Korosu (2025):</strong> Bağlama icracısı olarak koro bünyesinde aktif görev.</li>
+                    <li data-lang="career_li2"><strong>Katıldığı Programlar:</strong> TRT Türkü'de yayınlanan "Genç Nesilden Türküler" programlarında konuk sanatçı ve orkestra üyesi olarak yer aldı.</li>
                 </ul>
             </div>
 
             <div class="highlight-box">
-                <h3>Sanat Projeleri</h3>
+                <h3 data-lang="projects_title">Sanat Projeleri</h3>
                 <ul>
-                    <li><strong>East to West:</strong> Piyanist Elzė Markevičiūtė ile Anadolu ezgilerini Batı klasikleriyle buluşturan uluslararası konser serisi.</li>
-                    <li><strong>Edebiyat Denemeleri:</strong> Aruz ve hece ölçüsü kullanarak özgün şiirler üretmektedir. Şiirlerinde kullandığı net ve doğrudan üslubuyla dikkat çekmektedir.</li>
+                    <li data-lang="projects_li1"><strong>East to West:</strong> Piyanist Elzė Markevičiūtė ile Anadolu ezgilerini Batı klasikleriyle buluşturan uluslararası konser serisi.</li>
+                    <li data-lang="projects_li2"><strong>Edebiyat Denemeleri:</strong> Aruz ve hece ölçüsü kullanarak özgün şiirler üretmektedir. Şiirlerinde kullandığı net ve doğrudan üslubuyla dikkat çekmektedir.</li>
                 </ul>
             </div>
             
@@ -255,7 +338,7 @@
     </div>
 
     <footer>
-        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+        <p data-lang="footer_rights">© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
         
         <div class="social-wrapper" style="margin-top: 20px;">
             <div class="social-row">
@@ -276,6 +359,74 @@
             var menu = document.getElementById("anaMenu");
             menu.classList.toggle("aktif");
         }
+
+        // --- ÇEVİRİ VERİLERİ ---
+        const translations = {
+            tr: {
+                menu_home: "ANA SAYFA",
+                menu_about: "HAKKINDA",
+                menu_edu: "ONLINE EĞİTİM",
+                menu_notes: "NOTALAR",
+                menu_poems: "ŞİİRLER",
+                menu_concerts: "KONSERLER",
+                bio_title: "Hakkında",
+                bio_p1: "Mahmut Burak ASLANTAŞ, 8 Şubat 2002 yılında Birecik'te dünyaya gelmiştir. Müzikal yolculuğuna çocuk yaşlarında bağlama ile başlamıştır. Lise eğitimini Mehmet Adil Çulcuoğlu Anadolu Lisesinde tamamlamıştır. 2021 yılında Adnan Menderes Üniversitesinde Müzik Öğretmenliği bölümünü kazanmıştır. Öğrencilik döneminde okulun çeşitli projelerinde ve konserlerinde yer almıştır.",
+                bio_p2: "2024 yılında TRT Türk Halk Müziği Gençlik Korosuna bağlama icracısı olarak katılmıştır. 17 Aralık 2025'te Elzė MARKEVIČIŪTĖ'nin katılımı ile \"East to West\" projesi kapsamında ilk konserini tamamlamıştır. Aslantaş, müziği sadece bir ses dizisi değil, kültürler arası bir köprü olarak konumlandırmaktadır. Aynı zamanda amatör olarak şiirle uğraşan Aslantaş, şarkı sözü ve yeni beste üretme yolunda çalışmalarını sürdürmektedir.",
+                career_title: "Kariyer Özeti",
+                career_li1: "<strong>TRT Gençlik Korosu (2025):</strong> Bağlama icracısı olarak koro bünyesinde aktif görev.",
+                career_li2: "<strong>Katıldığı Programlar:</strong> TRT Türkü'de yayınlanan \"Genç Nesilden Türküler\" programlarında konuk sanatçı ve orkestra üyesi olarak yer aldı.",
+                projects_title: "Sanat Projeleri",
+                projects_li1: "<strong>East to West:</strong> Piyanist Elzė Markevičiūtė ile Anadolu ezgilerini Batı klasikleriyle buluşturan uluslararası konser serisi.",
+                projects_li2: "<strong>Edebiyat Denemeleri:</strong> Aruz ve hece ölçüsü kullanarak özgün şiirler üretmektedir. Şiirlerinde kullandığı net ve doğrudan üslubuyla dikkat çekmektedir.",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır."
+            },
+            en: {
+                menu_home: "HOME",
+                menu_about: "ABOUT ME",
+                menu_edu: "ONLINE LESSONS",
+                menu_notes: "SHEET MUSIC",
+                menu_poems: "POEMS",
+                menu_concerts: "CONCERTS",
+                bio_title: "About Me",
+                bio_p1: "Mahmut Burak ASLANTAŞ was born on February 8, 2002, in Birecik. He started his musical journey with the baglama at a young age. He completed his high school education at Mehmet Adil Çulcuoğlu Anatolian High School. In 2021, he was accepted into the Music Education Department at Adnan Menderes University. During his student years, he participated in various school projects and concerts.",
+                bio_p2: "In 2024, he joined the TRT Turkish Folk Music Youth Choir as a baglama performer. On December 17, 2025, he completed his first concert as part of the \"East to West\" project with the participation of Elzė MARKEVIČIŪTĖ. Aslantaş positions music not just as a sequence of sounds, but as a bridge between cultures. Also engaging in poetry as an amateur, Aslantaş continues his work towards producing song lyrics and new compositions.",
+                career_title: "Career Summary",
+                career_li1: "<strong>TRT Youth Choir (2025):</strong> Active duty within the choir as a baglama performer.",
+                career_li2: "<strong>Participated Programs:</strong> Participated as a guest artist and orchestra member in the \"Songs from the Young Generation\" programs broadcast on TRT Türkü.",
+                projects_title: "Art Projects",
+                projects_li1: "<strong>East to West:</strong> International concert series bringing Anatolian melodies together with Western classics with pianist Elzė Markevičiūtė.",
+                projects_li2: "<strong>Literary Essays:</strong> He produces original poems using Aruz and Syllabic meters. He draws attention with the clear and direct style he uses in his poems.",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved."
+            }
+        };
+
+        // --- DİL FONKSİYONLARI ---
+        function toggleLanguageMenu() {
+            document.getElementById("langDropdown").classList.toggle("active");
+        }
+
+        function changeLanguage(lang) {
+            const data = translations[lang] || translations['tr'];
+            
+            document.querySelectorAll("[data-lang]").forEach(element => {
+                const key = element.getAttribute("data-lang");
+                if (data[key]) {
+                    // innerHTML kullanarak <strong> etiketlerini koruyoruz
+                    element.innerHTML = data[key];
+                }
+            });
+
+            document.getElementById("langDropdown").classList.remove("active");
+            localStorage.setItem("selectedLang", lang);
+        }
+
+        // Sayfa açıldığında hafızayı kontrol et
+        window.onload = function() {
+            const savedLang = localStorage.getItem("selectedLang");
+            if(savedLang === "en") {
+                changeLanguage("en");
+            }
+        };
     </script>
 
 </body>
