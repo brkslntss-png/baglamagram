@@ -672,16 +672,16 @@
                             </div>
                             <div class="cat-box" onclick="sayfaGoster('ear-training-view')">
                                 <span class="cat-title">Mutlak Duyum Testi ve Kulak Egzersizi</span>
-                                <span class="cat-desc">Bu oyun, kulağının ne kadar keskin olduğunu ölçmek için tasarlandı. Dinle ve Cevapla! Bu oyunda kazanmak veya kaybetmek yok; çalıştıkça gelişen bir kulak var. Ne kadar çok denersen, sesler o kadar netleşir.</span>
+                                <span class="cat-desc">Bu oyun, kulağının ne kadar keskin olduğunu ölçmek için tasarlandı. Bu oyunda kazanmak veya kaybetmek yok; çalıştıkça gelişen bir kulak var.</span>
                             </div>
                             
                             <div class="cat-box" onclick="sayfaGoster('tsm-game-view')">
                                 <span class="cat-title">TSM Bilgi Yarışması</span>
-                                <span class="cat-desc">Türk Sanat Müziği makam ve usul bilginizi ölçün.</span>
+                                <span class="cat-desc">Türk Sanat Müziği makam ve usul bilginizi ölçün. Teoriye ve türk müziği kültürüne hakimiyetinizi kanıtlayın!</span>
                             </div>
                             <div class="cat-box" onclick="sayfaGoster('nota-yagmuru-view')">
                                 <span class="cat-title">Nota Yağmuru</span>
-                                <span class="cat-desc">Notaları doğru zamanda yakalayarak reflekslerinizi geliştirin.</span>
+                                <span class="cat-desc">Notaları doğru zamanda yakalayarak reflekslerinizi geliştirin. (8 yaş üzeri)</span>
                             </div>
                             </div>
                     </div>
@@ -946,18 +946,6 @@
         function girisKapat() { document.getElementById("login-overlay").style.display = "none"; }
 
         function sayfaGoster(id, addToHistory = true) {
-            // --- SES DURDURMA EKLEMESİ ---
-            // Aktif olan sayfadaki iframe'i bul ve yenile (sesi keser)
-            const currentActive = document.querySelector(".view-section.active");
-            if(currentActive) {
-                const iframe = currentActive.querySelector("iframe");
-                if(iframe) {
-                    // Iframe'i yeniden yükleyerek oyunu ve sesi sıfırla
-                    iframe.src = iframe.src;
-                }
-            }
-            // -----------------------------
-
             document.querySelectorAll(".view-section").forEach(s => s.classList.remove("active"));
             document.getElementById(id).classList.add("active");
             if(addToHistory) history.pushState({view: id}, "", "#" + id.replace("-view", ""));
