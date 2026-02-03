@@ -53,9 +53,73 @@
                               radial-gradient(circle at 90% 80%, rgba(157, 78, 221, 0.05) 0%, transparent 20%);
         }
 
+        /* --- DİL SEÇİCİ STİLLERİ --- */
+        .language-wrapper {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            z-index: 1002;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .lang-btn {
+            background: rgba(0, 0, 0, 0.6); 
+            border: 1px solid var(--accent);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lang-btn:hover {
+            background: rgba(197, 160, 89, 0.2);
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+        }
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 140px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .lang-dropdown a {
+            display: block;
+            padding: 12px 15px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lang-dropdown a:last-child { border-bottom: none; }
+        .lang-dropdown a:hover {
+            background: var(--accent);
+            color: #000;
+        }
+        .lang-dropdown.active {
+            display: block;
+            animation: fadeInDrop 0.3s ease;
+        }
+        @keyframes fadeInDrop {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* --- MENÜ --- */
         nav { background: rgba(0, 0, 0, 0.95); padding: 20px 0; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(197, 160, 89, 0.2); }
-        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; padding-right: 100px; }
         nav ul { display: flex; list-style: none; gap: 40px; padding: 0 20px; }
         nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease; }
         nav a:hover, nav a.active { color: var(--accent); }
@@ -70,7 +134,9 @@
             border-radius: 5px; box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
         }
         .portal-btn:hover { background: #e0c060; transform: translateY(-3px); }
-        .icon-stack { position: relative; display: inline-block; width: 40px; height: 40px; }
+        
+        /* İKON STİLİ (DÜZELTİLDİ) */
+        .icon-stack { position: relative; display: inline-block; width: 40px; height: 40px; flex-shrink: 0; }
         .icon-stack .fa-laptop { font-size: 36px; }
         .icon-stack .fa-music { position: absolute; font-size: 14px; top: 50%; left: 50%; transform: translate(-50%, -60%); color: #000; }
 
@@ -262,6 +328,9 @@
             nav ul.aktif { display: flex; }
             .menu-toggle { display: block; position: static; }
             .chat-container { height: 50vh; }
+            .language-wrapper { top: 20px; right: 70px; }
+            .lang-btn span { display: none; }
+            .nav-container { padding-right: 0; }
         }
 
         footer { background: #050505; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
@@ -272,18 +341,34 @@
 </head>
 <body>
 
+    <div class="language-wrapper">
+        <button class="lang-btn" onclick="toggleLanguageMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>Language</span>
+        </button>
+        
+        <div class="lang-dropdown" id="langDropdown">
+            <a href="javascript:void(0)" onclick="changeLanguage('tr')">🇹🇷 Türkçe</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('en')">🇬🇧 English</a>
+        </div>
+    </div>
+
     <nav>
         <div class="nav-container">
             <div class="menu-toggle" onclick="menuyuAcKapa()">
                 <i class="fas fa-bars"></i>
             </div>
             <ul id="anaMenu">
-                <li><a href="index.html">ANA SAYFA</a></li>
-                <li><a href="hakkinda.html">HAKKINDA</a></li>
-                <li><a href="online-egitim.html" class="active">ONLINE EĞİTİM</a></li>
-                <li><a href="notalar.html">NOTALAR</a></li>
-                <li><a href="siirler.html">ŞİİRLER</a></li>
-                <li><a href="konserler.html">KONSERLER</a></li>
+                <li><a href="index.html" data-lang="menu_home">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html" data-lang="menu_about">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" class="active" data-lang="menu_edu">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html" data-lang="menu_notes">NOTALAR</a></li>
+                <li><a href="siirler.html" data-lang="menu_poems">ŞİİRLER</a></li>
+                <li><a href="konserler.html" data-lang="menu_concerts">KONSERLER</a></li>
             </ul>
         </div>
     </nav>
@@ -292,18 +377,18 @@
        
   <div class="login-box">
     <span class="close-login" onclick="girisKapat()">×</span>
-    <h3 style="color: var(--accent); margin-bottom: 20px;">ÖĞRENCİ PORTALI</h3>
+    <h3 style="color: var(--accent); margin-bottom: 20px;" data-lang="portal_title">ÖĞRENCİ PORTALI</h3>
     
-    <input type="email" id="emailInput" placeholder="E-posta Adresiniz" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    <input type="email" id="emailInput" placeholder="E-posta Adresiniz" data-lang-placeholder="ph_email" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
     
-    <input type="password" id="passwordInput" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    <input type="password" id="passwordInput" placeholder="Şifreniz" data-lang-placeholder="ph_pass" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
     
     <div style="text-align: right; margin-bottom: 20px;">
-        <span onclick="sifreSifirla()" style="color: #bbb; cursor: pointer; font-size: 0.85rem; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#bbb'">
+        <span onclick="sifreSifirla()" style="color: #bbb; cursor: pointer; font-size: 0.85rem; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#bbb'" data-lang="forgot_pass">
             Şifremi Unuttum
         </span>
     </div>
-    <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;">GİRİŞ YAP</button>
+    <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;" data-lang="btn_login">GİRİŞ YAP</button>
     
     <p id="loginStatus" style="margin-top: 15px; font-size: 0.9rem; min-height: 20px;"></p>
 </div>
@@ -318,38 +403,38 @@
                     <i class="fas fa-laptop"></i>
                     <i class="fas fa-music"></i>
                 </div>
-                ÖĞRENCİ PORTALINA GİRİŞ YAP
+                <span data-lang="btn_enter_portal">ÖĞRENCİ PORTALINA GİRİŞ YAP</span>
             </button>
         </div>
 
         <div id="public-content">
             <div style="text-align: center; margin-bottom: 50px;">
-                <h2>Neden Online Eğitim?</h2>
+                <h2 data-lang="public_h2">Neden Online Eğitim?</h2>
                 <div style="width: 60px; height: 2px; background: var(--accent); margin: 15px auto;"></div>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <i class="fas fa-robot"></i>
-                    <h4>Yapay Zeka ile Eğitim</h4>
-                    <p>Yapay zeka destekli müzik öğretmeniniz BurakAI ile eğitimde yeni bir dönem. Bu teknolojiyi kullanmak ve derslerinize entegre etmek için aşağıdaki formu doldurarak ders paketlerimizi satın alabilirsiniz.</p>
+                    <h4 data-lang="feat_ai_title">Yapay Zeka ile Eğitim</h4>
+                    <p data-lang="feat_ai_desc">Yapay zeka destekli müzik öğretmeniniz BurakAI ile eğitimde yeni bir dönem. Bu teknolojiyi kullanmak ve derslerinize entegre etmek için aşağıdaki formu doldurarak ders paketlerimizi satın alabilirsiniz.</p>
                 </div>
                 <div class="feature-card">
                     <i class="fas fa-moon"></i>
-                    <h4>Mesai Sonrası Sanat</h4>
-                    <p>Çoğu kurs akşam 19:00'da kapılarını kapatır. Biz ise tam o saatlerde başlıyoruz. İşten eve döndüğünüzde, trafiğe girmeden ve kurs saatlerine yetişme stresi yaşamadan bağlamanızı elinize alın.</p>
+                    <h4 data-lang="feat_time_title">Mesai Sonrası Sanat</h4>
+                    <p data-lang="feat_time_desc">Çoğu kurs akşam 19:00'da kapılarını kapatır. Biz ise tam o saatlerde başlıyoruz. İşten eve döndüğünüzde, trafiğe girmeden ve kurs saatlerine yetişme stresi yaşamadan bağlamanızı elinize alın.</p>
                 </div>
-                <div class="feature-card"><i class="fas fa-user-tie"></i><h4>Premium Öğrenci Portalı</h4><p>Bu bölümde, yalnızca kendinize özel verilen şifre ile erişebileceğiniz ders materyalleri yer almaktadır. Tüm içerikler, öğrenme sürecini desteklemek amacıyla sesli ve görsel materyallerle hazırlanmıştır. Materyaller düzenli olarak güncellenmekte ve seviyelere göre yapılandırılmaktadır.</p></div>
-                <div class="feature-card"><i class="fab fa-whatsapp"></i><h4>Kesintisiz İletişim</h4><p>Ders bittiğinde bağımız kopmaz, Dilediğiniz zaman WhatsApp üzerinden ödevlerinizi gönderip, kafanıza takılan soruları sorup, videolarınızı gönderebilirsiniz. Bu özelliğe sadece öğrenci portalı üzerinden erişim sağlayabilirsiniz.</p></div>
+                <div class="feature-card"><i class="fas fa-user-tie"></i><h4 data-lang="feat_premium_title">Premium Öğrenci Portalı</h4><p data-lang="feat_premium_desc">Bu bölümde, yalnızca kendinize özel verilen şifre ile erişebileceğiniz ders materyalleri yer almaktadır. Tüm içerikler, öğrenme sürecini desteklemek amacıyla sesli ve görsel materyallerle hazırlanmıştır. Materyaller düzenli olarak güncellenmekte ve seviyelere göre yapılandırılmaktadır.</p></div>
+                <div class="feature-card"><i class="fab fa-whatsapp"></i><h4 data-lang="feat_comm_title">Kesintisiz İletişim</h4><p data-lang="feat_comm_desc">Ders bittiğinde bağımız kopmaz, Dilediğiniz zaman WhatsApp üzerinden ödevlerinizi gönderip, kafanıza takılan soruları sorup, videolarınızı gönderebilirsiniz. Bu özelliğe sadece öğrenci portalı üzerinden erişim sağlayabilirsiniz.</p></div>
             </div>
             <div class="apply-container">
-                <h3 style="text-align: center; margin-bottom: 25px;">BAŞVURU FORMU</h3>
+                <h3 style="text-align: center; margin-bottom: 25px;" data-lang="apply_title">BAŞVURU FORMU</h3>
                 <form action="https://formspree.io/f/xnjvyknz" method="POST" class="form-group">
-                    <input type="text" name="ad_soyad" placeholder="Ad Soyad" required>
-                    <input type="tel" name="telefon" placeholder="Telefon Numaranız" required>
-                    <div style="display: flex; gap: 10px;"><input type="number" name="yas" placeholder="Yaş (16+)" min="16" required style="flex:1;"><input type="text" name="meslek" placeholder="Meslek (Opsiyonel)" style="flex:1;"></div>
-                    <select name="seviye"><option value="" disabled selected>Mevcut Seviyeniz</option><option value="sifir">Hiç Bilmiyorum</option><option value="temel">Temel Seviye</option><option value="ileri">İleri Seviye</option></select>
-                    <textarea name="mesaj" rows="4" placeholder="Müzikal hedefleriniz..." required></textarea>
-                    <button type="submit" class="btn" style="width: 100%;">GÖNDER</button>
+                    <input type="text" name="ad_soyad" placeholder="Ad Soyad" data-lang-placeholder="ph_name" required>
+                    <input type="tel" name="telefon" placeholder="Telefon Numaranız" data-lang-placeholder="ph_phone" required>
+                    <div style="display: flex; gap: 10px;"><input type="number" name="yas" placeholder="Yaş (16+)" data-lang-placeholder="ph_age" min="16" required style="flex:1;"><input type="text" name="meslek" placeholder="Meslek (Opsiyonel)" data-lang-placeholder="ph_job" style="flex:1;"></div>
+                    <select name="seviye" id="levelSelect"><option value="" disabled selected data-lang="ph_level">Mevcut Seviyeniz</option><option value="sifir" data-lang="level_0">Hiç Bilmiyorum</option><option value="temel" data-lang="level_1">Temel Seviye</option><option value="ileri" data-lang="level_2">İleri Seviye</option></select>
+                    <textarea name="mesaj" rows="4" placeholder="Müzikal hedefleriniz..." data-lang-placeholder="ph_goals" required></textarea>
+                    <button type="submit" class="btn" style="width: 100%;" data-lang="btn_send">GÖNDER</button>
                 </form>
             </div>
         </div>
@@ -372,40 +457,40 @@
                         <div class="user-name" id="displaySoyad" style="text-transform: uppercase;">SOYAD</div>
                         
                         
-                        <div class="premium-badge">PREMIUM ÜYE</div>
+                        <div class="premium-badge" data-lang="badge_premium">PREMIUM ÜYE</div>
                     </div>
 
                     <div class="menu-links">
                         <a onclick="sayfaGoster('dashboard-view')" class="menu-link active">
-                            <i class="fas fa-home"></i> <span>Ana Sayfa</span>
+                            <i class="fas fa-home"></i> <span data-lang="sb_home">Ana Sayfa</span>
                         </a>
                         <br>
-                        <div style="color: #666; font-size: 0.8rem; margin-bottom: 5px; padding-left: 12px;" class="menu-title">EĞİTİMLERİM</div>
+                        <div style="color: #666; font-size: 0.8rem; margin-bottom: 5px; padding-left: 12px;" class="menu-title" data-lang="sb_edu_title">EĞİTİMLERİM</div>
                         <a onclick="sayfaGoster('baglama-menu-view')" class="menu-link">
-                            <i class="fas fa-music"></i> <span>Bağlama Eğitimi</span>
+                            <i class="fas fa-music"></i> <span data-lang="sb_baglama">Bağlama Eğitimi</span>
                         </a>
                         <a onclick="sayfaGoster('exam-categories-view')" class="menu-link">
-                            <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
+                            <i class="fas fa-edit"></i> <span data-lang="sb_exam">Yetenek Sınavı Hazırlık</span>
                         </a>
                         
-                        <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title">ARAÇLAR</div>
+                        <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title" data-lang="sb_tools_title">ARAÇLAR</div>
                         <a onclick="sayfaGoster('metronome-view')" class="menu-link">
-                            <i class="fas fa-stopwatch"></i> <span>Metronom</span>
+                            <i class="fas fa-stopwatch"></i> <span data-lang="sb_metro">Metronom</span>
                         </a>
                         <a onclick="sayfaGoster('tuner-view')" class="menu-link">
-                            <i class="fas fa-microphone-lines"></i> <span>Akort Cihazı</span>
+                            <i class="fas fa-microphone-lines"></i> <span data-lang="sb_tuner">Akort Cihazı</span>
                         </a>
 
                         <a onclick="startLiveClass()" class="menu-link">
-                             <i class="fas fa-video"></i> <span>Canlı Ders</span>
+                             <i class="fas fa-video"></i> <span data-lang="sb_live">Canlı Ders</span>
                         </a>
                         <a onclick="sayfaGoster('ai-mentor-view')" class="menu-link" style="color: var(--accent);">
-                            <i class="fas fa-robot"></i> <span>BurakAI Hoca (beta)</span>
+                            <i class="fas fa-robot"></i> <span data-lang="sb_ai">BurakAI Hoca (beta)</span>
                         </a>
                     </div>
 
                     <a href="https://wa.me/905335060921" target="_blank" class="whatsapp-sidebar-btn">
-                        <i class="fab fa-whatsapp"></i> <span>Acil Durumlar İçin</span>
+                        <i class="fab fa-whatsapp"></i> <span data-lang="sb_emergency">Acil Durumlar İçin</span>
                     </a>
                 </div>
 
@@ -420,28 +505,28 @@
                             <div class="dash-card" onclick="sayfaGoster('baglama-menu-view')">
                                 <img src="baglama-ikon.png" class="custom-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'">
                                 <i class="fas fa-music" style="display:none; font-size:3rem; color:var(--yellow-portal); margin-bottom:20px;"></i>
-                                <h3>BAĞLAMA EĞİTİMİ</h3>
-                                <p>Ders notları, notalar ve egzersizleri.</p>
+                                <h3 data-lang="card_baglama_title">BAĞLAMA EĞİTİMİ</h3>
+                                <p data-lang="card_baglama_desc">Ders notları, notalar ve egzersizleri.</p>
                             </div>
 
                             <div class="dash-card ai-card" onclick="sayfaGoster('ai-mentor-view')">
-                                <span class="ai-badge">YENİ</span>
+                                <span class="ai-badge" data-lang="badge_new">YENİ</span>
                                 <i class="fas fa-robot"></i>
-                                <h3>BurakAI Hoca (beta)</h3>
-                                <p style="font-size: 0.9rem; opacity: 0.9;">Yapay Zeka Entegrasyonlu İlk Müzik Eğitim Platformu.</p>
-                                <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px;">7/24 Emrinizdeyim. Türkiye'de Bir İlk!</p>
+                                <h3 data-lang="card_ai_title">BurakAI Hoca (beta)</h3>
+                                <p style="font-size: 0.9rem; opacity: 0.9;" data-lang="card_ai_desc1">Yapay Zeka Entegrasyonlu İlk Müzik Eğitim Platformu.</p>
+                                <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px;" data-lang="card_ai_desc2">7/24 Emrinizdeyim. Türkiye'de Bir İlk!</p>
                             </div>
 
                             <div class="dash-card" onclick="sayfaGoster('exam-categories-view')">
                                 <i class="fas fa-graduation-cap"></i>
-                                <h3>YETENEK SINAVINA HAZIRLIK</h3>
-                                <p>Konservatuvar, Müzik öğretmenliği ve GSL'ye hazırlık için öğretim materyalleri.</p>
+                                <h3 data-lang="card_exam_title">YETENEK SINAVINA HAZIRLIK</h3>
+                                <p data-lang="card_exam_desc">Konservatuvar, Müzik öğretmenliği ve GSL'ye hazırlık için öğretim materyalleri.</p>
                             </div>
                             
                             <div class="dash-card live-class-card" onclick="startLiveClass()">
                                 <i class="fas fa-video"></i>
-                                <h3>CANLI DERS</h3>
-                                <p>Sanal sınıfa bağlanarak canlı derse katılın.</p>
+                                <h3 data-lang="card_live_title">CANLI DERS</h3>
+                                <p data-lang="card_live_desc">Sanal sınıfa bağlanarak canlı derse katılın.</p>
                                 
                             </div>
                         </div>
@@ -449,22 +534,22 @@
 
                     <div id="ai-mentor-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2 style="font-family: 'Playfair Display', serif; color: var(--accent); letter-spacing: 1px;">BurakAI Hoca</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← Geri</button>
+                            <h2 style="font-family: 'Playfair Display', serif; color: var(--accent); letter-spacing: 1px;" data-lang="ai_header">BurakAI Hoca</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;" data-lang="btn_back">← Geri</button>
                         </div>
-                        <p style="color: #bbb; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Kafana takılan her şeyi sorabilirsin, ben senin için burdayım ciğerim.</p>
+                        <p style="color: #bbb; margin-bottom: 20px; font-family: 'Poppins', sans-serif;" data-lang="ai_intro">Kafana takılan her şeyi sorabilirsin, ben senin için burdayım ciğerim.</p>
                         
                         <div class="chat-container">
                             <div class="chat-box" id="aiChatBox">
                                 <div class="chat-message ai">
                                     <strong style="color: var(--accent); font-family: 'Playfair Display', serif;">BurakAI Hoca:</strong><br>
-                                    Gel bakalım evladım, hoş geldin. Sazın kucağındaysa, gönlün de aşka hazırsa aşamayacağımız yokuş yok. 'Yorulduk' demek yok, 'yapamıyorum' demek yok. Ben senin her adımda yanındayım. Hadi bismillah diyelim, sor bakalım kafana takılan şey nedir?
+                                    <span data-lang="ai_welcome_msg">Gel bakalım evladım, hoş geldin. Sazın kucağındaysa, gönlün de aşka hazırsa aşamayacağımız yokuş yok. 'Yorulduk' demek yok, 'yapamıyorum' demek yok. Ben senin her adımda yanındayım. Hadi bismillah diyelim, sor bakalım kafana takılan şey nedir?</span>
                                 </div>
                             </div>
                             
                             <div id="imagePreviewContainer">
                                 <img id="imagePreview" src="" />
-                                <span id="removeImage">Kaldır</span>
+                                <span id="removeImage" data-lang="btn_remove">Kaldır</span>
                             </div>
 
                             <div class="chat-input-area">
@@ -473,11 +558,11 @@
                                 <button class="chat-action-btn" title="Fotoğraf Yükle" onclick="triggerFileUpload()">
                                     <i class="fas fa-camera"></i>
                                 </button>
-                                <button class="chat-action-btn" title="Video Yükle" onclick="alert('Video özelliği yakında gelecek aslan parçası. Şimdilik fotoğraf gönderebilirsin.')">
+                                <button class="chat-action-btn" title="Video Yükle" onclick="alertVideoFeature()">
                                     <i class="fas fa-video"></i>
                                 </button>
                                 
-                                <input type="text" class="chat-input" placeholder="Bir soru sor..." id="aiUserInput">
+                                <input type="text" class="chat-input" placeholder="Bir soru sor..." data-lang-placeholder="ph_chat" id="aiUserInput">
                                 
                                 <button class="chat-mute-btn" title="Okumayı Durdur" onclick="window.speechSynthesis.cancel()">
                                     <i class="fas fa-volume-mute"></i>
@@ -490,8 +575,8 @@
 
                     <div id="metronome-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Metronom</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-lang="metro_title">Metronom</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;" data-lang="btn_back">← Geri</button>
                         </div>
 
                         <div class="metronome-container">
@@ -529,15 +614,15 @@
                                 </div>
                                 
                                 <button class="play-btn" id="playBtn" onclick="toggleMetronome()">
-                                    <i class="fas fa-play"></i> BAŞLAT
+                                    <i class="fas fa-play"></i> <span data-lang="btn_start">BAŞLAT</span>
                                 </button>
                             </div>
                         </div>
                     </div>
                     <div id="tuner-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Akort Cihazı</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-lang="tuner_title">Akort Cihazı</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;" data-lang="btn_back">← Geri</button>
                         </div>
 
                         <div class="tuner-container">
@@ -552,15 +637,15 @@
                                 <span id="frequencyValue">0.0</span> Hz
                             </div>
 
-                            <p id="tunerStatus" style="color:#888; font-size: 0.9rem; margin: 15px 0;">Başlamak için butona bas ve teline vur.</p>
+                            <p id="tunerStatus" style="color:#888; font-size: 0.9rem; margin: 15px 0;" data-lang="tuner_instr">Başlamak için butona bas ve teline vur.</p>
 
                             <button class="play-btn" id="tunerBtn" onclick="toggleTuner()">
-                                <i class="fas fa-microphone"></i> AKORTU BAŞLAT
+                                <i class="fas fa-microphone"></i> <span id="tunerBtnText" data-lang="btn_tuner_start">AKORTU BAŞLAT</span>
                             </button>
                             
                             <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                                 <div>
-                                    <h4 style="color:var(--accent); font-size: 0.85rem; margin-bottom:5px;">KISA SAP</h4>
+                                    <h4 style="color:var(--accent); font-size: 0.85rem; margin-bottom:5px;" data-lang="short_neck">KISA SAP</h4>
                                     <p style="font-size: 0.8rem; color: #ccc; line-height: 1.4;">
                                         Alt: <strong>F (Fa)</strong> / E (Mi)<br>
                                         Orta: <strong>Bb (Si Bemol)</strong> / A (La)<br>
@@ -568,7 +653,7 @@
                                     </p>
                                 </div>
                                 <div>
-                                    <h4 style="color:var(--accent); font-size: 0.85rem; margin-bottom:5px;">UZUN SAP</h4>
+                                    <h4 style="color:var(--accent); font-size: 0.85rem; margin-bottom:5px;" data-lang="long_neck">UZUN SAP</h4>
                                     <p style="font-size: 0.8rem; color: #ccc; line-height: 1.4;">
                                         Alt: <strong>Si (A) / Do (C)</strong><br>
                                         Orta: <strong>Mi (E) / Fa (F)</strong><br>
@@ -580,30 +665,30 @@
                     </div>
                     <div id="live-class-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Sanal Sınıf</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← Geri</button>
+                            <h2 data-lang="live_title">Sanal Sınıf</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;" data-lang="btn_back">← Geri</button>
                         </div>
                         <div id="meet-frame"></div>
                     </div>
 
                     <div id="baglama-menu-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Bağlama Eğitimi</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-lang="baglama_edu_title">Bağlama Eğitimi</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;" data-lang="btn_back">← Geri</button>
                         </div>
                         <br>
                         <div class="category-grid">
-                            <div class="cat-box" onclick="materyalAc('Teorik Bilgi')"><span class="cat-title">Ders Notları (Teorik Bilgi)</span><span class="cat-desc">Müzik teorisi ve makamlar.</span></div>
-                            <div class="cat-box" onclick="materyalAc('Kısa Sap Notaları')"><span class="cat-title">Kısa Sap Türkü Notaları</span><span class="cat-desc">Kısa sap repertuvarı.</span></div>
-                            <div class="cat-box" onclick="materyalAc('Uzun Sap Notaları')"><span class="cat-title">Uzun Sap Türkü Notaları</span><span class="cat-desc">Uzun sap icra teknikleri.</span></div>
-                            <div class="cat-box" onclick="materyalAc('Parmak Egzersizleri')"><span class="cat-title">Parmak Egzersizleri</span><span class="cat-desc">Hız ve teknik geliştirici etütler.</span></div>
+                            <div class="cat-box" onclick="materyalAc('Teorik Bilgi')"><span class="cat-title" data-lang="cat_theory">Ders Notları (Teorik Bilgi)</span><span class="cat-desc" data-lang="desc_theory">Müzik teorisi ve makamlar.</span></div>
+                            <div class="cat-box" onclick="materyalAc('Kısa Sap Notaları')"><span class="cat-title" data-lang="cat_short">Kısa Sap Türkü Notaları</span><span class="cat-desc" data-lang="desc_short">Kısa sap repertuvarı.</span></div>
+                            <div class="cat-box" onclick="materyalAc('Uzun Sap Notaları')"><span class="cat-title" data-lang="cat_long">Uzun Sap Türkü Notaları</span><span class="cat-desc" data-lang="desc_long">Uzun sap icra teknikleri.</span></div>
+                            <div class="cat-box" onclick="materyalAc('Parmak Egzersizleri')"><span class="cat-title" data-lang="cat_ex">Parmak Egzersizleri</span><span class="cat-desc" data-lang="desc_ex">Hız ve teknik geliştirici etütler.</span></div>
                         </div>
                     </div>
 
                     <div id="materials-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2 id="mat-category-title">Materyaller</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;" data-lang="btn_back">← Geri</button>
                         </div>
                         <div class="materials-grid" id="materials-container">
                             </div>
@@ -611,26 +696,26 @@
 
                     <div id="exam-categories-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Yetenek Sınavı Hazırlık</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-lang="exam_prep_title">Yetenek Sınavı Hazırlık</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;" data-lang="btn_back">← Geri</button>
                         </div>
                         <br>
                         <div class="category-grid">
-                            <div class="cat-box" onclick="yetenekKategoriAc('Dikte Soruları')"><span class="cat-title">Dikte Soruları</span><span class="cat-desc">İşitme ve yazma çalışmaları.</span></div>
-                            <div class="cat-box" onclick="yetenekKategoriAc('Ritim Tekrarı Soruları')"><span class="cat-title">Ritim Tekrarı Soruları</span><span class="cat-desc">Ritim kulağını geliştirme.</span></div>
-                            <div class="cat-box" onclick="yetenekKategoriAc('Tek Ses Tekrarı Soruları')"><span class="cat-title">Tek Ses Tekrarı Soruları</span><span class="cat-desc">Tek ses duyma çalışmaları.</span></div>
-                            <div class="cat-box" onclick="yetenekKategoriAc('Çift Ses Tekrarı Soruları')"><span class="cat-title">Çift Ses Tekrarı Soruları</span><span class="cat-desc">İki ses duyma çalışmaları.</span></div>
-                            <div class="cat-box" onclick="yetenekKategoriAc('Üç Ses Tekrarı Soruları')"><span class="cat-title">Üç Ses Tekrarı Soruları</span><span class="cat-desc">Akor duyma çalışmaları.</span></div>
-                            <div class="cat-box" onclick="yetenekKategoriAc('Dört Ses Tekrarı Soruları')"><span class="cat-title">Dört Ses Tekrarı Soruları</span><span class="cat-desc">İleri seviye akor çalışmaları.</span></div>
-                            <div class="cat-box" onclick="yetenekKategoriAc('Solfej Notaları')"><span class="cat-title">Solfej Notaları</span><span class="cat-desc">Deşifre ve okuma.</span></div>
-                            <div class="cat-box" onclick="yetenekKategoriAc('Ezgi Tekrarı Soruları')"><span class="cat-title">Ezgi Tekrarı Soruları</span><span class="cat-desc">Melodik hafıza çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Dikte Soruları')"><span class="cat-title" data-lang="cat_dictation">Dikte Soruları</span><span class="cat-desc" data-lang="desc_dictation">İşitme ve yazma çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Ritim Tekrarı Soruları')"><span class="cat-title" data-lang="cat_rhythm">Ritim Tekrarı Soruları</span><span class="cat-desc" data-lang="desc_rhythm">Ritim kulağını geliştirme.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Tek Ses Tekrarı Soruları')"><span class="cat-title" data-lang="cat_single_tone">Tek Ses Tekrarı Soruları</span><span class="cat-desc" data-lang="desc_single_tone">Tek ses duyma çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Çift Ses Tekrarı Soruları')"><span class="cat-title" data-lang="cat_double_tone">Çift Ses Tekrarı Soruları</span><span class="cat-desc" data-lang="desc_double_tone">İki ses duyma çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Üç Ses Tekrarı Soruları')"><span class="cat-title" data-lang="cat_triad">Üç Ses Tekrarı Soruları</span><span class="cat-desc" data-lang="desc_triad">Akor duyma çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Dört Ses Tekrarı Soruları')"><span class="cat-title" data-lang="cat_quad">Dört Ses Tekrarı Soruları</span><span class="cat-desc" data-lang="desc_quad">İleri seviye akor çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Solfej Notaları')"><span class="cat-title" data-lang="cat_solfege">Solfej Notaları</span><span class="cat-desc" data-lang="desc_solfege">Deşifre ve okuma.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Ezgi Tekrarı Soruları')"><span class="cat-title" data-lang="cat_melody">Ezgi Tekrarı Soruları</span><span class="cat-desc" data-lang="desc_melody">Melodik hafıza çalışmaları.</span></div>
                         </div>
                     </div>
 
                     <div id="exam-list-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2 id="exam-list-title">Çalışmalar</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;" data-lang="btn_back">← Geri</button>
                         </div>
                         <br>
                         <div id="exam-list-container" style="display: flex; flex-direction: column; gap: 10px;">
@@ -640,14 +725,14 @@
                     <div id="exam-detail-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2 id="exam-detail-title">Çalışma X</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Listeye Dön</button>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;" data-lang="btn_back_list">← Listeye Dön</button>
                         </div>
                         <div class="exam-detail-container">
-                            <p style="color:#888; margin-bottom:15px;">🎧 Dikte Kaydını Dinle:</p>
+                            <p style="color:#888; margin-bottom:15px;" data-lang="listen_dictation">🎧 Dikte Kaydını Dinle:</p>
                             <iframe id="exam-audio-player" src="" width="100%" height="150" style="border:none; border-radius: 10px;" allow="autoplay"></iframe>
                             
                             <div class="answer-key-btn" onclick="cevapGoster()">
-                                <i class="fas fa-eye"></i> CEVAP ANAHTARINI GÖRÜNTÜLE
+                                <i class="fas fa-eye"></i> <span data-lang="view_answer">CEVAP ANAHTARINI GÖRÜNTÜLE</span>
                             </div>
                             <input type="hidden" id="current-answer-img" value="">
                         </div>
@@ -670,10 +755,150 @@
             <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item"><i class="fab fa-spotify"></i></a>
             <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><i class="fab fa-youtube"></i></a>
         </div>
-        <p style="font-size: 0.8rem; color: #555;">© 2026 Mahmut Burak ASLANTAŞ.</p>
+        <p style="font-size: 0.8rem; color: #555;" data-lang="footer_rights">© 2026 Mahmut Burak ASLANTAŞ.</p>
     </footer>
 
    <script>
+        // --- DİL & ÇEVİRİ SİSTEMİ ---
+        const translations = {
+            tr: {
+                menu_home: "ANA SAYFA", menu_about: "HAKKINDA", menu_edu: "ONLINE EĞİTİM", menu_notes: "NOTALAR", menu_poems: "ŞİİRLER", menu_concerts: "KONSERLER",
+                portal_title: "ÖĞRENCİ PORTALI", ph_email: "E-posta Adresiniz", ph_pass: "Şifreniz", forgot_pass: "Şifremi Unuttum", btn_login: "GİRİŞ YAP",
+                btn_enter_portal: "ÖĞRENCİ PORTALINA GİRİŞ YAP", public_h2: "Neden Online Eğitim?",
+                feat_ai_title: "Yapay Zeka ile Eğitim", feat_ai_desc: "Yapay zeka destekli müzik öğretmeniniz BurakAI ile eğitimde yeni bir dönem. Bu teknolojiyi kullanmak ve derslerinize entegre etmek için aşağıdaki formu doldurarak ders paketlerimizi satın alabilirsiniz.",
+                feat_time_title: "Mesai Sonrası Sanat", feat_time_desc: "Çoğu kurs akşam 19:00'da kapılarını kapatır. Biz ise tam o saatlerde başlıyoruz. İşten eve döndüğünüzde, trafiğe girmeden ve kurs saatlerine yetişme stresi yaşamadan bağlamanızı elinize alın.",
+                feat_premium_title: "Premium Öğrenci Portalı", feat_premium_desc: "Bu bölümde, yalnızca kendinize özel verilen şifre ile erişebileceğiniz ders materyalleri yer almaktadır. Tüm içerikler, öğrenme sürecini desteklemek amacıyla sesli ve görsel materyallerle hazırlanmıştır. Materyaller düzenli olarak güncellenmekte ve seviyelere göre yapılandırılmaktadır.",
+                feat_comm_title: "Kesintisiz İletişim", feat_comm_desc: "Ders bittiğinde bağımız kopmaz, Dilediğiniz zaman WhatsApp üzerinden ödevlerinizi gönderip, kafanıza takılan soruları sorup, videolarınızı gönderebilirsiniz. Bu özelliğe sadece öğrenci portalı üzerinden erişim sağlayabilirsiniz.",
+                apply_title: "BAŞVURU FORMU", ph_name: "Ad Soyad", ph_phone: "Telefon Numaranız", ph_age: "Yaş (16+)", ph_job: "Meslek (Opsiyonel)", ph_level: "Mevcut Seviyeniz",
+                level_0: "Hiç Bilmiyorum", level_1: "Temel Seviye", level_2: "İleri Seviye", ph_goals: "Müzikal hedefleriniz...", btn_send: "GÖNDER",
+                badge_premium: "PREMIUM ÜYE", sb_home: "Ana Sayfa", sb_edu_title: "EĞİTİMLERİM", sb_baglama: "Bağlama Eğitimi", sb_exam: "Yetenek Sınavı Hazırlık",
+                sb_tools_title: "ARAÇLAR", sb_metro: "Metronom", sb_tuner: "Akort Cihazı", sb_live: "Canlı Ders", sb_ai: "BurakAI Hoca (beta)", sb_emergency: "Acil Durumlar İçin",
+                card_baglama_title: "BAĞLAMA EĞİTİMİ", card_baglama_desc: "Ders notları, notalar ve egzersizleri.",
+                card_ai_title: "BurakAI Hoca (beta)", badge_new: "YENİ", card_ai_desc1: "Yapay Zeka Entegrasyonlu İlk Müzik Eğitim Platformu.", card_ai_desc2: "7/24 Emrinizdeyim. Türkiye'de Bir İlk!",
+                card_exam_title: "YETENEK SINAVINA HAZIRLIK", card_exam_desc: "Konservatuvar, Müzik öğretmenliği ve GSL'ye hazırlık için öğretim materyalleri.",
+                card_live_title: "CANLI DERS", card_live_desc: "Sanal sınıfa bağlanarak canlı derse katılın.",
+                ai_header: "BurakAI Hoca", btn_back: "← Geri", btn_back_list: "← Listeye Dön", ai_intro: "Kafana takılan her şeyi sorabilirsin, ben senin için burdayım ciğerim.",
+                ai_welcome_msg: "Gel bakalım evladım, hoş geldin. Sazın kucağındaysa, gönlün de aşka hazırsa aşamayacağımız yokuş yok. 'Yorulduk' demek yok, 'yapamıyorum' demek yok. Ben senin her adımda yanındayım. Hadi bismillah diyelim, sor bakalım kafana takılan şey nedir?",
+                btn_remove: "Kaldır", ph_chat: "Bir soru sor...", metro_title: "Metronom", btn_start: "BAŞLAT", btn_stop: "DURDUR",
+                tuner_title: "Akort Cihazı", tuner_instr: "Başlamak için butona bas ve teline vur.", btn_tuner_start: "AKORTU BAŞLAT", btn_tuner_stop: "DURDUR",
+                short_neck: "KISA SAP", long_neck: "UZUN SAP", live_title: "Sanal Sınıf",
+                baglama_edu_title: "Bağlama Eğitimi", cat_theory: "Ders Notları (Teorik Bilgi)", desc_theory: "Müzik teorisi ve makamlar.",
+                cat_short: "Kısa Sap Türkü Notaları", desc_short: "Kısa sap repertuvarı.", cat_long: "Uzun Sap Türkü Notaları", desc_long: "Uzun sap icra teknikleri.",
+                cat_ex: "Parmak Egzersizleri", desc_ex: "Hız ve teknik geliştirici etütler.",
+                exam_prep_title: "Yetenek Sınavı Hazırlık", cat_dictation: "Dikte Soruları", desc_dictation: "İşitme ve yazma çalışmaları.",
+                cat_rhythm: "Ritim Tekrarı Soruları", desc_rhythm: "Ritim kulağını geliştirme.", cat_single_tone: "Tek Ses Tekrarı Soruları", desc_single_tone: "Tek ses duyma çalışmaları.",
+                cat_double_tone: "Çift Ses Tekrarı Soruları", desc_double_tone: "İki ses duyma çalışmaları.", cat_triad: "Üç Ses Tekrarı Soruları", desc_triad: "Akor duyma çalışmaları.",
+                cat_quad: "Dört Ses Tekrarı Soruları", desc_quad: "İleri seviye akor çalışmaları.", cat_solfege: "Solfej Notaları", desc_solfege: "Deşifre ve okuma.",
+                cat_melody: "Ezgi Tekrarı Soruları", desc_melody: "Melodik hafıza çalışmaları.",
+                listen_dictation: "🎧 Dikte Kaydını Dinle:", view_answer: "CEVAP ANAHTARINI GÖRÜNTÜLE", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ.",
+                
+                // JS İçin Dinamik Metinler
+                alert_video: "Video özelliği yakında gelecek aslan parçası. Şimdilik fotoğraf gönderebilirsin.",
+                js_tuner_stopped: "Akort cihazı durduruldu.", js_tuner_listening: "Mikrofon dinleniyor...",
+                js_login_empty: "Lütfen önce yukarıya e-posta adresini yaz.", js_reset_sending: "Sıfırlama bağlantısı gönderiliyor...", js_reset_sent: "E-postanı kontrol et! Sıfırlama linki gönderildi.",
+                js_user_not_found: "Bu e-posta adresi kayıtlı değil.", js_invalid_email: "Geçersiz e-posta formatı.", js_check_info: "Bilgiler kontrol ediliyor...",
+                js_login_success: "Giriş Başarılı! Yönlendiriliyorsun...", js_welcome: "Hoş Geldin, ", js_student: "ÖĞRENCİ", js_login_error: "E-posta veya şifre hatalı!",
+                js_error: "Hata oluştu.", js_no_material: "Bu kategoride henüz materyal bulunmuyor.", js_no_content: "Bu kategoride henüz içerik yok.", js_exercise: "Çalışma",
+                js_no_answer: "Cevap anahtarı bulunamadı.", js_mic_error: "Mikrofon erişim hatası! Lütfen izin verin.", js_ai_typing: "<em>Burak Hoca inceliyor... (Yazıyor)</em>",
+                js_ai_error: "Ağ Hatası (İnternetini kontrol et): "
+            },
+            en: {
+                menu_home: "HOME", menu_about: "ABOUT ME", menu_edu: "ONLINE LESSONS", menu_notes: "SHEET MUSIC", menu_poems: "POEMS", menu_concerts: "CONCERTS",
+                portal_title: "STUDENT PORTAL", ph_email: "Your Email Address", ph_pass: "Your Password", forgot_pass: "Forgot Password", btn_login: "LOGIN",
+                btn_enter_portal: "ENTER STUDENT PORTAL", public_h2: "Why Online Education?",
+                feat_ai_title: "AI-Powered Education", feat_ai_desc: "A new era in education with your AI-supported music teacher BurakAI. To use this technology and integrate it into your lessons, please fill out the form below to purchase our lesson packages.",
+                feat_time_title: "Art After Work", feat_time_desc: "Most courses close their doors at 19:00. We start exactly at those hours. Pick up your baglama when you return home from work, without getting into traffic and without the stress of catching up with course hours.",
+                feat_premium_title: "Premium Student Portal", feat_premium_desc: "In this section, there are course materials that you can access only with the password given specifically to you. All contents are prepared with audio and visual materials to support the learning process. Materials are regularly updated and structured according to levels.",
+                feat_comm_title: "Continuous Communication", feat_comm_desc: "Our bond does not break when the lesson ends. You can send your homework via WhatsApp, ask questions, and send your videos whenever you want. You can only access this feature through the student portal.",
+                apply_title: "APPLICATION FORM", ph_name: "Full Name", ph_phone: "Phone Number", ph_age: "Age (16+)", ph_job: "Profession (Optional)", ph_level: "Current Level",
+                level_0: "Total Beginner", level_1: "Basic Level", level_2: "Advanced Level", ph_goals: "Your musical goals...", btn_send: "SEND",
+                badge_premium: "PREMIUM MEMBER", sb_home: "Dashboard", sb_edu_title: "MY COURSES", sb_baglama: "Baglama Training", sb_exam: "Talent Exam Prep",
+                sb_tools_title: "TOOLS", sb_metro: "Metronome", sb_tuner: "Tuner", sb_live: "Live Class", sb_ai: "BurakAI Mentor (beta)", sb_emergency: "Emergency Contact",
+                card_baglama_title: "BAGLAMA TRAINING", card_baglama_desc: "Lecture notes, sheet music, and exercises.",
+                card_ai_title: "BurakAI Mentor (beta)", badge_new: "NEW", card_ai_desc1: "First AI Integrated Music Education Platform.", card_ai_desc2: "At your service 24/7. A first in Turkey!",
+                card_exam_title: "TALENT EXAM PREP", card_exam_desc: "Teaching materials for Conservatory, Music Teaching, and Fine Arts High School preparation.",
+                card_live_title: "LIVE CLASS", card_live_desc: "Join the live lesson by connecting to the virtual classroom.",
+                ai_header: "BurakAI Mentor", btn_back: "← Back", btn_back_list: "← Back to List", ai_intro: "You can ask me anything you're wondering about, I'm here for you.",
+                ai_welcome_msg: "Welcome, my child. If your instrument is in your lap and your heart is ready for love, there is no hill we cannot climb. No saying 'I'm tired', no saying 'I can't'. I am with you every step of the way. Let's start, ask me what's on your mind?",
+                btn_remove: "Remove", ph_chat: "Ask a question...", metro_title: "Metronome", btn_start: "START", btn_stop: "STOP",
+                tuner_title: "Instrument Tuner", tuner_instr: "Press the button and pluck your string to start.", btn_tuner_start: "START TUNER", btn_tuner_stop: "STOP",
+                short_neck: "SHORT NECK", long_neck: "LONG NECK", live_title: "Virtual Classroom",
+                baglama_edu_title: "Baglama Training", cat_theory: "Lecture Notes (Theory)", desc_theory: "Music theory and scales.",
+                cat_short: "Short Neck Folk Songs", desc_short: "Short neck repertoire.", cat_long: "Long Neck Folk Songs", desc_long: "Long neck performance techniques.",
+                cat_ex: "Finger Exercises", desc_ex: "Speed and technique development etudes.",
+                exam_prep_title: "Talent Exam Preparation", cat_dictation: "Dictation Questions", desc_dictation: "Hearing and writing exercises.",
+                cat_rhythm: "Rhythm Repetition", desc_rhythm: "Developing rhythmic ear.", cat_single_tone: "Single Tone Repetition", desc_single_tone: "Hearing single tones.",
+                cat_double_tone: "Double Tone Repetition", desc_double_tone: "Hearing two tones.", cat_triad: "Triad Repetition", desc_triad: "Hearing chords.",
+                cat_quad: "Quadrad Repetition", desc_quad: "Advanced chord exercises.", cat_solfege: "Solfege Notes", desc_solfege: "Sight-reading.",
+                cat_melody: "Melody Repetition", desc_melody: "Melodic memory exercises.",
+                listen_dictation: "🎧 Listen to Dictation:", view_answer: "VIEW ANSWER KEY", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved.",
+                
+                // JS Dynamic Texts
+                alert_video: "Video feature coming soon, champ. You can send photos for now.",
+                js_tuner_stopped: "Tuner stopped.", js_tuner_listening: "Listening to microphone...",
+                js_login_empty: "Please enter your email address above first.", js_reset_sending: "Sending reset link...", js_reset_sent: "Check your email! Reset link sent.",
+                js_user_not_found: "This email address is not registered.", js_invalid_email: "Invalid email format.", js_check_info: "Checking information...",
+                js_login_success: "Login Successful! Redirecting...", js_welcome: "Welcome, ", js_student: "STUDENT", js_login_error: "Incorrect email or password!",
+                js_error: "An error occurred.", js_no_material: "No materials available in this category yet.", js_no_content: "No content available in this category yet.", js_exercise: "Exercise",
+                js_no_answer: "Answer key not found.", js_mic_error: "Microphone access error! Please allow access.", js_ai_typing: "<em>BurakAI is analyzing... (Typing)</em>",
+                js_ai_error: "Network Error (Check your internet): "
+            }
+        };
+
+        let currentLang = localStorage.getItem("selectedLang") || "tr";
+        
+        function t(key) {
+            return translations[currentLang][key] || key;
+        }
+
+        function toggleLanguageMenu() {
+            document.getElementById("langDropdown").classList.toggle("active");
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem("selectedLang", lang);
+            document.getElementById("langDropdown").classList.remove("active");
+            
+            // 1. Static HTML Elements
+            document.querySelectorAll("[data-lang]").forEach(el => {
+                const key = el.getAttribute("data-lang");
+                if(translations[lang][key]) el.innerHTML = translations[lang][key]; // innerHTML for <strong> tags
+            });
+
+            // 2. Placeholders
+            document.querySelectorAll("[data-lang-placeholder]").forEach(el => {
+                const key = el.getAttribute("data-lang-placeholder");
+                if(translations[lang][key]) el.placeholder = translations[lang][key];
+            });
+
+            // 3. Dynamic Button States (Metronome/Tuner)
+            const tunerBtn = document.getElementById("tunerBtn");
+            const playBtn = document.getElementById("playBtn");
+            if(tunerBtn) {
+                 // Check if running to keep correct state text
+                 if(tunerBtn.classList.contains('tuner-btn-active')) {
+                     tunerBtn.innerHTML = `<i class="fas fa-stop"></i> ${t("btn_tuner_stop")}`;
+                     document.getElementById("tunerStatus").innerText = t("js_tuner_listening");
+                 } else {
+                     tunerBtn.innerHTML = `<i class="fas fa-microphone"></i> ${t("btn_tuner_start")}`;
+                     // If purely stopped, text handled by toggle function but initial state needs update
+                 }
+            }
+            if(playBtn) {
+                if(playBtn.classList.contains('playing')) {
+                    playBtn.innerHTML = `<i class="fas fa-stop"></i> ${t("btn_stop")}`;
+                } else {
+                    playBtn.innerHTML = `<i class="fas fa-play"></i> ${t("btn_start")}`;
+                }
+            }
+        }
+
+        // Initialize Language
+        document.addEventListener("DOMContentLoaded", () => {
+             if(currentLang === 'en') changeLanguage('en');
+        });
+
         // --- 1. DİKTE SES DOSYALARI ---
         const dikteVerileri = {
             1: "1CprU3vYtFIEZ0gRgReVEye4IHShh0y0_",
@@ -763,41 +988,75 @@
             else sayfaGoster('dashboard-view', false);
         };
 
+        // Translate Dynamic Item Names
+        function getTranslatedItemName(name) {
+            if(currentLang === 'tr') return name;
+            // Basic mapping for generic terms
+            if(name.startsWith("Alıştırma")) return name.replace("Alıştırma", "Exercise");
+            if(name.startsWith("4 Parmak Etüdü")) return name.replace("4 Parmak Etüdü", "4 Finger Etude");
+            if(name.startsWith("Temel Müzik Bilgileri")) return name.replace("Temel Müzik Bilgileri", "Basic Music Theory");
+            if(name.startsWith("Nota Süre")) return name.replace("Nota Süre", "Note Duration");
+            if(name.startsWith("Ders Notu")) return name.replace("Ders Notu", "Lecture Note");
+            if(name === "Bağlamanın Bölümleri") return "Parts of Baglama";
+            if(name === "Parmak Numaraları (Kısa Sap)") return "Finger Numbers (Short Neck)";
+            if(name === "Klavyede (Sapta) Notaların Yerleri") return "Note Positions on Neck";
+            if(name === "Basit Türküler") return "Simple Folk Songs";
+            return name; // Return proper nouns as is
+        }
+
+        // Translate Category Title Logic
+        const categoryMap = {
+            'Teorik Bilgi': 'cat_theory',
+            'Kısa Sap Notaları': 'cat_short',
+            'Uzun Sap Notaları': 'cat_long',
+            'Parmak Egzersizleri': 'cat_ex',
+            'Dikte Soruları': 'cat_dictation',
+            'Ritim Tekrarı Soruları': 'cat_rhythm',
+            'Tek Ses Tekrarı Soruları': 'cat_single_tone',
+            'Çift Ses Tekrarı Soruları': 'cat_double_tone',
+            'Üç Ses Tekrarı Soruları': 'cat_triad',
+            'Dört Ses Tekrarı Soruları': 'cat_quad',
+            'Solfej Notaları': 'cat_solfege',
+            'Ezgi Tekrarı Soruları': 'cat_melody'
+        };
+
         function materyalAc(kategori) {
-            document.getElementById("mat-category-title").innerText = kategori;
+            // Translate header
+            document.getElementById("mat-category-title").innerText = t(categoryMap[kategori] || 'materials');
+            
             const container = document.getElementById("materials-container");
             container.innerHTML = ""; 
 
             if (kategori === 'Teorik Bilgi') {
                 dersNotlariDosyalari.forEach(item => {
-                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./baglama-ders-teori/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-file-image" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${item.ad}</span></div>`;
+                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./baglama-ders-teori/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-file-image" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${getTranslatedItemName(item.ad)}</span></div>`;
                 });
             } else if (kategori === 'Kısa Sap Notaları') {
                 kisaSapNotalari.forEach(item => {
-                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./kisa-sap/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-music" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${item.ad}</span></div>`;
+                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./kisa-sap/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-music" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${getTranslatedItemName(item.ad)}</span></div>`;
                 });
             } else if (kategori === 'Parmak Egzersizleri') {
                 parmakEgzersizleri.forEach(item => {
-                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./parmak-egzersiz/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-hand-paper" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${item.ad}</span></div>`;
+                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./parmak-egzersiz/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-hand-paper" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${getTranslatedItemName(item.ad)}</span></div>`;
                 });
             } else {
-                container.innerHTML = "<p style='color:#888; padding: 20px;'>Bu kategoride henüz materyal bulunmuyor.</p>";
+                container.innerHTML = `<p style='color:#888; padding: 20px;'>${t('js_no_material')}</p>`;
             }
             sayfaGoster("materials-view");
         }
 
         function yetenekKategoriAc(kategoriAdi) {
-            document.getElementById("exam-list-title").innerText = kategoriAdi;
+            document.getElementById("exam-list-title").innerText = t(categoryMap[kategoriAdi] || 'exam_prep');
             const listeContainer = document.getElementById("exam-list-container");
             listeContainer.innerHTML = "";
             if (kategoriAdi === "Dikte Soruları") {
                 for (let i = 1; i <= 22; i++) {
                     if (i === 18) continue;
                     let driveId = dikteVerileri[i] || ""; 
-                    listeContainer.innerHTML += `<div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', 'Çalışma ${i}')"><span style="color:#fff; font-weight:500;">Çalışma ${i}</span><i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i></div>`;
+                    listeContainer.innerHTML += `<div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', '${t("js_exercise")} ${i}')"><span style="color:#fff; font-weight:500;">${t("js_exercise")} ${i}</span><i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i></div>`;
                 }
             } else {
-                listeContainer.innerHTML = "<p style='color:#888;'>Bu kategoride henüz içerik yok.</p>";
+                listeContainer.innerHTML = `<p style='color:#888;'>${t('js_no_content')}</p>`;
             }
             sayfaGoster("exam-list-view");
         }
@@ -820,10 +1079,11 @@
             if(link) {
                 resimGosterModal(link);
             } else {
-                alert("Cevap anahtarı bulunamadı.");
+                alert(t("js_no_answer"));
             }
         }
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
+        function alertVideoFeature() { alert(t("alert_video")); }
 
         function startLiveClass() {
             const domain = 'meet.jit.si';
@@ -832,7 +1092,7 @@
                 width: '100%',
                 height: 600,
                 parentNode: document.querySelector('#meet-frame'),
-                lang: 'tr',
+                lang: currentLang, // Set Jitsi lang based on current lang
                 configOverwrite: { 
                     startWithAudioMuted: true,
                     prejoinPageEnabled: false
@@ -846,7 +1106,7 @@
             sayfaGoster('live-class-view');
         }
 
-        // --- PROFİL FOTOĞRAFI YÜKLEME (GÜNCELLENMİŞ SIKIŞTIRMALI VERSİYON) ---
+        // --- PROFİL FOTOĞRAFI YÜKLEME ---
         function saveProfilePhoto(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
@@ -895,7 +1155,7 @@
             }
         }
 
-        // --- CHAT VE BURAKAI (BUG FİXLENDİ) ---
+        // --- CHAT VE BURAKAI ---
         let selectedImageBase64 = null;
         let lastAiResponse = "";
 
@@ -904,7 +1164,7 @@
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel(); 
                 let ses = new SpeechSynthesisUtterance(temizMetin);
-                ses.lang = 'tr-TR';
+                ses.lang = (currentLang === 'en') ? 'en-US' : 'tr-TR';
                 ses.rate = 1.0; 
                 window.speechSynthesis.speak(ses);
             }
@@ -1011,17 +1271,21 @@
             const loadingBubble = document.createElement("div");
             loadingBubble.className = "chat-message ai";
             loadingBubble.id = "loadingBubble";
-            loadingBubble.innerHTML = "<em>Burak Hoca inceliyor... (Yazıyor)</em>";
+            loadingBubble.innerHTML = t("js_ai_typing");
             box.appendChild(loadingBubble);
             box.scrollTop = box.scrollHeight;
 
             try {
+                // Determine system prompt language based on user selection
+                const systemLang = currentLang === 'en' ? 'en' : 'tr';
+                
                 const response = await fetch('https://baglamagram.vercel.app/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         message: msgText || "Şu gönderdiğim görsele bir bak hocam.", 
-                        image: imageToSend 
+                        image: imageToSend,
+                        language: systemLang // Pass language to backend if backend supports it, otherwise prompt engineering needed
                     })
                 });
 
@@ -1042,19 +1306,19 @@
                 
                 lastAiResponse = data.reply;
 
-                aiMsg.innerHTML = "<strong style='color: var(--accent); font-family: \"Playfair Display\", serif;'>BurakAI Hoca:</strong><br>" + (data.reply ? data.reply.replace(/\n/g, "<br>") : "Cevap boş geldi.");
+                aiMsg.innerHTML = `<strong style='color: var(--accent); font-family: "Playfair Display", serif;'>BurakAI Hoca:</strong><br>` + (data.reply ? data.reply.replace(/\n/g, "<br>") : "Cevap boş geldi.");
                 box.appendChild(aiMsg);
 
             } catch (err) {
                 const bubble = document.getElementById("loadingBubble");
-                if(bubble) bubble.innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
+                if(bubble) bubble.innerHTML = t("js_ai_error") + err.message;
                 console.error(err);
             }
             
             box.scrollTop = box.scrollHeight;
         }
 
-        // --- METRONOM MANTIĞI (BUG FİXLENDİ) ---
+        // --- METRONOM MANTIĞI ---
         let audioCtx = null;
         let isPlaying = false;
         let tempo = 100;
@@ -1109,14 +1373,14 @@
             if (isPlaying) {
                 isPlaying = false;
                 clearTimeout(timerID);
-                btn.innerHTML = '<i class="fas fa-play"></i> BAŞLAT';
+                btn.innerHTML = `<i class="fas fa-play"></i> ${t("btn_start")}`;
                 btn.classList.remove('playing');
                 resetVisuals();
             } else {
                 if (!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 }
-                // Browser politikası gereği resume gerekebilir
+                
                 if(audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
@@ -1125,7 +1389,7 @@
                 currentBeat = 0;
                 nextNoteTime = audioCtx.currentTime + 0.05;
                 scheduler();
-                btn.innerHTML = '<i class="fas fa-stop"></i> DURDUR';
+                btn.innerHTML = `<i class="fas fa-stop"></i> ${t("btn_stop")}`;
                 btn.classList.add('playing');
             }
         }
@@ -1173,7 +1437,7 @@
             document.querySelectorAll('.beat-dot').forEach(d => d.classList.remove('active'));
         }
 
-        // --- AKORT CİHAZI (TUNER) MANTIĞI (BUG FİXLENDİ) ---
+        // --- AKORT CİHAZI (TUNER) MANTIĞI ---
         let tunerAudioCtx = null;
         let analyser = null;
         let rafID = null;
@@ -1194,17 +1458,17 @@
                 if(tunerAudioCtx) tunerAudioCtx.suspend();
                 if(mediaStreamSource) mediaStreamSource.disconnect();
                 
-                btn.innerHTML = '<i class="fas fa-microphone"></i> AKORTU BAŞLAT';
+                btn.innerHTML = `<i class="fas fa-microphone"></i> ${t("btn_tuner_start")}`;
                 btn.classList.remove('tuner-btn-active');
-                status.innerText = "Akort cihazı durduruldu.";
+                status.innerText = t("js_tuner_stopped");
                 status.style.color = "#888";
                 
                 drawGauge(0, false); 
             } else {
                 startTuner();
-                btn.innerHTML = '<i class="fas fa-stop"></i> DURDUR';
+                btn.innerHTML = `<i class="fas fa-stop"></i> ${t("btn_tuner_stop")}`;
                 btn.classList.add('tuner-btn-active');
-                status.innerText = "Mikrofon dinleniyor...";
+                status.innerText = t("js_tuner_listening");
                 status.style.color = "var(--yellow-portal)";
             }
         }
@@ -1227,7 +1491,7 @@
                 updatePitch();
             } catch (err) {
                 console.error(err);
-                alert("Mikrofon erişim hatası! Lütfen izin verin.");
+                alert(t("js_mic_error"));
                 toggleTuner();
             }
         }
@@ -1440,27 +1704,27 @@
 
       if (!email) {
           status.style.color = "orange";
-          status.innerText = "Lütfen önce yukarıya e-posta adresini yaz.";
+          status.innerText = t("js_login_empty");
           return;
       }
 
       status.style.color = "yellow";
-      status.innerText = "Sıfırlama bağlantısı gönderiliyor...";
+      status.innerText = t("js_reset_sending");
 
       sendPasswordResetEmail(auth, email)
         .then(() => {
             status.style.color = "#4CAF50"; // Yeşil
-            status.innerText = "E-postanı kontrol et! Sıfırlama linki gönderildi.";
+            status.innerText = t("js_reset_sent");
         })
         .catch((error) => {
             status.style.color = "#ff4d4d"; // Kırmızı
             console.error(error);
             if (error.code === "auth/user-not-found") {
-                status.innerText = "Bu e-posta adresi kayıtlı değil.";
+                status.innerText = t("js_user_not_found");
             } else if (error.code === "auth/invalid-email") {
-                status.innerText = "Geçersiz e-posta formatı.";
+                status.innerText = t("js_invalid_email");
             } else {
-                status.innerText = "Hata: " + error.code;
+                status.innerText = t("js_error") + ": " + error.code;
             }
         });
   }
@@ -1529,12 +1793,12 @@
           const status = document.getElementById('loginStatus');
 
           status.style.color = "yellow";
-          status.innerText = "Bilgiler kontrol ediliyor...";
+          status.innerText = t("js_check_info");
 
           signInWithEmailAndPassword(auth, email, pass)
             .then((userCredential) => {
                 status.style.color = "#4CAF50"; 
-                status.innerText = "Giriş Başarılı! Yönlendiriliyorsun...";
+                status.innerText = t("js_login_success");
 
                 const girisYapanMail = userCredential.user.email;
                 const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
@@ -1556,12 +1820,12 @@
                         const gercekSoyad = sifreCo(ogrenci.soyad);
                         document.getElementById("displayAd").innerText = gercekAd;
                         document.getElementById("displaySoyad").innerText = gercekSoyad;
-                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + gercekAd + "!";
+                        document.getElementById("welcomeTitle").innerText = t("js_welcome") + gercekAd + "!";
                     } else {
                         const varsayilanAd = girisYapanMail.split('@')[0];
                         document.getElementById("displayAd").innerText = varsayilanAd;
-                        document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
-                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
+                        document.getElementById("displaySoyad").innerText = t("js_student");
+                        document.getElementById("welcomeTitle").innerText = t("js_welcome") + "!";
                     }
 
                     // FOTOĞRAFI VERİTABANINDAN ÇEK
@@ -1583,15 +1847,14 @@
                 status.style.color = "#ff4d4d";
                 console.error(error);
                 if (error.code === "auth/invalid-credential") {
-                    status.innerText = "E-posta veya şifre hatalı!";
+                    status.innerText = t("js_login_error");
                 } else {
-                    status.innerText = "Hata oluştu.";
+                    status.innerText = t("js_error");
                 }
             });
       });
   }
 </script>
-</script>
-    
+   
 </body>
 </html>
