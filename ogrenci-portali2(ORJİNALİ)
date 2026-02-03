@@ -51,6 +51,72 @@
                               radial-gradient(circle at 90% 80%, rgba(157, 78, 221, 0.05) 0%, transparent 20%);
         }
 
+        /* --- DİL SEÇİCİ STİLLERİ --- */
+        .language-wrapper {
+            position: fixed;
+            top: 25px;
+            left: 30px; 
+            z-index: 1100;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .lang-btn {
+            background: rgba(0, 0, 0, 0.6); 
+            border: 1px solid var(--accent);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .lang-btn:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
+        }
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 120%;
+            left: 0; 
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 140px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .lang-dropdown a {
+            display: block;
+            padding: 12px 15px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lang-dropdown a:last-child { border-bottom: none; }
+        .lang-dropdown a:hover {
+            background: var(--accent);
+            color: #000;
+        }
+        .lang-dropdown.active {
+            display: block;
+            animation: fadeInDrop 0.3s ease;
+        }
+        @keyframes fadeInDrop {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* --- MENÜ --- */
         nav { background: rgba(0, 0, 0, 0.95); padding: 20px 0; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(197, 160, 89, 0.2); }
         .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
@@ -275,18 +341,32 @@
 </head>
 <body>
 
+    <div class="language-wrapper">
+        <button class="lang-btn" onclick="toggleLanguageMenu()">
+            <i class="fas fa-globe"></i> <span id="lang-label">LANGUAGE</span>
+        </button>
+        
+        <div class="lang-dropdown" id="langDropdown">
+            <a href="javascript:void(0)" onclick="changeLanguage('tr')">🇹🇷 Türkçe</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('en')">🇬🇧 English</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('lt')">🇱🇹 Lietuvių</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('de')">🇩🇪 Deutsch</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('ru')">🇷🇺 Русский</a>
+        </div>
+    </div>
+
     <nav>
         <div class="nav-container">
             <div class="menu-toggle" onclick="menuyuAcKapa()">
                 <i class="fas fa-bars"></i>
             </div>
             <ul id="anaMenu">
-                <li><a href="index.html">ANA SAYFA</a></li>
-                <li><a href="hakkinda.html">HAKKINDA</a></li>
-                <li><a href="online-egitim.html" class="active">ONLINE EĞİTİM</a></li>
-                <li><a href="notalar.html">NOTALAR</a></li>
-                <li><a href="siirler.html">ŞİİRLER</a></li>
-                <li><a href="konserler.html">KONSERLER</a></li>
+                <li><a href="index.html" data-translate="nav_home">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html" data-translate="nav_about">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" class="active" data-translate="nav_edu">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html" data-translate="nav_notes">NOTALAR</a></li>
+                <li><a href="siirler.html" data-translate="nav_poems">ŞİİRLER</a></li>
+                <li><a href="konserler.html" data-translate="nav_concerts">KONSERLER</a></li>
             </ul>
         </div>
     </nav>
@@ -295,19 +375,19 @@
         
   <div class="login-box">
     <span class="close-login" onclick="girisKapat()">×</span>
-    <h3 style="color: var(--accent); margin-bottom: 20px;">ÖĞRENCİ PORTALI</h3>
+    <h3 style="color: var(--accent); margin-bottom: 20px;" data-translate="portal_title">ÖĞRENCİ PORTALI</h3>
     
-    <input type="email" id="emailInput" placeholder="E-posta Adresiniz" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    <input type="email" id="emailInput" data-translate-placeholder="login_email_placeholder" placeholder="E-posta Adresiniz" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
     
-    <input type="password" id="passwordInput" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    <input type="password" id="passwordInput" data-translate-placeholder="login_pass_placeholder" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
     
     <div style="text-align: right; margin-bottom: 20px;">
-        <span onclick="sifreSifirla()" style="color: #bbb; cursor: pointer; font-size: 0.85rem; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#bbb'">
+        <span onclick="sifreSifirla()" style="color: #bbb; cursor: pointer; font-size: 0.85rem; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#bbb'" data-translate="login_forgot_pass">
             Şifremi Unuttum
         </span>
     </div>
 
-    <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;">GİRİŞ YAP</button>
+    <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;" data-translate="login_btn">GİRİŞ YAP</button>
     
     <p id="loginStatus" style="margin-top: 15px; font-size: 0.9rem; min-height: 20px;"></p>
 </div>
@@ -322,7 +402,7 @@
                     <i class="fas fa-laptop"></i>
                     <i class="fas fa-music"></i>
                 </div>
-                ÖĞRENCİ PORTALINA GİRİŞ YAP
+                <span data-translate="portal_login_btn">ÖĞRENCİ PORTALINA GİRİŞ YAP</span>
             </button>
         </div>
 
@@ -376,43 +456,43 @@
                         <div class="user-name" id="displaySoyad" style="text-transform: uppercase;">SOYAD</div>
                         
                         
-                        <div class="premium-badge">PREMIUM ÜYE</div>
+                        <div class="premium-badge" data-translate="portal_premium_badge">PREMIUM ÜYE</div>
                     </div>
 
                     <div class="menu-links">
                         <a onclick="sayfaGoster('dashboard-view')" class="menu-link active">
-                            <i class="fas fa-home"></i> <span>Ana Sayfa</span>
+                            <i class="fas fa-home"></i> <span data-translate="portal_menu_home">Ana Sayfa</span>
                         </a>
                         <br>
-                        <div style="color: #666; font-size: 0.8rem; margin-bottom: 5px; padding-left: 12px;" class="menu-title">EĞİTİMLERİM</div>
+                        <div style="color: #666; font-size: 0.8rem; margin-bottom: 5px; padding-left: 12px;" class="menu-title" data-translate="portal_menu_edu_title">EĞİTİMLERİM</div>
                         <a onclick="sayfaGoster('baglama-menu-view')" class="menu-link">
-                            <i class="fas fa-music"></i> <span>Bağlama Eğitimi</span>
+                            <i class="fas fa-music"></i> <span data-translate="portal_menu_baglama">Bağlama Eğitimi</span>
                         </a>
                         <a onclick="sayfaGoster('exam-categories-view')" class="menu-link">
-                            <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
+                            <i class="fas fa-edit"></i> <span data-translate="portal_menu_exam">Yetenek Sınavı Hazırlık</span>
                         </a>
                         <a onclick="sayfaGoster('fun-learning-view')" class="menu-link">
-                            <i class="fas fa-gamepad"></i> <span>Eğlenerek Öğren</span>
+                            <i class="fas fa-gamepad"></i> <span data-translate="portal_menu_fun">Eğlenerek Öğren</span>
                         </a>
                         
-                        <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title">ARAÇLAR</div>
+                        <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title" data-translate="portal_menu_tools_title">ARAÇLAR</div>
                         <a onclick="sayfaGoster('metronome-view')" class="menu-link">
-                            <i class="fas fa-stopwatch"></i> <span>Metronom</span>
+                            <i class="fas fa-stopwatch"></i> <span data-translate="portal_menu_metronome">Metronom</span>
                         </a>
                         <a onclick="sayfaGoster('tuner-view')" class="menu-link">
-                            <i class="fas fa-microphone-lines"></i> <span>Akort Cihazı</span>
+                            <i class="fas fa-microphone-lines"></i> <span data-translate="portal_menu_tuner">Akort Cihazı</span>
                         </a>
 
                         <a onclick="startLiveClass()" class="menu-link">
-                             <i class="fas fa-video"></i> <span>Canlı Ders</span>
+                             <i class="fas fa-video"></i> <span data-translate="portal_menu_live">Canlı Ders</span>
                         </a>
                         <a onclick="sayfaGoster('ai-mentor-view')" class="menu-link" style="color: var(--accent);">
-                            <i class="fas fa-robot"></i> <span>BurakAI Hoca (beta)</span>
+                            <i class="fas fa-robot"></i> <span data-translate="portal_menu_ai">BurakAI Hoca (beta)</span>
                         </a>
                     </div>
 
                     <a href="https://wa.me/905335060921" target="_blank" class="whatsapp-sidebar-btn">
-                        <i class="fab fa-whatsapp"></i> <span>Soru Sor / Ödev Gönder</span>
+                        <i class="fab fa-whatsapp"></i> <span data-translate="portal_menu_whatsapp">Soru Sor / Ödev Gönder</span>
                     </a>
                 </div>
 
@@ -420,46 +500,46 @@
                     
                     <div id="dashboard-view" class="view-section active">
                         <div class="dashboard-header">
-                            <h1 id="welcomeTitle">Merhaba!</h1>
+                            <h1 id="welcomeTitle" data-translate="portal_welcome">Merhaba!</h1>
                         </div>
                         <br>
                         <div class="dashboard-grid">
                             <div class="dash-card" onclick="sayfaGoster('baglama-menu-view')">
                                 <img src="baglama-ikon.png" class="custom-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'">
                                 <i class="fas fa-music" style="display:none; font-size:3rem; color:var(--yellow-portal); margin-bottom:20px;"></i>
-                                <h3>BAĞLAMA EĞİTİMİ</h3>
-                                <p>Ders notları, notalar ve egzersizler.</p>
+                                <h3 data-translate="portal_menu_baglama">BAĞLAMA EĞİTİMİ</h3>
+                                <p data-translate="portal_card_baglama_desc">Ders notları, notalar ve egzersizler.</p>
                             </div>
 
                             <div class="dash-card ai-card" onclick="sayfaGoster('ai-mentor-view')">
                                 <span class="ai-badge">YENİ</span>
                                 <i class="fas fa-robot"></i>
-                                <h3>BurakAI Hoca (beta)</h3>
+                                <h3 data-translate="portal_menu_ai">BurakAI Hoca (beta)</h3>
                                 <p style="font-size: 0.9rem; opacity: 0.9;">Yapay Zeka Entegrasyonlu İlk Müzik Eğitim Platformu.</p>
                                 <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px;">İcranı yükle, anında yorumla.</p>
                             </div>
 
                             <div class="dash-card" onclick="sayfaGoster('exam-categories-view')">
                                 <i class="fas fa-graduation-cap"></i>
-                                <h3>YETENEK SINAVI HAZIRLIK</h3>
+                                <h3 data-translate="portal_menu_exam">YETENEK SINAVI HAZIRLIK</h3>
                                 <p>Dikte çalışmaları, soru çözümleri.</p>
                             </div>
                             
                             <div class="dash-card" onclick="sayfaGoster('fun-learning-view')">
                                 <i class="fas fa-gamepad"></i>
-                                <h3>EĞLENEREK ÖĞREN</h3>
+                                <h3 data-translate="portal_menu_fun">EĞLENEREK ÖĞREN</h3>
                                 <p>Bilgi yarışması ve eğitici oyunlar.</p>
                             </div>
 
                             <div class="dash-card live-class-card" onclick="startLiveClass()">
                                 <i class="fas fa-video"></i>
-                                <h3>CANLI DERS</h3>
+                                <h3 data-translate="portal_menu_live">CANLI DERS</h3>
                                 <p>Sanal sınıfa bağlanarak canlı derse katılın.</p>
                             </div>
 
                             <div class="dash-card" onclick="sayfaGoster('tools-menu-view')">
                                 <i class="fas fa-tools"></i>
-                                <h3>ARAÇLAR</h3>
+                                <h3 data-translate="portal_menu_tools_title">ARAÇLAR</h3>
                                 <p>Metronom, Akort Cihazı.</p>
                             </div>
                         </div>
@@ -468,7 +548,7 @@
                     <div id="ai-mentor-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2 style="font-family: 'Playfair Display', serif; color: var(--accent); letter-spacing: 1px;">BurakAI Hoca</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← Geri</button>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
                         <p style="color: #bbb; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Kafana takılan her şeyi sorabilirsin, ben senin için burdayım ciğerim.</p>
                         
@@ -508,8 +588,8 @@
 
                     <div id="metronome-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Metronom</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-translate="portal_menu_metronome">Metronom</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
 
                         <div class="metronome-container">
@@ -554,8 +634,8 @@
                     </div>
                     <div id="tuner-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Akort Cihazı</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-translate="portal_menu_tuner">Akort Cihazı</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
 
                         <div class="tuner-container">
@@ -599,8 +679,8 @@
                     
                     <div id="live-class-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Sanal Sınıf</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← Geri</button>
+                            <h2 data-translate="portal_menu_live">Sanal Sınıf</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
                         
                         <div style="width: 100%; height: 600px; border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); background: #000;">
@@ -616,8 +696,8 @@
 
                     <div id="baglama-menu-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Bağlama Eğitimi</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-translate="portal_menu_baglama">Bağlama Eğitimi</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
                         <br>
                         <div class="category-grid">
@@ -631,7 +711,7 @@
                     <div id="materials-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2 id="mat-category-title">Materyaller</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
                         <div class="materials-grid" id="materials-container">
                             </div>
@@ -639,8 +719,8 @@
 
                     <div id="exam-categories-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Yetenek Sınavı Hazırlık</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-translate="portal_menu_exam">Yetenek Sınavı Hazırlık</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
                         <br>
                         <div class="category-grid">
@@ -657,8 +737,8 @@
                     
                     <div id="fun-learning-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Eğlenerek Öğren</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-translate="portal_menu_fun">Eğlenerek Öğren</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
                         <br>
                         <div class="category-grid">
@@ -672,16 +752,16 @@
                             </div>
                             <div class="cat-box" onclick="sayfaGoster('ear-training-view')">
                                 <span class="cat-title">Mutlak Duyum Testi ve Kulak Egzersizi</span>
-                                <span class="cat-desc">Bu oyun, kulağının ne kadar keskin olduğunu ölçmek için tasarlandı. Bu oyunda kazanmak veya kaybetmek yok; çalıştıkça gelişen bir kulak var.</span>
+                                <span class="cat-desc">Bu oyun, kulağının ne kadar keskin olduğunu ölçmek için tasarlandı. Dinle ve Cevapla! Bu oyunda kazanmak veya kaybetmek yok; çalıştıkça gelişen bir kulak var. Ne kadar çok denersen, sesler o kadar netleşir.</span>
                             </div>
                             
                             <div class="cat-box" onclick="sayfaGoster('tsm-game-view')">
-                                <span class="cat-title">TSM Bilgi Yarışması</span>
-                                <span class="cat-desc">Türk Sanat Müziği makam ve usul bilginizi ölçün. Teoriye ve türk müziği kültürüne hakimiyetinizi kanıtlayın!</span>
+                                <span class="cat-title" data-translate="tsm_game_title">TSM Bilgi Yarışması</span>
+                                <span class="cat-desc" data-translate="tsm_game_desc">Türk Sanat Müziği makam ve usul bilginizi ölçün.</span>
                             </div>
                             <div class="cat-box" onclick="sayfaGoster('nota-yagmuru-view')">
-                                <span class="cat-title">Nota Yağmuru</span>
-                                <span class="cat-desc">Notaları doğru zamanda yakalayarak reflekslerinizi geliştirin. (8 yaş üzeri)</span>
+                                <span class="cat-title" data-translate="nota_rain_title">Nota Yağmuru</span>
+                                <span class="cat-desc" data-translate="nota_rain_desc">Notaları doğru zamanda yakalayarak reflekslerinizi geliştirin.</span>
                             </div>
                             </div>
                     </div>
@@ -693,7 +773,7 @@
                                 <button onclick="tamEkranYap('quiz-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
                                     <i class="fas fa-expand"></i> Tam Ekran
                                 </button>
-                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Çıkış</span></button>
                             </div>
                         </div>
                         
@@ -710,7 +790,7 @@
                     <div id="exam-list-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2 id="exam-list-title">Çalışmalar</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
                         <br>
                         <div id="exam-list-container" style="display: flex; flex-direction: column; gap: 10px;">
@@ -740,7 +820,7 @@
                                 <button onclick="tamEkranYap('memory-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
                                     <i class="fas fa-expand"></i> Tam Ekran
                                 </button>
-                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Çıkış</span></button>
                             </div>
                         </div>
                         
@@ -756,17 +836,17 @@
 
                     <div id="tools-menu-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Araçlar</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                            <h2 data-translate="portal_menu_tools_title">Araçlar</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Geri</span></button>
                         </div>
                         <br>
                         <div class="category-grid">
                             <div class="cat-box" onclick="sayfaGoster('metronome-view')">
-                                <span class="cat-title">Metronom</span>
+                                <span class="cat-title" data-translate="portal_menu_metronome">Metronom</span>
                                 <span class="cat-desc">Ritim çalışmaları için.</span>
                             </div>
                             <div class="cat-box" onclick="sayfaGoster('tuner-view')">
-                                <span class="cat-title">Akort Cihazı</span>
+                                <span class="cat-title" data-translate="portal_menu_tuner">Akort Cihazı</span>
                                 <span class="cat-desc">Enstrümanınızı akort edin.</span>
                             </div>
                         </div>
@@ -779,7 +859,7 @@
                                 <button onclick="tamEkranYap('ear-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
                                     <i class="fas fa-expand"></i> Tam Ekran
                                 </button>
-                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Çıkış</span></button>
                             </div>
                         </div>
                         
@@ -795,12 +875,12 @@
 
                     <div id="tsm-game-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>TSM Bilgi Yarışması</h2>
+                            <h2 data-translate="tsm_game_title">TSM Bilgi Yarışması</h2>
                             <div>
                                 <button onclick="tamEkranYap('tsm-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
                                     <i class="fas fa-expand"></i> Tam Ekran
                                 </button>
-                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Çıkış</span></button>
                             </div>
                         </div>
                         
@@ -816,12 +896,12 @@
 
                     <div id="nota-yagmuru-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Nota Yağmuru</h2>
+                            <h2 data-translate="nota_rain_title">Nota Yağmuru</h2>
                             <div>
                                 <button onclick="tamEkranYap('nota-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
                                     <i class="fas fa-expand"></i> Tam Ekran
                                 </button>
-                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Çıkış</span></button>
                             </div>
                         </div>
                         
@@ -944,8 +1024,21 @@
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function girisAc() { document.getElementById("login-overlay").style.display = "flex"; }
         function girisKapat() { document.getElementById("login-overlay").style.display = "none"; }
+        function toggleLanguageMenu() { document.getElementById("langDropdown").classList.toggle("active"); }
 
         function sayfaGoster(id, addToHistory = true) {
+            // --- SES DURDURMA EKLEMESİ ---
+            // Aktif olan sayfadaki iframe'i bul ve yenile (sesi keser)
+            const currentActive = document.querySelector(".view-section.active");
+            if(currentActive) {
+                const iframe = currentActive.querySelector("iframe");
+                if(iframe) {
+                    // Iframe'i yeniden yükleyerek oyunu ve sesi sıfırla
+                    iframe.src = iframe.src;
+                }
+            }
+            // -----------------------------
+
             document.querySelectorAll(".view-section").forEach(s => s.classList.remove("active"));
             document.getElementById(id).classList.add("active");
             if(addToHistory) history.pushState({view: id}, "", "#" + id.replace("-view", ""));
@@ -1780,6 +1873,218 @@
       });
   }
 </script>
+
+<script>
+    // --- DİL DEĞİŞTİRME MEKANİZMASI ---
+    const translations = {
+        'tr': {
+            'lang_label': 'DİL',
+            'nav_home': 'ANA SAYFA',
+            'nav_about': 'HAKKINDA',
+            'nav_edu': 'ONLINE EĞİTİM',
+            'nav_notes': 'NOTALAR',
+            'nav_poems': 'ŞİİRLER',
+            'nav_concerts': 'KONSERLER',
+            'portal_login_btn': 'ÖĞRENCİ PORTALINA GİRİŞ YAP',
+            'portal_title': 'ÖĞRENCİ PORTALI',
+            'login_email_placeholder': 'E-posta Adresiniz',
+            'login_pass_placeholder': 'Şifreniz',
+            'login_forgot_pass': 'Şifremi Unuttum',
+            'login_btn': 'GİRİŞ YAP',
+            'portal_premium_badge': 'PREMIUM ÜYE',
+            'portal_menu_home': 'Ana Sayfa',
+            'portal_menu_edu_title': 'EĞİTİMLERİM',
+            'portal_menu_baglama': 'Bağlama Eğitimi',
+            'portal_menu_exam': 'Yetenek Sınavı Hazırlık',
+            'portal_menu_fun': 'Eğlenerek Öğren',
+            'portal_menu_tools_title': 'ARAÇLAR',
+            'portal_menu_metronome': 'Metronom',
+            'portal_menu_tuner': 'Akort Cihazı',
+            'portal_menu_live': 'Canlı Ders',
+            'portal_menu_ai': 'BurakAI Hoca (beta)',
+            'portal_menu_whatsapp': 'Soru Sor / Ödev Gönder',
+            'portal_welcome': 'Merhaba!',
+            'portal_card_baglama_desc': 'Ders notları, notalar ve egzersizler.',
+            'tsm_game_title': 'TSM BİLGİ YARIŞMASI',
+            'tsm_game_desc': 'Makam ve usul bilginizi test edin.',
+            'nota_rain_title': 'NOTA YAĞMURU',
+            'nota_rain_desc': 'Hızınızı ve reflekslerinizi ölçün.',
+            'back_btn': 'Geri'
+        },
+        'en': {
+            'lang_label': 'LANGUAGE',
+            'nav_home': 'HOME',
+            'nav_about': 'ABOUT',
+            'nav_edu': 'ONLINE EDUCATION',
+            'nav_notes': 'SHEET MUSIC',
+            'nav_poems': 'POEMS',
+            'nav_concerts': 'CONCERTS',
+            'portal_login_btn': 'LOGIN TO STUDENT PORTAL',
+            'portal_title': 'STUDENT PORTAL',
+            'login_email_placeholder': 'Your Email Address',
+            'login_pass_placeholder': 'Your Password',
+            'login_forgot_pass': 'Forgot Password',
+            'login_btn': 'LOGIN',
+            'portal_premium_badge': 'PREMIUM MEMBER',
+            'portal_menu_home': 'Dashboard',
+            'portal_menu_edu_title': 'MY COURSES',
+            'portal_menu_baglama': 'Baglama Training',
+            'portal_menu_exam': 'Aptitude Exam Prep',
+            'portal_menu_fun': 'Learn with Fun',
+            'portal_menu_tools_title': 'TOOLS',
+            'portal_menu_metronome': 'Metronome',
+            'portal_menu_tuner': 'Tuner',
+            'portal_menu_live': 'Live Class',
+            'portal_menu_ai': 'BurakAI Mentor (beta)',
+            'portal_menu_whatsapp': 'Ask Question / Send Homework',
+            'portal_welcome': 'Hello!',
+            'portal_card_baglama_desc': 'Lecture notes, sheet music, and exercises.',
+            'tsm_game_title': 'TSM QUIZ',
+            'tsm_game_desc': 'Test your knowledge of Makam and Usul.',
+            'nota_rain_title': 'NOTE RAIN',
+            'nota_rain_desc': 'Test your speed and reflexes.',
+            'back_btn': 'Back'
+        },
+        'lt': {
+            'lang_label': 'KALBA',
+            'nav_home': 'PAGRINDINIS',
+            'nav_about': 'APIE',
+            'nav_edu': 'MOKYMAI INTERNETU',
+            'nav_notes': 'NATOS',
+            'nav_poems': 'EILĖRAŠČIAI',
+            'nav_concerts': 'KONCERTAI',
+            'portal_login_btn': 'PRISIJUNGTI PRIE STUDENTŲ PORTALO',
+            'portal_title': 'STUDENTŲ PORTALAS',
+            'login_email_placeholder': 'Jūsų el. pašto adresas',
+            'login_pass_placeholder': 'Jūsų slaptažodis',
+            'login_forgot_pass': 'Pamiršau slaptažodį',
+            'login_btn': 'PRISIJUNGTI',
+            'portal_premium_badge': 'PREMIUM NARYS',
+            'portal_menu_home': 'Pagrindinis',
+            'portal_menu_edu_title': 'MANO KURSAI',
+            'portal_menu_baglama': 'Baglama Mokymai',
+            'portal_menu_exam': 'Egzaminų ruošimas',
+            'portal_menu_fun': 'Mokykis žaisdamas',
+            'portal_menu_tools_title': 'ĮRANKIAI',
+            'portal_menu_metronome': 'Metronomas',
+            'portal_menu_tuner': 'Derintuvas',
+            'portal_menu_live': 'Tiesioginė pamoka',
+            'portal_menu_ai': 'BurakAI Mentorius (beta)',
+            'portal_menu_whatsapp': 'Klausti / Siųsti namų darbus',
+            'portal_welcome': 'Sveiki!',
+            'portal_card_baglama_desc': 'Paskaitų užrašai, natos ir pratimai.',
+            'tsm_game_title': 'TSM VIKTORINA',
+            'tsm_game_desc': 'Pasitikrinkite savo žinias apie Makam ir Usul.',
+            'nota_rain_title': 'NATŲ LIETUS',
+            'nota_rain_desc': 'Išbandykite savo greitį ir refleksus.',
+            'back_btn': 'Atgal'
+        },
+        'de': {
+            'lang_label': 'SPRACHE',
+            'nav_home': 'STARTSEITE',
+            'nav_about': 'ÜBER UNS',
+            'nav_edu': 'ONLINE-AUSBILDUNG',
+            'nav_notes': 'NOTEN',
+            'nav_poems': 'GEDICHTE',
+            'nav_concerts': 'KONZERTE',
+            'portal_login_btn': 'ZUM STUDENTENPORTAL ANMELDEN',
+            'portal_title': 'STUDENTENPORTAL',
+            'login_email_placeholder': 'Ihre E-Mail-Adresse',
+            'login_pass_placeholder': 'Ihr Passwort',
+            'login_forgot_pass': 'Passwort vergessen',
+            'login_btn': 'ANMELDEN',
+            'portal_premium_badge': 'PREMIUM-MITGLIED',
+            'portal_menu_home': 'Startseite',
+            'portal_menu_edu_title': 'MEINE KURSE',
+            'portal_menu_baglama': 'Baglama-Training',
+            'portal_menu_exam': 'Eignungsprüfungsvorbereitung',
+            'portal_menu_fun': 'Spielerisch lernen',
+            'portal_menu_tools_title': 'WERKZEUGE',
+            'portal_menu_metronome': 'Metronom',
+            'portal_menu_tuner': 'Stimmgerät',
+            'portal_menu_live': 'Live-Unterricht',
+            'portal_menu_ai': 'BurakAI Mentor (beta)',
+            'portal_menu_whatsapp': 'Frage stellen / Hausaufgaben senden',
+            'portal_welcome': 'Hallo!',
+            'portal_card_baglama_desc': 'Vorlesungsunterlagen, Noten und Übungen.',
+            'tsm_game_title': 'TSM QUIZ',
+            'tsm_game_desc': 'Testen Sie Ihr Wissen über Makam und Usul.',
+            'nota_rain_title': 'NOTEN REGEN',
+            'nota_rain_desc': 'Testen Sie Ihre Geschwindigkeit und Reflexe.',
+            'back_btn': 'Zurück'
+        },
+        'ru': {
+            'lang_label': 'ЯЗЫК',
+            'nav_home': 'ГЛАВНАЯ',
+            'nav_about': 'О НАС',
+            'nav_edu': 'ОНЛАЙН ОБУЧЕНИЕ',
+            'nav_notes': 'НОТЫ',
+            'nav_poems': 'СТИХИ',
+            'nav_concerts': 'КОНЦЕРТЫ',
+            'portal_login_btn': 'ВОЙТИ В СТУДЕНЧЕСКИЙ ПОРТАЛ',
+            'portal_title': 'СТУДЕНЧЕСКИЙ ПОРТАЛ',
+            'login_email_placeholder': 'Ваш адрес электронной почты',
+            'login_pass_placeholder': 'Ваш пароль',
+            'login_forgot_pass': 'Забыли пароль?',
+            'login_btn': 'ВОЙТИ',
+            'portal_premium_badge': 'ПРЕМИУМ УЧАСТНИК',
+            'portal_menu_home': 'Главная панель',
+            'portal_menu_edu_title': 'МОИ КУРСЫ',
+            'portal_menu_baglama': 'Обучение Багламе',
+            'portal_menu_exam': 'Подготовка к экзаменам',
+            'portal_menu_fun': 'Учись играя',
+            'portal_menu_tools_title': 'ИНСТРУМЕНТЫ',
+            'portal_menu_metronome': 'Метроном',
+            'portal_menu_tuner': 'Тюнер',
+            'portal_menu_live': 'Живой урок',
+            'portal_menu_ai': 'BurakAI Ментор (бета)',
+            'portal_menu_whatsapp': 'Задать вопрос / Отправить задание',
+            'portal_welcome': 'Привет!',
+            'portal_card_baglama_desc': 'Лекции, ноты и упражнения.',
+            'tsm_game_title': 'ВИКТОРИНА TSM',
+            'tsm_game_desc': 'Проверьте свои знания Макама и Усула.',
+            'nota_rain_title': 'НОТНЫЙ ДОЖДЬ',
+            'nota_rain_desc': 'Проверьте свою скорость и рефлексы.',
+            'back_btn': 'Назад'
+        }
+    };
+
+    function changeLanguage(lang) {
+        // Seçili dili kaydet
+        localStorage.setItem('selected_language', lang);
+        
+        // Buton üzerindeki "LANGUAGE" yazısını güncelle
+        document.getElementById('lang-label').innerText = translations[lang]['lang_label'];
+
+        // Data-translate özelliğine sahip tüm elementleri bul ve çevir
+        const elements = document.querySelectorAll('[data-translate]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-translate');
+            if (translations[lang][key]) {
+                el.innerText = translations[lang][key];
+            }
+        });
+
+        // Placeholder (Giriş inputları) çevirisi
+        const inputs = document.querySelectorAll('[data-translate-placeholder]');
+        inputs.forEach(input => {
+            const key = input.getAttribute('data-translate-placeholder');
+            if (translations[lang][key]) {
+                input.placeholder = translations[lang][key];
+            }
+        });
+
+        document.getElementById("langDropdown").classList.remove("active");
+        
+        // EĞER OYUN SAYFASI AÇIKSA, OYUN ADLARINI TEKRAR GÜNCELLE
+        // Bu kısım view-section'lar içindeki elemanları da kapsar
+    }
+
+    // Sayfa yüklendiğinde kayıtlı dili uygula
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('selected_language') || 'tr';
+        changeLanguage(savedLang);
+    });
 </script>
     
 </body>
