@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <meta name="google-site-verification" content="_M5BfxWGwxt47kzLdqDckVCSwkliVvvoYFVn8SdsrwM" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Notalar | Mahmut Burak ASLANTAŞ</title>
     
-    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,12 +37,76 @@
             min-height: 100vh;
         }
 
+        /* --- DİL SEÇİCİ STİLLERİ --- */
+        .language-wrapper {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            z-index: 1002;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .lang-btn {
+            background: rgba(0, 0, 0, 0.6); 
+            border: 1px solid var(--accent);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lang-btn:hover {
+            background: rgba(197, 160, 89, 0.2);
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+        }
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 140px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .lang-dropdown a {
+            display: block;
+            padding: 12px 15px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lang-dropdown a:last-child { border-bottom: none; }
+        .lang-dropdown a:hover {
+            background: var(--accent);
+            color: #000;
+        }
+        .lang-dropdown.active {
+            display: block;
+            animation: fadeInDrop 0.3s ease;
+        }
+        @keyframes fadeInDrop {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* --- NAVİGASYON --- */
         nav {
             background: #000; padding: 20px 0; position: sticky; top: 0; z-index: 1000;
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
-        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; padding-right: 100px; }
         nav ul { display: flex; gap: 50px; list-style: none; }
         nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         nav a:hover, nav a.active { color: var(--accent); }
@@ -60,7 +126,7 @@
         .search-box input:focus { border-color: var(--accent); background: rgba(0,0,0,0.5); }
         .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); }
 
-        /* --- TABLO TASARIMI (PREMIUM) --- */
+        /* --- TABLO TASARIMI --- */
         .table-container {
             overflow-x: auto; 
             animation: fadeInUp 1s ease-out 0.4s forwards;
@@ -146,40 +212,62 @@
         .social-item:hover { color: #fff; }
 
         @media (max-width: 768px) {
-            .menu-toggle { display: block; }
+            .menu-toggle { display: block; right: 20px; }
             nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
             nav ul.aktif { display: flex; }
             .page-header h1 { font-size: 2.5rem; }
-            th, td { padding: 15px; } 
+            th, td { padding: 15px; }
+            .language-wrapper { top: 20px; right: 70px; }
+            .lang-btn span { display: none; }
+            .nav-container { padding-right: 0; }
         }
     </style>
 </head>
 <body>
 
+    <div class="language-wrapper">
+        <button class="lang-btn" onclick="toggleLanguageMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>Language</span>
+        </button>
+        
+        <div class="lang-dropdown" id="langDropdown">
+            <a href="javascript:void(0)" onclick="changeLanguage('tr')">🇹🇷 Türkçe</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('en')">🇬🇧 English</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('lt')">🇱🇹 Lietuvių</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('de')">🇩🇪 Deutsch</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('ru')">🇷🇺 Русский</a>
+        </div>
+    </div>
+
     <nav>
         <div class="nav-container">
             <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
             <ul id="anaMenu">
-                <li><a href="index.html">ANA SAYFA</a></li>
-                <li><a href="hakkinda.html">HAKKINDA</a></li>
-                <li><a href="online-egitim.html">ONLINE EĞİTİM</a></li>
-                <li><a href="notalar.html" class="active">NOTALAR</a></li>
-                <li><a href="siirler.html">ŞİİRLER</a></li>
-                <li><a href="konserler.html">KONSERLER</a></li>
+                <li><a href="index.html" data-lang="menu_home">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html" data-lang="menu_about">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" data-lang="menu_edu">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html" class="active" data-lang="menu_notes">NOTALAR</a></li>
+                <li><a href="siirler.html" data-lang="menu_poems">ŞİİRLER</a></li>
+                <li><a href="konserler.html" data-lang="menu_concerts">KONSERLER</a></li>
             </ul>
         </div>
     </nav>
 
     <header class="page-header">
-        <h1>NOTALAR</h1>
-        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;">Bağlama repertuvarı ve döküman arşivi...</p>
+        <h1 data-lang="notes_title">NOTALAR</h1>
+        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;" data-lang="notes_desc">Bağlama repertuvarı ve döküman arşivi...</p>
     </header>
 
     <div class="main-container">
         <div class="search-wrapper">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="notaAra" onkeyup="filtrele()" placeholder="Eser adı veya besteci ara...">
+                <input type="text" id="notaAra" onkeyup="filtrele()" placeholder="Eser adı veya besteci ara..." data-lang-placeholder="ph_search">
             </div>
         </div>
 
@@ -187,9 +275,9 @@
             <table id="notaTablosu">
                 <thead>
                     <tr>
-                        <th style="width: 50%;">ESER ADI</th>
-                        <th style="width: 30%;">BESTECİ / KAYNAK KİŞİ</th>
-                        <th style="width: 20%; text-align: center;">İNDİR</th>
+                        <th style="width: 50%;" data-lang="th_title">ESER ADI</th>
+                        <th style="width: 30%;" data-lang="th_composer">BESTECİ / KAYNAK KİŞİ</th>
+                        <th style="width: 20%; text-align: center;" data-lang="th_download">İNDİR</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -233,7 +321,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="no-result" style="display:none; text-align:center; margin-top:20px; color:#888;">Aradığınız eser bulunamadı.</div>
+        <div id="no-result" style="display:none; text-align:center; margin-top:20px; color:#888;" data-lang="no_result">Aradığınız eser bulunamadı.</div>
     </div>
 
     <footer>
@@ -242,7 +330,7 @@
             <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-youtube"></i></div><span>YouTube</span></a>
         </div>
         <br>
-        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+        <p data-lang="footer_rights">© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
     </footer>
 
     <script>
@@ -273,6 +361,75 @@
             document.getElementById("no-result").style.display = foundAny ? "none" : "block";
             document.querySelector("thead").style.display = foundAny ? "" : "none";
         }
+
+        // --- ÇEVİRİ SİSTEMİ ---
+        const translations = {
+            tr: {
+                menu_home: "ANA SAYFA", menu_about: "HAKKINDA", menu_edu: "ONLINE EĞİTİM", menu_notes: "NOTALAR", menu_poems: "ŞİİRLER", menu_concerts: "KONSERLER",
+                notes_title: "NOTALAR", notes_desc: "Bağlama repertuvarı ve döküman arşivi...",
+                ph_search: "Eser adı veya besteci ara...", th_title: "ESER ADI", th_composer: "BESTECİ / KAYNAK KİŞİ", th_download: "İNDİR",
+                no_result: "Aradığınız eser bulunamadı.", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır."
+            },
+            en: {
+                menu_home: "HOME", menu_about: "ABOUT ME", menu_edu: "ONLINE LESSONS", menu_notes: "SHEET MUSIC", menu_poems: "POEMS", menu_concerts: "CONCERTS",
+                notes_title: "SHEET MUSIC", notes_desc: "Baglama repertoire and document archive...",
+                ph_search: "Search song title or composer...", th_title: "TITLE", th_composer: "COMPOSER / SOURCE", th_download: "DOWNLOAD",
+                no_result: "No sheet music found.", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved."
+            },
+            lt: {
+                menu_home: "PAGRINDINIS", menu_about: "APIE MANE", menu_edu: "INTERNETINĖS PAMOKOS", menu_notes: "NATOS", menu_poems: "EILĖRAŠČIAI", menu_concerts: "KONCERTAI",
+                notes_title: "NATOS", notes_desc: "Baglama repertuaras ir dokumentų archyvas...",
+                ph_search: "Ieškoti kūrinio ar kompozitoriaus...", th_title: "KŪRINIO PAVADINIMAS", th_composer: "KOMPOZITORIUS / ŠALTINIS", th_download: "ATSISIŲSTI",
+                no_result: "Natų nerasta.", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos."
+            },
+            de: {
+                menu_home: "STARTSEITE", menu_about: "ÜBER MICH", menu_edu: "ONLINE-UNTERRICHT", menu_notes: "NOTEN", menu_poems: "GEDICHTE", menu_concerts: "KONZERTE",
+                notes_title: "NOTEN", notes_desc: "Baglama-Repertoire und Dokumentenarchiv...",
+                ph_search: "Nach Titel oder Komponist suchen...", th_title: "TITEL", th_composer: "KOMPONIST / QUELLE", th_download: "HERUNTERLADEN",
+                no_result: "Keine Noten gefunden.", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten."
+            },
+            ru: {
+                menu_home: "ГЛАВНАЯ", menu_about: "ОБО МНЕ", menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ", menu_notes: "НОТЫ", menu_poems: "СТИХИ", menu_concerts: "КОНЦЕРТЫ",
+                notes_title: "НОТЫ", notes_desc: "Репертуар багламы и архив документов...",
+                ph_search: "Поиск по названию или композитору...", th_title: "НАЗВАНИЕ", th_composer: "КОМПОЗИТОР / ИСТОЧНИК", th_download: "СКАЧАТЬ",
+                no_result: "Ноты не найдены.", footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены."
+            }
+        };
+
+        function toggleLanguageMenu() {
+            document.getElementById("langDropdown").classList.toggle("active");
+        }
+
+        function changeLanguage(lang) {
+            const data = translations[lang] || translations['tr'];
+            
+            // UI Elementlerini Çevir
+            document.querySelectorAll("[data-lang]").forEach(element => {
+                const key = element.getAttribute("data-lang");
+                if (data[key]) {
+                    element.innerText = data[key];
+                }
+            });
+
+            // Placeholder'ları Çevir
+            document.querySelectorAll("[data-lang-placeholder]").forEach(element => {
+                const key = element.getAttribute("data-lang-placeholder");
+                if (data[key]) {
+                    element.placeholder = data[key];
+                }
+            });
+
+            document.getElementById("langDropdown").classList.remove("active");
+            localStorage.setItem("selectedLang", lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem("selectedLang");
+            if(savedLang && translations[savedLang]) {
+                changeLanguage(savedLang);
+            }
+        };
     </script>
+
 </body>
 </html>
