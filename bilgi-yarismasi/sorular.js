@@ -1,5 +1,5 @@
 const tumSorular = [
-    // --- ÇOCUKLAR İÇİN MÜZİK SORULARI (100 ADET) ---
+    // --- ÇOCUKLAR İÇİN MÜZİK SORULARI ---
     {
         "soru": "Hangi çalgıyı üfleyerek çalarız?",
         "secenekler": ["Flüt", "Gitar", "Davul", "Piyano"],
@@ -291,7 +291,7 @@ const tumSorular = [
         "dogru": "Davul"
     },
     {
-        "soru": "Şarkı söylerken neyimizi kullanırız?",
+        "soru": "Şarkı söyleyerek neyimizi kullanırız?",
         "secenekler": ["Sesimizi", "Ayağımızı", "Saçımızı", "Kulağımızı"],
         "dogru": "Sesimizi"
     },
@@ -444,8 +444,9 @@ const tumSorular = [
         "soru": "Şarkı söylemek eğlenceli midir?",
         "secenekler": ["Evet, çok eğlenceli", "Hayır, sıkıcı", "Bilmem", "Belki"],
         "dogru": "Evet, çok eğlenceli"
-    }
-    // --- EKSTRA: GENEL MÜZİK KÜLTÜRÜ & TEORİSİ (100 SORU) ---
+    },
+
+    // --- GENEL MÜZİK KÜLTÜRÜ & TEORİSİ ---
     {
         "soru": "Standart bir piyanoda toplam kaç tuş bulunur?",
         "secenekler": ["88", "61", "76", "92"],
@@ -945,8 +946,9 @@ const tumSorular = [
         "soru": "\"Moonlight Sonata\" (Ayışığı Sonatı) kime aittir?",
         "secenekler": ["Beethoven", "Mozart", "Chopin", "Liszt"],
         "dogru": "Beethoven"
-    }
-    // --- BÖLÜM 1: HALK OZANLARI & SANATÇILAR ---
+    },
+
+    // --- TÜRK HALK MÜZİĞİ VE KÜLTÜRÜ ---
     {"soru": "\"Bozkırın Tezenesi\" lakabıyla bilinen, \"Gönül Dağı\" ve \"Ah Yalan Dünya\" eserlerinin sahibi usta kimdir?", "secenekler": ["Neşet Ertaş", "Mahzuni Şerif", "Muharrem Ertaş", "Hacı Taşan"], "dogru": "Neşet Ertaş"},
     {"soru": "\"Uzun İnce Bir Yoldayım\" ve \"Dostlar Beni Hatırlasın\" eserlerinin sahibi Sivaslı ozan kimdir?", "secenekler": ["Aşık Veysel", "Aşık Daimi", "Pir Sultan Abdal", "Ali Ekber Çiçek"], "dogru": "Aşık Veysel"},
     {"soru": "\"Mihriban\" türküsünün sözleri (şiiri) kime aittir?", "secenekler": ["Abdurrahim Karakoç", "Musa Eroğlu", "Nazım Hikmet", "Cemal Süreya"], "dogru": "Abdurrahim Karakoç"},
@@ -957,7 +959,6 @@ const tumSorular = [
     {"soru": "100 TL'lik banknotun üzerinde resmi bulunan, \"Nevakar\" eserinin bestecisi kimdir?", "secenekler": ["Itri", "Dede Efendi", "Hacı Arif Bey", "Tamburi Cemil Bey"], "dogru": "Itri"},
     {"soru": "Neşet Ertaş'ın babası olan ve bozlak geleneğinin en büyük ustası kabul edilen kimdir?", "secenekler": ["Muharrem Ertaş", "Çekiç Ali", "Hacı Taşan", "Şemsi Yastıman"], "dogru": "Muharrem Ertaş"},
     {"soru": "\"Mihriban\" türküsünü besteleyerek geniş kitlelere ulaştıran bağlama ustası kimdir?", "secenekler": ["Musa Eroğlu", "Arif Sağ", "Muhlis Akarsu", "Yavuz Top"], "dogru": "Musa Eroğlu"},
-    // --- BÖLÜM 2: ENSTRÜMAN BİLGİSİ ---
     {"soru": "Bağlamanın gövde kısmına verilen teknik isim nedir?", "secenekler": ["Tekne", "Sap", "Burgu", "Kapak"], "dogru": "Tekne"},
     {"soru": "Karadeniz’in doğusunda yaygın olan, oğlak derisinden yapılan üflemeli çalgı hangisidir?", "secenekler": ["Tulum", "Kemençe", "Zurna", "Mey"], "dogru": "Tulum"},
     {"soru": "Mey enstrümanı gövdesi için en çok hangi ağaç tercih edilir?", "secenekler": ["Erik", "Çam", "Kavak", "Meşe"], "dogru": "Erik"},
@@ -968,7 +969,6 @@ const tumSorular = [
     {"soru": "Davul çalarken sağ el ile vurulan kalın çubuğa ne ad verilir?", "secenekler": ["Tokmak", "Çubuk", "Baget", "Mızrap"], "dogru": "Tokmak"},
     {"soru": "Bağlamada notaların yerini belirleyen sap üzerindeki çizgilere ne denir?", "secenekler": ["Perde", "Eşik", "Tel", "Burgu"], "dogru": "Perde"},
     {"soru": "\"Çığırtma\" adlı çalgı, geleneksel olarak hangi hayvanın kemiğinden yapılır?", "secenekler": ["Kartal", "Koyun", "Tavuk", "At"], "dogru": "Kartal"},
-    // --- BÖLÜM 3: ATATÜRK & KURUMLAR ---
     {"soru": "Mustafa Kemal Atatürk'ün en sevdiği Rumeli türküsü hangisidir?", "secenekler": ["Vardar Ovası", "Çalın Davulları", "Yemen Türküsü", "Sarı Gelin"], "dogru": "Vardar Ovası"},
     {"soru": "Atatürk'ün emriyle kurulan Türkiye'nin ilk müzik öğretmen okulu hangisidir?", "secenekler": ["Musiki Muallim Mektebi", "Köy Enstitüsü", "Darülelhan", "Mızıka-i Hümayun"], "dogru": "Musiki Muallim Mektebi"},
     {"soru": "Atatürk'ün son balosunda dizini yere vurarak oynadığı zeybek hangisidir?", "secenekler": ["Sarı Zeybek", "Harmandalı", "Kerimoğlu", "Çökertme"], "dogru": "Sarı Zeybek"},
@@ -978,7 +978,6 @@ const tumSorular = [
     {"soru": "Türk Sanat Müziği ses sistemini bilimsel temellere oturtan kuramcı kimdir?", "secenekler": ["Hüseyin Sadettin Arel", "Rauf Yekta", "Suphi Ezgi", "Zekai Dede"], "dogru": "Hüseyin Sadettin Arel"},
     {"soru": "Atatürk'ün davet ettiği ve derlemeler için rapor hazırlayan Macar besteci kimdir?", "secenekler": ["Bela Bartok", "Paul Hindemith", "Kodaly", "Liszt"], "dogru": "Bela Bartok"},
     {"soru": "Osmanlı'nın ilk resmi konservatuvarı sayılan kurum hangisidir?", "secenekler": ["Darülelhan", "Darülbedayi", "Enderun", "Mızıka-i Hümayun"], "dogru": "Darülelhan"},
-    // --- BÖLÜM 4: TEORİ & FORMLAR ---
     {"soru": "Türk Halk Müziği'nde ritmik (usullü) olan ezgilere ne ad verilir?", "secenekler": ["Kırık Hava", "Uzun Hava", "Bozlak", "Ağıt"], "dogru": "Kırık Hava"},
     {"soru": "Belirli bir ölçüsü olmayan, serbest ritimli ezgilere ne ad verilir?", "secenekler": ["Uzun Hava", "Kırık Hava", "Oyun Havası", "Halay"], "dogru": "Uzun Hava"},
     {"soru": "Çocukları uyutmak amacıyla söylenen türkü formuna ne denir?", "secenekler": ["Ninni", "Ağıt", "Mani", "Güzelleme"], "dogru": "Ninni"},
@@ -989,7 +988,6 @@ const tumSorular = [
     {"soru": "Bağlamada kısa sap düzeninde (Re-Sol-La) alt tel hangi sese çekilir?", "secenekler": ["Re", "Mi", "Sol", "La"], "dogru": "Re"},
     {"soru": "Bir ana vuruşun üç eşit parçaya bölünmesiyle oluşan ritmik gruba ne denir?", "secenekler": ["Triyole", "Senkop", "Es", "Ropriz"], "dogru": "Triyole"},
     {"soru": "Türk Sanat Müziği'nde \"La\" perdesinin adı nedir?", "secenekler": ["Dügah", "Rast", "Segah", "Neva"], "dogru": "Dügah"},
-    // --- BÖLÜM 5: YÖRE & OYUNLAR ---
     {"soru": "UNESCO tarafından \"Yaratıcı Şehirler Ağı\"na müzik alanında dahil edilen ilk ilimiz hangisidir?", "secenekler": ["Kırşehir", "İstanbul", "Şanlıurfa", "Sivas"], "dogru": "Kırşehir"},
     {"soru": "Karadeniz denince akla gelen hızlı oyun hangisidir?", "secenekler": ["Horon", "Zeybek", "Bar", "Halay"], "dogru": "Horon"},
     {"soru": "Ege Bölgesi'nin simgesi olan ağır ve vakur oyun hangisidir?", "secenekler": ["Zeybek", "Horon", "Misket", "Çiftetelli"], "dogru": "Zeybek"},
@@ -999,7 +997,6 @@ const tumSorular = [
     {"soru": "\"Silifke'nin Yoğurdu\" türküsü hangi ilimize aittir?", "secenekler": ["Mersin", "Adana", "Antalya", "Hatay"], "dogru": "Mersin"},
     {"soru": "Gaziantep'e has, yanık söyleyişli uzun hava türü hangisidir?", "secenekler": ["Barak Havası", "Bozlak", "Maya", "Hoyrat"], "dogru": "Barak Havası"},
     {"soru": "Alevi-Bektaşi cemlerinde dönülen törensel dansa ne ad verilir?", "secenekler": ["Semah", "Sema", "Zikir", "Devran"], "dogru": "Semah"},
-    // --- BÖLÜM 6: MODERN DÖNEM & VİRTÜÖZLER ---
     {"soru": "\"Perdesiz Gitar\"ı icat eden usta kimdir?", "secenekler": ["Erkan Oğur", "Bülent Ortaçgil", "Fikret Kızılok", "Doğan Canku"], "dogru": "Erkan Oğur"},
     {"soru": "\"Tamirci Çırağı\" eseriyle bilinen Anadolu Rock sanatçısı kimdir?", "secenekler": ["Cem Karaca", "Barış Manço", "Erkin Koray", "Edip Akbayram"], "dogru": "Cem Karaca"},
     {"soru": "Bağlamada \"Şelpe\" tekniğini akademik düzeye taşıyan virtüöz kimdir?", "secenekler": ["Erdal Erzincan", "Arif Sağ", "Hasret Gültekin", "Çetin Akdeniz"], "dogru": "Erdal Erzincan"},
@@ -1010,7 +1007,6 @@ const tumSorular = [
     {"soru": "\"Türkü Baba\" lakaplı, \"Kilim\" şarkısının sahibi kimdir?", "secenekler": ["Fatih Kısaparmak", "İbrahim Tatlıses", "Mahsun Kırmızıgül", "Burhan Çaçan"], "dogru": "Fatih Kısaparmak"},
     {"soru": "\"Leylim Ley\" ve \"Eşkıya\" eserlerinin bestecisi kimdir?", "secenekler": ["Zülfü Livaneli", "Ahmet Kaya", "Edip Akbayram", "Fikret Kızılok"], "dogru": "Zülfü Livaneli"},
     {"soru": "\"Bağlama Virtuözü\" albümüyle tanınan ve çok hızlı çalan usta kimdir?", "secenekler": ["Çetin Akdeniz", "İsmail Tunçbilek", "Ahmet Koç", "Motor Ali"], "dogru": "Çetin Akdeniz"},
-    // --- GRUP 2: TEKNİK NAZARİYAT & MAKAM ---
     {"soru": "Türk müziğinde 4 komalık pesleşmeyi ifade eden Bakiye Bemolü'nün simgesi nedir?", "secenekler": ["Geriye doğru kancalı bemol", "Ters Diyez", "Çift Bemol", "Naturel"], "dogru": "Geriye doğru kancalı bemol"},
     {"soru": "Bir tam sesten biraz daha küçük olan 5 komalık aralığa ne ad verilir?", "secenekler": ["Küçük Mücennep", "Bakiye", "Tanini", "Artık İkili"], "dogru": "Küçük Mücennep"},
     {"soru": "Türk müziğinde \"Do\" perdesinin ismi nedir?", "secenekler": ["Rast", "Dügah", "Segah", "Neva"], "dogru": "Rast"},
@@ -1048,7 +1044,6 @@ const tumSorular = [
     {"soru": "Aşıkların 11'li hece ölçüsüyle yazdığı en yaygın şiir türü nedir?", "secenekler": ["Koşma", "Mani", "Semai", "İlahi"], "dogru": "Koşma"},
     {"soru": "Sevgilinin güzelliğini öven halk şiiri türüne ne denir?", "secenekler": ["Güzelleme", "Taşlama", "Koçaklama", "Ağıt"], "dogru": "Güzelleme"},
     {"soru": "Toplumu sarsan büyük olayları (savaş, kıtlık) anlatan uzun şiir formuna ne denir?", "secenekler": ["Destan", "Koşma", "Mani", "Semai"], "dogru": "Destan"},
-    // --- GRUP 2 & 3: TEKNİK DETAYLAR VE TARİH ---
     {"soru": "Aruz vezninin \"Mef'ûlü Mefâîlü...\" kalıbıyla yazılan aşık şiiri türü hangisidir?", "secenekler": ["Kalenderi", "Divan", "Selis", "Semai"], "dogru": "Divan"},
     {"soru": "Elazığ yöresine özgü, ağırbaşlı ve yanık uzun hava türüne ne ad verilir?", "secenekler": ["Maya", "Bozlak", "Hoyrat", "Barak"], "dogru": "Maya"},
     {"soru": "Çobanların kaval eşliğinde söylediği serbest ritimli kır ezgilerine ne denir?", "secenekler": ["Kayabaşı", "Gurbet Havası", "Argah", "Yol Havası"], "dogru": "Kayabaşı"},
@@ -1057,7 +1052,7 @@ const tumSorular = [
     {"soru": "\"10. Yıl Marşı\"nın bestecisi olan ünlü müzik adamı kimdir?", "secenekler": ["Cemal Reşit Rey", "Adnan Saygun", "Necil Kazım Akses", "Ulvi Cemal Erkin"], "dogru": "Cemal Reşit Rey"},
     {"soru": "Cumhurbaşkanlığı Senfoni Orkestrası'nın (CSO) temelini oluşturan Osmanlı kurumu hangisidir?", "secenekler": ["Riyaset-i Cumhur Filarmoni Orkestrası", "Mızıka-i Hümayun", "Darülelhan", "Mehterhane"], "dogru": "Riyaset-i Cumhur Filarmoni Orkestrası"},
     {"soru": "Osmanlı'da Mehterhane'yi kaldırıp Mızıka-i Hümayun'u kuran padişah kimdir?", "secenekler": ["II. Mahmut", "III. Selim", "Abdülmecid", "II. Abdülhamid"], "dogru": "II. Mahmut"},
-    {"soru": "Mızıka-i Hümayun'un başına getirilen ve \"Paşa\" unvanı alan İtalyan müzisyen kimdir?", "secenekler": ["Donizetti Paşa", "Guatelli Paşa", "Lizst", "Rossini"], "dogru": "Donizetti Paşa)"},
+    {"soru": "Mızıka-i Hümayun'un başına getirilen ve \"Paşa\" unvanı alan İtalyan müzisyen kimdir?", "secenekler": ["Donizetti Paşa", "Guatelli Paşa", "Lizst", "Rossini"], "dogru": "Donizetti Paşa"},
     {"soru": "Bir enstrümanın makamı tanıtmak için yaptığı, ölçüsüz ve doğaçlama icraya ne denir?", "secenekler": ["Taksim", "Peşrev", "Saz Semaisi", "Aranağme"], "dogru": "Taksim"},
     {"soru": "Klasik Türk Müziği'nde saz eserleri faslının en başında çalınan büyük form nedir?", "secenekler": ["Peşrev", "Saz Semaisi", "Taksim", "Medhal"], "dogru": "Peşrev"},
     {"soru": "Saz semailerinde dördüncü haneden sonra çalınan ve ana ezgiye dönülen bölüme ne denir?", "secenekler": ["Teslim", "Mülazime", "Serhane", "Zeyil"], "dogru": "Teslim"},
@@ -1073,7 +1068,7 @@ const tumSorular = [
     {"soru": "Ramazan aylarında sahurda insanları uyandırmak için çalınan geleneksel çalgı nedir?", "secenekler": ["Davul", "Zurna", "Ney", "Kaval"], "dogru": "Davul"},
     {"soru": "Halay oyununda en başta duran ve oyunu yöneten kişiye ne ad verilir?", "secenekler": ["Halaybaşı", "Efe", "Barbaşı", "Çavuş"], "dogru": "Halaybaşı"},
     {"soru": "\"Bozkırın Tezenesi\" Neşet Ertaş, Kırşehir'in hangi ilçesindendir?", "secenekler": ["Çiçekdağı", "Kaman", "Mucur", "Akpınar"], "dogru": "Çiçekdağı"},
-    {"soru": "Müzikte \"Alla Breve\" terimi hangi ölçü birimini ifade eder?", "secenekler": ["2/2'lik", "4/4'lük", "2/4'lük", "6/8'lik"], "dogru": "2/2'lik ölçü"},
+    {"soru": "Müzikte \"Alla Breve\" terimi hangi ölçü birimini ifade eder?", "secenekler": ["2/2'lik", "4/4'lük", "2/4'lük", "6/8'lik"], "dogru": "2/2'lik"},
     {"soru": "Nota üzerinde kuş gözüne benzeyen \"Fermata\" işareti ne anlama gelir?", "secenekler": ["Sesin istendiği kadar uzatılacağını", "Sesin kesik çalınacağını", "Hızlanılacağını", "Sessiz olunacağını"], "dogru": "Sesin istendiği kadar uzatılacağını"},
     {"soru": "Notaları kesik kesik ve sıçratarak çalma tekniğine ne ad verilir?", "secenekler": ["Staccato", "Legato", "Pizzicato", "Vibrato"], "dogru": "Staccato"},
     {"soru": "Türk Sanat Müziği'nde \"Si\" perdesinin (Naturel) adı nedir?", "secenekler": ["Buselik", "Segah", "Uşşak", "Hüseyni"], "dogru": "Buselik"},
@@ -1124,7 +1119,7 @@ const tumSorular = [
     {"soru": "Gelin ağlatma havasında hüzünlü ses veren enstrüman hangisidir?", "secenekler": ["Kaval (veya Mey)", "Zurna", "Davul", "Tef"], "dogru": "Kaval (veya Mey)"},
     {"soru": "Koç katımı törenlerinde söylenen türkülerin amacı nedir?", "secenekler": ["Bereket dilemek", "Yağmur yağdırmak", "Savaş ilanı", "Eğlence"], "dogru": "Bereket dilemek"},
     {"soru": "Aşık Veysel'in \"Sadık Yarim\" dediği şey nedir?", "secenekler": ["Kara Toprak", "Eşi", "Sazı", "Köyü"], "dogru": "Kara Toprak"},
-    {"soru": "Türkülerde \"Al Yazmalı\" ifadesi neyi temsil eder?", "secenekler": ["Genç kızı ve iffeti", "Zenginliği", "Şehirli olmayı", "Yabancı olmayı"], "dogru": "Genç kızı ve iffeti"},
+    {"soru": "Türkülerde \"Al Yazmalı\" ifadesi neyi temsil eder?", "secenekler": ["Anadolu kadınının iffetini", "Zenginliği", "Şehirli olmayı", "Yabancı olmayı"], "dogru": "Anadolu kadınının iffetini"},
     {"soru": "Köy oyunlarında kullanılan 'Zilli Maşa' hangi malzemeden yapılır?", "secenekler": ["Demir veya Bakır", "Tahta", "Plastik", "Cam"], "dogru": "Demir veya Bakır"},
     {"soru": "Sahurda çalınan davulun ritmine ne ad verilir?", "secenekler": ["Velveleli vuruş", "Aksak ritim", "Düz ritim", "Halay ritmi"], "dogru": "Velveleli vuruş"},
     {"soru": "Aşıklıkta 'Bade içmek' neyin başlangıcıdır?", "secenekler": ["Hakk aşığı olmanın", "Zengin olmanın", "Evlenmenin", "Yolculuğun"], "dogru": "Hakk aşığı olmanın"},
@@ -1142,7 +1137,7 @@ const tumSorular = [
     {"soru": "\"Havada Bulut Yok\" türküsü hangi cephe içindir?", "secenekler": ["Yemen Cephesi", "Çanakkale", "Kafkas", "Galiçya"], "dogru": "Yemen Cephesi"},
     {"soru": "\"Mihriban\" türküsünün bestesi kime aittir?", "secenekler": ["Musa Eroğlu", "Mahzuni Şerif", "Neşet Ertaş", "Arif Sağ"], "dogru": "Musa Eroğlu"},
     {"soru": "Nota üzerinde 'Fine' ne demektir?", "secenekler": ["Eserin bittiği yer", "Başa dön", "Hızlan", "Yavaşla"], "dogru": "Eserin bittiği yer"},
-    {"soru": "Bağlamada göğse vurularak yapılan ritmik süsleme nedir?", "secenekler": ["Zikir (Fiske)", "Şelpe", "Tezene", "Çarpma"], "dogru": "Zikir (Fiske)"},
+    {"soru": "Bağlamada göğse vurularak yapılan ritmik süsleme nedir?", "secenekler": ["Zikir (Fiske/Tık) vuruşu", "Şelpe", "Tarama", "Çarpma"], "dogru": "Zikir (Fiske/Tık) vuruşu"},
     {"soru": "İkilik nota kaç vuruştur?", "secenekler": ["2 vuruş", "1 vuruş", "4 vuruş", "Yarım vuruş"], "dogru": "2 vuruş"},
     {"soru": "Dörlük sus (es) işareti ne kadar sessizlik ister?", "secenekler": ["1 vuruş", "2 vuruş", "Yarım vuruş", "4 vuruş"], "dogru": "1 vuruş"},
     {"soru": "Diyez işareti sesi nasıl değiştirir?", "secenekler": ["Yarım ses inceltir", "Yarım ses kalınlaştırır", "Değiştirmez", "Sıfırlar"], "dogru": "Yarım ses inceltir"},
@@ -1151,7 +1146,6 @@ const tumSorular = [
     {"soru": "Bağlamada tekne yapımında kullanılan en dayanıklı ağaçlardan biri hangisidir?", "secenekler": ["Dut", "Kavak", "Çam", "Söğüt"], "dogru": "Dut"},
     {"soru": "Türk halk müziğinde 'Tavır' denince akla gelen ilk derlemeci kimdir?", "secenekler": ["Muzaffer Sarısözen", "Zeki Müren", "Barış Manço", "Tarkan"], "dogru": "Muzaffer Sarısözen"},
     {"soru": "Oyun havalarında sözsüz çalgısal bölüme ne denir?", "secenekler": ["Ara Nağme", "Giriş", "Final", "Nakarat"], "dogru": "Ara Nağme"},
-    // --- GRUP 4: ÇALGI YAPIM & DERİN KÜLTÜR ---
     {"soru": "Bağlamanın göğüs (kapak) kısmında ladin ağacının tercih edilmesinin temel sebebi nedir?", "secenekler": ["Ses iletiminin yüksek olması", "Renginin güzel olması", "Ucuz olması", "Kolay bulunması"], "dogru": "Ses iletiminin yüksek olması"},
     {"soru": "Dut ağacından yapılan bir bağlama teknesinin ses karakteri nasıldır?", "secenekler": ["Tok ve bas karakterli", "Tiz ve metalik", "Çok parlak", "Zayıf"], "dogru": "Tok ve bas karakterli"},
     {"soru": "Kabak Kemane yapımında kullanılan su kabağının ideal kuruma süresi nedir?", "secenekler": ["1-2 yıl", "3 ay", "1 hafta", "10 yıl"], "dogru": "1-2 yıl"},
@@ -1244,7 +1238,7 @@ const tumSorular = [
     {"soru": "Sipsi çalgısının ağızlık kısmına takılan ve sesi çıkaran ince parçaya ne denir?", "secenekler": ["Dil (Cukcuk)", "Kamış", "Lüle", "Başpare"], "dogru": "Dil (Cukcuk)"},
     {"soru": "Kabak kemanenin altına takılan ve çalgıyı dize dayamaya yarayan metal çubuğa ne denir?", "secenekler": ["Direk (Şiş)", "Ayak", "Sap", "Destek"], "dogru": "Direk (Şiş)"},
     {"soru": "Bağlamanın teknesinde (arka veya yan) bulunan küçük deliğin görevi nedir?", "secenekler": ["Sesin çıkışını dengelemek (Ses deliği)", "Süsleme", "Hava almak", "Sapı tutmak"], "dogru": "Sesin çıkışını dengelemek (Ses deliği)"},
-    {"soru": "Karadeniz Kemençesinde tellerin üzerine basıldığı klavye kısmına ne ad verilir?", "secenekler": ["Kravat", "Sap", "Eşik", "Tekne"], "dogru": "Kravat"},
+    {"soru": "Karadeniz Kemençesinde telleren üzerine basıldığı klavye kısmına ne ad verilir?", "secenekler": ["Kravat", "Sap", "Eşik", "Tekne"], "dogru": "Kravat"},
     {"soru": "Kanun çalgısında mandalların dizili olduğu rampalı tahtaya ne denir?", "secenekler": ["Mandal Tahtası", "Burguluk", "Klavye", "Ses Kutusu"], "dogru": "Mandal Tahtası"},
     {"soru": "Köy seyirlik oyunlarında ritim tutmak için kullanılan metal maşaya ne denir?", "secenekler": ["Zilli Maşa", "Kaşık", "Zil", "Çan"], "dogru": "Zilli Maşa"},
     {"soru": "\"Çökertme\" zeybeği hangi sahil beldemizle özdeşleşmiştir?", "secenekler": ["Bodrum", "Marmaris", "Kuşadası", "Fethiye"], "dogru": "Bodrum"},
@@ -1254,7 +1248,6 @@ const tumSorular = [
     {"soru": "Nota üzerinde eserin bittiğini gösteren terim nedir?", "secenekler": ["Fine", "Da Capo", "Coda", "Senyö"], "dogru": "Fine"},
     {"soru": "Bağlamada ritmi güçlendirmek için göğüs tahtasına işaret parmağıyla yapılan vuruşa ne denir?", "secenekler": ["Zikir (Fiske/Tık) vuruşu", "Şelpe", "Tarama", "Çarpma"], "dogru": "Zikir (Fiske/Tık) vuruşu"},
     {"soru": "Oyun havalarında sözlü bölümler arasında çalgının tek başına çaldığı bölüme ne denir?", "secenekler": ["Ara Nağme", "Giriş", "Taksim", "Final"], "dogru": "Ara Nağme"},
-    // --- GRUP 5 DEVAMI: TEKNİK DETAYLAR & GENEL KÜLTÜR ---
     {"soru": "Bağlamada mızrap kullanmadan, elin tüm parmaklarıyla tellere vurularak yapılan icra tekniğine ne denir?", "secenekler": ["Şelpe", "Tezene", "Pençe", "Tırnak"], "dogru": "Şelpe"},
     {"soru": "Kabak kemanenin gövdesi üzerindeki ses deri genellikle hangi hayvandan elde edilir?", "secenekler": ["Yürek zarı veya Balık derisi", "Koyun", "İpek", "Plastik"], "dogru": "Yürek zarı veya Balık derisi"},
     {"soru": "Zurnada kamışın üzerine takılan ve dudak yorulmasını engelleyen parçaya ne denir?", "secenekler": ["Sipsi (Metelik)", "Lüle", "Ağızlık", "Kıskaç"], "dogru": "Sipsi (Metelik)"},
@@ -1295,55 +1288,19 @@ const tumSorular = [
     {"soru": "Halayda en başta duran ve oyunu yöneten kişiye ne denir?", "secenekler": ["Halaybaşı", "Çavuş", "Efe", "Barbaşı"], "dogru": "Halaybaşı"},
     {"soru": "Sivas halaylarının sonunda oynanan hızlı bölüme ne denir?", "secenekler": ["Yeldirme", "Sallama", "Ağırlama", "Final"], "dogru": "Yeldirme"},
     {"soru": "Doğu'da gelin evden çıkarken çalınan hüzünlü havalara ne denir?", "secenekler": ["Gelin Ağlatma Havaları", "Oyun Havası", "Kına Havası", "Karşılama"], "dogru": "Gelin Ağlatma Havaları"},
-    {"soru": "\"Bozkırın Tezenesi\" lakabını Neşet Ertaş'a kim vermiştir?", "secenekler": ["Yaşar Kemal", "Orhan Kemal", "Nazım Hikmet", "Sabahattin Ali"], "dogru": "Yaşar Kemal"},
-    {"soru": "\"Kardeş Türküler\" grubunun temel felsefesi nedir?", "secenekler": ["Kültürleri orijinal dillerinde yorumlamak", "Sadece Türkçe söylemek", "Pop müzik yapmak", "Sadece enstrümantal çalmak"], "dogru": "Kültürleri orijinal dillerinde yorumlamak"},
-    {"soru": "Elektro bağlamayı icat eden usta sanatçı kimdir?", "secenekler": ["Erkin Koray", "Orhan Gencebay", "Arif Sağ", "Cem Karaca"], "dogru": "Erkin Koray"},
-    {"soru": "\"Perdesiz Gitar\"ı dünya müziğine kazandıran kimdir?", "secenekler": ["Erkan Oğur", "Bülent Ortaçgil", "Fikret Kızılok", "Doğan Canku"], "dogru": "Erkan Oğur"},
-    {"soru": "Hasret Gültekin bağlamaya hangi teknikle katkı sağlamıştır?", "secenekler": ["Şelpe (Mızrapsız) tekniği", "Elektro bağlama", "Yaylı bağlama", "Bas bağlama"], "dogru": "Şelpe (Mızrapsız) tekniği"},
-    {"soru": "Barış Manço'nun türkü formundaki meşhur eseri hangisidir?", "secenekler": ["Gülpembe", "Arkadaşım Eşek", "Domates Biber Patlıcan", "Nane Limon"], "dogru": "Gülpembe"},
-    {"soru": "\"Leylim Ley\" ve \"Adaletin Bu Mu Dünya\" eserleriyle tanınan sanatçı kimdir?", "secenekler": ["Selda Bağcan", "Gülden Karaböcek", "Neşe Karaböcek", "Kamuran Akkor"], "dogru": "Selda Bağcan"},
     {"soru": "Aşık Mahzuni Şerif'in memleketi neresidir?", "secenekler": ["Kahramanmaraş (Afşin)", "Sivas", "Kırşehir", "Erzurum"], "dogru": "Kahramanmaraş (Afşin)"},
-    {"soru": "70'lerin Anadolu Rock şarkılarını dünyada tanıtan günümüz grubu hangisidir?", "secenekler": ["Altın Gün", "Duman", "Yüzyüzeyken Konuşuruz", "Adamlar"], "dogru": "Altın Gün"},
-    {"soru": "Zülfü Livaneli'nin \"Eşkıya\" eserindeki yapı nasıldır?", "secenekler": ["Türkü formunda modern düzenleme", "Klasik batı müziği", "Rap", "Caz"], "dogru": "Türkü formunda modern düzenleme"},
-    {"soru": "Bağlama sapında perdelerin kaymaması için bağlanan misina düğümlere ne denir?", "secenekler": ["Perde bağı", "Düğüm", "Kilit", "Burgu ipi"], "dogru": "Perde bağı"},
-    {"soru": "Mey gövdesi neden kayısı veya erik ağacından yapılır?", "secenekler": ["Sertliği ve ses parlaklığı için", "Ucuz olduğu için", "Hafif olduğu için", "Rengi için"], "dogru": "Sertliği ve ses parlaklığı için"},
-    {"soru": "Ney enstrümanında (başpare hariç) kaç ses deliği vardır?", "secenekler": ["7 (6 önde 1 arkada)", "10", "5", "12"], "dogru": "7 (6 önde 1 arkada)"},
-    {"soru": "Davulda deriyi germeye yarayan iplere ne denir?", "secenekler": ["Gergi", "Bağcık", "Kiriş", "Tel"], "dogru": "Gergi"},
-    {"soru": "Zurna çalarken nefes kesmeden sürekli ses çıkarma tekniğine ne denir?", "secenekler": ["Devir (Burun nefesi)", "Çifte üfleme", "Kesik nefes", "Diyafram"], "dogru": "Devir (Burun nefesi)"},
-    {"soru": "Sipsinin ses çıkaran ince kamış parçasına ne denir?", "secenekler": ["Dil (Cukcuk)", "Ağızlık", "Perde", "Gövde"], "dogru": "Dil (Cukcuk)"},
-    {"soru": "Kabak kemanenin altına takılan metal çubuğa ne denir?", "secenekler": ["Direk (Şiş)", "Ayak", "Sap", "Destek"], "dogru": "Direk (Şiş)"},
-    {"soru": "Bağlamanın teknesindeki küçük deliğin adı nedir?", "secenekler": ["Ses deliği", "Hava deliği", "Tutamak", "Süs"], "dogru": "Ses deliği"},
-    {"soru": "Kemençede tellere basılan düzlüğe ne ad verilir?", "secenekler": ["Kravat", "Klavye", "Sap", "Eşik"], "dogru": "Kravat"},
-    {"soru": "Kanunda mandalların bulunduğu tahtaya ne denir?", "secenekler": ["Mandal tahtası", "Burguluk", "Klavye", "Ses kutusu"], "dogru": "Mandal tahtası"},
-    {"soru": "Gelin ağlatma havasında hüzünlü ses veren enstrüman hangisidir?", "secenekler": ["Kaval (veya Mey)", "Zurna", "Davul", "Tef"], "dogru": "Kaval (veya Mey)"},
-    {"soru": "Koç katımı törenlerinde söylenen türkülerin amacı nedir?", "secenekler": ["Bereket dilemek", "Yağmur yağdırmak", "Savaş ilanı", "Eğlence"], "dogru": "Bereket dilemek"},
-    {"soru": "Aşık Veysel'in \"Sadık Yarim\" dediği şey nedir?", "secenekler": ["Kara Toprak", "Eşi", "Sazı", "Köyü"], "dogru": "Kara Toprak"},
-    {"soru": "Türkülerde \"Al Yazmalı\" ifadesi neyi temsil eder?", "secenekler": ["Anadolu kadınının iffetini", "Zenginliği", "Şehirli olmayı", "Yabancı olmayı"], "dogru": "Anadolu kadınının iffetini"},
-    {"soru": "Köy oyunlarında kullanılan 'Zilli Maşa' hangi malzemeden yapılır?", "secenekler": ["Demir veya Bakır", "Tahta", "Plastik", "Cam"], "dogru": "Demir veya Bakır"},
-    {"soru": "Sahurda çalınan davulun ritmine ne ad verilir?", "secenekler": ["Velveleli vuruş", "Aksak ritim", "Düz ritim", "Halay ritmi"], "dogru": "Velveleli vuruş"},
-    {"soru": "Aşıklıkta 'Bade içmek' neyin başlangıcıdır?", "secenekler": ["Hakk aşığı olmanın", "Zengin olmanın", "Evlenmenin", "Yolculuğun"], "dogru": "Hakk aşığı olmanın"},
-    {"soru": "Bağlamada 'Tavır' neyi yansıtır?", "secenekler": ["Yöresel çalma biçimini", "Sazın boyunu", "Tel sayısını", "Akordunu"], "dogru": "Yöresel çalma biçimini"},
-    {"soru": "Çobanların hayvanlarını yönetmek için kullandığı enstrüman nedir?", "secenekler": ["Kaval", "Zurna", "Saz", "Davul"], "dogru": "Kaval"},
-    {"soru": "Halk müziğindeki 'Ayak', klasik müzikte neye karşılık gelir?", "secenekler": ["Makam", "Usul", "Ritim", "Form"], "dogru": "Makam"},
-    {"soru": "\"Hekimoğlu\" türküsündeki 'Aynalı Martin' nedir?", "secenekler": ["Tüfek markası", "Ayna", "Gitar", "At"], "dogru": "Tüfek markası"},
-    {"soru": "\"Ormancı\" türküsü hangi ilimizde geçer?", "secenekler": ["Muğla", "İzmir", "Aydın", "Antalya"], "dogru": "Muğla"},
-    {"soru": "\"Sarı Gelin\" türküsü hangi coğrafyalarındır?", "secenekler": ["Doğu Anadolu ve Kafkasya", "Ege", "Trakya", "Karadeniz"], "dogru": "Doğu Anadolu ve Kafkasya"},
-    {"soru": "\"Zülüf Dökülmüş Yüze\" türküsü hangi yöreye aittir?", "secenekler": ["Kırşehir", "Erzurum", "Sivas", "Konya"], "dogru": "Kırşehir"},
-    {"soru": "\"Çeşm-i Siyahım\" ifadesi ne demektir?", "secenekler": ["Kara Gözlüm", "Kara Kaşlım", "Kara Saçlım", "Kara Yazgım"], "dogru": "Kara Gözlüm"},
-    {"soru": "\"Çökertme\" zeybeği nerenin hikayesidir?", "secenekler": ["Bodrum", "Marmaris", "Kuşadası", "Fethiye"], "dogru": "Bodrum"},
-    {"soru": "\"Gesi Bağları\" türküsü hangi ilimizindir?", "secenekler": ["Kayseri", "Sivas", "Yozgat", "Niğde"], "dogru": "Kayseri"},
-    {"soru": "Ruhi Su halk müziğine ne katmıştır?", "secenekler": ["Operatik ve çok sesli yorum", "Elektro bağlama", "Arabesk tarz", "Pop tarz"], "dogru": "Operatik ve çok sesli yorum"},
-    {"soru": "\"Havada Bulut Yok\" türküsü hangi cephe içindir?", "secenekler": ["Yemen Cephesi", "Çanakkale", "Kafkas", "Galiçya"], "dogru": "Yemen Cephesi"},
-    {"soru": "\"Mihriban\" türküsünün bestesi kime aittir?", "secenekler": ["Musa Eroğlu", "Mahzuni Şerif", "Neşet Ertaş", "Arif Sağ"], "dogru": "Musa Eroğlu"},
-    {"soru": "Nota üzerinde 'Fine' ne demektir?", "secenekler": ["Eserin bittiği yer", "Başa dön", "Hızlan", "Yavaşla"], "dogru": "Eserin bittiği yer"},
-    {"soru": "Bağlamada göğse vurularak yapılan ritmik süsleme nedir?", "secenekler": ["Zikir (Fiske/Tık) vuruşu", "Şelpe", "Tarama", "Çarpma"], "dogru": "Zikir (Fiske/Tık) vuruşu"},
-    {"soru": "İkilik nota kaç vuruştur?", "secenekler": ["2 vuruş", "1 vuruş", "4 vuruş", "Yarım vuruş"], "dogru": "2 vuruş"},
-    {"soru": "Dörlük sus (es) işareti ne kadar sessizlik ister?", "secenekler": ["1 vuruş", "2 vuruş", "Yarım vuruş", "4 vuruş"], "dogru": "1 vuruş"},
-    {"soru": "Diyez işareti sesi nasıl değiştirir?", "secenekler": ["Yarım ses inceltir", "Yarım ses kalınlaştırır", "Değiştirmez", "Sıfırlar"], "dogru": "Yarım ses inceltir"},
-    {"soru": "Bemol işareti sesi nasıl değiştirir?", "secenekler": ["Yarım ses kalınlaştırır", "Yarım ses inceltir", "Değiştirmez", "Uzatır"], "dogru": "Yarım ses kalınlaştırır"},
-    {"soru": "Müzikte 'Ritim' nedir?", "secenekler": ["Seslerin zaman içindeki düzenli akışı", "Sesin yüksekliği", "Sesin rengi", "Sesin hızı"], "dogru": "Seslerin zaman içindeki düzenli akışı"},
-    {"soru": "Bağlamada tekne yapımında kullanılan en dayanıklı ağaçlardan biri hangisidir?", "secenekler": ["Dut", "Kavak", "Çam", "Söğüt"], "dogru": "Dut"},
-    {"soru": "Türk halk müziğinde 'Tavır' denince akla gelen ilk derlemeci kimdir?", "secenekler": ["Muzaffer Sarısözen", "Zeki Müren", "Barış Manço", "Tarkan"], "dogru": "Muzaffer Sarısözen"},
-    {"soru": "Oyun havalarında sözsüz çalgısal bölüme ne denir?", "secenekler": ["Ara Nağme", "Giriş", "Final", "Nakarat"], "dogru": "Ara Nağme"},
+    {"soru": "Harman zamanı söylenen \"Dövme Türküleri\"nin ritmi neye dayanır?", "secenekler": ["Harman döven hayvanların ayak sesine", "Rüzgar sesine", "Su sesine", "Kuş sesine"], "dogru": "Harman döven hayvanların ayak sesine"},
+    {"soru": "Halk hikayelerinin en ünlü anlatıcıları kimlerdir?", "secenekler": ["Aşıklar ve Meddahlar", "Öğretmenler", "Muhtarlar", "Askerler"], "dogru": "Aşıklar ve Meddahlar"},
+    {"soru": "\"Ormancı\" türküsü hangi köyde geçer?", "secenekler": ["Gevenne (Muğla)", "Çiçekdağı", "Akçaabat", "Keskin"], "dogru": "Gevenne (Muğla)"},
+    {"soru": "Cem Karaca'nın \"Resimdeki Gözyaşları\" neyi anlatır?", "secenekler": ["Ayrılık ve özlemi", "Mutluluğu", "Okul yıllarını", "Doğa sevgisini"], "dogru": "Ayrılık ve özlemi"},
+    {"soru": "Neşet Ertaş'ın \"Neredesin Sen\" türküsündeki \"Tatlı Dillim\" kimdir?", "secenekler": ["Sevdiği / Eşi / Annesi", "Kızı", "Öğretmeni", "Arkadaşı"], "dogru": "Sevdiği / Eşi / Annesi"},
+    {"soru": "Edip Akbayram'ın \"Aldırma Gönül\" şarkısının sözleri kime aittir?", "secenekler": ["Sabahattin Ali", "Nazım Hikmet", "Ahmed Arif", "Can Yücel"], "dogru": "Sabahattin Ali"},
+    {"soru": "TRT Gençlik Korosu'ndan yetişen ünlü sanatçı kimdir?", "secenekler": ["Güler Duman", "Barış Manço", "Cem Karaca", "Zeki Müren"], "dogru": "Güler Duman"},
+    {"soru": "Bağlamada \"Dertli\" mahlasını kullanan ozan kimdir?", "secenekler": ["Aşık Dertli", "Aşık Veysel", "Karacaoğlan", "Pir Sultan"], "dogru": "Aşık Dertli"},
+    {"soru": "Halk arasında bağlamaya verilen eski isimlerden biri nedir?", "secenekler": ["Çöğür", "Gitar", "Viyola", "Kanun"], "dogru": "Çöğür"},
+    {"soru": "Trakya'da davula eski dönemlerde ne denirdi?", "secenekler": ["Kos", "Trampet", "Bateri", "Dümbelek"], "dogru": "Kos"},
+    {"soru": "\"Zurna\" isminin kökeni olan \"Surnay\" ne demektir?", "secenekler": ["Düğün kamışı / Büyük düdük", "Savaş borusu", "Çoban çalgısı", "Saray müziği"], "dogru": "Düğün kamışı / Büyük düdük"},
+    {"soru": "Anadolu'da def çalan kişiye ne ad verilir?", "secenekler": ["Dairezen", "Zurnazen", "Neyzen", "Aşık"], "dogru": "Dairezen"},
+    {"soru": "Türk Halk Müziği'nde karar sesinin bir oktav (8 ses) incesine ne ad verilir?", "secenekler": ["Tiz Durak", "Yeden", "Güçlü", "Gerdaniye"], "dogru": "Tiz Durak"},
     {"soru": "Fırat nehri kıyısındaki hem Barak Kültürü hem de Urfa Müziğinin özelliklerini barındıran Kelaynakları ile meşhur yer neresidir?", "secenekler": ["Birecik", "Kelkit", "Nizip", "Kahta"], "dogru": "Birecik"}
 ];
