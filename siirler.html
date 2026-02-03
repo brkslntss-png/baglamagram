@@ -27,13 +27,77 @@
         
         body { 
             font-family: 'Montserrat', sans-serif; 
-            background: var(--bg-dark); /* Siyah ekranı önlemek için düz renk yedeği */
+            background: var(--bg-dark); 
             background-image: var(--bg-gradient);
             color: var(--text); 
             line-height: 1.8;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+        }
+
+        /* --- DİL SEÇİCİ STİLLERİ --- */
+        .language-wrapper {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            z-index: 1002;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .lang-btn {
+            background: rgba(0, 0, 0, 0.6); 
+            border: 1px solid var(--accent);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .lang-btn:hover {
+            background: rgba(197, 160, 89, 0.2);
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+        }
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 140px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .lang-dropdown a {
+            display: block;
+            padding: 12px 15px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lang-dropdown a:last-child { border-bottom: none; }
+        .lang-dropdown a:hover {
+            background: var(--accent);
+            color: #000;
+        }
+        .lang-dropdown.active {
+            display: block;
+            animation: fadeInDrop 0.3s ease;
+        }
+        @keyframes fadeInDrop {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- NAVİGASYON --- */
@@ -45,13 +109,13 @@
             z-index: 1000;
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
-        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; padding-right: 100px; }
         nav ul { display: flex; gap: 50px; list-style: none; }
         nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         nav a:hover, nav a.active { color: var(--accent); }
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
 
-        /* --- ANIMASYONLAR (Garantili Çalışma İçin Revize Edildi) --- */
+        /* --- ANIMASYONLAR --- */
         @keyframes fadeInUp {
             0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -62,7 +126,7 @@
             text-align: center;
             padding: 80px 0 40px;
             animation: fadeInUp 1s ease-out forwards;
-            opacity: 0; /* Animasyon başlayana kadar gizli */
+            opacity: 0; 
         }
         .page-header h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; letter-spacing: 5px; text-transform: uppercase; }
         .page-header h1::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 15px auto 0; }
@@ -113,7 +177,11 @@
         .social-item:hover { color: #fff; }
         
         @media (max-width: 768px) {
-            .menu-toggle { display: block; }
+            .language-wrapper { top: 20px; right: 70px; }
+            .lang-btn span { display: none; }
+            .nav-container { padding-right: 0; }
+            
+            .menu-toggle { display: block; right: 20px; }
             nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
             nav ul.aktif { display: flex; }
             .page-header h1 { font-size: 2.5rem; }
@@ -122,60 +190,78 @@
 </head>
 <body>
 
+    <div class="language-wrapper">
+        <button class="lang-btn" onclick="toggleLanguageMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>Language</span>
+        </button>
+        
+        <div class="lang-dropdown" id="langDropdown">
+            <a href="javascript:void(0)" onclick="changeLanguage('tr')">🇹🇷 Türkçe</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('en')">🇬🇧 English</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('lt')">🇱🇹 Lietuvių</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('de')">🇩🇪 Deutsch</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('ru')">🇷🇺 Русский</a>
+        </div>
+    </div>
+
     <nav>
         <div class="nav-container">
             <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
             <ul id="anaMenu">
-                <li><a href="index.html">ANA SAYFA</a></li>
-                <li><a href="hakkinda.html">HAKKINDA</a></li>
-                <li><a href="online-egitim.html">ONLINE EĞİTİM</a></li>
-                <li><a href="notalar.html">NOTALAR</a></li>
-                <li><a href="siirler.html" class="active">ŞİİRLER</a></li>
-                <li><a href="konserler.html">KONSERLER</a></li>
+                <li><a href="index.html" data-lang="menu_home">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html" data-lang="menu_about">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" data-lang="menu_edu">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html" data-lang="menu_notes">NOTALAR</a></li>
+                <li><a href="siirler.html" class="active" data-lang="menu_poems">ŞİİRLER</a></li>
+                <li><a href="konserler.html" data-lang="menu_concerts">KONSERLER</a></li>
             </ul>
         </div>
     </nav>
 
     <header class="page-header">
-        <h1>ŞİİRLER</h1>
-        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;">Gönülden dökülen nağmeler...</p>
+        <h1 data-lang="poems_title">ŞİİRLER</h1>
+        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;" data-lang="poems_subtitle">Gönülden dökülen nağmeler...</p>
     </header>
 
     <div class="main-container">
         <div class="search-wrapper">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="siirAra" onkeyup="filtrele()" placeholder="Şiirlerde ara...">
+                <input type="text" id="siirAra" onkeyup="filtrele()" placeholder="Şiirlerde ara..." data-lang-placeholder="ph_search">
             </div>
         </div>
 
         <div id="siirListesi" class="poems-grid">
-            
-            <a href="siir-hasret.html" class="poem-link"><div class="poem-card"><h3>Hasret</h3><p>"Her anımda sadece sen varsın. Geceler senin gündüzler senin..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-ardic-sazim.html" class="poem-link"><div class="poem-card"><h3>Ardıç Sazım</h3><p>"Düştün ustanın eline. Ruhun üfürdü teline. Gel benimle konuş di..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-sazima-meramim.html" class="poem-link"><div class="poem-card"><h3>Sazıma Meramım</h3><p>"Yarama derman bulunmaz. Dinmez benim gönül sızım. Kimseler bana yar olm..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-cesm-i-derya.html" class="poem-link"><div class="poem-card"><h3>Çeşm-i Derya</h3><p>"Gönül bu, ne laf dinler ne de haya. Büyüne kapıldım ey Çeşm-i Derya..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-gonlumde-irmaklar-caglar.html" class="poem-link"><div class="poem-card"><h3>Irmaklar Çağlar</h3><p>"Evimin önünde abşar. Dereler akar uzunca. Gönlümde Irmaklar Çağl..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-pencereden-gelen.html" class="poem-link"><div class="poem-card"><h3>Pencereden Gelen</h3><p>"Pencereden gelen ala gözlü dilber. Yaktın odpare nigahınla bağrımı..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-kendine-gel-ademoglu.html" class="poem-link"><div class="poem-card"><h3>Kendine Gel Ademoğlu</h3><p>"Boğazın dokuz boğumlu Her sözün adabı vardır. Kendine gel Ademoğ..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-vatan-sevdasi.html" class="poem-link"><div class="poem-card"><h3>Vatan Sevdası</h3><p>"Farklı kültürlerden gönüldaşlarımı. Yurdumun her köşesini göresim var..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-agyarin-ardindan.html" class="poem-link"><div class="poem-card"><h3>Ağyar'ın Ardından</h3><p>"Ölü vücuda gerekmez toprak. Yaşarken ölmüş insanlara tok. Sanma sakın..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-cehennem-nari.html" class="poem-link"><div class="poem-card"><h3>Cehennem Narı</h3><p>"Yandı içimde cehennem narı. Ala gözlü bir güzelden gayrı..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-dort-mevsim-askin-siiri.html" class="poem-link"><div class="poem-card"><h3>Dört Mevsim Aşk</h3><p>"Baharın başında, çiçekler açanda. Bütün cihan yeniden canlandığında..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-dertli-yoldas.html" class="poem-link"><div class="poem-card"><h3>Dertli Yoldaş</h3><p>"Ey gam yüklü dertli yoldaş. Yükünü kenarı indir. Nedir bu gözündeki y..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-yoruldum.html" class="poem-link"><div class="poem-card"><h3>Yoruldum</h3><p>"Yoruldum artık sevmekten Yar derdi ile yaş dökmekten..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-gonul-derd-ile.html" class="poem-link"><div class="poem-card"><h3>Gönül derd ile</h3><p>"Gönül derd ile yanmada harâbım, Ne dermân olur âhımda ne şâbım..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-yorgun-saatler.html" class="poem-link"><div class="poem-card"><h3>Yorgun Saatler</h3><p>"Bir günün tortusu kaldı üzerimde, yürüyen gölgeler gibi sessizim..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-yarim-kalan.html" class="poem-link"><div class="poem-card"><h3>Yarım Kalan</h3><p>"Yürüdüm… yollar tükendi, dizlerimde takat yok. Bir yarım türküyüm ben..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-haktan-gelir-biliriz.html" class="poem-link"><div class="poem-card"><h3>Hak'tan Gelir</h3><p>"Benim de yüzümde yeller eser ya, Yâr uzak, ses uzak, gönül gezer ya..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-her-adimda-ask.html" class="poem-link"><div class="poem-card"><h3>Her Adımda Aşk</h3><p>"Dağın koynunda derinden bir nida. Su taşla konuşur, gönlüm duyar da..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-yalin-iz.html" class="poem-link"><div class="poem-card"><h3>Yalın İz</h3><p>"Kalabalık içinde garip halim, Söylerim duyulmaz, lal oldu dilim..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-ait.html" class="poem-link"><div class="poem-card"><h3>Ait</h3><p>"Ne bu şehre aitim, ne sokağa, Düşmüşüm dalımdan kuru toprağa..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-nigah-i-revnak.html" class="poem-link"><div class="poem-card"><h3>Nigah-ı Revnak</h3><p>"Bir bakışla yaktın gönül evini, Didârın şavkıyla doldum bu gece..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
-            <a href="siir-dost-pazari.html" class="poem-link"><div class="poem-card"><h3>Dost Pazarı</h3><p>"Dili şeker şerbet, kalbi buz imiş, Dost dediğin meğer, sadece söz imiş..."</p><div class="read-more">TAMAMINI OKU →</div></div></a>
+            <a href="siir-hasret.html" class="poem-link"><div class="poem-card"><h3 data-lang="p1_title">Hasret</h3><p data-lang="p1_desc">"Her anımda sadece sen varsın. Geceler senin gündüzler senin..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-ardic-sazim.html" class="poem-link"><div class="poem-card"><h3 data-lang="p2_title">Ardıç Sazım</h3><p data-lang="p2_desc">"Düştün ustanın eline. Ruhun üfürdü teline. Gel benimle konuş di..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-sazima-meramim.html" class="poem-link"><div class="poem-card"><h3 data-lang="p3_title">Sazıma Meramım</h3><p data-lang="p3_desc">"Yarama derman bulunmaz. Dinmez benim gönül sızım. Kimseler bana yar olm..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-cesm-i-derya.html" class="poem-link"><div class="poem-card"><h3 data-lang="p4_title">Çeşm-i Derya</h3><p data-lang="p4_desc">"Gönül bu, ne laf dinler ne de haya. Büyüne kapıldım ey Çeşm-i Derya..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-gonlumde-irmaklar-caglar.html" class="poem-link"><div class="poem-card"><h3 data-lang="p5_title">Irmaklar Çağlar</h3><p data-lang="p5_desc">"Evimin önünde abşar. Dereler akar uzunca. Gönlümde Irmaklar Çağl..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-pencereden-gelen.html" class="poem-link"><div class="poem-card"><h3 data-lang="p6_title">Pencereden Gelen</h3><p data-lang="p6_desc">"Pencereden gelen ala gözlü dilber. Yaktın odpare nigahınla bağrımı..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-kendine-gel-ademoglu.html" class="poem-link"><div class="poem-card"><h3 data-lang="p7_title">Kendine Gel Ademoğlu</h3><p data-lang="p7_desc">"Boğazın dokuz boğumlu Her sözün adabı vardır. Kendine gel Ademoğ..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-vatan-sevdasi.html" class="poem-link"><div class="poem-card"><h3 data-lang="p8_title">Vatan Sevdası</h3><p data-lang="p8_desc">"Farklı kültürlerden gönüldaşlarımı. Yurdumun her köşesini göresim var..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-agyarin-ardindan.html" class="poem-link"><div class="poem-card"><h3 data-lang="p9_title">Ağyar'ın Ardından</h3><p data-lang="p9_desc">"Ölü vücuda gerekmez toprak. Yaşarken ölmüş insanlara tok. Sanma sakın..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-cehennem-nari.html" class="poem-link"><div class="poem-card"><h3 data-lang="p10_title">Cehennem Narı</h3><p data-lang="p10_desc">"Yandı içimde cehennem narı. Ala gözlü bir güzelden gayrı..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-dort-mevsim-askin-siiri.html" class="poem-link"><div class="poem-card"><h3 data-lang="p11_title">Dört Mevsim Aşk</h3><p data-lang="p11_desc">"Baharın başında, çiçekler açanda. Bütün cihan yeniden canlandığında..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-dertli-yoldas.html" class="poem-link"><div class="poem-card"><h3 data-lang="p12_title">Dertli Yoldaş</h3><p data-lang="p12_desc">"Ey gam yüklü dertli yoldaş. Yükünü kenarı indir. Nedir bu gözündeki y..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-yoruldum.html" class="poem-link"><div class="poem-card"><h3 data-lang="p13_title">Yoruldum</h3><p data-lang="p13_desc">"Yoruldum artık sevmekten Yar derdi ile yaş dökmekten..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-gonul-derd-ile.html" class="poem-link"><div class="poem-card"><h3 data-lang="p14_title">Gönül derd ile</h3><p data-lang="p14_desc">"Gönül derd ile yanmada harâbım, Ne dermân olur âhımda ne şâbım..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-yorgun-saatler.html" class="poem-link"><div class="poem-card"><h3 data-lang="p15_title">Yorgun Saatler</h3><p data-lang="p15_desc">"Bir günün tortusu kaldı üzerimde, yürüyen gölgeler gibi sessizim..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-yarim-kalan.html" class="poem-link"><div class="poem-card"><h3 data-lang="p16_title">Yarım Kalan</h3><p data-lang="p16_desc">"Yürüdüm… yollar tükendi, dizlerimde takat yok. Bir yarım türküyüm ben..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-haktan-gelir-biliriz.html" class="poem-link"><div class="poem-card"><h3 data-lang="p17_title">Hak'tan Gelir</h3><p data-lang="p17_desc">"Benim de yüzümde yeller eser ya, Yâr uzak, ses uzak, gönül gezer ya..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-her-adimda-ask.html" class="poem-link"><div class="poem-card"><h3 data-lang="p18_title">Her Adımda Aşk</h3><p data-lang="p18_desc">"Dağın koynunda derinden bir nida. Su taşla konuşur, gönlüm duyar da..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-yalin-iz.html" class="poem-link"><div class="poem-card"><h3 data-lang="p19_title">Yalın İz</h3><p data-lang="p19_desc">"Kalabalık içinde garip halim, Söylerim duyulmaz, lal oldu dilim..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-ait.html" class="poem-link"><div class="poem-card"><h3 data-lang="p20_title">Ait</h3><p data-lang="p20_desc">"Ne bu şehre aitim, ne sokağa, Düşmüşüm dalımdan kuru toprağa..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-nigah-i-revnak.html" class="poem-link"><div class="poem-card"><h3 data-lang="p21_title">Nigah-ı Revnak</h3><p data-lang="p21_desc">"Bir bakışla yaktın gönül evini, Didârın şavkıyla doldum bu gece..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
+            <a href="siir-dost-pazari.html" class="poem-link"><div class="poem-card"><h3 data-lang="p22_title">Dost Pazarı</h3><p data-lang="p22_desc">"Dili şeker şerbet, kalbi buz imiş, Dost dediğin meğer, sadece söz imiş..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
 
         </div>
-        <div id="no-result">Aradığınız kriterlere uygun şiir bulunamadı.</div>
+        <div id="no-result" data-lang="no_result">Aradığınız kriterlere uygun şiir bulunamadı.</div>
     </div>
 
     <footer>
@@ -184,7 +270,7 @@
             <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-youtube"></i></div><span>YouTube</span></a>
         </div>
         <br>
-        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+        <p data-lang="footer_rights">© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
     </footer>
 
     <script>
@@ -200,6 +286,182 @@
             }
             document.getElementById("no-result").style.display = foundAny ? "none" : "block";
         }
+
+        // --- ÇEVİRİ SİSTEMİ ---
+        const translations = {
+            tr: {
+                menu_home: "ANA SAYFA", menu_about: "HAKKINDA", menu_edu: "ONLINE EĞİTİM", menu_notes: "NOTALAR", menu_poems: "ŞİİRLER", menu_concerts: "KONSERLER",
+                poems_title: "ŞİİRLER", poems_subtitle: "Gönülden dökülen nağmeler...", ph_search: "Şiirlerde ara...", no_result: "Aradığınız kriterlere uygun şiir bulunamadı.",
+                btn_read: "TAMAMINI OKU →", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.",
+                // Şiir Başlıkları ve Özetler (Mevcut TR verileri)
+                p1_title: "Hasret", p1_desc: "\"Her anımda sadece sen varsın. Geceler senin gündüzler senin...\"",
+                p2_title: "Ardıç Sazım", p2_desc: "\"Düştün ustanın eline. Ruhun üfürdü teline. Gel benimle konuş di...\"",
+                p3_title: "Sazıma Meramım", p3_desc: "\"Yarama derman bulunmaz. Dinmez benim gönül sızım. Kimseler bana yar olm...\"",
+                p4_title: "Çeşm-i Derya", p4_desc: "\"Gönül bu, ne laf dinler ne de haya. Büyüne kapıldım ey Çeşm-i Derya...\"",
+                p5_title: "Irmaklar Çağlar", p5_desc: "\"Evimin önünde abşar. Dereler akar uzunca. Gönlümde Irmaklar Çağl...\"",
+                p6_title: "Pencereden Gelen", p6_desc: "\"Pencereden gelen ala gözlü dilber. Yaktın odpare nigahınla bağrımı...\"",
+                p7_title: "Kendine Gel Ademoğlu", p7_desc: "\"Boğazın dokuz boğumlu Her sözün adabı vardır. Kendine gel Ademoğ...\"",
+                p8_title: "Vatan Sevdası", p8_desc: "\"Farklı kültürlerden gönüldaşlarımı. Yurdumun her köşesini göresim var...\"",
+                p9_title: "Ağyar'ın Ardından", p9_desc: "\"Ölü vücuda gerekmez toprak. Yaşarken ölmüş insanlara tok. Sanma sakın...\"",
+                p10_title: "Cehennem Narı", p10_desc: "\"Yandı içimde cehennem narı. Ala gözlü bir güzelden gayrı...\"",
+                p11_title: "Dört Mevsim Aşk", p11_desc: "\"Baharın başında, çiçekler açanda. Bütün cihan yeniden canlandığında...\"",
+                p12_title: "Dertli Yoldaş", p12_desc: "\"Ey gam yüklü dertli yoldaş. Yükünü kenarı indir. Nedir bu gözündeki y...\"",
+                p13_title: "Yoruldum", p13_desc: "\"Yoruldum artık sevmekten Yar derdi ile yaş dökmekten...\"",
+                p14_title: "Gönül derd ile", p14_desc: "\"Gönül derd ile yanmada harâbım, Ne dermân olur âhımda ne şâbım...\"",
+                p15_title: "Yorgun Saatler", p15_desc: "\"Bir günün tortusu kaldı üzerimde, yürüyen gölgeler gibi sessizim...\"",
+                p16_title: "Yarım Kalan", p16_desc: "\"Yürüdüm… yollar tükendi, dizlerimde takat yok. Bir yarım türküyüm ben...\"",
+                p17_title: "Hak'tan Gelir", p17_desc: "\"Benim de yüzümde yeller eser ya, Yâr uzak, ses uzak, gönül gezer ya...\"",
+                p18_title: "Her Adımda Aşk", p18_desc: "\"Dağın koynunda derinden bir nida. Su taşla konuşur, gönlüm duyar da...\"",
+                p19_title: "Yalın İz", p19_desc: "\"Kalabalık içinde garip halim, Söylerim duyulmaz, lal oldu dilim...\"",
+                p20_title: "Ait", p20_desc: "\"Ne bu şehre aitim, ne sokağa, Düşmüşüm dalımdan kuru toprağa...\"",
+                p21_title: "Nigah-ı Revnak", p21_desc: "\"Bir bakışla yaktın gönül evini, Didârın şavkıyla doldum bu gece...\"",
+                p22_title: "Dost Pazarı", p22_desc: "\"Dili şeker şerbet, kalbi buz imiş, Dost dediğin meğer, sadece söz imiş...\""
+            },
+            en: {
+                menu_home: "HOME", menu_about: "ABOUT ME", menu_edu: "ONLINE LESSONS", menu_notes: "SHEET MUSIC", menu_poems: "POEMS", menu_concerts: "CONCERTS",
+                poems_title: "POEMS", poems_subtitle: "Melodies pouring from the heart...", ph_search: "Search poems...", no_result: "No poems found matching your criteria.",
+                btn_read: "READ MORE →", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved.",
+                p1_title: "Longing", p1_desc: "\"You are in my every moment. Nights are yours, days are yours...\"",
+                p2_title: "My Juniper Saz", p2_desc: "\"You fell into the master's hand. His soul blew into your string...\"",
+                p3_title: "My Plea to My Saz", p3_desc: "\"No cure for my wound. My heart's ache won't cease...\"",
+                p4_title: "Eye of the Sea", p4_desc: "\"This heart listens to neither words nor shame. I was captivated by your spell...\"",
+                p5_title: "Rivers Flow", p5_desc: "\"Waterfall in front of my house. Streams flow long...\"",
+                p6_title: "Coming from the Window", p6_desc: "\"Hazel-eyed beauty coming from the window. You burned my bosom...\"",
+                p7_title: "Come to Your Senses", p7_desc: "\"The throat has nine knots. Every word has a manner...\"",
+                p8_title: "Love for Motherland", p8_desc: "\"My soulmates from different cultures. I want to see every corner of my land...\"",
+                p9_title: "After the Stranger", p9_desc: "\"Dead body needs no soil. Full of people dead while alive...\"",
+                p10_title: "Fire of Hell", p10_desc: "\"The fire of hell burned inside me. Other than a hazel-eyed beauty...\"",
+                p11_title: "Four Seasons of Love", p11_desc: "\"At the beginning of spring, when flowers bloom...\"",
+                p12_title: "Sorrowful Companion", p12_desc: "\"O sorrow-laden companion. Put your burden aside...\"",
+                p13_title: "I'm Tired", p13_desc: "\"I am tired of loving, of shedding tears with the pain of the beloved...\"",
+                p14_title: "With Heart's Trouble", p14_desc: "\"I am ruined burning with heart's trouble...\"",
+                p15_title: "Tired Hours", p15_desc: "\"The residue of a day remained on me, I am silent like walking shadows...\"",
+                p16_title: "Left Unfinished", p16_desc: "\"I walked... roads ended, no strength in my knees. I am an unfinished song...\"",
+                p17_title: "Comes from God", p17_desc: "\"Winds blow on my face too, The beloved is far...\"",
+                p18_title: "Love in Every Step", p18_desc: "\"A deep voice in the bosom of the mountain. Water talks to stone...\"",
+                p19_title: "Plain Trace", p19_desc: "\"My strange state in the crowd, I speak but am not heard...\"",
+                p20_title: "Belonging", p20_desc: "\"I belong neither to this city nor to the street...\"",
+                p21_title: "Splendid Gaze", p21_desc: "\"You burned the house of heart with one look...\"",
+                p22_title: "Market of Friends", p22_desc: "\"Tongue is sugar and sherbet, heart is ice...\""
+            },
+            lt: {
+                menu_home: "PAGRINDINIS", menu_about: "APIE MANE", menu_edu: "INTERNETINĖS PAMOKOS", menu_notes: "NATOS", menu_poems: "EILĖRAŠČIAI", menu_concerts: "KONCERTAI",
+                poems_title: "EILĖRAŠČIAI", poems_subtitle: "Melodijos, liejančios iš širdies...", ph_search: "Ieškoti eilėraščių...", no_result: "Eilėraščių nerasta.",
+                btn_read: "SKAITYTI DAUGIAU →", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos.",
+                p1_title: "Ilgesys", p1_desc: "\"Tu esi kiekvienoje mano akimirkoje. Naktys tavo, dienos tavo...\"",
+                p2_title: "Mano Kadagio Sazas", p2_desc: "\"Patekai į meistro rankas. Jo siela įpūtė į tavo stygą...\"",
+                p3_title: "Mano Prašymas Sazui", p3_desc: "\"Nėra vaisto mano žaizdai. Mano širdies skausmas nerimsta...\"",
+                p4_title: "Jūros Akis", p4_desc: "\"Ši širdis neklauso nei žodžių, nei gėdos. Buvau pakerėtas tavo kerų...\"",
+                p5_title: "Upės Teka", p5_desc: "\"Krioklys priešais mano namus. Upeliai teka ilgai...\"",
+                p6_title: "Ateinanti iš Lango", p6_desc: "\"Lazdyno akių gražuolė, ateinanti iš lango. Sudeginai mano krūtinę...\"",
+                p7_title: "Atsipeikėk, Žmogau", p7_desc: "\"Gerklė turi devynis mazgus. Kiekvienas žodis turi savo būdą...\"",
+                p8_title: "Tėvynės Meilė", p8_desc: "\"Mano bendraminčiai iš skirtingų kultūrų. Noriu pamatyti kiekvieną savo krašto kampelį...\"",
+                p9_title: "Po Svetimojo", p9_desc: "\"Mirusiam kūnui nereikia žemės. Pilna žmonių, mirusių gyviesiems...\"",
+                p10_title: "Pragaro Ugnis", p10_desc: "\"Pragaro ugnis degė mano viduje. Be lazdyno akių gražuolės...\"",
+                p11_title: "Keturi Meilės Sezonai", p11_desc: "\"Pavasario pradžioje, kai žydi gėlės...\"",
+                p12_title: "Sielvartingas Draugas", p12_desc: "\"O sielvarto prislėgtas drauge. Padėk savo naštą į šalį...\"",
+                p13_title: "Aš Pavargau", p13_desc: "\"Pavargau mylėti, lieti ašaras dėl mylimojo skausmo...\"",
+                p14_title: "Su Širdies Bėda", p14_desc: "\"Esu sugriautas, degantis širdies bėda...\"",
+                p15_title: "Pavargusios Valandos", p15_desc: "\"Dienos nuosėdos liko ant manęs, esu tylus kaip vaikščiojantys šešėliai...\"",
+                p16_title: "Paliktas Nepabaigtas", p16_desc: "\"Ėjau... keliai baigėsi, keliuose nėra jėgų. Esu nepabaigta daina...\"",
+                p17_title: "Ateina iš Dievo", p17_desc: "\"Vėjai pučia ir man į veidą, Mylimasis toli...\"",
+                p18_title: "Meilė Kiekviename Žingsnyje", p18_desc: "\"Gilus balsas kalno prieglobstyje. Vanduo kalba su akmeniu...\"",
+                p19_title: "Paprastas Pėdsakas", p19_desc: "\"Mano keista būsena minioje, kalbu, bet nesu girdimas...\"",
+                p20_title: "Priklausymas", p20_desc: "\"Nepriklausau nei šiam miestui, nei gatvei...\"",
+                p21_title: "Nuostabus Žvilgsnis", p21_desc: "\"Vienu žvilgsniu sudeginai širdies namus...\"",
+                p22_title: "Draugų Turgus", p22_desc: "\"Liežuvis cukrus ir šerbetas, širdis ledas...\""
+            },
+            de: {
+                menu_home: "STARTSEITE", menu_about: "ÜBER MICH", menu_edu: "ONLINE-UNTERRICHT", menu_notes: "NOTEN", menu_poems: "GEDICHTE", menu_concerts: "KONZERTE",
+                poems_title: "GEDICHTE", poems_subtitle: "Melodien, die aus dem Herzen strömen...", ph_search: "Gedichte suchen...", no_result: "Keine Gedichte gefunden.",
+                btn_read: "WEITERLESEN →", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten.",
+                p1_title: "Sehnsucht", p1_desc: "\"Du bist in jedem meiner Momente. Die Nächte gehören dir, die Tage dir...\"",
+                p2_title: "Mein Wacholder-Saz", p2_desc: "\"Du bist in die Hände des Meisters gefallen. Seine Seele hauchte in deine Saite...\"",
+                p3_title: "Mein Flehen an mein Saz", p3_desc: "\"Kein Heilmittel für meine Wunde. Mein Herzschmerz hört nicht auf...\"",
+                p4_title: "Auge des Meeres", p4_desc: "\"Dieses Herz hört weder auf Worte noch auf Scham. Ich war gefangen von deinem Zauber...\"",
+                p5_title: "Flüsse Fließen", p5_desc: "\"Wasserfall vor meinem Haus. Bäche fließen lang...\"",
+                p6_title: "Vom Fenster Kommend", p6_desc: "\"Haselnussäugige Schönheit, die vom Fenster kommt. Du hast meine Brust verbrannt...\"",
+                p7_title: "Komm zu Sinnen", p7_desc: "\"Der Hals hat neun Knoten. Jedes Wort hat eine Art...\"",
+                p8_title: "Heimatliebe", p8_desc: "\"Meine Seelenverwandten aus verschiedenen Kulturen. Ich möchte jeden Winkel meines Landes sehen...\"",
+                p9_title: "Nach dem Fremden", p9_desc: "\"Toter Körper braucht keine Erde. Satt von Menschen, die lebendig tot sind...\"",
+                p10_title: "Höllenfeuer", p10_desc: "\"Das Höllenfeuer brannte in mir. Außer einer haselnussäugigen Schönheit...\"",
+                p11_title: "Vier Jahreszeiten der Liebe", p11_desc: "\"Zu Beginn des Frühlings, wenn die Blumen blühen...\"",
+                p12_title: "Kummervoller Gefährte", p12_desc: "\"O kummervoller Gefährte. Leg deine Last beiseite...\"",
+                p13_title: "Ich bin Müde", p13_desc: "\"Ich bin müde zu lieben, Tränen zu vergießen mit dem Schmerz des Geliebten...\"",
+                p14_title: "Mit Herzensleid", p14_desc: "\"Ich bin ruiniert, brenne vor Herzensleid...\"",
+                p15_title: "Müde Stunden", p15_desc: "\"Der Rückstand eines Tages blieb auf mir, ich bin still wie wandelnde Schatten...\"",
+                p16_title: "Unvollendet Geblieben", p16_desc: "\"Ich ging... Wege endeten, keine Kraft in den Knien. Ich bin ein unvollendetes Lied...\"",
+                p17_title: "Kommt von Gott", p17_desc: "\"Winde wehen auch in meinem Gesicht, Der Geliebte ist fern...\"",
+                p18_title: "Liebe bei Jedem Schritt", p18_desc: "\"Eine tiefe Stimme im Schoß des Berges. Wasser spricht mit Stein...\"",
+                p19_title: "Schlichte Spur", p19_desc: "\"Mein seltsamer Zustand in der Menge, ich spreche, werde aber nicht gehört...\"",
+                p20_title: "Zugehörigkeit", p20_desc: "\"Ich gehöre weder dieser Stadt noch der Straße...\"",
+                p21_title: "Prächtiger Blick", p21_desc: "\"Du hast das Haus des Herzens mit einem Blick verbrannt...\"",
+                p22_title: "Markt der Freunde", p22_desc: "\"Zunge ist Zucker und Sorbet, Herz ist Eis...\""
+            },
+            ru: {
+                menu_home: "ГЛАВНАЯ", menu_about: "ОБО МНЕ", menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ", menu_notes: "НОТЫ", menu_poems: "СТИХИ", menu_concerts: "КОНЦЕРТЫ",
+                poems_title: "СТИХИ", poems_subtitle: "Мелодии, льющиеся из сердца...", ph_search: "Поиск стихов...", no_result: "Стихи не найдены.",
+                btn_read: "ЧИТАТЬ ДАЛЕЕ →", footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены.",
+                p1_title: "Тоска", p1_desc: "\"Ты в каждом моем мгновении. Ночи твои, дни твои...\"",
+                p2_title: "Мой Можжевеловый Саз", p2_desc: "\"Ты попал в руки мастера. Его душа подула на твою струну...\"",
+                p3_title: "Моя Мольба к Сазу", p3_desc: "\"Нет лекарства от моей раны. Боль в сердце не утихает...\"",
+                p4_title: "Око Моря", p4_desc: "\"Это сердце не слушает ни слов, ни стыда. Я был пленен твоими чарами...\"",
+                p5_title: "Реки Текут", p5_desc: "\"Водопад перед моим домом. Ручьи текут долго...\"",
+                p6_title: "Идущая от Окна", p6_desc: "\"Кареглазая красавица, идущая от окна. Ты сожгла мою грудь...\"",
+                p7_title: "Опомнись, Человек", p7_desc: "\"У горла девять узлов. У каждого слова есть манера...\"",
+                p8_title: "Любовь к Родине", p8_desc: "\"Мои единомышленники из разных культур. Хочу увидеть каждый уголок своей страны...\"",
+                p9_title: "Вслед за Чужаком", p9_desc: "\"Мертвому телу не нужна земля. Сыт людьми, которые мертвы при жизни...\"",
+                p10_title: "Адский Огонь", p10_desc: "\"Адский огонь горел во мне. Кроме кареглазой красавицы...\"",
+                p11_title: "Четыре Сезона Любви", p11_desc: "\"В начале весны, когда цветут цветы...\"",
+                p12_title: "Печальный Спутник", p12_desc: "\"О печальный спутник. Отложи свою ношу...\"",
+                p13_title: "Я Устал", p13_desc: "\"Я устал любить, лить слезы от боли любимой...\"",
+                p14_title: "С Сердечной Бедой", p14_desc: "\"Я разрушен, сгорая от сердечной беды...\"",
+                p15_title: "Усталые Часы", p15_desc: "\"Осадок дня остался на мне, я тих, как блуждающие тени...\"",
+                p16_title: "Оставшийся Незавершенным", p16_desc: "\"Я шел... дороги кончились, нет сил в коленях. Я незавершенная песня...\"",
+                p17_title: "Приходит от Бога", p17_desc: "\"Ветры дуют и мне в лицо, Любимая далеко...\"",
+                p18_title: "Любовь в Каждом Шаге", p18_desc: "\"Глубокий голос в лоне горы. Вода говорит с камнем...\"",
+                p19_title: "Простой След", p19_desc: "\"Мое странное состояние в толпе, я говорю, но меня не слышат...\"",
+                p20_title: "Принадлежность", p20_desc: "\"Я не принадлежу ни этому городу, ни улице...\"",
+                p21_title: "Великолепный Взгляд", p21_desc: "\"Ты сожгла дом сердца одним взглядом...\"",
+                p22_title: "Базар Друзей", p22_desc: "\"Язык - сахар и шербет, сердце - лед...\""
+            }
+        };
+
+        function toggleLanguageMenu() {
+            document.getElementById("langDropdown").classList.toggle("active");
+        }
+
+        function changeLanguage(lang) {
+            const data = translations[lang] || translations['tr'];
+            
+            // UI Elementlerini Çevir
+            document.querySelectorAll("[data-lang]").forEach(element => {
+                const key = element.getAttribute("data-lang");
+                if (data[key]) {
+                    element.innerText = data[key];
+                }
+            });
+
+            // Placeholder'ları Çevir
+            document.querySelectorAll("[data-lang-placeholder]").forEach(element => {
+                const key = element.getAttribute("data-lang-placeholder");
+                if (data[key]) {
+                    element.placeholder = data[key];
+                }
+            });
+
+            document.getElementById("langDropdown").classList.remove("active");
+            localStorage.setItem("selectedLang", lang);
+        }
+
+        // Sayfa Yüklendiğinde Dil Kontrolü
+        window.onload = function() {
+            const savedLang = localStorage.getItem("selectedLang");
+            if(savedLang && translations[savedLang]) {
+                changeLanguage(savedLang);
+            }
+        };
     </script>
+
 </body>
 </html>
