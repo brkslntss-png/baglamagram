@@ -1,4 +1,5 @@
-const tumSorular = [// --- ÇOCUKLAR İÇİN MÜZİK SORULARI (100 ADET) ---
+const tumSorular = [
+    // --- ÇOCUKLAR İÇİN MÜZİK SORULARI (100 ADET) ---
     {
         "soru": "Hangi çalgıyı üfleyerek çalarız?",
         "secenekler": ["Flüt", "Gitar", "Davul", "Piyano"],
