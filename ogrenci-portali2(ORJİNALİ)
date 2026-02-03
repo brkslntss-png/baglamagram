@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&family=Lato&display=swap" rel="stylesheet">
 
-    <script src='https://meet.jit.si/external_api.js'></script>
-
     <style>
         /* ============================================================
            TEMEL AYARLAR
@@ -124,8 +122,28 @@
         
         .user-info { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; text-align: center; }
         .user-name { color: var(--yellow-portal); font-family: 'Lato', sans-serif; font-size: 1.4rem; font-weight: normal; line-height: 1.2; margin-bottom: 5px; }
-        .premium-badge { font-size: 0.65rem; color: #000; background: var(--yellow-portal); padding: 4px 10px; border-radius: 20px; display: inline-block; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; box-shadow: 0 0 10px var(--portal-glow); }
+        .premium-badge { font-size: 0.65rem; color: #000; background: var(--yellow-portal); padding: 4px 10px; border-radius: 20px; display: inline-block; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; box-shadow: 0 0 10px var(--portal-glow); margin-top: 10px; }
         
+        /* --- PROFİL FOTOĞRAFI STİLİ --- */
+        .profile-container {
+            width: 100px; height: 100px; margin: 0 auto 15px auto;
+            position: relative; cursor: pointer; border-radius: 50%;
+            border: 2px solid var(--accent); padding: 2px;
+            transition: transform 0.3s;
+        }
+        .profile-container:hover { transform: scale(1.05); }
+        .profile-container img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+        }
+        .edit-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; transition: 0.3s;
+        }
+        .profile-container:hover .edit-overlay { opacity: 1; }
+        .edit-overlay i { color: #fff; font-size: 1.5rem; }
+
         .menu-link { display: flex; align-items: center; gap: 15px; color: #ccc; text-decoration: none; padding: 12px 15px; margin-bottom: 5px; border-radius: 12px; transition: 0.3s; cursor: pointer; font-size: 0.95rem; border: 1px solid transparent; }
         .menu-link:hover { background: rgba(255, 255, 255, 0.05); color: #fff; transform: translateX(5px); }
         .menu-link.active { background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, transparent 100%); color: var(--yellow-portal); border-left: 3px solid var(--yellow-portal); border-radius: 4px 12px 12px 4px; }
@@ -138,7 +156,9 @@
         .view-section.active { display: block; }
         
         .dashboard-header h1 { font-family: 'Lato', sans-serif; color: var(--yellow-portal); margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; font-weight: normal; letter-spacing: 1px; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        
+        /* GÜNCELLEME: Grid yapısını 3 sütuna çıkarttık */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         
         .dash-card { background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 40px 30px; text-align: center; border-radius: 20px; cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; overflow: hidden; }
         .dash-card:hover { transform: translateY(-8px); border-color: var(--yellow-portal); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
@@ -236,14 +256,15 @@
             .portal-layout { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: relative; top: 0; padding: 20px; border-radius: 0; border: none; border-bottom: 1px solid var(--glass-border); background: var(--bg-dark); max-height: none; }
             .sidebar.collapsed { height: 70px; overflow: hidden; padding: 15px 20px; }
-            .portal-content { width: 100%; padding: 10px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .materials-grid { grid-template-columns: repeat(2, 1fr); }
+            .sidebar.collapsed .user-info, .sidebar.collapsed .menu-title { display: none; }
+            .nav-container { display: flex; justify-content: space-between; padding: 0 20px; }
             nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
             nav ul.aktif { display: flex; }
-            .menu-toggle { display: block; }
+            .menu-toggle { display: block; position: static; }
             .chat-container { height: 50vh; }
+            
+            /* Mobilde grid tek sütuna düşsün */
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
 
         footer { background: #050505; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
@@ -271,14 +292,26 @@
     </nav>
 
     <div id="login-overlay">
-        <div class="login-box">
-            <span class="close-login" onclick="girisKapat()">×</span>
-            <h3>ÖĞRENCİ GİRİŞİ</h3>
-            <p style="color: #888; margin-bottom: 20px; font-size: 0.9rem;">Sisteme erişmek için şifrenizi girin.</p>
-            <input type="password" id="studentPass" placeholder="Şifreniz">
-            <button onclick="sistemeGiris()" class="btn" style="background: var(--accent); color: black;">GİRİŞ YAP</button>
-            <p id="loginError" style="color: red; display: none; margin-top: 10px;">Hatalı şifre!</p>
-        </div>
+        
+  <div class="login-box">
+    <span class="close-login" onclick="girisKapat()">×</span>
+    <h3 style="color: var(--accent); margin-bottom: 20px;">ÖĞRENCİ PORTALI</h3>
+    
+    <input type="email" id="emailInput" placeholder="E-posta Adresiniz" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    
+    <input type="password" id="passwordInput" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    
+    <div style="text-align: right; margin-bottom: 20px;">
+        <span onclick="sifreSifirla()" style="color: #bbb; cursor: pointer; font-size: 0.85rem; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#bbb'">
+            Şifremi Unuttum
+        </span>
+    </div>
+
+    <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;">GİRİŞ YAP</button>
+    
+    <p id="loginStatus" style="margin-top: 15px; font-size: 0.9rem; min-height: 20px;"></p>
+</div>
+ 
     </div>
 
     <div class="page-content">
@@ -332,11 +365,20 @@
                     <div class="hamburger-btn" onclick="toggleSidebar()">
                         <i class="fas fa-bars"></i>
                     </div>
+                    
                     <div class="user-info">
+                        <div class="profile-container" onclick="document.getElementById('profileUpload').click()">
+                            <img id="userAvatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profil">
+                            <div class="edit-overlay"><i class="fas fa-camera"></i></div>
+                            <input type="file" id="profileUpload" accept="image/*" style="display: none;" onchange="saveProfilePhoto(this)">
+                        </div>
                         <div class="user-name" id="displayAd">Ad</div>
                         <div class="user-name" id="displaySoyad" style="text-transform: uppercase;">SOYAD</div>
+                        
+                        
                         <div class="premium-badge">PREMIUM ÜYE</div>
                     </div>
+
                     <div class="menu-links">
                         <a onclick="sayfaGoster('dashboard-view')" class="menu-link active">
                             <i class="fas fa-home"></i> <span>Ana Sayfa</span>
@@ -348,6 +390,9 @@
                         </a>
                         <a onclick="sayfaGoster('exam-categories-view')" class="menu-link">
                             <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
+                        </a>
+                        <a onclick="sayfaGoster('fun-learning-view')" class="menu-link">
+                            <i class="fas fa-gamepad"></i> <span>Eğlenerek Öğren</span>
                         </a>
                         
                         <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title">ARAÇLAR</div>
@@ -400,10 +445,22 @@
                                 <p>Dikte çalışmaları, soru çözümleri.</p>
                             </div>
                             
+                            <div class="dash-card" onclick="sayfaGoster('fun-learning-view')">
+                                <i class="fas fa-gamepad"></i>
+                                <h3>EĞLENEREK ÖĞREN</h3>
+                                <p>Bilgi yarışması ve eğitici oyunlar.</p>
+                            </div>
+
                             <div class="dash-card live-class-card" onclick="startLiveClass()">
                                 <i class="fas fa-video"></i>
                                 <h3>CANLI DERS</h3>
                                 <p>Sanal sınıfa bağlanarak canlı derse katılın.</p>
+                            </div>
+
+                            <div class="dash-card" onclick="sayfaGoster('tools-menu-view')">
+                                <i class="fas fa-tools"></i>
+                                <h3>ARAÇLAR</h3>
+                                <p>Metronom, Akort Cihazı.</p>
                             </div>
                         </div>
                     </div>
@@ -539,12 +596,22 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div id="live-class-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2>Sanal Sınıf</h2>
                             <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← Geri</button>
                         </div>
-                        <div id="meet-frame"></div>
+                        
+                        <div style="width: 100%; height: 600px; border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); background: #000;">
+                             <iframe 
+                                id="whereby-frame"
+                                src="" 
+                                allow="camera; microphone; fullscreen; speaker; display-capture" 
+                                style="width: 100%; height: 100%; border: none;">
+                            </iframe>
+                        </div>
+                        <p style="text-align:center; color:#666; font-size:0.8rem; margin-top:10px;">En iyi performans için kulaklık kullanınız.</p>
                     </div>
 
                     <div id="baglama-menu-view" class="view-section">
@@ -587,6 +654,58 @@
                             <div class="cat-box" onclick="yetenekKategoriAc('Ezgi Tekrarı Soruları')"><span class="cat-title">Ezgi Tekrarı Soruları</span><span class="cat-desc">Melodik hafıza çalışmaları.</span></div>
                         </div>
                     </div>
+                    
+                    <div id="fun-learning-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Eğlenerek Öğren</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <br>
+                        <div class="category-grid">
+                            <div class="cat-box" onclick="sayfaGoster('quiz-game-view')">
+                                <span class="cat-title">Bilgi Yarışması</span>
+                                <span class="cat-desc">Müzik bilginizi test edin ve yarışın. Ne kadar bilgili olduğunuzu herkese gösterin!</span>
+                            </div>
+                            <div class="cat-box" onclick="sayfaGoster('memory-game-view')">
+                                <span class="cat-title">Enstrümanlarla Görsel Hafıza</span>
+                                <span class="cat-desc">Kartları eşleştir, oyun oynayarak hafızanı güçlendir.    (3-10 Yaş)</span>
+                            </div>
+                            <div class="cat-box" onclick="sayfaGoster('ear-training-view')">
+                                <span class="cat-title">Mutlak Duyum Testi ve Kulak Egzersizi</span>
+                                <span class="cat-desc">Bu oyun, kulağının ne kadar keskin olduğunu ölçmek için tasarlandı. Bu oyunda kazanmak veya kaybetmek yok; çalıştıkça gelişen bir kulak var.</span>
+                            </div>
+                            
+                            <div class="cat-box" onclick="sayfaGoster('tsm-game-view')">
+                                <span class="cat-title">TSM Bilgi Yarışması</span>
+                                <span class="cat-desc">Türk Sanat Müziği makam ve usul bilginizi ölçün. Teoriye ve türk müziği kültürüne hakimiyetinizi kanıtlayın!</span>
+                            </div>
+                            <div class="cat-box" onclick="sayfaGoster('nota-yagmuru-view')">
+                                <span class="cat-title">Nota Yağmuru</span>
+                                <span class="cat-desc">Notaları doğru zamanda yakalayarak reflekslerinizi geliştirin. (8 yaş üzeri)</span>
+                            </div>
+                            </div>
+                    </div>
+
+                    <div id="quiz-game-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Bilgi Yarışması</h2>
+                            <div>
+                                <button onclick="tamEkranYap('quiz-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
+                                    <i class="fas fa-expand"></i> Tam Ekran
+                                </button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                            </div>
+                        </div>
+                        
+                        <iframe 
+                            id="quiz-frame"
+                            src="bilgi-yarismasi/oyun.html" 
+                            width="100%" 
+                            height="750" 
+                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+                            title="Bağlamagram Yarışması">
+                        </iframe>
+                    </div>
 
                     <div id="exam-list-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
@@ -614,6 +733,108 @@
                         </div>
                     </div>
 
+                    <div id="memory-game-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Müzik Hafıza Oyunu</h2>
+                            <div>
+                                <button onclick="tamEkranYap('memory-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
+                                    <i class="fas fa-expand"></i> Tam Ekran
+                                </button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                            </div>
+                        </div>
+                        
+                        <iframe 
+                            id="memory-frame"
+                            src="bilgi-yarismasi/hafiza.html" 
+                            width="100%" 
+                            height="750" 
+                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+                            title="Hafıza Oyunu">
+                        </iframe>
+                    </div>
+
+                    <div id="tools-menu-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Araçlar</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <br>
+                        <div class="category-grid">
+                            <div class="cat-box" onclick="sayfaGoster('metronome-view')">
+                                <span class="cat-title">Metronom</span>
+                                <span class="cat-desc">Ritim çalışmaları için.</span>
+                            </div>
+                            <div class="cat-box" onclick="sayfaGoster('tuner-view')">
+                                <span class="cat-title">Akort Cihazı</span>
+                                <span class="cat-desc">Enstrümanınızı akort edin.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ear-training-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Mutlak Duyum Testi</h2>
+                            <div>
+                                <button onclick="tamEkranYap('ear-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
+                                    <i class="fas fa-expand"></i> Tam Ekran
+                                </button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                            </div>
+                        </div>
+                        
+                        <iframe 
+                            id="ear-frame"
+                            src="bilgi-yarismasi/kulak-egzersiz.html" 
+                            width="100%" 
+                            height="750" 
+                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+                            title="Kulak Egzersizi">
+                        </iframe>
+                    </div>
+
+                    <div id="tsm-game-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>TSM Bilgi Yarışması</h2>
+                            <div>
+                                <button onclick="tamEkranYap('tsm-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
+                                    <i class="fas fa-expand"></i> Tam Ekran
+                                </button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                            </div>
+                        </div>
+                        
+                        <iframe 
+                            id="tsm-frame"
+                            src="tsm-oyun.html" 
+                            width="100%" 
+                            height="750" 
+                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+                            title="TSM Bilgi Yarışması">
+                        </iframe>
+                    </div>
+
+                    <div id="nota-yagmuru-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Nota Yağmuru</h2>
+                            <div>
+                                <button onclick="tamEkranYap('nota-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
+                                    <i class="fas fa-expand"></i> Tam Ekran
+                                </button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                            </div>
+                        </div>
+                        
+                        <iframe 
+                            id="nota-frame"
+                            src="nota-yagmuru.html" 
+                            width="100%" 
+                            height="750" 
+                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+                            title="Nota Yağmuru">
+                        </iframe>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -634,17 +855,20 @@
         <p style="font-size: 0.8rem; color: #555;">© 2026 Mahmut Burak ASLANTAŞ.</p>
     </footer>
 
-    <script>
-        // --- 1. ÖĞRENCİ VERİTABANI ---
-        const ogrenciler = {
-            "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },            
-            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },        
-            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },      
-            "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3R1xJ8=", soyad: "UEFJTlRFUg==" }, 
-            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }        
-        };
+   <script>
+        // --- TAM EKRAN FONKSİYONU ---
+        function tamEkranYap(iframeId) {
+            var elem = document.getElementById(iframeId);
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        }
 
-        // --- 2. DİKTE SES DOSYALARI ---
+        // --- 1. DİKTE SES DOSYALARI ---
         const dikteVerileri = {
             1: "1CprU3vYtFIEZ0gRgReVEye4IHShh0y0_",
             2: "1F47H-u9OgakbY-Y8o0X3s_ago7C9x-RO",
@@ -669,7 +893,7 @@
             22: "1pdHx7gHYkg1sEfu01AfVTxbpHQJ3GCOS"
         };
 
-        // --- 3. DERS NOTLARI LİSTESİ ---
+        // --- 2. DERS NOTLARI LİSTESİ ---
         const dersNotlariDosyalari = [
             { ad: "Temel Müzik Bilgileri 1", dosya: "1.png" },
             { ad: "Temel Müzik Bilgileri 2", dosya: "2.png" },
@@ -684,7 +908,7 @@
             { ad: "Nota Süreleri 2", dosya: "nota-sureleri1.png" }
         ];
 
-        // --- 4. KISA SAP NOTALARI ---
+        // --- 3. KISA SAP NOTALARI ---
         const kisaSapNotalari = [
             { ad: "Gelin Ayşem", dosya: "a.jpg" },
             { ad: "Eklemedir Koca Konak", dosya: "b.jpg" },
@@ -708,7 +932,7 @@
             { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
         ];
 
-        // --- 5. PARMAK EGZERSİZLERİ ---
+        // --- 4. PARMAK EGZERSİZLERİ ---
         const parmakEgzersizleri = [
             { ad: "Alıştırma 1", dosya: "alistirma-1.png" },
             { ad: "Alıştırma 2", dosya: "alistirma-2.png" },
@@ -720,52 +944,6 @@
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function girisAc() { document.getElementById("login-overlay").style.display = "flex"; }
         function girisKapat() { document.getElementById("login-overlay").style.display = "none"; }
-
-        document.getElementById("studentPass").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") { sistemeGiris(); }
-        });
-
-        function sistemeGiris() {
-            const hamSifre = document.getElementById("studentPass").value.trim();
-            let sifre = "";
-            
-            try {
-                sifre = btoa(unescape(encodeURIComponent(hamSifre)));
-            } catch (e) {
-                console.log("Şifre çevrim hatası");
-            }
-
-            if (ogrenciler[sifre]) {
-                const ogr = ogrenciler[sifre];
-                
-                let formatliAd = "Öğrenci";
-                let formatliSoyad = "";
-
-                try {
-                    let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
-                    let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
-                    formatliAd = gercekAd.toLowerCase().split(' ').map(kelime => kelime.charAt(0).toUpperCase() + kelime.slice(1)).join(' ');
-                    formatliSoyad = gercekSoyad.toUpperCase();
-                } catch (err) {
-                    console.log("İsim çözme hatası");
-                }
-                
-                document.getElementById("displayAd").innerText = formatliAd;
-                document.getElementById("displaySoyad").innerText = formatliSoyad;
-                document.getElementById("welcomeTitle").innerText = "Merhaba " + formatliAd + "!";
-                
-                girisKapat();
-                document.getElementById("portal-entry-btn-section").style.display = "none";
-                document.getElementById("public-content").style.display = "none";
-                document.getElementById("student-portal").style.display = "block";
-                
-                document.body.classList.add("portal-active");
-
-                history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
-            } else {
-                document.getElementById("loginError").style.display = "block";
-            }
-        }
 
         function sayfaGoster(id, addToHistory = true) {
             document.querySelectorAll(".view-section").forEach(s => s.classList.remove("active"));
@@ -842,27 +1020,69 @@
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
 
         function startLiveClass() {
-            const domain = 'meet.jit.si';
-            const options = {
-                roomName: 'BurakHocaBaglamaSinifi',
-                width: '100%',
-                height: 600,
-                parentNode: document.querySelector('#meet-frame'),
-                lang: 'tr',
-                configOverwrite: { 
-                    startWithAudioMuted: true,
-                    prejoinPageEnabled: false
-                }
-            };
+            // Whereby Oda Linki
+            const myRoomUrl = "https://whereby.com/baglamagram"; 
+            const frame = document.getElementById('whereby-frame');
             
-            if(document.querySelector('#meet-frame').innerHTML === "") {
-                const api = new JitsiMeetExternalAPI(domain, options);
+            // Linki sadece boşsa yükle (Sayfa yenilenmesini önler)
+            if(frame.src === "" || !frame.src.includes("whereby.com")) {
+                frame.src = myRoomUrl + "?embed&minimal&background=off&chat=on"; 
             }
             
             sayfaGoster('live-class-view');
         }
 
-        // --- YENİ EKLENEN FOTOĞRAF, CHAT VE SESLENDİRME MANTIĞI ---
+        // --- PROFİL FOTOĞRAFI YÜKLEME (GÜNCELLENMİŞ SIKIŞTIRMALI VERSİYON) ---
+        function saveProfilePhoto(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        // 1. Resmi Küçült (Veritabanına sığması için)
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        const MAX_SIZE = 300; 
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        if (width > height) {
+                            if (width > MAX_SIZE) {
+                                height *= MAX_SIZE / width;
+                                width = MAX_SIZE;
+                            }
+                        } else {
+                            if (height > MAX_SIZE) {
+                                width *= MAX_SIZE / height;
+                                height = MAX_SIZE;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7); 
+                        
+                        document.getElementById('userAvatar').src = dataUrl;
+                        
+                        // KİŞİYE ÖZEL KAYDETME
+                        const aktifMail = localStorage.getItem('aktifKullaniciMail');
+                        if (aktifMail) {
+                            localStorage.setItem('foto_' + aktifMail, dataUrl);
+                        } else {
+                            localStorage.setItem('geciciFoto', dataUrl);
+                        }
+                    };
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // --- CHAT VE BURAKAI (BUG FİXLENDİ) ---
         let selectedImageBase64 = null;
         let lastAiResponse = "";
 
@@ -938,6 +1158,7 @@
             document.getElementById('imagePreviewContainer').style.display = 'none';
         }
 
+        // --- ENTER TUŞU İLE MESAJ GÖNDERME ---
         document.getElementById("aiUserInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault(); 
@@ -1012,14 +1233,15 @@
                 box.appendChild(aiMsg);
 
             } catch (err) {
-                document.getElementById("loadingBubble").innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
+                const bubble = document.getElementById("loadingBubble");
+                if(bubble) bubble.innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
                 console.error(err);
             }
             
             box.scrollTop = box.scrollHeight;
         }
 
-        // --- METRONOM MANTIĞI (DÜZELTİLDİ: SCRIPT İÇİNE TAŞINDI) ---
+        // --- METRONOM MANTIĞI (BUG FİXLENDİ) ---
         let audioCtx = null;
         let isPlaying = false;
         let tempo = 100;
@@ -1081,6 +1303,11 @@
                 if (!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 }
+                // Browser politikası gereği resume gerekebilir
+                if(audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
                 isPlaying = true;
                 currentBeat = 0;
                 nextNoteTime = audioCtx.currentTime + 0.05;
@@ -1133,7 +1360,7 @@
             document.querySelectorAll('.beat-dot').forEach(d => d.classList.remove('active'));
         }
 
-        // --- AKORT CİHAZI (TUNER) MANTIĞI ---
+        // --- AKORT CİHAZI (TUNER) MANTIĞI (BUG FİXLENDİ) ---
         let tunerAudioCtx = null;
         let analyser = null;
         let rafID = null;
@@ -1218,11 +1445,12 @@
         function autoCorrelate(buf, sampleRate) {
             let SIZE = buf.length;
             let rms = 0;
+            let rms_sum = 0;
             for (let i = 0; i < SIZE; i++) {
                 const val = buf[i];
-                rms += val * val;
+                rms_sum += val * val;
             }
-            rms = Math.sqrt(rms / SIZE);
+            rms = Math.sqrt(rms_sum / SIZE);
             if (rms < 0.01) return -1;
 
             let r1 = 0, r2 = SIZE - 1, thres = 0.2;
@@ -1349,12 +1577,210 @@
             return (value - x1) * (y2 - x2) / (y1 - x1) + x2;
         }
 
-        // --- ORTAK BAŞLANGIÇ ---
         document.addEventListener('DOMContentLoaded', () => {
-            createDots(); // Metronom başlat
-            drawGauge(0, false); // Tuner ibresini sıfırla
+            createDots(); 
+            drawGauge(0, false); 
         });
 
+    
     </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+  // Firestore (Veritabanı) kütüphaneleri
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBIx9TujKPX82NaWXGh2QTxyG6TEQ-abi8",
+    authDomain: "baglamagram-portal.firebaseapp.com",
+    projectId: "baglamagram-portal",
+    storageBucket: "baglamagram-portal.firebasestorage.app",
+    messagingSenderId: "498044667137",
+    appId: "1:498044667137:web:e1a75ef1a0f0edf1330700",
+    measurementId: "G-RD5H01SSTH"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Şifre Çözücü Fonksiyon
+  function sifreCo(sifreliMetin) {
+      try {
+          return decodeURIComponent(escape(window.atob(sifreliMetin)));
+      } catch (e) {
+          console.error("Şifre çözme hatası:", e);
+          return sifreliMetin;
+      }
+  }
+
+  // YENİ ÖĞRENCİLERİN AD-SOYADINI İLK BAŞTA BURAYA GİRECEKSİN. KAYDI
+  const ogrenciListesi = {
+      "Z29rYm95MDlAZ21haWwuY29t": { ad: "R29rMg==", soyad: "UEFJTlRFUg==" },
+        "elifin-epostası-gelecek@xyz.com": { ad: "RWxpZg==", soyad: "S0FSTUFO" },
+      "ZmVyaGF0Y2l2YW4wMjA1QG91dGxvb2suY29t": { ad: "RmVyaGF0ZQ==", soyad: "Q2l2YW5lIEJha2FuZQ==" },
+      "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" }
+  };
+
+  // --- ŞİFRE SIFIRLAMA FONKSİYONU EKLENDİ ---
+  window.sifreSifirla = function() {
+      const email = document.getElementById('emailInput').value;
+      const status = document.getElementById('loginStatus');
+
+      if (!email) {
+          status.style.color = "orange";
+          status.innerText = "Lütfen önce yukarıya e-posta adresini yaz.";
+          return;
+      }
+
+      status.style.color = "yellow";
+      status.innerText = "Sıfırlama bağlantısı gönderiliyor...";
+
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+            status.style.color = "#4CAF50"; // Yeşil
+            status.innerText = "E-postanı kontrol et! Sıfırlama linki gönderildi.";
+        })
+        .catch((error) => {
+            status.style.color = "#ff4d4d"; // Kırmızı
+            console.error(error);
+            if (error.code === "auth/user-not-found") {
+                status.innerText = "Bu e-posta adresi kayıtlı değil.";
+            } else if (error.code === "auth/invalid-email") {
+                status.innerText = "Geçersiz e-posta formatı.";
+            } else {
+                status.innerText = "Hata: " + error.code;
+            }
+        });
+  }
+
+  // --- FOTOĞRAF KAYDETME (VERİTABANINA) ---
+  // Bu fonksiyonu window'a atıyoruz ki HTML'den çağrılabilsin
+  window.saveProfilePhoto = function(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // 1. Resmi Küçült (Veritabanına sığması için)
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                const MAX_SIZE = 300; 
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > height) {
+                    if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+                } else {
+                    if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                // Kaliteyi biraz daha düşürdük (0.6) ki hızlı olsun
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
+
+                // 2. Ekrana bas (Kullanıcı anında görsün)
+                document.getElementById('userAvatar').src = dataUrl;
+
+                // 3. VERİTABANINA KAYDET
+                const user = auth.currentUser;
+                if (user) {
+                    const userRef = doc(db, "kullanicilar", user.email);
+                    setDoc(userRef, { profil_fotosu: dataUrl }, { merge: true })
+                        .then(() => { console.log("Fotoğraf buluta kaydedildi!"); })
+                        .catch((error) => { console.error("Yazma hatası:", error); });
+                }
+            };
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+  }
+
+  const loginBtn = document.getElementById('firebaseLoginBtn');
+  const emailInput = document.getElementById('emailInput');
+  const passInput = document.getElementById('passwordInput');
+  
+  function enterKontrol(e) {
+      if (e.key === "Enter") loginBtn.click();
+  }
+  if(emailInput) emailInput.addEventListener("keyup", enterKontrol);
+  if(passInput) passInput.addEventListener("keyup", enterKontrol);
+
+  if(loginBtn) {
+      loginBtn.addEventListener('click', () => {
+          const email = emailInput.value;
+          const pass = passInput.value;
+          const status = document.getElementById('loginStatus');
+
+          status.style.color = "yellow";
+          status.innerText = "Bilgiler kontrol ediliyor...";
+
+          signInWithEmailAndPassword(auth, email, pass)
+            .then((userCredential) => {
+                status.style.color = "#4CAF50"; 
+                status.innerText = "Premium Öğrenme Ayrıcalığına Hoş Geldin...";
+
+                const girisYapanMail = userCredential.user.email;
+                const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
+                
+                // Maili yine de hafızada tutalım (yedek olsun)
+                localStorage.setItem('aktifKullaniciMail', girisYapanMail);
+
+                setTimeout(() => {
+                    document.getElementById("login-overlay").style.display = "none";
+                    document.getElementById("portal-entry-btn-section").style.display = "none";
+                    document.getElementById("public-content").style.display = "none";
+                    document.getElementById("student-portal").style.display = "block";
+                    document.body.classList.add("portal-active");
+
+                    // İSİM AYARLAMA
+                    let ogrenci = ogrenciListesi[sifreliMail];
+                    if (ogrenci) {
+                        const gercekAd = sifreCo(ogrenci.ad);
+                        const gercekSoyad = sifreCo(ogrenci.soyad);
+                        document.getElementById("displayAd").innerText = gercekAd;
+                        document.getElementById("displaySoyad").innerText = gercekSoyad;
+                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + gercekAd + "!";
+                    } else {
+                        const varsayilanAd = girisYapanMail.split('@')[0];
+                        document.getElementById("displayAd").innerText = varsayilanAd;
+                        document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
+                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
+                    }
+
+                    // FOTOĞRAFI VERİTABANINDAN ÇEK
+                    document.getElementById('userAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+                    
+                    const userRef = doc(db, "kullanicilar", girisYapanMail);
+                    getDoc(userRef).then((docSnap) => {
+                        if (docSnap.exists() && docSnap.data().profil_fotosu) {
+                            document.getElementById('userAvatar').src = docSnap.data().profil_fotosu;
+                        }
+                    }).catch((error) => {
+                        console.log("Fotoğraf çekilemedi (Henüz yüklenmemiş olabilir).");
+                    });
+                    
+                    history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
+                }, 1500);
+            })
+            .catch((error) => {
+                status.style.color = "#ff4d4d";
+                console.error(error);
+                if (error.code === "auth/invalid-credential") {
+                    status.innerText = "E-postanız veya şifreniz hatalı! Bilgilerinizi tekrar gözden geçirin";
+                } else {
+                    status.innerText = "Hata oluştu.";
+                }
+            });
+      });
+  }
+</script>
+</script>
+    
 </body>
 </html>
