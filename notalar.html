@@ -6,8 +6,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Notalar | Mahmut Burak ASLANTAŞ</title>
+    <title>Mahmut Burak ASLANTAŞ</title>
     
+    <meta name="description" content="Mahmut Burak ASLANTAŞ'ın resmi web sitesi. Bağlama icraları, özgün şiir çalışmaları, konser takvimi ve online eğitim portalına dair güncel içerikler.">
+    <meta name="keywords" content="Mahmut Burak ASLANTAŞ, bağlama, türk halk müziği, şair, şiir, dijital tasarım, baglamagram, konser">
+    <meta name="author" content="Mahmut Burak ASLANTAŞ">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baglamagram.com.tr/index.html">
+    <meta property="og:title" content="Mahmut Burak ASLANTAŞ | Resmi Web Sitesi">
+    <meta property="og:description" content="Bağlama icraları, özgün şiirler ve online eğitim portalı.">
+    <meta property="og:image" content="https://i.hizliresim.com/h6g4amm.jpg">
+    <meta property="og:locale" content="tr_TR">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mahmut Burak ASLANTAŞ | Resmi Web Sitesi">
+    <meta name="twitter:description" content="Sanat ve eğitimin dijital buluşma noktası.">
+    <meta name="twitter:image" content="https://i.hizliresim.com/h6g4amm.jpg">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,18 +33,22 @@
     <style>
         :root {
             --primary: #000000;
-            --accent: #c5a059;
+            --accent: #c5a059; /* Altın Rengi */
+            --accent-hover: #d4b06a;
             --bg-dark: #0f0f0f;
             --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
-            --box-bg: rgba(30, 30, 30, 0.4);
+            --box-bg: rgba(255, 255, 255, 0.03);
             --text: #ffffff;
             --text-secondary: #b0b0b0;
+            --spotify: #1DB954;
+            --youtube: #FF0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
             font-family: 'Montserrat', sans-serif; 
+            font-weight: 300;
             background: var(--bg-dark);
             background-image: var(--bg-gradient);
             color: var(--text); 
@@ -35,6 +56,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* --- DİL SEÇİCİ STİLLERİ --- */
@@ -103,122 +125,262 @@
 
         /* --- NAVİGASYON --- */
         nav {
-            background: #000; padding: 20px 0; position: sticky; top: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
-        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; padding-right: 100px; }
-        nav ul { display: flex; gap: 50px; list-style: none; }
-        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
-        nav a:hover, nav a.active { color: var(--accent); }
-        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
-
-        /* --- BAŞLIK --- */
-        .page-header { text-align: center; padding: 80px 0 40px; animation: fadeInUp 1s ease-out forwards; opacity: 0; }
-        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; letter-spacing: 5px; text-transform: uppercase; }
-        .page-header h1::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 15px auto 0; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- ARAMA --- */
-        .main-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; width: 100%; }
-        .search-wrapper { display: flex; justify-content: center; margin-bottom: 40px; animation: fadeInUp 1s ease-out 0.2s forwards; opacity: 0; }
-        .search-box { position: relative; width: 100%; max-width: 400px; }
-        .search-box input { width: 100%; padding: 12px 50px; background: rgba(255,255,255,0.05); border: 1px solid rgba(197,160,89,0.3); border-radius: 4px; color: #fff; outline: none; transition: 0.3s; font-family: 'Montserrat', sans-serif; }
-        .search-box input:focus { border-color: var(--accent); background: rgba(0,0,0,0.5); }
-        .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); }
-
-        /* --- TABLO TASARIMI --- */
-        .table-container {
-            overflow-x: auto; 
-            animation: fadeInUp 1s ease-out 0.4s forwards;
-            opacity: 0;
-            background: var(--box-bg);
-            border-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px; 
-        }
-
-        thead {
-            background: rgba(197, 160, 89, 0.1);
-            border-bottom: 2px solid var(--accent);
-        }
-
-        th {
-            text-align: left;
-            padding: 20px;
-            font-family: 'Playfair Display', serif;
-            color: var(--accent);
-            font-weight: 400;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
-        td {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            transition: 0.3s;
-        }
-
-        tr { transition: 0.3s; }
         
-        tbody tr:hover {
-            background: rgba(197, 160, 89, 0.05);
-        }
-        tbody tr:hover td {
-            color: #fff;
+       /* --- DÜZELTİLMİŞ NAVİGASYON CSS'İ --- */
+.nav-container {
+    display: flex;
+    justify-content: center; /* İçeriği yatayda tam ortalar */
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 20px; /* Sağdaki 100px'lik itme payını kaldırdık, eşit boşluk verdik */
+}
+
+nav ul { 
+    display: flex; 
+    justify-content: center; /* Listeyi kendi içinde ortalar */
+    list-style: none; 
+    gap: 40px; /* Linkler arası boşluk */
+    padding: 0; 
+    margin: 0;
+    width: 100%; /* Kapsayıcının tamamına yayılmasını sağlar */
+}        
+        nav a { 
+            color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; 
+            font-weight: 500; text-transform: uppercase; letter-spacing: 2px; 
+            transition: all 0.3s ease; position: relative;
         }
 
-        .note-link {
-            text-decoration: none;
-            color: #fff;
-            font-weight: 500;
-            transition: 0.3s;
-            display: block; 
+        nav a::after {
+            content: ''; position: absolute; width: 0; height: 2px; 
+            bottom: -5px; left: 0; background-color: var(--accent); transition: width 0.3s ease;
         }
-        .note-link:hover { color: var(--accent); }
+        nav a:hover { color: var(--accent); }
+        nav a:hover::after { width: 100%; }
 
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(197, 160, 89, 0.3);
-            border-radius: 50%;
+        .menu-toggle {
+            display: none; font-size: 1.5rem; color: var(--accent);
+            cursor: pointer; position: absolute; right: 20px;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 80px 20px 40px; position: relative;
+            overflow: hidden; 
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .name-container {
+            border: 1px solid rgba(197, 160, 89, 0.3); padding: 40px 60px; margin-bottom: 30px;
+            position: relative; animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .name-container::after, .name-container::before {
+            content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid var(--accent);
+        }
+        .name-container::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .name-container::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: 3.5rem; letter-spacing: 5px;
+            text-transform: uppercase; line-height: 1.2;
+        }
+        .hero h1 span { color: var(--accent); font-weight: 600; }
+
+        .hero-static-quote {
+            max-width: 700px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
             color: var(--text-secondary);
-            transition: 0.3s;
-            text-decoration: none;
+            font-style: italic;
+            margin: 0 auto 50px auto;
+            animation: fadeIn 2s ease-in-out;
         }
-        .download-btn:hover {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
-            transform: scale(1.1);
+        .hero-static-quote .author-name {
+            font-size: 0.9em;
+            color: var(--accent);
+            display: block;
+            margin-top: 10px;
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* --- BUTONLAR --- */
+        .cta-buttons { display: flex; gap: 25px; animation: fadeIn 2.5s ease-in-out; margin-bottom: 60px; }
+
+        .btn {
+            padding: 18px 45px; border: 1px solid var(--accent); color: var(--accent);
+            background: transparent; text-decoration: none; text-transform: uppercase;
+            letter-spacing: 2px; font-size: 0.85rem; transition: 0.4s; position: relative;
+            z-index: 1; overflow: hidden;
+        }
+        .btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%;
+            background: var(--accent); z-index: -1; transition: 0.4s;
+        }
+        .btn:hover { color: #000; }
+        .btn:hover::before { width: 100%; }
+        .btn-secondary { border-color: var(--text-secondary); color: var(--text-secondary); }
+        .btn-secondary::before { background: var(--text-secondary); }
+
+        /* --- İSTATİSTİK PANELİ --- */
+        .stats-section {
+            background: rgba(0, 0, 0, 0.5); border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 40px 0; margin-bottom: 60px;
+            animation: fadeIn 2.2s ease-in-out;
+        }
+        .stats-grid {
+            display: flex; justify-content: center; gap: 80px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto;
+        }
+        .stat-item { text-align: center; }
+        .stat-number { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--accent); display: block; }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- GÜNÜN SÖZÜ --- */
+        .quote-section {
+            text-align: center; max-width: 800px; margin: 0 auto 80px; padding: 0 20px;
+            position: relative; animation: fadeIn 2.4s ease-in-out;
+        }
+        .daily-quote {
+            font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: #fff;
+            margin-bottom: 15px; display: block;
+        }
+        .quote-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; display: block;}
+        .quote-line { width: 40px; height: 2px; background: var(--accent); margin: 0 auto; opacity: 0.5; }
+
+        /* --- KREATİF KÖŞE --- */
+        .creative-section {
+            width: 100%;
+            max-width: 100%; 
+            margin: 0 auto 80px; 
+            padding: 0 5%;
+        }
+        .section-title {
+            text-align: center; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent);
+            margin-bottom: 40px; letter-spacing: 2px;
+        }
+        .creative-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            background: #000;
+            border: 1px solid #333;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* --- INSTAGRAM FEED --- */
+        .instagram-section {
+            background: #080808; padding: 60px 20px; text-align: center;
+        }
+        .insta-header { margin-bottom: 40px; }
+        .insta-header i { font-size: 2rem; color: var(--text); margin-bottom: 10px; }
+        .insta-link { color: var(--text); text-decoration: none; font-size: 1.1rem; }
+        
+        .insta-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 1000px; margin: 0 auto;
+        }
+        .insta-item {
+            position: relative; aspect-ratio: 1/1; overflow: hidden; display: block; group;
+        }
+        .insta-item img {
+            width: 100%; height: 100%; object-fit: cover; transition: 0.3s;
+        }
+        .insta-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+            opacity: 0; transition: 0.3s;
+        }
+        .insta-item:hover .insta-overlay { opacity: 1; }
+        .insta-overlay i { color: #fff; font-size: 1.5rem; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- FOOTER --- */
-        footer { background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
-        .social-wrapper { display: flex; justify-content: center; gap: 40px; }
-        .social-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: #888; font-size: 0.8rem; transition: 0.3s; }
-        .social-icon-box { font-size: 24px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; border-radius: 50%; transition: all 0.3s ease; }
-        .social-item:hover .social-icon-box { border-color: var(--accent); transform: translateY(-5px); }
-        .social-item:hover { color: #fff; }
+        footer {
+            background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a;
+        }
+        .social-wrapper { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .social-item { display: flex; flexDirection: column; align-items: center; gap: 8px; textDecoration: none; color: #888; fontSize: 0.8rem; transition: 0.3s; }
+        
+        .social-icon-box {
+            font-size: 1.2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #333;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
 
+        .social-item:hover .social-icon-box { borderColor: var(--accent); transform: translateY(-5px); }
+        .social-item:hover { color: var(--text); }
+        
+        .fa-instagram { color: #fff; } 
+        .social-item:hover .fa-instagram { color: #E1306C; }
+        
+        .fa-spotify { color: #fff; } 
+        .social-item:hover .fa-spotify { color: var(--spotify); }
+        
+        .fa-youtube { color: #fff; } 
+        .social-item:hover .fa-youtube { color: var(--youtube); }
+
+        /* RESPONSIVE */
         @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
             .menu-toggle { display: block; right: 20px; }
-            nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
-            nav ul.aktif { display: flex; }
-            .page-header h1 { font-size: 2.5rem; }
-            th, td { padding: 15px; }
             .language-wrapper { top: 20px; right: 70px; }
             .lang-btn span { display: none; }
+            
+            nav ul {
+                display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
+                background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent);
+            }
+            nav ul.aktif { display: flex; }
+            .cta-buttons { flex-direction: column; width: 80%; }
+            .stats-grid { gap: 40px; }
+            .creative-grid { grid-template-columns: 1fr; } 
+            .insta-grid { grid-template-columns: repeat(2, 1fr); }
             .nav-container { padding-right: 0; }
         }
     </style>
@@ -230,7 +392,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
             </svg>
             <span>Language</span>
         </button>
@@ -248,154 +410,342 @@
         <div class="nav-container">
             <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
             <ul id="anaMenu">
-                <li><a href="index.html" data-lang="menu_home">ANA SAYFA</a></li>
+                <li><a href="index.html" style="color: var(--accent);" data-lang="menu_home">ANA SAYFA</a></li>
                 <li><a href="hakkinda.html" data-lang="menu_about">HAKKINDA</a></li>
                 <li><a href="online-egitim.html" data-lang="menu_edu">ONLINE EĞİTİM</a></li>
-                <li><a href="notalar.html" class="active" data-lang="menu_notes">NOTALAR</a></li>
+                <li><a href="notalar.html" data-lang="menu_notes">NOTALAR</a></li>
                 <li><a href="siirler.html" data-lang="menu_poems">ŞİİRLER</a></li>
                 <li><a href="konserler.html" data-lang="menu_concerts">KONSERLER</a></li>
             </ul>
         </div>
     </nav>
 
-    <header class="page-header">
-        <h1 data-lang="notes_title">NOTALAR</h1>
-        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;" data-lang="notes_desc">Bağlama repertuvarı ve döküman arşivi...</p>
+    <header class="hero">
+        <div class="name-container">
+            <h1>Mahmut Burak<br><span>ASLANTAŞ</span></h1>
+        </div>
+        
+        <div class="hero-static-quote">
+            <span id="staticQuoteText" data-lang="hero_quote">“Sanatsız kalan bir milletin, hayat damarlarından biri kopmuş demektir.”</span><br>
+            <span id="staticQuoteAuthor" class="author-name" data-lang="hero_quote_author">Mustafa Kemal ATATÜRK</span>
+        </div>
+
+        <div class="cta-buttons">
+            <a href="konserler.html" class="btn" data-lang="btn_concerts">Konserleri Keşfet</a>
+            <a href="siirler.html" class="btn btn-secondary" data-lang="btn_poems">Şiirleri Oku</a>
+        </div>
     </header>
 
-    <div class="main-container">
-        <div class="search-wrapper">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="notaAra" onkeyup="filtrele()" placeholder="Eser adı veya besteci ara..." data-lang-placeholder="ph_search">
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label" data-lang="stat_lessons">SAAT ONLINE DERS</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">20+</span>
+                <span class="stat-label" data-lang="stat_works">ÖZGÜN ESER & ŞİİR</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">10+</span>
+                <span class="stat-label" data-lang="stat_stage">SAHNE PERFORMANSI</span>
             </div>
         </div>
+    </section>
 
-        <div class="table-container">
-            <table id="notaTablosu">
-                <thead>
-                    <tr>
-                        <th style="width: 50%;" data-lang="th_title">ESER ADI</th>
-                        <th style="width: 30%;" data-lang="th_composer">BESTECİ / KAYNAK KİŞİ</th>
-                        <th style="width: 20%; text-align: center;" data-lang="th_download">İNDİR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <tr>
-                        <td>
-                            <a href="nota-yoruldum.html" class="note-link">Yoruldum</a>
-                        </td>
-                        <td>Mahmut Burak ASLANTAŞ</td>
-                        <td style="text-align: center;">
-                            <a href="notalar/yoruldum.pdf" download class="download-btn" title="İndir">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </td>
-                    </tr>
+    <section class="quote-section">
+        <span class="quote-title" data-lang="title_quote">GÜNÜN SÖZÜ</span>
+        <span id="gununSozu" class="daily-quote"></span>
+        <div class="quote-line"></div>
+    </section>
 
-                    <tr>
-                        <td>
-                            <a href="nota-cehennem-nari.html" class="note-link">Cehennem Narı</a>
-                        </td>
-                        <td>Mahmut Burak ASLANTAŞ</td>
-                        <td style="text-align: center;">
-                            <a href="notalar/cehennem-nari.pdf" download class="download-btn" title="İndir">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <a href="nota-ardic-sazim.html" class="note-link">Ardıç Sazım</a>
-                        </td>
-                        <td>Mahmut Burak ASLANTAŞ</td>
-                        <td style="text-align: center;">
-                            <a href="notalar/ardic-sazim.pdf" download class="download-btn" title="İndir">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
+    <section class="creative-section">
+        <h2 class="section-title" data-lang="title_creative">KREATİF KÖŞE</h2>
+        <div class="creative-grid">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/SvliCP5Wznw" allowfullscreen></iframe>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/DfzEr4qozlI" allowfullscreen></iframe>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/v39ygvfSdGE" allowfullscreen></iframe>
+            </div>
         </div>
-        <div id="no-result" style="display:none; text-align:center; margin-top:20px; color:#888;" data-lang="no_result">Aradığınız eser bulunamadı.</div>
-    </div>
+    </section>
+
+    <section class="instagram-section">
+        <div class="insta-header">
+            <i class="fab fa-instagram"></i>
+            <br>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-link">@baglamagram</a>
+        </div>
+        
+        <div class="insta-grid">
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
+                <img src="https://i.hizliresim.com/ne9q1cu.jpg" alt="Insta 1">
+                <div class="insta-overlay"><i class="fas fa-heart"></i></div>
+            </a>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
+                <img src="https://i.hizliresim.com/ps617qs.JPG" alt="Insta 2">
+                <div class="insta-overlay"><i class="fas fa-heart"></i></div>
+            </a>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
+                <img src="https://i.hizliresim.com/h6g4amm.jpg" alt="Insta 3">
+                <div class="insta-overlay"><i class="fas fa-heart"></i></div>
+            </a>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="insta-item">
+                <img src="https://i.hizliresim.com/l1dfhwg.jpg" alt="Insta 4">
+                <div class="insta-overlay"><i class="fas fa-heart"></i></div>
+            </a>
+        </div>
+        </section>
 
     <footer>
         <div class="social-wrapper">
-            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-instagram"></i></div><span>Instagram</span></a>
-            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-youtube"></i></div><span>YouTube</span></a>
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
+                <div class="social-icon-box"><i class="fab fa-instagram"></i></div>
+                <span>Instagram</span>
+            </a>
+            <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item">
+                <div class="social-icon-box"><i class="fab fa-spotify"></i></div>
+                <span>Spotify</span>
+            </a>
+            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item">
+                <div class="social-icon-box"><i class="fab fa-youtube"></i></div>
+                <span>YouTube</span>
+            </a>
         </div>
         <br>
         <p data-lang="footer_rights">© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
     </footer>
 
     <script>
-        function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
-        
-        function filtrele() {
-            var input = document.getElementById("notaAra").value.toUpperCase();
-            var table = document.getElementById("notaTablosu");
-            var tr = table.getElementsByTagName("tr");
-            var foundAny = false;
-
-            for (var i = 1; i < tr.length; i++) {
-                var tdEser = tr[i].getElementsByTagName("td")[0]; 
-                var tdBesteci = tr[i].getElementsByTagName("td")[1]; 
-                
-                if (tdEser || tdBesteci) {
-                    var txtEser = tdEser.textContent || tdEser.innerText;
-                    var txtBesteci = tdBesteci.textContent || tdBesteci.innerText;
-                    
-                    if (txtEser.toUpperCase().indexOf(input) > -1 || txtBesteci.toUpperCase().indexOf(input) > -1) {
-                        tr[i].style.display = "";
-                        foundAny = true;
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-            document.getElementById("no-result").style.display = foundAny ? "none" : "block";
-            document.querySelector("thead").style.display = foundAny ? "" : "none";
+        function menuyuAcKapa() {
+            var menu = document.getElementById("anaMenu");
+            menu.classList.toggle("aktif");
         }
 
-        // --- ÇEVİRİ SİSTEMİ ---
+        // --- ÇEVİRİ VERİTABANI ---
         const translations = {
             tr: {
-                menu_home: "ANA SAYFA", menu_about: "HAKKINDA", menu_edu: "ONLINE EĞİTİM", menu_notes: "NOTALAR", menu_poems: "ŞİİRLER", menu_concerts: "KONSERLER",
-                notes_title: "NOTALAR", notes_desc: "Bağlama repertuvarı ve döküman arşivi...",
-                ph_search: "Eser adı veya besteci ara...", th_title: "ESER ADI", th_composer: "BESTECİ / KAYNAK KİŞİ", th_download: "İNDİR",
-                no_result: "Aradığınız eser bulunamadı.", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır."
+                menu_home: "ANA SAYFA",
+                menu_about: "HAKKINDA",
+                menu_edu: "ONLINE EĞİTİM",
+                menu_notes: "NOTALAR",
+                menu_poems: "ŞİİRLER",
+                menu_concerts: "KONSERLER",
+                hero_quote: "“Sanatsız kalan bir milletin, hayat damarlarından biri kopmuş demektir.”",
+                hero_quote_author: "Mustafa Kemal ATATÜRK",
+                btn_concerts: "KONSERLERİ KEŞFET",
+                btn_poems: "ŞİİRLERİ OKU",
+                stat_lessons: "SAAT ONLINE DERS",
+                stat_works: "ÖZGÜN ESER & ŞİİR",
+                stat_stage: "SAHNE PERFORMANSI",
+                title_quote: "GÜNÜN SÖZÜ",
+                title_creative: "KREATİF KÖŞE",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır."
             },
             en: {
-                menu_home: "HOME", menu_about: "ABOUT ME", menu_edu: "ONLINE LESSONS", menu_notes: "SHEET MUSIC", menu_poems: "POEMS", menu_concerts: "CONCERTS",
-                notes_title: "SHEET MUSIC", notes_desc: "Baglama repertoire and document archive...",
-                ph_search: "Search song title or composer...", th_title: "TITLE", th_composer: "COMPOSER / SOURCE", th_download: "DOWNLOAD",
-                no_result: "No sheet music found.", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved."
+                menu_home: "HOME",
+                menu_about: "ABOUT ME",
+                menu_edu: "ONLINE LESSONS",
+                menu_notes: "SHEET MUSIC",
+                menu_poems: "POEMS",
+                menu_concerts: "CONCERTS",
+                hero_quote: "“A nation without art has lost one of its life-sustaining vessels.”",
+                hero_quote_author: "Mustafa Kemal ATATÜRK",
+                btn_concerts: "DISCOVER CONCERTS",
+                btn_poems: "READ POEMS",
+                stat_lessons: "HOURS OF ONLINE LESSONS",
+                stat_works: "ORIGINAL WORKS & POEMS",
+                stat_stage: "STAGE PERFORMANCES",
+                title_quote: "QUOTE OF THE DAY",
+                title_creative: "CREATIVE CORNER",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved."
             },
             lt: {
-                menu_home: "PAGRINDINIS", menu_about: "APIE MANE", menu_edu: "INTERNETINĖS PAMOKOS", menu_notes: "NATOS", menu_poems: "EILĖRAŠČIAI", menu_concerts: "KONCERTAI",
-                notes_title: "NATOS", notes_desc: "Baglama repertuaras ir dokumentų archyvas...",
-                ph_search: "Ieškoti kūrinio ar kompozitoriaus...", th_title: "KŪRINIO PAVADINIMAS", th_composer: "KOMPOZITORIUS / ŠALTINIS", th_download: "ATSISIŲSTI",
-                no_result: "Natų nerasta.", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos."
+                menu_home: "PAGRINDINIS",
+                menu_about: "APIE MANE",
+                menu_edu: "INTERNETINĖS PAMOKOS",
+                menu_notes: "NATOS",
+                menu_poems: "EILĖRAŠČIAI",
+                menu_concerts: "KONCERTAI",
+                hero_quote: "„Tauta be meno neteko vienos iš savo gyvybinių arterijų.“",
+                hero_quote_author: "Mustafa Kemal ATATÜRK",
+                btn_concerts: "ATRASKITE KONCERTUS",
+                btn_poems: "SKAITYTI EILĖRAŠČIUS",
+                stat_lessons: "VALANDŲ INTERNETINIŲ PAMOKŲ",
+                stat_works: "ORIGINALŪS KŪRINIAI IR EILĖRAŠČIAI",
+                stat_stage: "SCENINIAI PASIRODYMAI",
+                title_quote: "DIENOS CITATA",
+                title_creative: "KŪRYBINIS KAMPELIS",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos."
             },
             de: {
-                menu_home: "STARTSEITE", menu_about: "ÜBER MICH", menu_edu: "ONLINE-UNTERRICHT", menu_notes: "NOTEN", menu_poems: "GEDICHTE", menu_concerts: "KONZERTE",
-                notes_title: "NOTEN", notes_desc: "Baglama-Repertoire und Dokumentenarchiv...",
-                ph_search: "Nach Titel oder Komponist suchen...", th_title: "TITEL", th_composer: "KOMPONIST / QUELLE", th_download: "HERUNTERLADEN",
-                no_result: "Keine Noten gefunden.", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten."
+                menu_home: "STARTSEITE",
+                menu_about: "ÜBER MICH",
+                menu_edu: "ONLINE-UNTERRICHT",
+                menu_notes: "NOTEN",
+                menu_poems: "GEDICHTE",
+                menu_concerts: "KONZERTE",
+                hero_quote: "„Eine Nation ohne Kunst hat eine ihrer lebenswichtigen Adern verloren.“",
+                hero_quote_author: "Mustafa Kemal ATATÜRK",
+                btn_concerts: "KONZERTE ENTDECKEN",
+                btn_poems: "GEDICHTE LESEN",
+                stat_lessons: "STUNDEN ONLINE-UNTERRICHT",
+                stat_works: "ORIGINALWERKE & GEDICHTE",
+                stat_stage: "BÜHNENAUFTRITTE",
+                title_quote: "ZITAT DES TAGES",
+                title_creative: "KREATIVE ECKE",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten."
             },
             ru: {
-                menu_home: "ГЛАВНАЯ", menu_about: "ОБО МНЕ", menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ", menu_notes: "НОТЫ", menu_poems: "СТИХИ", menu_concerts: "КОНЦЕРТЫ",
-                notes_title: "НОТЫ", notes_desc: "Репертуар багламы и архив документов...",
-                ph_search: "Поиск по названию или композитору...", th_title: "НАЗВАНИЕ", th_composer: "КОМПОЗИТОР / ИСТОЧНИК", th_download: "СКАЧАТЬ",
-                no_result: "Ноты не найдены.", footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены."
+                menu_home: "ГЛАВНАЯ",
+                menu_about: "ОБО МНЕ",
+                menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ",
+                menu_notes: "НОТЫ",
+                menu_poems: "СТИХИ",
+                menu_concerts: "КОНЦЕРТЫ",
+                hero_quote: "«Нация без искусства лишилась одной из своих жизненно важных артерий».",
+                hero_quote_author: "Мустафа Кемаль АТАТЮРК",
+                btn_concerts: "ОТКРЫТЬ КОНЦЕРТЫ",
+                btn_poems: "ЧИТАТЬ СТИХИ",
+                stat_lessons: "ЧАСОВ ОНЛАЙН-ЗАНЯТИЙ",
+                stat_works: "ОРИГИНАЛЬНЫЕ РАБОТЫ И СТИХИ",
+                stat_stage: "СЦЕНИЧЕСКИЕ ВЫСТУПЛЕНИЯ",
+                title_quote: "ЦИТАТА ДНЯ",
+                title_creative: "ТВОРЧЕСКИЙ УГОЛОК",
+                footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены."
             }
         };
 
+        // --- GÜNÜN SÖZÜ OTOMASYONU (TÜM DİLLER) ---
+        // TR
+        const sozler = [
+            "Sabırla bekleyen, taş üstüne gül açtırır, acele eden, eceline kucak açtırır. - Mahmut Burak ASLANTAŞ",
+            "Müziğin olduğu yerde kötülük barınmaz. - Cervantes",
+            "Gönül kimi severse, aşk onda güzeldir. - Neşet Ertaş",
+            "Vakit nakit değil candır, geçen her an imtihandır. - Mahmut Burak ASLANTAŞ",
+            "Yüksek uçan alçak konar, gurur insanı tez yakar.",
+            "Hüzün de bir misafirdir; gelir, geçer, izi kalır. - Mahmut Burak ASLANTAŞ",
+            "Gülü incitme dalında, sözü incitme dilinde. - Mahmut Burak ASLANTAŞ",
+            "Bağlama, Anadolu'nun sesidir; duymasını bilene çok şey anlatır.",
+            "Sanat, görüneni tekrarlamak değil; görünür kılmaktır. - Paul Klee",
+            "Yoruldum artık sevmekten, yar derdi ile yaş dökmekten... - Mahmut Burak ASLANTAŞ",
+            "Gölgen boyunu aşsa da, güneş batınca hükmü biter. - Mahmut Burak ASLANTAŞ",
+            "Söz okun yaydan çıkışıdır; hedefini bulmazsa döner sahibini vurur. - Mahmut Burak ASLANTAŞ",
+            "Vuslatı bekleyen göz, aradaki dağları dert etmez. - Mahmut Burak ASLANTAŞ",
+            "Cahilin övgüsü, zehirli bala benzer, yerken tatlı gelir ama sonra öldürür; alimin yergisi ise acı ilaca benzer, içerken zorlar ama sonunda güldürür. - Mahmut Burak ASLANTAŞ",
+            "Yolu yürüyen değil, yolda eriyen bilir hakikati; menzile varmak nasip işidir, yolda sadakatle kalan er kişidir. - Mahmut Burak ASLANTAŞ",
+            "Gönül aynası buğulanmışsa, baktığın yüzde kusur arama; önce kendi nefesini tut ki, karşındakinin sureti berraklaşsın. - Mahmut Burak ASLANTAŞ",
+            "Gölgen boyunu aşsa da, güneş batınca hükmü biter. - Mahmut Burak ASLANTAŞ"
+        ];
+
+        // EN
+        const sozlerEN = [
+            "He who waits with patience makes roses bloom on stone; he who hurries embraces his end. - Mahmut Burak ASLANTAŞ",
+            "Where there is music, there is no evil. - Cervantes",
+            "Whomever the heart loves, love is beautiful in them. - Neşet Ertaş",
+            "Time is not cash but life; every passing moment is a test. - Mahmut Burak ASLANTAŞ",
+            "Those who fly high land low; pride burns one quickly.",
+            "Sorrow is also a guest; it comes, it passes, but leaves a trace. - Mahmut Burak ASLANTAŞ",
+            "Do not hurt the rose on the branch, do not hurt the word on the tongue. - Mahmut Burak ASLANTAŞ",
+            "The Baglama is the voice of Anatolia; it tells much to those who know how to listen.",
+            "Art does not reproduce the visible; rather, it makes visible. - Paul Klee",
+            "I am tired of loving, of shedding tears with the pain of the beloved... - Mahmut Burak ASLANTAŞ",
+            "Even if your shadow exceeds your height, its rule ends when the sun sets. - Mahmut Burak ASLANTAŞ",
+            "A word is like an arrow leaving the bow; if it misses its target, it returns to hit its owner. - Mahmut Burak ASLANTAŞ",
+            "The eye waiting for reunion does not mind the mountains in between. - Mahmut Burak ASLANTAŞ",
+            "The praise of the ignorant is like poisoned honey, sweet to eat but deadly later; the criticism of the wise is like bitter medicine, hard to swallow but makes you smile in the end. - Mahmut Burak ASLANTAŞ",
+            "Not he who walks the path, but he who melts into the path knows the truth. - Mahmut Burak ASLANTAŞ",
+            "If the mirror of the heart is misty, do not look for flaws in the face you see; hold your own breath first so the image before you clears up. - Mahmut Burak ASLANTAŞ",
+            "Even if your shadow exceeds your height, its rule ends when the sun sets. - Mahmut Burak ASLANTAŞ"
+        ];
+
+        // LT (Lietuvių)
+        const sozlerLT = [
+            "Tas, kuris kantriai laukia, priverčia rožes žydėti ant akmens; tas, kuris skuba, apkabina savo pabaigą. - Mahmut Burak ASLANTAŞ",
+            "Kur skamba muzika, ten nėra blogio. - Servantesas",
+            "Ką širdis myli, tas joje gražus. - Neşet Ertaş",
+            "Laikas ne pinigai, o gyvenimas; kiekviena praeinanti akimirka yra išbandymas. - Mahmut Burak ASLANTAŞ",
+            "Kas aukštai skrenda, žemai leidžiasi; puikybė greitai sudegina.",
+            "Liūdesys taip pat yra svečias; jis ateina, praeina, bet palieka pėdsaką. - Mahmut Burak ASLANTAŞ",
+            "Nežeisk rožės ant šakos, nežeisk žodžio ant liežuvio. - Mahmut Burak ASLANTAŞ",
+            "Baglama yra Anatolijos balsas; ji daug pasako tiems, kurie moka klausytis.",
+            "Menas neatkartoja to, kas matoma; greičiau jis padaro matoma. - Paul Klee",
+            "Aš pavargau mylėti, lieti ašaras su mylimojo skausmu... - Mahmut Burak ASLANTAŞ",
+            "Net jei tavo šešėlis viršija tavo ūgį, jo valdymas baigiasi, kai nusileidžia saulė. - Mahmut Burak ASLANTAŞ",
+            "Žodis yra kaip strėlė, paliekanti lanką; jei ji nepataiko į tikslą, ji grįžta ir sužeidžia savo šeimininką. - Mahmut Burak ASLANTAŞ",
+            "Akis, laukianti susitikimo, nepaiso kalnų, esančių tarp jų. - Mahmut Burak ASLANTAŞ",
+            "Neišmanėlio pagyrimas yra kaip nuodingas medus, saldus valgyti, bet vėliau mirtinas; išminčiaus kritika yra kaip kartūs vaistai, sunku nuryti, bet galiausiai priverčia nusišypsoti. - Mahmut Burak ASLANTAŞ",
+            "Ne tas, kuris eina keliu, o tas, kuris ištirpsta kelyje, žino tiesą. - Mahmut Burak ASLANTAŞ",
+            "Jei širdies veidrodis yra miglotas, neieškok trūkumų veide, kurį matai; pirmiausia sulaikyk kvėpavimą, kad vaizdas prieš tave išsigrynintų. - Mahmut Burak ASLANTAŞ",
+            "Net jei tavo šešėlis viršija tavo ūgį, jo valdymas baigiasi, kai nusileidžia saulė. - Mahmut Burak ASLANTAŞ"
+        ];
+
+        // DE (Deutsch)
+        const sozlerDE = [
+            "Wer geduldig wartet, lässt Rosen auf Stein blühen; wer eilt, umarmt sein Ende. - Mahmut Burak ASLANTAŞ",
+            "Wo Musik ist, da ist kein Böses. - Cervantes",
+            "Wen das Herz liebt, in dem ist die Liebe schön. - Neşet Ertaş",
+            "Zeit ist kein Geld, sondern Leben; jeder vergehende Moment ist eine Prüfung. - Mahmut Burak ASLANTAŞ",
+            "Wer hoch fliegt, landet tief; Stolz verbrennt einen schnell.",
+            "Kummer ist auch ein Gast; er kommt, er geht, aber er hinterlässt eine Spur. - Mahmut Burak ASLANTAŞ",
+            "Verletze nicht die Rose am Zweig, verletze nicht das Wort auf der Zunge. - Mahmut Burak ASLANTAŞ",
+            "Die Baglama ist die Stimme Anatoliens; sie erzählt denen viel, die zuzuhören wissen.",
+            "Kunst gibt nicht das Sichtbare wieder, sondern macht sichtbar. - Paul Klee",
+            "Ich bin müde zu lieben, Tränen zu vergießen mit dem Schmerz des Geliebten... - Mahmut Burak ASLANTAŞ",
+            "Auch wenn dein Schatten deine Größe übertrifft, endet seine Herrschaft, wenn die Sonne untergeht. - Mahmut Burak ASLANTAŞ",
+            "Ein Wort ist wie ein Pfeil, der den Bogen verlässt; wenn es sein Ziel verfehlt, kehrt es zurück, um seinen Besitzer zu treffen. - Mahmut Burak ASLANTAŞ",
+            "Das Auge, das auf das Wiedersehen wartet, kümmert sich nicht um die Berge dazwischen. - Mahmut Burak ASLANTAŞ",
+            "Das Lob des Unwissenden ist wie vergifteter Honig, süß zu essen, aber später tödlich; die Kritik des Weisen ist wie bittere Medizin, schwer zu schlucken, aber am Ende bringt sie dich zum Lächeln. - Mahmut Burak ASLANTAŞ",
+            "Nicht der, der den Weg geht, sondern der, der im Weg verschmilzt, kennt die Wahrheit. - Mahmut Burak ASLANTAŞ",
+            "Wenn der Spiegel des Herzens neblig ist, suche nicht nach Fehlern im Gesicht, das du siehst; halte zuerst deinen eigenen Atem an, damit das Bild vor dir klar wird. - Mahmut Burak ASLANTAŞ",
+            "Auch wenn dein Schatten deine Größe übertrifft, endet seine Herrschaft, wenn die Sonne untergeht. - Mahmut Burak ASLANTAŞ"
+        ];
+
+        // RU (Русский)
+        const sozlerRU = [
+            "Тот, кто терпеливо ждет, заставляет розы цвести на камне; тот, кто спешит, обнимает свой конец. - Махмут Бурак АСЛАНТАШ",
+            "Где музыка, там нет зла. - Сервантес",
+            "Кого любит сердце, в том любовь прекрасна. - Нешет Эрташ",
+            "Время — это не деньги, а жизнь; каждое проходящее мгновение — это испытание. - Махмут Бурак АСЛАНТАШ",
+            "Кто высоко летает, тот низко садится; гордость сжигает быстро.",
+            "Печаль тоже гость; она приходит, проходит, но оставляет след. - Махмут Бурак АСЛАНТАШ",
+            "Не рань розу на ветке, не рань слово на языке. - Махмут Бурак АСЛАНТАШ",
+            "Баглама — это голос Анатолии; она многое говорит тем, кто умеет слушать.",
+            "Искусство не воспроизводит видимое, а делает его видимым. - Пауль Клее",
+            "Я устал любить, лить слезы от боли любимой... - Махмут Бурак АСЛАНТАШ",
+            "Даже если тень превышает твой рост, ее власть заканчивается, когда заходит солнце. - Махмут Бурак АСЛАНТАШ",
+            "Слово подобно стреле, выпущенной из лука; если она не попадает в цель, то возвращается и ранит своего владельца. - Махмут Бурак АСЛАНТАШ",
+            "Глаз, ждущий встречи, не замечает гор между ними. - Махмут Бурак АСЛАНТАШ",
+            "Похвала невежды подобна отравленному меду, сладкому на вкус, но смертельному впоследствии; критика мудреца подобна горькому лекарству, которое трудно проглотить, но в конце концов оно заставляет улыбнуться. - Махмут Бурак АСЛАНТАШ",
+            "Не тот, кто идет по пути, а тот, кто растворяется в пути, знает истину. - Махмут Бурак АСЛАНТАШ",
+            "Если зеркало сердца затуманено, не ищи изъянов в лице, которое видишь; сначала задержи дыхание, чтобы образ перед тобой прояснился. - Махмут Бурак АСЛАНТАШ",
+            "Даже если тень превышает твой рост, ее власть заканчивается, когда заходит солнце. - Махмут Бурак АСЛАНТАШ"
+        ];
+
+        function gununSozunuGetir() {
+            const currentLang = localStorage.getItem("selectedLang") || "tr";
+            const bugun = new Date();
+            const baslangic = new Date(bugun.getFullYear(), 0, 0);
+            const fark = bugun - baslangic;
+            const gunSayisi = Math.floor(fark / (1000 * 60 * 60 * 24));
+            
+            // Dile göre doğru listeyi seç
+            let targetList = sozler; // Varsayılan
+            if (currentLang === "en") targetList = sozlerEN;
+            else if (currentLang === "lt") targetList = sozlerLT;
+            else if (currentLang === "de") targetList = sozlerDE;
+            else if (currentLang === "ru") targetList = sozlerRU;
+
+            const secilenSoz = targetList[gunSayisi % targetList.length];
+            
+            document.getElementById("gununSozu").innerText = `“${secilenSoz}”`;
+        }
+
+        // --- DİL FONKSİYONLARI ---
         function toggleLanguageMenu() {
             document.getElementById("langDropdown").classList.toggle("active");
         }
@@ -403,7 +753,6 @@
         function changeLanguage(lang) {
             const data = translations[lang] || translations['tr'];
             
-            // UI Elementlerini Çevir
             document.querySelectorAll("[data-lang]").forEach(element => {
                 const key = element.getAttribute("data-lang");
                 if (data[key]) {
@@ -411,22 +760,17 @@
                 }
             });
 
-            // Placeholder'ları Çevir
-            document.querySelectorAll("[data-lang-placeholder]").forEach(element => {
-                const key = element.getAttribute("data-lang-placeholder");
-                if (data[key]) {
-                    element.placeholder = data[key];
-                }
-            });
-
             document.getElementById("langDropdown").classList.remove("active");
             localStorage.setItem("selectedLang", lang);
+            gununSozunuGetir();
         }
 
         window.onload = function() {
             const savedLang = localStorage.getItem("selectedLang");
             if(savedLang && translations[savedLang]) {
                 changeLanguage(savedLang);
+            } else {
+                gununSozunuGetir();
             }
         };
     </script>
