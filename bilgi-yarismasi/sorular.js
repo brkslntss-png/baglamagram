@@ -1,5 +1,4 @@
-const tumSorular = [
-    // --- ÇOCUKLAR İÇİN MÜZİK SORULARI (100 ADET) ---
+const tumSorular = [// --- ÇOCUKLAR İÇİN MÜZİK SORULARI (100 ADET) ---
     {
         "soru": "Hangi çalgıyı üfleyerek çalarız?",
         "secenekler": ["Flüt", "Gitar", "Davul", "Piyano"],
@@ -127,7 +126,324 @@ const tumSorular = [
     },
     {
         "soru": "Tencere ve tavalarla ne yapabiliriz?",
-        "secenekler": ["Davul gibi
+        "secenekler": ["Davul gibi çalabiliriz", "Resim yapabiliriz", "Okuyabiliriz", "Giyebiliriz"],
+        "dogru": "Davul gibi çalabiliriz"
+    },
+    {
+        "soru": "Hangi çalgı üçgendir?",
+        "secenekler": ["Üçgen Zil (Triangle)", "Davul", "Gitar", "Saz"],
+        "dogru": "Üçgen Zil (Triangle)"
+    },
+    {
+        "soru": "Müziği kim yazar?",
+        "secenekler": ["Besteci", "Boyacı", "Şoför", "Berber"],
+        "dogru": "Besteci"
+    },
+    {
+        "soru": "Hangi çalgının tuşlarına basarız?",
+        "secenekler": ["Org / Piyano", "Davul", "Zil", "Kaval"],
+        "dogru": "Org / Piyano"
+    },
+    {
+        "soru": "Kuşlar sabahları ne yapar?",
+        "secenekler": ["Öterler (Şarkı söylerler)", "Uyurlar", "Televizyon izlerler", "Okula giderler"],
+        "dogru": "Öterler (Şarkı söylerler)"
+    },
+    {
+        "soru": "Hangi ses çok kalındır?",
+        "secenekler": ["Ayı sesi / Davul sesi", "Kuş sesi", "Zil sesi", "Kedi sesi"],
+        "dogru": "Ayı sesi / Davul sesi"
+    },
+    {
+        "soru": "Hangi ses çok incedir?",
+        "secenekler": ["Kuş sesi / Düdük sesi", "Aslan kükremesi", "Gök gürültüsü", "Kamyon sesi"],
+        "dogru": "Kuş sesi / Düdük sesi"
+    },
+    {
+        "soru": "Sahnede şarkı söyleyen kişiye ne yaparız?",
+        "secenekler": ["Alkışlarız", "Uyuruz", "Arkamızı döneriz", "Konuşuruz"],
+        "dogru": "Alkışlarız"
+    },
+    {
+        "soru": "Hangi çalgı omuzda taşınır?",
+        "secenekler": ["Keman", "Piyano", "Davul seti", "Org"],
+        "dogru": "Keman"
+    },
+    {
+        "soru": "Müzik dersinde ne öğreniriz?",
+        "secenekler": ["Şarkı söylemeyi", "Yüzmeyi", "Yemek yapmayı", "Araba sürmeyi"],
+        "dogru": "Şarkı söylemeyi"
+    },
+    {
+        "soru": "Hangi çalgı tahtadan yapılmıştır?",
+        "secenekler": ["Gitar / Saz", "Trompet", "Zil", "Düdük (Plastik)"],
+        "dogru": "Gitar / Saz"
+    },
+    {
+        "soru": "Müzik kutusunu açınca ne olur?",
+        "secenekler": ["Müzik çalar", "Su akar", "Işık yanar", "Kuş uçar"],
+        "dogru": "Müzik çalar"
+    },
+    {
+        "soru": "Radyodan ne dinleriz?",
+        "secenekler": ["Müzik / Haber", "Resim", "Yemek", "Oyun"],
+        "dogru": "Müzik / Haber"
+    },
+    {
+        "soru": "Hangi çalgının şekli armuda benzer?",
+        "secenekler": ["Ud", "Flüt", "Davul", "Zil"],
+        "dogru": "Ud"
+    },
+    {
+        "soru": "Bir konsere gidince ne yaparız?",
+        "secenekler": ["Sessizce dinleriz", "Bağırıp koşarız", "Uyuruz", "Top oynarız"],
+        "dogru": "Sessizce dinleriz"
+    },
+    {
+        "soru": "Hangi çalgı metalden yapılır ve parlar?",
+        "secenekler": ["Saksafon / Trompet", "Tahta kaşık", "Davul derisi", "Keman yayı"],
+        "dogru": "Saksafon / Trompet"
+    },
+    {
+        "soru": "Balinalar suyun altında ne yapar?",
+        "secenekler": ["Şarkı söylerler", "Resim yaparlar", "Yürürler", "Uçarlar"],
+        "dogru": "Şarkı söylerler"
+    },
+    {
+        "soru": "Arıların çıkardığı ses neye benzer?",
+        "secenekler": ["Vızzz (Müzik sesi gibi)", "Hav hav", "Miyav", "Möö"],
+        "dogru": "Vızzz (Müzik sesi gibi)"
+    },
+    {
+        "soru": "Çok yavaş çalan müzikte ne hissederiz?",
+        "secenekler": ["Sakinlik / Uyku", "Koşma isteği", "Korku", "Açlık"],
+        "dogru": "Sakinlik / Uyku"
+    },
+    {
+        "soru": "Hangi çalgı kocaman bir kutuya benzer?",
+        "secenekler": ["Piyano", "Flüt", "Zil", "Kaşık"],
+        "dogru": "Piyano"
+    },
+    {
+        "soru": "Şarkıların sözlerini unuttuğumuzda ne yaparız?",
+        "secenekler": ["Mırıldanırız (La la la)", "Ağlarız", "Eve gideriz", "Kızarız"],
+        "dogru": "Mırıldanırız (La la la)"
+    },
+    {
+        "soru": "Hangi çalgı en çok düğünlerde çalar?",
+        "secenekler": ["Davul - Zurna", "Piyano", "Arp", "Üçgen zil"],
+        "dogru": "Davul - Zurna"
+    },
+    {
+        "soru": "Müzik sesi çok yüksekse ne yaparız?",
+        "secenekler": ["Sesini kısarız", "Daha çok açarız", "Bağırırız", "Dans ederiz"],
+        "dogru": "Sesini kısarız"
+    },
+    {
+        "soru": "Hangi çalgının 6 tane teli vardır?",
+        "secenekler": ["Gitar", "Davul", "Flüt", "Zil"],
+        "dogru": "Gitar"
+    },
+    {
+        "soru": "Koroda kaç kişi şarkı söyler?",
+        "secenekler": ["Birçok kişi", "Sadece 1 kişi", "Hiç kimse", "Sadece öğretmen"],
+        "dogru": "Birçok kişi"
+    },
+    {
+        "soru": "Notaların isimleri nelerdir?",
+        "secenekler": ["Do-Re-Mi-Fa-Sol-La-Si", "A-B-C-D-E", "1-2-3-4-5", "Kırmızı-Sarı-Mavi"],
+        "dogru": "Do-Re-Mi-Fa-Sol-La-Si"
+    },
+    {
+        "soru": "Hangi çalgı 'Düt düt' diye ses çıkarır?",
+        "secenekler": ["Düdük / Flüt", "Davul", "Gitar", "Piyano"],
+        "dogru": "Düdük / Flüt"
+    },
+    {
+        "soru": "Müzik aletlerini korumak için neye koyarız?",
+        "secenekler": ["Kılıfına / Kutusuna", "Suya", "Toprağa", "Buzdolabına"],
+        "dogru": "Kılıfına / Kutusuna"
+    },
+    {
+        "soru": "Hangi çalgıyı çalarken parmaklarımızı gezdiririz?",
+        "secenekler": ["Piyano / Org", "Davul", "Zil", "Üçgen"],
+        "dogru": "Piyano / Org"
+    },
+    {
+        "soru": "Yağmurun sesi neye benzer?",
+        "secenekler": ["Tıp tıp tıp (Ritim)", "Güm güm", "Vız vız", "Ciyak ciyak"],
+        "dogru": "Tıp tıp tıp (Ritim)"
+    },
+    {
+        "soru": "Hangi çalgının içi boştur?",
+        "secenekler": ["Gitarın gövdesi", "Piyano tuşu", "Davul tokmağı", "Keman yayı"],
+        "dogru": "Gitarın gövdesi"
+    },
+    {
+        "soru": "Müzik dinlerken ayağımızla ne tutarız?",
+        "secenekler": ["Tempo / Ritim", "Top", "Balık", "Kalem"],
+        "dogru": "Tempo / Ritim"
+    },
+    {
+        "soru": "Hangi çalgı 'Güm Güm' diye ses çıkarır?",
+        "secenekler": ["Davul", "Zil", "Flüt", "Keman"],
+        "dogru": "Davul"
+    },
+    {
+        "soru": "Şarkı söylerken neyimizi kullanırız?",
+        "secenekler": ["Sesimizi", "Ayağımızı", "Saçımızı", "Kulağımızı"],
+        "dogru": "Sesimizi"
+    },
+    {
+        "soru": "Hangi çalgı çok incedir ve yan tutularak üflenir?",
+        "secenekler": ["Yan Flüt", "Davul", "Gitar", "Tuba"],
+        "dogru": "Yan Flüt"
+    },
+    {
+        "soru": "Hangi hayvanın sesi trompete benzer?",
+        "secenekler": ["Fil", "Fare", "Kedi", "Tavşan"],
+        "dogru": "Fil"
+    },
+    {
+        "soru": "Ellerimizi birbirine vurursak ne olur?",
+        "secenekler": ["Ses çıkar (Şak şak)", "Sessizlik olur", "Işık yanar", "Su akar"],
+        "dogru": "Ses çıkar (Şak şak)"
+    },
+    {
+        "soru": "Hangi müzik bizi oynatır?",
+        "secenekler": ["Hareketli müzik", "Ninni", "Ağıt", "Sessiz müzik"],
+        "dogru": "Hareketli müzik"
+    },
+    {
+        "soru": "Piyanist kime denir?",
+        "secenekler": ["Piyano çalana", "Gitar çalana", "Davul çalana", "Şarkı söyleyene"],
+        "dogru": "Piyano çalana"
+    },
+    {
+        "soru": "Rüzgar esince ağaçlar nasıl ses çıkarır?",
+        "secenekler": ["Uğultu (Huuu)", "Miyav", "Hav hav", "Düt düt"],
+        "dogru": "Uğultu (Huuu)"
+    },
+    {
+        "soru": "Hangi çalgı tahtadan ve telli olur?",
+        "secenekler": ["Bağlama", "Trompet", "Zil", "Düdük"],
+        "dogru": "Bağlama"
+    },
+    {
+        "soru": "Müzik notası hangi şekle benzer?",
+        "secenekler": ["Yuvarlak ve saplı", "Kare", "Üçgen", "Yıldız"],
+        "dogru": "Yuvarlak ve saplı"
+    },
+    {
+        "soru": "Hangi çalgı yayla çalınır?",
+        "secenekler": ["Kemençe / Keman", "Gitar", "Davul", "Piyano"],
+        "dogru": "Kemençe / Keman"
+    },
+    {
+        "soru": "Müzik grubu ne yapar?",
+        "secenekler": ["Birlikte şarkı çalar", "Yemek yer", "Uyur", "Top oynar"],
+        "dogru": "Birlikte şarkı çalar"
+    },
+    {
+        "soru": "Hangi çalgının sesi çok gürültülüdür?",
+        "secenekler": ["Davul", "Keman", "Flüt", "Gitar"],
+        "dogru": "Davul"
+    },
+    {
+        "soru": "Hangi çalgı küçük ve yuvarlaktır, sallayınca ses çıkarır?",
+        "secenekler": ["Marakas / Tef", "Gitar", "Piyano", "Zurna"],
+        "dogru": "Marakas / Tef"
+    },
+    {
+        "soru": "Şarkı söylemeyi seviyor musun?",
+        "secenekler": ["Evet", "Hayır", "Belki", "Bazen"],
+        "dogru": "Evet"
+    },
+    {
+        "soru": "Hangi çalgı 'Dımbır dımbır' eder?",
+        "secenekler": ["Saz", "Davul", "Zil", "Düdük"],
+        "dogru": "Saz"
+    },
+    {
+        "soru": "Solist kime denir?",
+        "secenekler": ["Şarkıyı söyleyen kişiye", "Davul çalana", "Işıkları yakana", "Kapıyı açana"],
+        "dogru": "Şarkıyı söyleyen kişiye"
+    },
+    {
+        "soru": "Hangi çalgının pedalı vardır?",
+        "secenekler": ["Piyano", "Gitar", "Keman", "Flüt"],
+        "dogru": "Piyano"
+    },
+    {
+        "soru": "Müzik dinleyince ne hissederiz?",
+        "secenekler": ["Mutluluk", "Açlık", "Susuzluk", "Soğuk"],
+        "dogru": "Mutluluk"
+    },
+    {
+        "soru": "Hangi çalgı en çok askerlerde olur?",
+        "secenekler": ["Trompet / Boru", "Piyano", "Keman", "Gitar"],
+        "dogru": "Trompet / Boru"
+    },
+    {
+        "soru": "Kuş sesi hangi çalgıya benzer?",
+        "secenekler": ["Flüt", "Davul", "Gitar", "Tuba"],
+        "dogru": "Flüt"
+    },
+    {
+        "soru": "Gök gürültüsü sesi neye benzer?",
+        "secenekler": ["Büyük davula", "Kuş sesine", "Zil sesine", "Kedi sesine"],
+        "dogru": "Büyük davula"
+    },
+    {
+        "soru": "Hangi çalgı en uzundur?",
+        "secenekler": ["Zurna / Kaval", "Tef", "Zil", "Marakas"],
+        "dogru": "Zurna / Kaval"
+    },
+    {
+        "soru": "Müzik defterinin çizgilerine ne denir?",
+        "secenekler": ["Dizek", "Kare", "Daire", "Üçgen"],
+        "dogru": "Dizek"
+    },
+    {
+        "soru": "Hangi çalgı metal kapaklara benzer?",
+        "secenekler": ["Zil", "Davul", "Gitar", "Keman"],
+        "dogru": "Zil"
+    },
+    {
+        "soru": "Şarkı bitince ne yaparız?",
+        "secenekler": ["Alkışlarız", "Ağlarız", "Uyuruz", "Kızarız"],
+        "dogru": "Alkışlarız"
+    },
+    {
+        "soru": "Hangi çalgı boynumuza asılır?",
+        "secenekler": ["Gitar / Davul", "Piyano", "Org", "Tuba"],
+        "dogru": "Gitar / Davul"
+    },
+    {
+        "soru": "Müzik öğretmeni ne öğretir?",
+        "secenekler": ["Nota / Şarkı", "Matematik", "Yüzme", "Koşma"],
+        "dogru": "Nota / Şarkı"
+    },
+    {
+        "soru": "Hangi çalgı 'Gıygı gıygı' diye ses çıkarır?",
+        "secenekler": ["Keman / Kemençe", "Davul", "Piyano", "Flüt"],
+        "dogru": "Keman / Kemençe"
+    },
+    {
+        "soru": "Müzik ne renktir?",
+        "secenekler": ["Her renk olabilir (Gökkuşağı)", "Sadece Siyah", "Sadece Beyaz", "Renksiz"],
+        "dogru": "Her renk olabilir (Gökkuşağı)"
+    },
+    {
+        "soru": "Hangi çalgının sesi çok incedir?",
+        "secenekler": ["Cura", "Davul", "Tuba", "Kontrbas"],
+        "dogru": "Cura"
+    },
+    {
+        "soru": "Şarkı söylemek eğlenceli midir?",
+        "secenekler": ["Evet, çok eğlenceli", "Hayır, sıkıcı", "Bilmem", "Belki"],
+        "dogru": "Evet, çok eğlenceli"
+    }
     // --- EKSTRA: GENEL MÜZİK KÜLTÜRÜ & TEORİSİ (100 SORU) ---
     {
         "soru": "Standart bir piyanoda toplam kaç tuş bulunur?",
