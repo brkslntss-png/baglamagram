@@ -1,4 +1,133 @@
 const tumSorular = [
+    // --- ÇOCUKLAR İÇİN MÜZİK SORULARI (100 ADET) ---
+    {
+        "soru": "Hangi çalgıyı üfleyerek çalarız?",
+        "secenekler": ["Flüt", "Gitar", "Davul", "Piyano"],
+        "dogru": "Flüt"
+    },
+    {
+        "soru": "Davul çalmak için elimizde ne tutarız?",
+        "secenekler": ["Baget (Çubuk)", "Kaşık", "Kalem", "Tarak"],
+        "dogru": "Baget (Çubuk)"
+    },
+    {
+        "soru": "Piyanonun tuşları hangi renktir?",
+        "secenekler": ["Siyah ve Beyaz", "Kırmızı ve Mavi", "Sarı ve Yeşil", "Mor ve Pembe"],
+        "dogru": "Siyah ve Beyaz"
+    },
+    {
+        "soru": "Şarkı söyleyen kişiye ne denir?",
+        "secenekler": ["Şarkıcı", "Doktor", "Pilot", "Aşçı"],
+        "dogru": "Şarkıcı"
+    },
+    {
+        "soru": "Müziğin hızına ne denir?",
+        "secenekler": ["Ritim / Hız", "Renk", "Koku", "Tat"],
+        "dogru": "Ritim / Hız"
+    },
+    {
+        "soru": "Hangi hayvan çok güzel öter ve şarkı söyler?",
+        "secenekler": ["Kuş (Bülbül)", "Kedi", "Balık", "Kaplumbağa"],
+        "dogru": "Kuş (Bülbül)"
+    },
+    {
+        "soru": "Gitarın neresine dokunarak ses çıkarırız?",
+        "secenekler": ["Tellerine", "Ayağına", "Sapına", "Arkasina"],
+        "dogru": "Tellerine"
+    },
+    {
+        "soru": "Bebekleri uyutmak için anneler ne söyler?",
+        "secenekler": ["Ninni", "Marş", "Oyun Havası", "Rap"],
+        "dogru": "Ninni"
+    },
+    {
+        "soru": "Mikrofon ne işe yarar?",
+        "secenekler": ["Sesimizi yükseltmeye", "Resim yapmaya", "Su içmeye", "Uyumaya"],
+        "dogru": "Sesimizi yükseltmeye"
+    },
+    {
+        "soru": "Hangi çalgının telleri vardır?",
+        "secenekler": ["Saz / Bağlama", "Davul", "Düdük", "Zil"],
+        "dogru": "Saz / Bağlama"
+    },
+    {
+        "soru": "Müzik dinlemek için ne takarız?",
+        "secenekler": ["Kulaklık", "Gözlük", "Eldiven", "Şapka"],
+        "dogru": "Kulaklık"
+    },
+    {
+        "soru": "Çok hızlı çalan bir müzikte ne yaparız?",
+        "secenekler": ["Dans ederiz / Koşarız", "Uyuruz", "Ağlarız", "Yemek yeriz"],
+        "dogru": "Dans ederiz / Koşarız"
+    },
+    {
+        "soru": "Kemanı ne ile çalarız?",
+        "secenekler": ["Yay", "Çekiç", "Bıçak", "Kaşık"],
+        "dogru": "Yay"
+    },
+    {
+        "soru": "Alkış yapmak için ne kullanırız?",
+        "secenekler": ["Ellerimizi", "Ayaklarımızı", "Gözlerimizi", "Burnumuzu"],
+        "dogru": "Ellerimizi"
+    },
+    {
+        "soru": "Hangi çalgı kocaman ve göbeğe benzer?",
+        "secenekler": ["Davul", "Flüt", "Zurna", "Kaval"],
+        "dogru": "Davul"
+    },
+    {
+        "soru": "Zil sesi nasıldır?",
+        "secenekler": ["Çın çın", "Güm güm", "Vız vız", "Hır hır"],
+        "dogru": "Çın çın"
+    },
+    {
+        "soru": "Marşlar nasıl söylenir?",
+        "secenekler": ["Coşkulu ve gür", "Fısıldayarak", "Ağlayarak", "Uyuyarak"],
+        "dogru": "Coşkulu ve gür"
+    },
+    {
+        "soru": "Hangi çalgıyı ağzımızla üfleriz?",
+        "secenekler": ["Trompet", "Piyano", "Gitar", "Keman"],
+        "dogru": "Trompet"
+    },
+    {
+        "soru": "Orkestrayı yöneten kişi elinde ne tutar?",
+        "secenekler": ["Çubuk (Baget)", "Top", "Çiçek", "Telefon"],
+        "dogru": "Çubuk (Baget)"
+    },
+    {
+        "soru": "Doğum gününde ne söylenir?",
+        "secenekler": ["İyi ki Doğdun", "Ninni", "Ağıt", "Tekerleme"],
+        "dogru": "İyi ki Doğdun"
+    },
+    {
+        "soru": "Kediler piyano çalarsa nasıl ses çıkar?",
+        "secenekler": ["Rastgele (Miyavlı)", "Çok düzgün", "Hiç ses çıkmaz", "Konuşurlar"],
+        "dogru": "Rastgele (Miyavlı)"
+    },
+    {
+        "soru": "Hangi çalgı dizlerin üstüne konularak vurulur?",
+        "secenekler": ["Darbuka", "Flüt", "Keman", "Zurna"],
+        "dogru": "Darbuka"
+    },
+    {
+        "soru": "Müzik notaları nereye yazılır?",
+        "secenekler": ["Kağıda (Dizek)", "Duvara", "Ağaca", "Halıya"],
+        "dogru": "Kağıda (Dizek)"
+    },
+    {
+        "soru": "Çok güzel şarkı söyleyenlere ne denir?",
+        "secenekler": ["Bülbül sesli", "Karga sesli", "Aslan sesli", "Fil sesli"],
+        "dogru": "Bülbül sesli"
+    },
+    {
+        "soru": "Hangisi bir müzik aleti DEĞİLDİR?",
+        "secenekler": ["Televizyon", "Gitar", "Saz", "Piyano"],
+        "dogru": "Televizyon"
+    },
+    {
+        "soru": "Tencere ve tavalarla ne yapabiliriz?",
+        "secenekler": ["Davul gibi
     // --- EKSTRA: GENEL MÜZİK KÜLTÜRÜ & TEORİSİ (100 SORU) ---
     {
         "soru": "Standart bir piyanoda toplam kaç tuş bulunur?",
