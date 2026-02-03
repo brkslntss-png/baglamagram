@@ -256,13 +256,11 @@
             .portal-layout { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: relative; top: 0; padding: 20px; border-radius: 0; border: none; border-bottom: 1px solid var(--glass-border); background: var(--bg-dark); max-height: none; }
             .sidebar.collapsed { height: 70px; overflow: hidden; padding: 15px 20px; }
-            .portal-content { width: 100%; padding: 10px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .materials-grid { grid-template-columns: repeat(2, 1fr); }
+            .sidebar.collapsed .user-info, .sidebar.collapsed .menu-title { display: none; }
+            .nav-container { display: flex; justify-content: space-between; padding: 0 20px; }
             nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
             nav ul.aktif { display: flex; }
-            .menu-toggle { display: block; }
+            .menu-toggle { display: block; position: static; }
             .chat-container { height: 50vh; }
         }
 
@@ -291,15 +289,20 @@
     </nav>
 
     <div id="login-overlay">
-      
+       
   <div class="login-box">
     <span class="close-login" onclick="girisKapat()">×</span>
     <h3 style="color: var(--accent); margin-bottom: 20px;">ÖĞRENCİ PORTALI</h3>
     
     <input type="email" id="emailInput" placeholder="E-posta Adresiniz" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
     
-    <input type="password" id="passwordInput" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 20px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    <input type="password" id="passwordInput" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
     
+    <div style="text-align: right; margin-bottom: 20px;">
+        <span onclick="sifreSifirla()" style="color: #bbb; cursor: pointer; font-size: 0.85rem; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#bbb'">
+            Şifremi Unuttum
+        </span>
+    </div>
     <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;">GİRİŞ YAP</button>
     
     <p id="loginStatus" style="margin-top: 15px; font-size: 0.9rem; min-height: 20px;"></p>
@@ -368,7 +371,7 @@
                         <div class="user-name" id="displayAd">Ad</div>
                         <div class="user-name" id="displaySoyad" style="text-transform: uppercase;">SOYAD</div>
                         
-                       
+                        
                         <div class="premium-badge">PREMIUM ÜYE</div>
                     </div>
 
@@ -1394,7 +1397,7 @@
     </script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
   // Firestore (Veritabanı) kütüphaneleri
   import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
@@ -1428,6 +1431,38 @@
         "elifin-epostası-gelecek@xyz.com": { ad: "RWxpZg==", soyad: "S0FSTUFO" },
       "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" }
   };
+
+  // --- ŞİFRE SIFIRLAMA FONKSİYONU EKLENDİ ---
+  window.sifreSifirla = function() {
+      const email = document.getElementById('emailInput').value;
+      const status = document.getElementById('loginStatus');
+
+      if (!email) {
+          status.style.color = "orange";
+          status.innerText = "Lütfen önce yukarıya e-posta adresini yaz.";
+          return;
+      }
+
+      status.style.color = "yellow";
+      status.innerText = "Sıfırlama bağlantısı gönderiliyor...";
+
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+            status.style.color = "#4CAF50"; // Yeşil
+            status.innerText = "E-postanı kontrol et! Sıfırlama linki gönderildi.";
+        })
+        .catch((error) => {
+            status.style.color = "#ff4d4d"; // Kırmızı
+            console.error(error);
+            if (error.code === "auth/user-not-found") {
+                status.innerText = "Bu e-posta adresi kayıtlı değil.";
+            } else if (error.code === "auth/invalid-email") {
+                status.innerText = "Geçersiz e-posta formatı.";
+            } else {
+                status.innerText = "Hata: " + error.code;
+            }
+        });
+  }
 
   // --- FOTOĞRAF KAYDETME (VERİTABANINA) ---
   // Bu fonksiyonu window'a atıyoruz ki HTML'den çağrılabilsin
