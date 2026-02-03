@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
     <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <meta name="google-site-verification" content="_M5BfxWGwxt47kzLdqDckVCSwkliVvvoYFVn8SdsrwM" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Eğitim | Mahmut Burak ASLANTAŞ</title>
@@ -134,8 +135,6 @@
             border-radius: 5px; box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
         }
         .portal-btn:hover { background: #e0c060; transform: translateY(-3px); }
-        
-        /* İKON STİLİ (DÜZELTİLDİ) */
         .icon-stack { position: relative; display: inline-block; width: 40px; height: 40px; flex-shrink: 0; }
         .icon-stack .fa-laptop { font-size: 36px; }
         .icon-stack .fa-music { position: absolute; font-size: 14px; top: 50%; left: 50%; transform: translate(-50%, -60%); color: #000; }
@@ -354,6 +353,9 @@
         <div class="lang-dropdown" id="langDropdown">
             <a href="javascript:void(0)" onclick="changeLanguage('tr')">🇹🇷 Türkçe</a>
             <a href="javascript:void(0)" onclick="changeLanguage('en')">🇬🇧 English</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('lt')">🇱🇹 Lietuvių</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('de')">🇩🇪 Deutsch</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('ru')">🇷🇺 Русский</a>
         </div>
     </div>
 
@@ -842,6 +844,129 @@
                 js_error: "An error occurred.", js_no_material: "No materials available in this category yet.", js_no_content: "No content available in this category yet.", js_exercise: "Exercise",
                 js_no_answer: "Answer key not found.", js_mic_error: "Microphone access error! Please allow access.", js_ai_typing: "<em>BurakAI is analyzing... (Typing)</em>",
                 js_ai_error: "Network Error (Check your internet): "
+            },
+            lt: {
+                menu_home: "PAGRINDINIS", menu_about: "APIE MANE", menu_edu: "INTERNETINĖS PAMOKOS", menu_notes: "NATOS", menu_poems: "EILĖRAŠČIAI", menu_concerts: "KONCERTAI",
+                portal_title: "MOKINIO PORTALAS", ph_email: "Jūsų el. pašto adresas", ph_pass: "Jūsų slaptažodis", forgot_pass: "Pamiršote slaptažodį?", btn_login: "PRISIJUNGTI",
+                btn_enter_portal: "PRISIJUNGTI Į MOKINIO PORTALĄ", public_h2: "Kodėl verta mokytis internetu?",
+                feat_ai_title: "Mokymasis su dirbtiniu intelektu", feat_ai_desc: "Nauja era švietime su jūsų dirbtinio intelekto palaikomu muzikos mokytoju BurakAI. Norėdami naudotis šia technologija ir integruoti ją į savo pamokas, užpildykite žemiau esančią formą ir įsigykite mūsų pamokų paketus.",
+                feat_time_title: "Menas po darbo", feat_time_desc: "Dauguma kursų uždaro duris 19:00 val. Mes pradedame būtent tokiu metu. Paimkite savo baglamą grįžę namo iš darbo, nepatekę į eismo spūstis ir be streso dėl kursų valandų.",
+                feat_premium_title: "Premium mokinio portalas", feat_premium_desc: "Šiame skyriuje yra mokomoji medžiaga, kurią galite pasiekti tik su jums specialiai suteiktu slaptažodžiu. Visas turinys parengtas su garso ir vaizdo medžiaga, siekiant paremti mokymosi procesą. Medžiaga reguliariai atnaujinama ir struktūrizuojama pagal lygius.",
+                feat_comm_title: "Nepertraukiamas bendravimas", feat_comm_desc: "Mūsų ryšys nenutrūksta pasibaigus pamokai. Galite siųsti namų darbus per „WhatsApp“, užduoti klausimus ir siųsti vaizdo įrašus bet kuriuo metu. Šią funkciją galite pasiekti tik per mokinio portalą.",
+                apply_title: "REGISTRACIJOS FORMA", ph_name: "Vardas Pavardė", ph_phone: "Telefono numeris", ph_age: "Amžius (16+)", ph_job: "Profesija (neprivaloma)", ph_level: "Dabartinis lygis",
+                level_0: "Visiškai pradedantysis", level_1: "Pagrindinis lygis", level_2: "Pažengęs lygis", ph_goals: "Jūsų muzikiniai tikslai...", btn_send: "SIŲSTI",
+                badge_premium: "PREMIUM NARYS", sb_home: "Pagrindinis", sb_edu_title: "MANO KURSAI", sb_baglama: "Baglama mokymai", sb_exam: "Pasirengimas talentų egzaminui",
+                sb_tools_title: "ĮRANKIAI", sb_metro: "Metronomas", sb_tuner: "Derintuvas", sb_live: "Tiesioginė pamoka", sb_ai: "BurakAI Mentorius (beta)", sb_emergency: "Skubiai pagalbai",
+                card_baglama_title: "BAGLAMA MOKYMAI", card_baglama_desc: "Paskaitų užrašai, natos ir pratimai.",
+                card_ai_title: "BurakAI Mentorius (beta)", badge_new: "NAUJA", card_ai_desc1: "Pirmoji dirbtinio intelekto integruota muzikos mokymo platforma.", card_ai_desc2: "Jūsų paslaugoms 24/7. Pirmoji Turkijoje!",
+                card_exam_title: "PASIRENGIMAS EGZAMINUI", card_exam_desc: "Mokomoji medžiaga konservatorijai, muzikos mokymui ir pasiruošimui menų gimnazijai.",
+                card_live_title: "TIESIOGINĖ PAMOKA", card_live_desc: "Prisijunkite prie tiesioginės pamokos virtualioje klasėje.",
+                ai_header: "BurakAI Mentorius", btn_back: "← Atgal", btn_back_list: "← Atgal į sąrašą", ai_intro: "Galite manęs klausti bet ko, kas jums rūpi, esu čia dėl jūsų.",
+                ai_welcome_msg: "Sveikas atvykęs, mano vaike. Jei tavo instrumentas ant kelių, o širdis pasiruošusi meilei, nėra kalno, kurio negalėtume įveikti. Jokio „aš pavargau“, jokio „aš negaliu“. Aš su tavimi kiekviename žingsnyje. Pradėkime, klausk manęs, kas tavo mintyse?",
+                btn_remove: "Pašalinti", ph_chat: "Užduokite klausimą...", metro_title: "Metronomas", btn_start: "PRADĖTI", btn_stop: "SUSTABDYTI",
+                tuner_title: "Instrumento derintuvas", tuner_instr: "Paspauskite mygtuką ir užgaukite stygą, kad pradėtumėte.", btn_tuner_start: "PRADĖTI DERINIMĄ", btn_tuner_stop: "SUSTABDYTI",
+                short_neck: "TRUMPAS KAKLELIS", long_neck: "ILGAS KAKLELIS", live_title: "Virtuali klasė",
+                baglama_edu_title: "Baglama mokymai", cat_theory: "Paskaitų užrašai (Teorija)", desc_theory: "Muzikos teorija ir gamos.",
+                cat_short: "Trumpo kaklelio liaudies dainos", desc_short: "Trumpo kaklelio repertuaras.", cat_long: "Ilgo kaklelio liaudies dainos", desc_long: "Ilgo kaklelio atlikimo technika.",
+                cat_ex: "Pirštų pratimai", desc_ex: "Greičio ir technikos tobulinimo etiudai.",
+                exam_prep_title: "Pasirengimas talentų egzaminui", cat_dictation: "Diktavimo klausimai", desc_dictation: "Klausos ir rašymo pratimai.",
+                cat_rhythm: "Ritmo kartojimas", desc_rhythm: "Ritminės klausos lavinimas.", cat_single_tone: "Vieno garso kartojimas", desc_single_tone: "Vienų garsų klausymas.",
+                cat_double_tone: "Dvigubo garso kartojimas", desc_double_tone: "Dviejų garsų klausymas.", cat_triad: "Triadų kartojimas", desc_triad: "Akordų klausymas.",
+                cat_quad: "Kvadratų kartojimas", desc_quad: "Pažengę akordų pratimai.", cat_solfege: "Solfežiavimo natos", desc_solfege: "Skaitymas iš lapo.",
+                cat_melody: "Melodijos kartojimas", desc_melody: "Melodinės atminties pratimai.",
+                listen_dictation: "🎧 Klausyti diktanto:", view_answer: "ŽIŪRĖTI ATSAKYMŲ RAKTĄ", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos.",
+                
+                // JS Dynamic Texts
+                alert_video: "Vaizdo įrašų funkcija netrukus pasirodys, čempione. Kol kas galite siųsti nuotraukas.",
+                js_tuner_stopped: "Derintuvas sustabdytas.", js_tuner_listening: "Klausomasi mikrofono...",
+                js_login_empty: "Pirmiausia viršuje įveskite savo el. pašto adresą.", js_reset_sending: "Siunčiama atkūrimo nuoroda...", js_reset_sent: "Patikrinkite savo el. paštą! Atkūrimo nuoroda išsiųsta.",
+                js_user_not_found: "Šis el. pašto adresas neregistruotas.", js_invalid_email: "Neteisingas el. pašto formatas.", js_check_info: "Tikrinama informacija...",
+                js_login_success: "Prisijungimas sėkmingas! Nukreipiama...", js_welcome: "Sveiki, ", js_student: "MOKINYS", js_login_error: "Neteisingas el. paštas arba slaptažodis!",
+                js_error: "Įvyko klaida.", js_no_material: "Šioje kategorijoje medžiagos kol kas nėra.", js_no_content: "Šioje kategorijoje turinio kol kas nėra.", js_exercise: "Pratimas",
+                js_no_answer: "Atsakymų raktas nerastas.", js_mic_error: "Mikrofono prieigos klaida! Prašome leisti prieigą.", js_ai_typing: "<em>BurakAI analizuoja... (Rašo)</em>",
+                js_ai_error: "Tinklo klaida (patikrinkite interneto ryšį): "
+            },
+            de: {
+                menu_home: "STARTSEITE", menu_about: "ÜBER MICH", menu_edu: "ONLINE-UNTERRICHT", menu_notes: "NOTEN", menu_poems: "GEDICHTE", menu_concerts: "KONZERTE",
+                portal_title: "SCHÜLERPORTAL", ph_email: "Ihre E-Mail-Adresse", ph_pass: "Ihr Passwort", forgot_pass: "Passwort vergessen?", btn_login: "ANMELDEN",
+                btn_enter_portal: "ZUM SCHÜLERPORTAL", public_h2: "Warum Online-Unterricht?",
+                feat_ai_title: "KI-gestützte Bildung", feat_ai_desc: "Eine neue Ära in der Bildung mit Ihrem KI-unterstützten Musiklehrer BurakAI. Um diese Technologie zu nutzen und in Ihren Unterricht zu integrieren, füllen Sie bitte das untenstehende Formular aus, um unsere Unterrichtspakete zu erwerben.",
+                feat_time_title: "Kunst nach Feierabend", feat_time_desc: "Die meisten Kurse schließen um 19:00 Uhr. Wir fangen genau zu diesen Zeiten an. Nehmen Sie Ihre Baglama in die Hand, wenn Sie von der Arbeit nach Hause kommen, ohne in den Verkehr zu geraten und ohne Stress, die Kurszeiten einzuhalten.",
+                feat_premium_title: "Premium-Schülerportal", feat_premium_desc: "In diesem Bereich finden Sie Unterrichtsmaterialien, auf die Sie nur mit dem speziell für Sie vergebenen Passwort zugreifen können. Alle Inhalte sind mit Audio- und Videomaterialien aufbereitet, um den Lernprozess zu unterstützen. Die Materialien werden regelmäßig aktualisiert und nach Niveaus strukturiert.",
+                feat_comm_title: "Kontinuierliche Kommunikation", feat_comm_desc: "Unsere Verbindung bricht nach dem Unterricht nicht ab. Sie können Ihre Hausaufgaben über WhatsApp senden, Fragen stellen und Ihre Videos jederzeit senden. Auf diese Funktion können Sie nur über das Schülerportal zugreifen.",
+                apply_title: "ANMELDEFORMULAR", ph_name: "Vor- und Nachname", ph_phone: "Telefonnummer", ph_age: "Alter (16+)", ph_job: "Beruf (Optional)", ph_level: "Aktuelles Niveau",
+                level_0: "Totaler Anfänger", level_1: "Grundstufe", level_2: "Fortgeschritten", ph_goals: "Ihre musikalischen Ziele...", btn_send: "SENDEN",
+                badge_premium: "PREMIUM-MITGLIED", sb_home: "Dashboard", sb_edu_title: "MEINE KURSE", sb_baglama: "Baglama-Training", sb_exam: "Talentprüfung Vorb.",
+                sb_tools_title: "WERKZEUGE", sb_metro: "Metronom", sb_tuner: "Stimmgerät", sb_live: "Live-Unterricht", sb_ai: "BurakAI Mentor (beta)", sb_emergency: "Notfallkontakt",
+                card_baglama_title: "BAGLAMA-TRAINING", card_baglama_desc: "Vorlesungsnotizen, Noten und Übungen.",
+                card_ai_title: "BurakAI Mentor (beta)", badge_new: "NEU", card_ai_desc1: "Erste KI-integrierte Musikbildungsplattform.", card_ai_desc2: "Rund um die Uhr für Sie da. Eine Premiere in der Türkei!",
+                card_exam_title: "TALENTPRÜFUNG VORB.", card_exam_desc: "Lehrmaterialien zur Vorbereitung auf Konservatorium, Musikpädagogik und Gymnasium der Künste.",
+                card_live_title: "LIVE-UNTERRICHT", card_live_desc: "Nehmen Sie am Live-Unterricht teil, indem Sie sich mit dem virtuellen Klassenzimmer verbinden.",
+                ai_header: "BurakAI Mentor", btn_back: "← Zurück", btn_back_list: "← Zurück zur Liste", ai_intro: "Du kannst mich alles fragen, was dich beschäftigt, ich bin für dich da.",
+                ai_welcome_msg: "Willkommen, mein Kind. Wenn dein Instrument auf deinem Schoß liegt und dein Herz bereit für die Liebe ist, gibt es keinen Hügel, den wir nicht erklimmen können. Kein 'Ich bin müde', kein 'Ich kann nicht'. Ich bin bei jedem Schritt bei dir. Lass uns anfangen, frag mich, was dir auf dem Herzen liegt?",
+                btn_remove: "Entfernen", ph_chat: "Stelle eine Frage...", metro_title: "Metronom", btn_start: "START", btn_stop: "STOPP",
+                tuner_title: "Instrumentenstimmgerät", tuner_instr: "Drücken Sie den Knopf und zupfen Sie Ihre Saite, um zu beginnen.", btn_tuner_start: "STIMMGERÄT STARTEN", btn_tuner_stop: "STOPP",
+                short_neck: "KURZHALS", long_neck: "LANGHALS", live_title: "Virtuelles Klassenzimmer",
+                baglama_edu_title: "Baglama-Training", cat_theory: "Vorlesungsnotizen (Theorie)", desc_theory: "Musiktheorie und Tonleitern.",
+                cat_short: "Kurzhals-Volkslieder", desc_short: "Repertoire für Kurzhals.", cat_long: "Langhals-Volkslieder", desc_long: "Spieltechniken für Langhals.",
+                cat_ex: "Fingerübungen", desc_ex: "Etüden zur Geschwindigkeits- und Technikentwicklung.",
+                exam_prep_title: "Vorbereitung auf die Talentprüfung", cat_dictation: "Diktatfragen", desc_dictation: "Hör- und Schreibübungen.",
+                cat_rhythm: "Rhythmuswiederholung", desc_rhythm: "Entwicklung des rhythmischen Gehörs.", cat_single_tone: "Einzeltonwiederholung", desc_single_tone: "Hören von Einzeltönen.",
+                cat_double_tone: "Doppeltonwiederholung", desc_double_tone: "Hören von zwei Tönen.", cat_triad: "Dreiklangwiederholung", desc_triad: "Hören von Akkorden.",
+                cat_quad: "Vierklangwiederholung", desc_quad: "Fortgeschrittene Akkordübungen.", cat_solfege: "Solfège-Noten", desc_solfege: "Vom-Blatt-Singen.",
+                cat_melody: "Melodiewiederholung", desc_melody: "Übungen zum melodischen Gedächtnis.",
+                listen_dictation: "🎧 Diktat anhören:", view_answer: "ANTWORTSCHLÜSSEL ANZEIGEN", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten.",
+                
+                // JS Dynamic Texts
+                alert_video: "Video-Funktion kommt bald, Champion. Du kannst vorerst Fotos senden.",
+                js_tuner_stopped: "Stimmgerät gestoppt.", js_tuner_listening: "Höre auf Mikrofon...",
+                js_login_empty: "Bitte geben Sie zuerst oben Ihre E-Mail-Adresse ein.", js_reset_sending: "Sende Rücksetz-Link...", js_reset_sent: "Überprüfen Sie Ihre E-Mail! Rücksetz-Link gesendet.",
+                js_user_not_found: "Diese E-Mail-Adresse ist nicht registriert.", js_invalid_email: "Ungültiges E-Mail-Format.", js_check_info: "Informationen werden überprüft...",
+                js_login_success: "Anmeldung erfolgreich! Weiterleitung...", js_welcome: "Willkommen, ", js_student: "SCHÜLER", js_login_error: "Falsche E-Mail oder falsches Passwort!",
+                js_error: "Ein Fehler ist aufgetreten.", js_no_material: "In dieser Kategorie sind noch keine Materialien verfügbar.", js_no_content: "In dieser Kategorie ist noch kein Inhalt verfügbar.", js_exercise: "Übung",
+                js_no_answer: "Antwortschlüssel nicht gefunden.", js_mic_error: "Mikrofonzugriffsfehler! Bitte erlauben Sie den Zugriff.", js_ai_typing: "<em>BurakAI analysiert... (Tippt)</em>",
+                js_ai_error: "Netzwerkfehler (Überprüfen Sie Ihr Internet): "
+            },
+            ru: {
+                menu_home: "ГЛАВНАЯ", menu_about: "ОБО МНЕ", menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ", menu_notes: "НОТЫ", menu_poems: "СТИХИ", menu_concerts: "КОНЦЕРТЫ",
+                portal_title: "УЧЕНИЧЕСКИЙ ПОРТАЛ", ph_email: "Ваш адрес электронной почты", ph_pass: "Ваш пароль", forgot_pass: "Забыли пароль?", btn_login: "ВОЙТИ",
+                btn_enter_portal: "ВОЙТИ В УЧЕНИЧЕСКИЙ ПОРТАЛ", public_h2: "Почему онлайн-обучение?",
+                feat_ai_title: "Обучение с ИИ", feat_ai_desc: "Новая эра в образовании с вашим учителем музыки BurakAI с поддержкой искусственного интеллекта. Чтобы использовать эту технологию и интегрировать ее в свои уроки, заполните форму ниже для приобретения наших пакетов уроков.",
+                feat_time_title: "Искусство после работы", feat_time_desc: "Большинство курсов закрываются в 19:00. Мы начинаем именно в это время. Возьмите в руки саз, когда вернетесь домой с работы, без пробок и стресса, чтобы успеть к часам занятий.",
+                feat_premium_title: "Премиум ученический портал", feat_premium_desc: "В этом разделе находятся учебные материалы, доступ к которым вы можете получить только по специально выданному вам паролю. Все содержимое подготовлено с использованием аудио и видео материалов для поддержки процесса обучения. Материалы регулярно обновляются и структурируются по уровням.",
+                feat_comm_title: "Непрерывное общение", feat_comm_desc: "Наша связь не прерывается после окончания урока. Вы можете отправлять домашние задания через WhatsApp, задавать вопросы и присылать свои видео в любое время. Доступ к этой функции возможен только через ученический портал.",
+                apply_title: "ФОРМА ЗАЯВКИ", ph_name: "Имя Фамилия", ph_phone: "Номер телефона", ph_age: "Возраст (16+)", ph_job: "Профессия (необязательно)", ph_level: "Текущий уровень",
+                level_0: "Полный новичок", level_1: "Базовый уровень", level_2: "Продвинутый уровень", ph_goals: "Ваши музыкальные цели...", btn_send: "ОТПРАВИТЬ",
+                badge_premium: "ПРЕМИУМ УЧАСТНИК", sb_home: "Панель управления", sb_edu_title: "МОИ КУРСЫ", sb_baglama: "Обучение игре на сазе", sb_exam: "Подготовка к экзамену",
+                sb_tools_title: "ИНСТРУМЕНТЫ", sb_metro: "Метроном", sb_tuner: "Тюнер", sb_live: "Живой урок", sb_ai: "Ментор BurakAI (бета)", sb_emergency: "Экстренная связь",
+                card_baglama_title: "ОБУЧЕНИЕ ИГРЕ НА САЗЕ", card_baglama_desc: "Лекционные заметки, ноты и упражнения.",
+                card_ai_title: "Ментор BurakAI (бета)", badge_new: "НОВЫЙ", card_ai_desc1: "Первая платформа музыкального образования с интеграцией ИИ.", card_ai_desc2: "К вашим услугам 24/7. Впервые в Турции!",
+                card_exam_title: "ПОДГОТОВКА К ЭКЗАМЕНУ", card_exam_desc: "Учебные материалы для подготовки к консерватории, преподаванию музыки и лицею искусств.",
+                card_live_title: "ЖИВОЙ УРОК", card_live_desc: "Присоединяйтесь к живому уроку, подключившись к виртуальному классу.",
+                ai_header: "Ментор BurakAI", btn_back: "← Назад", btn_back_list: "← Назад к списку", ai_intro: "Вы можете спросить меня о чем угодно, я здесь для вас.",
+                ai_welcome_msg: "Добро пожаловать, дитя мое. Если твой инструмент у тебя на коленях, а сердце готово к любви, нет холма, на который мы не смогли бы взобраться. Не говори 'я устал', не говори 'я не могу'. Я с тобой на каждом шагу. Давай начнем, спроси меня, что у тебя на уме?",
+                btn_remove: "Удалить", ph_chat: "Задайте вопрос...", metro_title: "Метроном", btn_start: "СТАРТ", btn_stop: "СТОП",
+                tuner_title: "Тюнер инструмента", tuner_instr: "Нажмите кнопку и дерните струну, чтобы начать.", btn_tuner_start: "ЗАПУСТИТЬ ТЮНЕР", btn_tuner_stop: "СТОП",
+                short_neck: "КОРОТКИЙ ГРИФ", long_neck: "ДЛИННЫЙ ГРИФ", live_title: "Виртуальный класс",
+                baglama_edu_title: "Обучение игре на сазе", cat_theory: "Лекционные заметки (Теория)", desc_theory: "Теория музыки и гаммы.",
+                cat_short: "Народные песни (Короткий гриф)", desc_short: "Репертуар для короткого грифа.", cat_long: "Народные песни (Длинный гриф)", desc_long: "Техника исполнения на длинном грифе.",
+                cat_ex: "Упражнения для пальцев", desc_ex: "Этюды для развития скорости и техники.",
+                exam_prep_title: "Подготовка к экзамену талантов", cat_dictation: "Вопросы по диктанту", desc_dictation: "Упражнения на слух и письмо.",
+                cat_rhythm: "Повторение ритма", desc_rhythm: "Развитие ритмического слуха.", cat_single_tone: "Повторение одного тона", desc_single_tone: "Слушание одиночных тонов.",
+                cat_double_tone: "Повторение двух тонов", desc_double_tone: "Слушание двух тонов.", cat_triad: "Повторение трезвучий", desc_triad: "Слушание аккордов.",
+                cat_quad: "Повторение септаккордов", desc_quad: "Продвинутые упражнения с аккордами.", cat_solfege: "Ноты сольфеджио", desc_solfege: "Чтение с листа.",
+                cat_melody: "Повторение мелодии", desc_melody: "Упражнения на мелодическую память.",
+                listen_dictation: "🎧 Слушать диктант:", view_answer: "ПОСМОТРЕТЬ КЛЮЧ К ОТВЕТУ", footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены.",
+                
+                // JS Dynamic Texts
+                alert_video: "Функция видео скоро появится, чемпион. Пока что вы можете отправлять фото.",
+                js_tuner_stopped: "Тюнер остановлен.", js_tuner_listening: "Слушаю микрофон...",
+                js_login_empty: "Пожалуйста, сначала введите свой адрес электронной почты выше.", js_reset_sending: "Отправка ссылки для сброса...", js_reset_sent: "Проверьте свою электронную почту! Ссылка для сброса отправлена.",
+                js_user_not_found: "Этот адрес электронной почты не зарегистрирован.", js_invalid_email: "Неверный формат электронной почты.", js_check_info: "Проверка информации...",
+                js_login_success: "Вход выполнен успешно! Перенаправление...", js_welcome: "Добро пожаловать, ", js_student: "УЧЕНИК", js_login_error: "Неверный адрес электронной почты или пароль!",
+                js_error: "Произошла ошибка.", js_no_material: "В этой категории пока нет материалов.", js_no_content: "В этой категории пока нет контента.", js_exercise: "Упражнение",
+                js_no_answer: "Ключ к ответу не найден.", js_mic_error: "Ошибка доступа к микрофону! Пожалуйста, разрешите доступ.", js_ai_typing: "<em>BurakAI анализирует... (Печатает)</em>",
+                js_ai_error: "Ошибка сети (проверьте интернет): "
             }
         };
 
