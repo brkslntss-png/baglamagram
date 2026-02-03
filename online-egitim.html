@@ -103,8 +103,7 @@
             width: var(--sidebar-width); 
             background: var(--glass-bg); 
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            /* GÜNCELLEME: Padding azaltıldı, fotoğraf yukarı kaysın diye */
-            padding: 20px 25px; 
+            padding: 30px; 
             border: 1px solid var(--glass-border); border-radius: 24px; 
             display: flex; flex-direction: column; 
             transition: all 0.3s ease; 
@@ -119,11 +118,9 @@
         .sidebar.collapsed .user-info, .sidebar.collapsed .menu-title { display: none; }
         .sidebar.collapsed .menu-link span, .sidebar.collapsed .whatsapp-sidebar-btn span { display: none; }
         .sidebar.collapsed .menu-link { justify-content: center; padding: 15px 0; }
-        .hamburger-btn { font-size: 1.5rem; color: var(--yellow-portal); cursor: pointer; margin-bottom: 10px; align-self: flex-end; }
+        .hamburger-btn { font-size: 1.5rem; color: var(--yellow-portal); cursor: pointer; margin-bottom: 20px; align-self: flex-end; }
         
-        /* GÜNCELLEME: Marginler ayarlandı, fotoğraf yukarı çekildi */
-        .user-info { margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; text-align: center; margin-top: 0; }
-        
+        .user-info { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; text-align: center; }
         .user-name { color: var(--yellow-portal); font-family: 'Lato', sans-serif; font-size: 1.4rem; font-weight: normal; line-height: 1.2; margin-bottom: 5px; }
         .premium-badge { font-size: 0.65rem; color: #000; background: var(--yellow-portal); padding: 4px 10px; border-radius: 20px; display: inline-block; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; box-shadow: 0 0 10px var(--portal-glow); margin-top: 10px; }
         
@@ -160,7 +157,7 @@
         
         .dashboard-header h1 { font-family: 'Lato', sans-serif; color: var(--yellow-portal); margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; font-weight: normal; letter-spacing: 1px; }
         
-        /* Dashboard Grid 3 sütun olarak ayarlı */
+        /* GÜNCELLEME: Grid yapısını 3 sütuna çıkarttık */
         .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         
         .dash-card { background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 40px 30px; text-align: center; border-radius: 20px; cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; overflow: hidden; }
@@ -463,25 +460,7 @@
                             <div class="dash-card" onclick="sayfaGoster('tools-menu-view')">
                                 <i class="fas fa-tools"></i>
                                 <h3>ARAÇLAR</h3>
-                                <p>Metronom ve Akort Cihazı.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="tools-menu-view" class="view-section">
-                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2>Araçlar</h2>
-                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
-                        </div>
-                        <br>
-                        <div class="category-grid">
-                            <div class="cat-box" onclick="sayfaGoster('metronome-view')">
-                                <span class="cat-title">Metronom</span>
-                                <span class="cat-desc">Ritim çalışmaları için.</span>
-                            </div>
-                            <div class="cat-box" onclick="sayfaGoster('tuner-view')">
-                                <span class="cat-title">Akort Cihazı</span>
-                                <span class="cat-desc">Enstrümanınızı akort edin.</span>
+                                <p>Metronom, Akort Cihazı.</p>
                             </div>
                         </div>
                     </div>
@@ -691,6 +670,10 @@
                                 <span class="cat-title">Müzik Hafıza</span>
                                 <span class="cat-desc">Kartları eşleştir, hafızanı güçlendir. (3-10 Yaş)</span>
                             </div>
+                            <div class="cat-box" onclick="sayfaGoster('ear-training-view')">
+                                <span class="cat-title">Mutlak Duyum Testi</span>
+                                <span class="cat-desc">Kulağını test et, notayı bil. (Zor)</span>
+                            </div>
                         </div>
                     </div>
 
@@ -759,6 +742,45 @@
                             height="750" 
                             style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
                             title="Hafıza Oyunu">
+                        </iframe>
+                    </div>
+
+                    <div id="tools-menu-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Araçlar</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <br>
+                        <div class="category-grid">
+                            <div class="cat-box" onclick="sayfaGoster('metronome-view')">
+                                <span class="cat-title">Metronom</span>
+                                <span class="cat-desc">Ritim çalışmaları için.</span>
+                            </div>
+                            <div class="cat-box" onclick="sayfaGoster('tuner-view')">
+                                <span class="cat-title">Akort Cihazı</span>
+                                <span class="cat-desc">Enstrümanınızı akort edin.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ear-training-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Mutlak Duyum Testi</h2>
+                            <div>
+                                <button onclick="tamEkranYap('ear-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
+                                    <i class="fas fa-expand"></i> Tam Ekran
+                                </button>
+                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                            </div>
+                        </div>
+                        
+                        <iframe 
+                            id="ear-frame"
+                            src="bilgi-yarismasi/kulak-egzersiz.html" 
+                            width="100%" 
+                            height="750" 
+                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+                            title="Kulak Egzersizi">
                         </iframe>
                     </div>
 
