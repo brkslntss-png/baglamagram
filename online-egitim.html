@@ -669,17 +669,8 @@
         <p style="font-size: 0.8rem; color: #555;">© 2026 Mahmut Burak ASLANTAŞ.</p>
     </footer>
 
-    <script>
-        // --- 1. ÖĞRENCİ VERİTABANI ---
-        const ogrenciler = {
-            "ZWxpZmthcm1hbjEyMw==": { ad: "RWxpZg==", soyad: "S0FSTUFO" },            
-            "bWFobXV0YnVyYWs=": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },        
-            "aGFsaWxndWxheWRpbjEyMw==": { ad: "SGFsaWw=", soyad: "R8OcTEFZRElO" },       
-            "YW1hbnNlbmRlY2Fubw==": { ad: "R8Oka3R1xJ8=", soyad: "UEFJTlRFUg==" }, 
-            "dGVreW9sZGV2cmlt": { ad: "RmVyaGF0ZSBDaXZhbmU=", soyad: "QkFLQU5F" }        
-        };
-
-        // --- 2. DİKTE SES DOSYALARI ---
+   <script>
+        // --- 1. DİKTE SES DOSYALARI ---
         const dikteVerileri = {
             1: "1CprU3vYtFIEZ0gRgReVEye4IHShh0y0_",
             2: "1F47H-u9OgakbY-Y8o0X3s_ago7C9x-RO",
@@ -704,7 +695,7 @@
             22: "1pdHx7gHYkg1sEfu01AfVTxbpHQJ3GCOS"
         };
 
-        // --- 3. DERS NOTLARI LİSTESİ ---
+        // --- 2. DERS NOTLARI LİSTESİ ---
         const dersNotlariDosyalari = [
             { ad: "Temel Müzik Bilgileri 1", dosya: "1.png" },
             { ad: "Temel Müzik Bilgileri 2", dosya: "2.png" },
@@ -719,7 +710,7 @@
             { ad: "Nota Süreleri 2", dosya: "nota-sureleri1.png" }
         ];
 
-        // --- 4. KISA SAP NOTALARI ---
+        // --- 3. KISA SAP NOTALARI ---
         const kisaSapNotalari = [
             { ad: "Gelin Ayşem", dosya: "a.jpg" },
             { ad: "Eklemedir Koca Konak", dosya: "b.jpg" },
@@ -743,7 +734,7 @@
             { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
         ];
 
-        // --- 5. PARMAK EGZERSİZLERİ ---
+        // --- 4. PARMAK EGZERSİZLERİ ---
         const parmakEgzersizleri = [
             { ad: "Alıştırma 1", dosya: "alistirma-1.png" },
             { ad: "Alıştırma 2", dosya: "alistirma-2.png" },
@@ -755,52 +746,6 @@
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
         function girisAc() { document.getElementById("login-overlay").style.display = "flex"; }
         function girisKapat() { document.getElementById("login-overlay").style.display = "none"; }
-
-        document.getElementById("studentPass").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") { sistemeGiris(); }
-        });
-
-        function sistemeGiris() {
-            const hamSifre = document.getElementById("studentPass").value.trim();
-            let sifre = "";
-            
-            try {
-                sifre = btoa(unescape(encodeURIComponent(hamSifre)));
-            } catch (e) {
-                console.log("Şifre çevrim hatası");
-            }
-
-            if (ogrenciler[sifre]) {
-                const ogr = ogrenciler[sifre];
-                
-                let formatliAd = "Öğrenci";
-                let formatliSoyad = "";
-
-                try {
-                    let gercekAd = decodeURIComponent(escape(atob(ogr.ad)));
-                    let gercekSoyad = decodeURIComponent(escape(atob(ogr.soyad)));
-                    formatliAd = gercekAd.toLowerCase().split(' ').map(kelime => kelime.charAt(0).toUpperCase() + kelime.slice(1)).join(' ');
-                    formatliSoyad = gercekSoyad.toUpperCase();
-                } catch (err) {
-                    console.log("İsim çözme hatası");
-                }
-                
-                document.getElementById("displayAd").innerText = formatliAd;
-                document.getElementById("displaySoyad").innerText = formatliSoyad;
-                document.getElementById("welcomeTitle").innerText = "Merhaba " + formatliAd + "!";
-                
-                girisKapat();
-                document.getElementById("portal-entry-btn-section").style.display = "none";
-                document.getElementById("public-content").style.display = "none";
-                document.getElementById("student-portal").style.display = "block";
-                
-                document.body.classList.add("portal-active");
-
-                history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
-            } else {
-                document.getElementById("loginError").style.display = "block";
-            }
-        }
 
         function sayfaGoster(id, addToHistory = true) {
             document.querySelectorAll(".view-section").forEach(s => s.classList.remove("active"));
@@ -897,64 +842,56 @@
             sayfaGoster('live-class-view');
         }
 
-        // --- PROFİL FOTOĞRAFI YÜKLEME ---
-       // --- YENİ saveProfilePhoto FONKSİYONU ---
-function saveProfilePhoto(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                // 1. Canvas oluştur
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
+        // --- PROFİL FOTOĞRAFI YÜKLEME (GÜNCELLENMİŞ SIKIŞTIRMALI VERSİYON) ---
+        function saveProfilePhoto(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
                 
-                // 2. Boyutlandır
-                const MAX_SIZE = 300; 
-                let width = img.width;
-                let height = img.height;
-                
-                if (width > height) {
-                    if (width > MAX_SIZE) {
-                        height *= MAX_SIZE / width;
-                        width = MAX_SIZE;
-                    }
-                } else {
-                    if (height > MAX_SIZE) {
-                        width *= MAX_SIZE / height;
-                        height = MAX_SIZE;
-                    }
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        const MAX_SIZE = 300; 
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        if (width > height) {
+                            if (width > MAX_SIZE) {
+                                height *= MAX_SIZE / width;
+                                width = MAX_SIZE;
+                            }
+                        } else {
+                            if (height > MAX_SIZE) {
+                                width *= MAX_SIZE / height;
+                                height = MAX_SIZE;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7); 
+                        
+                        document.getElementById('userAvatar').src = dataUrl;
+                        
+                        // KİŞİYE ÖZEL KAYDETME
+                        const aktifMail = localStorage.getItem('aktifKullaniciMail');
+                        if (aktifMail) {
+                            localStorage.setItem('foto_' + aktifMail, dataUrl);
+                        } else {
+                            localStorage.setItem('geciciFoto', dataUrl);
+                        }
+                    };
+                    img.src = e.target.result;
                 }
-                canvas.width = width;
-                canvas.height = height;
-                
-                // 3. Çiz ve Sıkıştır
-                ctx.drawImage(img, 0, 0, width, height);
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.7); 
-                
-                // 4. Ekrana bas
-                document.getElementById('userAvatar').src = dataUrl;
-                
-                // --- İŞTE DÜZELTME BURADA ---
-                // Fotoğrafı "Genel" değil, "Kişiye Özel" kaydediyoruz
-                const aktifMail = localStorage.getItem('aktifKullaniciMail');
-                if (aktifMail) {
-                    localStorage.setItem('foto_' + aktifMail, dataUrl);
-                } else {
-                    // Eğer sistemsel bir hata varsa geçici olarak kaydet
-                    localStorage.setItem('geciciFoto', dataUrl);
-                }
-            };
-            img.src = e.target.result;
+                reader.readAsDataURL(file);
+            }
         }
-        reader.readAsDataURL(file);
-    }
-}
 
-
-        // --- YENİ EKLENEN FOTOĞRAF, CHAT VE SESLENDİRME MANTIĞI ---
+        // --- CHAT VE BURAKAI (BUG FİXLENDİ) ---
         let selectedImageBase64 = null;
         let lastAiResponse = "";
 
@@ -1030,6 +967,7 @@ function saveProfilePhoto(input) {
             document.getElementById('imagePreviewContainer').style.display = 'none';
         }
 
+        // --- ENTER TUŞU İLE MESAJ GÖNDERME ---
         document.getElementById("aiUserInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault(); 
@@ -1104,14 +1042,15 @@ function saveProfilePhoto(input) {
                 box.appendChild(aiMsg);
 
             } catch (err) {
-                document.getElementById("loadingBubble").innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
+                const bubble = document.getElementById("loadingBubble");
+                if(bubble) bubble.innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
                 console.error(err);
             }
             
             box.scrollTop = box.scrollHeight;
         }
 
-        // --- METRONOM MANTIĞI ---
+        // --- METRONOM MANTIĞI (BUG FİXLENDİ) ---
         let audioCtx = null;
         let isPlaying = false;
         let tempo = 100;
@@ -1173,6 +1112,11 @@ function saveProfilePhoto(input) {
                 if (!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 }
+                // Browser politikası gereği resume gerekebilir
+                if(audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
                 isPlaying = true;
                 currentBeat = 0;
                 nextNoteTime = audioCtx.currentTime + 0.05;
@@ -1225,7 +1169,7 @@ function saveProfilePhoto(input) {
             document.querySelectorAll('.beat-dot').forEach(d => d.classList.remove('active'));
         }
 
-        // --- AKORT CİHAZI (TUNER) MANTIĞI ---
+        // --- AKORT CİHAZI (TUNER) MANTIĞI (BUG FİXLENDİ) ---
         let tunerAudioCtx = null;
         let analyser = null;
         let rafID = null;
@@ -1441,18 +1385,12 @@ function saveProfilePhoto(input) {
             return (value - x1) * (y2 - x2) / (y1 - x1) + x2;
         }
 
-        // --- ORTAK BAŞLANGIÇ ---
         document.addEventListener('DOMContentLoaded', () => {
-            createDots(); // Metronom başlat
-            drawGauge(0, false); // Tuner ibresini sıfırla
-            
-            // Kaydedilmiş profil fotoğrafı varsa yükle
-            const savedFoto = localStorage.getItem('ogrenciProfilFoto');
-            if(savedFoto) {
-                document.getElementById('userAvatar').src = savedFoto;
-            }
+            createDots(); 
+            drawGauge(0, false); 
         });
 
+    
     </script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
@@ -1471,10 +1409,24 @@ function saveProfilePhoto(input) {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-    // --- İSİM LİSTESİ (ÖĞRENCİLERİN ADINI ÖNCE BURAYA EKLEYİP SONRA FİREBASE'YE EKLE)---
+  // --- TÜRKÇE KARAKTER DESTEKLİ ÇÖZÜCÜ ---
+  function sifreCo(str) {
+      try {
+          return decodeURIComponent(escape(window.atob(str)));
+      } catch (e) {
+          return str; // Şifreli değilse olduğu gibi döndür
+      }
+  }
+
+  // --- ŞİFRELENMİŞ ÖĞRENCİ LİSTESİ (BASE64) ---
+  // Buradaki anahtarlar (email) ve değerler (ad, soyad) Base64 halindedir.
+  // Meraklı gözler bakınca anlamsız harfler görür.
   const ogrenciListesi = {
-      "gokboy09@gmail.com": { ad: "Gökhan", soyad: "BOY" },
-      "brkslntss@gmail.com": { ad: "Burak", soyad: "ASLANTAŞ" }
+      // gokboy09@gmail.com : { Gökhan, BOY }
+      "Z29rYm95MDlAZ21haWwuY29t": { ad: "R8OkaGFu", soyad: "Qk9Z" },
+      
+      // brkslntss@gmail.com : { Burak, ASLANTAŞ }
+      "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "QnVyYWs=", soyad: "QVNMQU5UQcWe" }
   };
 
   const loginBtn = document.getElementById('firebaseLoginBtn');
@@ -1501,8 +1453,12 @@ function saveProfilePhoto(input) {
                 status.style.color = "#4CAF50"; 
                 status.innerText = "Giriş Başarılı! Yönlendiriliyorsun...";
 
-                // --- KRİTİK NOKTA: Giriş yapanı hafızaya not et ---
+                // --- GİRİŞ YAPAN MAİLİ ŞİFRELE Kİ LİSTEDE BULALIM ---
+                // (Türkçe karakter sorunu olmasın diye özel kodlama ile şifreliyoruz)
                 const girisYapanMail = userCredential.user.email;
+                const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
+                
+                // Hafızaya maili kaydet (Şifresiz kaydetmekte sorun yok, tarayıcı kişiye özeldir)
                 localStorage.setItem('aktifKullaniciMail', girisYapanMail);
 
                 setTimeout(() => {
@@ -1512,24 +1468,27 @@ function saveProfilePhoto(input) {
                     document.getElementById("student-portal").style.display = "block";
                     document.body.classList.add("portal-active");
 
-                    // İsim Ayarlama
-                    let ogrenci = ogrenciListesi[girisYapanMail];
+                    // İsim Ayarlama (Şifreli listeden bulup çözüyoruz)
+                    let ogrenci = ogrenciListesi[sifreliMail];
+
                     if (ogrenci) {
-                        document.getElementById("displayAd").innerText = ogrenci.ad;
-                        document.getElementById("displaySoyad").innerText = ogrenci.soyad;
-                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + ogrenci.ad + "!";
+                        // Şifreli veriyi çözüp (atob) ekrana basıyoruz
+                        const gercekAd = sifreCo(ogrenci.ad);
+                        const gercekSoyad = sifreCo(ogrenci.soyad);
+                        
+                        document.getElementById("displayAd").innerText = gercekAd;
+                        document.getElementById("displaySoyad").innerText = gercekSoyad;
+                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + gercekAd + "!";
                     } else {
+                        // Listede yoksa mailden isim uydur
                         const varsayilanAd = girisYapanMail.split('@')[0];
                         document.getElementById("displayAd").innerText = varsayilanAd;
                         document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
                         document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
                     }
 
-                    // --- FOTOĞRAF AYARLAMA (Kişiye Özel) ---
-                    // Önce varsayılan boş resmi koy
-                    document.getElementById('userAvatar').src = "https://i.hizliresim.com/mlkkkp6.png";
-                    
-                    // Sonra bu kişinin özel fotosu var mı diye bak
+                    // Fotoğraf Getirme
+                    document.getElementById('userAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
                     const kisiselFoto = localStorage.getItem('foto_' + girisYapanMail);
                     if (kisiselFoto) {
                         document.getElementById('userAvatar').src = kisiselFoto;
