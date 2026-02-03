@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Eğitim | Mahmut Burak ASLANTAŞ</title>
+    <meta name="description" content="Mahmut Burak ASLANTAŞ ile profesyonel online bağlama eğitimi.">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&family=Lato&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           TEMEL AYARLAR
+           ============================================================ */
+        :root {
+            --primary: #000000;
+            --accent: #c5a059;
+            --bg-dark: #0f0f0f;
+            --bg-sidebar: #151515;
+            --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
+            --yellow-portal: #ffd700;
+            --portal-glow: rgba(255, 215, 0, 0.3);
+            --glass-bg: rgba(20, 20, 20, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+            --whatsapp-green: #25d366;
+            --ai-purple: #9d4edd;
+            --sidebar-width: 280px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 300;
+            background: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: var(--text); 
+            line-height: 1.6;
+            display: flex; flex-direction: column; min-height: 100vh;
+            transition: background 0.5s ease;
+        }
+
+        body.portal-active {
+            font-family: 'Poppins', sans-serif;
+            background-color: #050505;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.03) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(157, 78, 221, 0.05) 0%, transparent 20%);
+        }
+
+        /* --- MENÜ --- */
+        nav { background: rgba(0, 0, 0, 0.95); padding: 20px 0; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(197, 160, 89, 0.2); }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
+        nav ul { display: flex; list-style: none; gap: 40px; padding: 0 20px; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease; }
+        nav a:hover, nav a.active { color: var(--accent); }
+        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
+
+        /* --- LANDING CONTENT --- */
+        .portal-login-btn-container { text-align: center; margin: 40px 0; display: flex; justify-content: center; }
+        .portal-btn {
+            background: var(--accent); border: 1px solid var(--accent); color: #000; padding: 20px 40px;
+            font-family: 'Playfair Display', serif; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 20px;
+            border-radius: 5px; box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+        }
+        .portal-btn:hover { background: #e0c060; transform: translateY(-3px); }
+        .icon-stack { position: relative; display: inline-block; width: 40px; height: 40px; }
+        .icon-stack .fa-laptop { font-size: 36px; }
+        .icon-stack .fa-music { position: absolute; font-size: 14px; top: 50%; left: 50%; transform: translate(-50%, -60%); color: #000; }
+
+        .page-content { flex: 1; padding: 20px; max-width: 1400px; margin: 0 auto; width: 100%; animation: fadeInUp 1s ease-out forwards; opacity: 0; }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        
+        h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-bottom: 50px; }
+        .feature-card { background: rgba(255, 255, 255, 0.03); padding: 30px; border-left: 2px solid var(--accent); transition: transform 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
+        .feature-card i { font-size: 2rem; color: var(--accent); margin-bottom: 20px; }
+        
+        .apply-container { background: #050505; padding: 40px; border: 1px solid #222; max-width: 800px; margin: 0 auto; }
+        .form-group { display: flex; flex-direction: column; gap: 15px; }
+        input, select, textarea { background: rgba(0, 0, 0, 0.6); border: 1px solid #333; color: white; padding: 12px; font-family: 'Montserrat', sans-serif; outline: none; }
+        input:focus { border-color: var(--accent); }
+        .btn { padding: 12px 30px; border: 1px solid var(--accent); color: var(--accent); background: transparent; text-transform: uppercase; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        .btn:hover { background: var(--accent); color: #000; }
+
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; justify-content: center; align-items: center; flex-direction: column; animation: fadeIn 0.3s; }
+        .login-box { border: 1px solid var(--accent); padding: 40px; text-align: center; background: #111; box-shadow: 0 0 30px rgba(197, 160, 89, 0.3); width: 90%; max-width: 400px; position: relative; }
+        .close-login { position: absolute; top: 10px; right: 15px; color: #fff; font-size: 1.5rem; cursor: pointer; }
+
+        /* ============================================================
+           PORTAL STİLLERİ
+           ============================================================ */
+        #student-portal { display: none; width: 100%; min-height: 80vh; margin-top: 30px; }
+        .portal-layout { display: flex; gap: 30px; min-height: 80vh; }
+        
+        .sidebar { 
+            width: var(--sidebar-width); 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 30px; 
+            border: 1px solid var(--glass-border); border-radius: 24px; 
+            display: flex; flex-direction: column; 
+            transition: all 0.3s ease; 
+            max-height: 85vh; 
+            position: sticky; top: 100px;
+            overflow-y: auto; 
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+        .sidebar.collapsed { width: 90px; padding: 30px 15px; }
+        .sidebar.collapsed .user-info, .sidebar.collapsed .menu-title { display: none; }
+        .sidebar.collapsed .menu-link span, .sidebar.collapsed .whatsapp-sidebar-btn span { display: none; }
+        .sidebar.collapsed .menu-link { justify-content: center; padding: 15px 0; }
+        .hamburger-btn { font-size: 1.5rem; color: var(--yellow-portal); cursor: pointer; margin-bottom: 20px; align-self: flex-end; }
+        
+        .user-info { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; text-align: center; }
+        .user-name { color: var(--yellow-portal); font-family: 'Lato', sans-serif; font-size: 1.4rem; font-weight: normal; line-height: 1.2; margin-bottom: 5px; }
+        .premium-badge { font-size: 0.65rem; color: #000; background: var(--yellow-portal); padding: 4px 10px; border-radius: 20px; display: inline-block; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; box-shadow: 0 0 10px var(--portal-glow); margin-top: 10px; }
+        
+        /* --- PROFİL FOTOĞRAFI STİLİ --- */
+        .profile-container {
+            width: 100px; height: 100px; margin: 0 auto 15px auto;
+            position: relative; cursor: pointer; border-radius: 50%;
+            border: 2px solid var(--accent); padding: 2px;
+            transition: transform 0.3s;
+        }
+        .profile-container:hover { transform: scale(1.05); }
+        .profile-container img {
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+        }
+        .edit-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; transition: 0.3s;
+        }
+        .profile-container:hover .edit-overlay { opacity: 1; }
+        .edit-overlay i { color: #fff; font-size: 1.5rem; }
+
+        .menu-link { display: flex; align-items: center; gap: 15px; color: #ccc; text-decoration: none; padding: 12px 15px; margin-bottom: 5px; border-radius: 12px; transition: 0.3s; cursor: pointer; font-size: 0.95rem; border: 1px solid transparent; }
+        .menu-link:hover { background: rgba(255, 255, 255, 0.05); color: #fff; transform: translateX(5px); }
+        .menu-link.active { background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, transparent 100%); color: var(--yellow-portal); border-left: 3px solid var(--yellow-portal); border-radius: 4px 12px 12px 4px; }
+        
+        .whatsapp-sidebar-btn { display: flex; align-items: center; gap: 15px; background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); color: white; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 600; margin-top: auto; transition: 0.3s; justify-content: center; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2); }
+        .whatsapp-sidebar-btn:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4); }
+
+        .portal-content { flex: 1; border-radius: 24px; padding: 10px; }
+        .view-section { display: none; animation: fadeIn 0.5s; }
+        .view-section.active { display: block; }
+        
+        .dashboard-header h1 { font-family: 'Lato', sans-serif; color: var(--yellow-portal); margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; font-weight: normal; letter-spacing: 1px; }
+        
+        /* GÜNCELLEME: Grid yapısını 3 sütuna çıkarttık */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        
+        .dash-card { background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 40px 30px; text-align: center; border-radius: 20px; cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; overflow: hidden; }
+        .dash-card:hover { transform: translateY(-8px); border-color: var(--yellow-portal); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        .dash-card i { font-size: 3.5rem; color: var(--yellow-portal); margin-bottom: 20px; transition: 0.3s; }
+        .dash-card:hover i { transform: scale(1.1); text-shadow: 0 0 20px var(--portal-glow); }
+        .custom-icon { width: 80px; height: auto; margin-bottom: 20px; filter: grayscale(100%) brightness(200%); transition: 0.4s; display: block; margin-left: auto; margin-right: auto;}
+        .dash-card:hover .custom-icon { filter: none; transform: scale(1.1); }
+        
+        .ai-card { border: 1px solid rgba(157, 78, 221, 0.3); background: linear-gradient(160deg, rgba(20, 20, 20, 0.8) 0%, rgba(157, 78, 221, 0.05) 100%); }
+        .ai-card:hover { border-color: var(--ai-purple); box-shadow: 0 0 25px rgba(157, 78, 221, 0.2); }
+        .ai-card i { color: var(--ai-purple) !important; }
+        .ai-badge { position: absolute; top: 15px; right: 15px; background: var(--ai-purple); color: white; font-size: 0.65rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; z-index: 2; box-shadow: 0 0 10px rgba(157, 78, 221, 0.5); }
+
+        .chat-container { display: flex; flex-direction: column; height: 65vh; border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(10px); }
+        .chat-box { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+        .chat-message { max-width: 75%; padding: 15px 20px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .chat-message.ai { align-self: flex-start; background: rgba(40, 40, 40, 0.9); border-bottom-left-radius: 2px; color: #eee; border: 1px solid rgba(255,255,255,0.05); }
+        .chat-message.ai strong { color: var(--yellow-portal); }
+        .chat-message.user { align-self: flex-end; background: linear-gradient(135deg, var(--yellow-portal) 0%, #b8860b 100%); color: #000; border-bottom-right-radius: 2px; font-weight: 500; }
+        
+        .chat-input-area { padding: 20px; background: rgba(20, 20, 20, 0.9); border-top: 1px solid var(--glass-border); display: flex; gap: 12px; align-items: center; }
+        .chat-input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid #444; color: white; padding: 12px 20px; border-radius: 30px; outline: none; transition: 0.3s; }
+        .chat-input:focus { border-color: var(--yellow-portal); background: rgba(255, 255, 255, 0.1); }
+        .chat-action-btn, .chat-mute-btn { background: transparent; border: none; color: #888; padding: 10px; cursor: pointer; transition: 0.2s; font-size: 1.1rem; }
+        .chat-action-btn:hover { color: var(--yellow-portal); transform: scale(1.1); }
+        .chat-mute-btn:hover { color: red; }
+        .chat-send-btn { background: var(--yellow-portal); color: black; border: none; width: 45px; height: 45px; border-radius: 50%; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--portal-glow); transition: 0.3s; }
+        .chat-send-btn:hover { transform: scale(1.1); }
+
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .cat-box { background: var(--glass-bg); padding: 30px; border-radius: 12px; border-left: 4px solid var(--yellow-portal); cursor: pointer; transition: 0.3s; border: 1px solid var(--glass-border); border-left-width: 4px; }
+        .cat-box:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(5px); }
+        .cat-title { color: var(--yellow-portal); font-family: 'Playfair Display', serif; font-size: 1.3rem; display: block; margin-bottom: 8px; }
+        .materials-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; }
+        .mat-item { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 25px 15px; text-align: center; border-radius: 15px; cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .mat-item:hover { border-color: var(--yellow-portal); transform: translateY(-5px); background: rgba(255,255,255,0.02); }
+        .exam-row { background: var(--glass-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .exam-row:hover { border-color: var(--yellow-portal); background: rgba(255,255,255,0.05); }
+        .exam-detail-container { background: var(--glass-bg); padding: 40px; border-radius: 20px; border: 1px solid var(--glass-border); margin-top: 20px; }
+        .answer-key-btn { background: rgba(0,0,0,0.3); color: #fff; padding: 20px; width: 100%; text-align: center; border: 1px dashed var(--yellow-portal); border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: 0.3s; margin-top: 30px; }
+        .answer-key-btn:hover { background: var(--yellow-portal); color: #000; border-style: solid; }
+
+        .image-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 10000; display: none; justify-content: center; align-items: center; }
+        .image-modal img { max-width: 90%; max-height: 90%; border: 3px solid var(--yellow-portal); border-radius: 10px; }
+        .close-modal { position: absolute; top: 30px; right: 40px; color: #fff; font-size: 3rem; cursor: pointer; }
+        
+        #imagePreviewContainer { 
+            display: none; position: absolute; bottom: 85px; left: 30px; 
+            background: rgba(0,0,0,0.8); padding: 10px; 
+            border: 1px solid var(--yellow-portal); border-radius: 10px; 
+            z-index: 10; backdrop-filter: blur(5px); 
+        }
+        #imagePreview { max-width: 120px; max-height: 120px; display: block; border-radius: 5px; }
+        #removeImage { color: #ff4d4d; cursor: pointer; text-align: center; display: block; margin-top: 8px; font-size: 0.85rem; font-weight: bold; }
+
+        .live-class-card { border-color: rgba(255, 0, 0, 0.3); }
+        .live-class-card:hover { border-color: red; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
+        .live-class-card i { color: #ff4d4d; }
+        #meet-frame { width: 100%; height: 600px; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); }
+
+        /* --- METRONOM STİLLERİ --- */
+        .metronome-container {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 40px; max-width: 600px; margin: 20px auto; text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+        }
+        .beat-dots { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; height: 30px; }
+        .beat-dot { width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid #444; transition: all 0.1s; }
+        .beat-dot.active { background: var(--yellow-portal); box-shadow: 0 0 15px var(--yellow-portal); transform: scale(1.3); border-color: #fff; }
+        .bpm-display-area { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .bpm-value-box { font-family: 'Lato', sans-serif; font-size: 4rem; font-weight: 300; color: var(--text); width: 180px; line-height: 1; }
+        .bpm-label { display: block; font-size: 0.9rem; color: var(--accent); letter-spacing: 2px; margin-top: 5px; }
+        .bpm-btn { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--accent); background: transparent; color: var(--accent); font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
+        .bpm-btn:hover { background: var(--accent); color: #000; }
+        .slider-container { width: 100%; margin-bottom: 40px; }
+        .bpm-slider { -webkit-appearance: none; width: 100%; height: 6px; background: #333; border-radius: 5px; outline: none; }
+        .bpm-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--yellow-portal); cursor: pointer; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); transition: transform 0.2s; }
+        .bpm-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        .controls-row { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; }
+        .select-wrapper select { padding: 15px 20px; border-radius: 30px; background: rgba(0,0,0,0.4); border: 1px solid var(--accent); color: #fff; font-size: 1rem; cursor: pointer; outline: none; }
+        .play-btn { padding: 15px 40px; border-radius: 30px; background: var(--yellow-portal); color: #000; border: none; font-weight: bold; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); transition: 0.3s; }
+        .play-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+        .play-btn.playing { background: #ff4d4d; color: white; }
+
+        /* --- AKORT CİHAZI STİLLERİ --- */
+        .tuner-container { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; max-width: 500px; margin: 20px auto; text-align: center; box-shadow: 0 0 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+        #tunerGauge { width: 100%; max-width: 400px; height: auto; margin-bottom: 10px; }
+        .note-display { font-family: 'Lato', sans-serif; font-weight: bold; color: var(--text); text-shadow: 0 0 20px rgba(255, 215, 0, 0.2); margin-bottom: 5px; }
+        #noteName { font-size: 5rem; color: var(--yellow-portal); }
+        #noteOctave { font-size: 2rem; color: var(--text-secondary); }
+        .frequency-display { font-family: 'Montserrat', sans-serif; color: var(--accent); font-size: 1.2rem; letter-spacing: 1px; }
+        .tuner-btn-active { background: #ff4d4d !important; color: white !important; box-shadow: 0 0 20px rgba(255, 77, 77, 0.4) !important; }
+
+        @media (max-width: 900px) {
+            .portal-layout { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; top: 0; padding: 20px; border-radius: 0; border: none; border-bottom: 1px solid var(--glass-border); background: var(--bg-dark); max-height: none; }
+            .sidebar.collapsed { height: 70px; overflow: hidden; padding: 15px 20px; }
+            .sidebar.collapsed .user-info, .sidebar.collapsed .menu-title { display: none; }
+            .nav-container { display: flex; justify-content: space-between; padding: 0 20px; }
+            nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
+            nav ul.aktif { display: flex; }
+            .menu-toggle { display: block; position: static; }
+            .chat-container { height: 50vh; }
+            
+            /* Mobilde grid tek sütuna düşsün */
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        footer { background: #050505; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
+        .social-wrapper { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
+        .social-item { color: #555; font-size: 1.5rem; transition: 0.3s; }
+        .social-item:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <div class="menu-toggle" onclick="menuyuAcKapa()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul id="anaMenu">
+                <li><a href="index.html">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" class="active">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html">NOTALAR</a></li>
+                <li><a href="siirler.html">ŞİİRLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="login-overlay">
+        
+  <div class="login-box">
+    <span class="close-login" onclick="girisKapat()">×</span>
+    <h3 style="color: var(--accent); margin-bottom: 20px;">ÖĞRENCİ PORTALI</h3>
+    
+    <input type="email" id="emailInput" placeholder="E-posta Adresiniz" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    
+    <input type="password" id="passwordInput" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
+    
+    <div style="text-align: right; margin-bottom: 20px;">
+        <span onclick="sifreSifirla()" style="color: #bbb; cursor: pointer; font-size: 0.85rem; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#bbb'">
+            Şifremi Unuttum
+        </span>
+    </div>
+
+    <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;">GİRİŞ YAP</button>
+    
+    <p id="loginStatus" style="margin-top: 15px; font-size: 0.9rem; min-height: 20px;"></p>
+</div>
+ 
+    </div>
+
+    <div class="page-content">
+        
+        <div id="portal-entry-btn-section" class="portal-login-btn-container">
+            <button onclick="girisAc()" class="portal-btn">
+                <div class="icon-stack">
+                    <i class="fas fa-laptop"></i>
+                    <i class="fas fa-music"></i>
+                </div>
+                ÖĞRENCİ PORTALINA GİRİŞ YAP
+            </button>
+        </div>
+
+        <div id="public-content">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h2>Neden Online Eğitim?</h2>
+                <div style="width: 60px; height: 2px; background: var(--accent); margin: 15px auto;"></div>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-robot"></i>
+                    <h4>Yapay Zeka ile Eğitim</h4>
+                    <p>Yapay zeka destekli müzik öğretmeniniz BurakAI ile eğitimde yeni bir dönem. Bu teknolojiyi kullanmak ve derslerinize entegre etmek için aşağıdaki formu doldurarak ders paketlerimizi satın alabilirsiniz.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-moon"></i>
+                    <h4>Mesai Sonrası Sanat</h4>
+                    <p>Çoğu kurs akşam 19:00'da kapılarını kapatır. Biz ise tam o saatlerde başlıyoruz. İşten eve döndüğünüzde, trafiğe girmeden ve kurs saatlerine yetişme stresi yaşamadan bağlamanızı elinize alın.</p>
+                </div>
+                <div class="feature-card"><i class="fas fa-user-tie"></i><h4>Premium Öğrenci Portalı</h4><p>Bu bölümde, yalnızca kendinize özel verilen şifre ile erişebileceğiniz ders materyalleri yer almaktadır. Tüm içerikler, öğrenme sürecini desteklemek amacıyla sesli ve görsel materyallerle hazırlanmıştır. Materyaller düzenli olarak güncellenmekte ve seviyelere göre yapılandırılmaktadır.</p></div>
+                <div class="feature-card"><i class="fab fa-whatsapp"></i><h4>Kesintisiz İletişim</h4><p>Ders bittiğinde bağımız kopmaz, Dilediğiniz zaman WhatsApp üzerinden ödevlerinizi gönderip, kafanıza takılan soruları sorup, videolarınızı gönderebilirsiniz. Bu özelliğe sadece öğrenci portalı üzerinden erişim sağlayabilirsiniz.</p></div>
+            </div>
+            <div class="apply-container">
+                <h3 style="text-align: center; margin-bottom: 25px;">BAŞVURU FORMU</h3>
+                <form action="https://formspree.io/f/xnjvyknz" method="POST" class="form-group">
+                    <input type="text" name="ad_soyad" placeholder="Ad Soyad" required>
+                    <input type="tel" name="telefon" placeholder="Telefon Numaranız" required>
+                    <div style="display: flex; gap: 10px;"><input type="number" name="yas" placeholder="Yaş (16+)" min="16" required style="flex:1;"><input type="text" name="meslek" placeholder="Meslek (Opsiyonel)" style="flex:1;"></div>
+                    <select name="seviye"><option value="" disabled selected>Mevcut Seviyeniz</option><option value="sifir">Hiç Bilmiyorum</option><option value="temel">Temel Seviye</option><option value="ileri">İleri Seviye</option></select>
+                    <textarea name="mesaj" rows="4" placeholder="Müzikal hedefleriniz..." required></textarea>
+                    <button type="submit" class="btn" style="width: 100%;">GÖNDER</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="student-portal">
+            <div class="portal-layout">
+                
+                <div class="sidebar" id="sidebar">
+                    <div class="hamburger-btn" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    
+                    <div class="user-info">
+                        <div class="profile-container" onclick="document.getElementById('profileUpload').click()">
+                            <img id="userAvatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profil">
+                            <div class="edit-overlay"><i class="fas fa-camera"></i></div>
+                            <input type="file" id="profileUpload" accept="image/*" style="display: none;" onchange="saveProfilePhoto(this)">
+                        </div>
+                        <div class="user-name" id="displayAd">Ad</div>
+                        <div class="user-name" id="displaySoyad" style="text-transform: uppercase;">SOYAD</div>
+                        
+                        
+                        <div class="premium-badge">PREMIUM ÜYE</div>
+                    </div>
+
+                    <div class="menu-links">
+                        <a onclick="sayfaGoster('dashboard-view')" class="menu-link active">
+                            <i class="fas fa-home"></i> <span>Ana Sayfa</span>
+                        </a>
+                        <br>
+                        <div style="color: #666; font-size: 0.8rem; margin-bottom: 5px; padding-left: 12px;" class="menu-title">EĞİTİMLERİM</div>
+                        <a onclick="sayfaGoster('baglama-menu-view')" class="menu-link">
+                            <i class="fas fa-music"></i> <span>Bağlama Eğitimi</span>
+                        </a>
+                        <a onclick="sayfaGoster('exam-categories-view')" class="menu-link">
+                            <i class="fas fa-edit"></i> <span>Yetenek Sınavı Hazırlık</span>
+                        </a>
+                        <a onclick="sayfaGoster('fun-learning-view')" class="menu-link">
+                            <i class="fas fa-gamepad"></i> <span>Eğlenerek Öğren</span>
+                        </a>
+                        
+                        <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title">ARAÇLAR</div>
+                        <a onclick="sayfaGoster('metronome-view')" class="menu-link">
+                            <i class="fas fa-stopwatch"></i> <span>Metronom</span>
+                        </a>
+                        <a onclick="sayfaGoster('tuner-view')" class="menu-link">
+                            <i class="fas fa-microphone-lines"></i> <span>Akort Cihazı</span>
+                        </a>
+
+                        <a onclick="startLiveClass()" class="menu-link">
+                             <i class="fas fa-video"></i> <span>Canlı Ders</span>
+                        </a>
+                        <a onclick="sayfaGoster('ai-mentor-view')" class="menu-link" style="color: var(--accent);">
+                            <i class="fas fa-robot"></i> <span>BurakAI Hoca (beta)</span>
+                        </a>
+                    </div>
+
+                    <a href="https://wa.me/905335060921" target="_blank" class="whatsapp-sidebar-btn">
+                        <i class="fab fa-whatsapp"></i> <span>Soru Sor / Ödev Gönder</span>
+                    </a>
+                </div>
+
+                <div class="portal-content">
+                    
+                    <div id="dashboard-view" class="view-section active">
+                        <div class="dashboard-header">
+                            <h1 id="welcomeTitle">Merhaba!</h1>
+                        </div>
+                        <br>
+                        <div class="dashboard-grid">
+                            <div class="dash-card" onclick="sayfaGoster('baglama-menu-view')">
+                                <img src="baglama-ikon.png" class="custom-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'">
+                                <i class="fas fa-music" style="display:none; font-size:3rem; color:var(--yellow-portal); margin-bottom:20px;"></i>
+                                <h3>BAĞLAMA EĞİTİMİ</h3>
+                                <p>Ders notları, notalar ve egzersizler.</p>
+                            </div>
+
+                            <div class="dash-card ai-card" onclick="sayfaGoster('ai-mentor-view')">
+                                <span class="ai-badge">YENİ</span>
+                                <i class="fas fa-robot"></i>
+                                <h3>BurakAI Hoca (beta)</h3>
+                                <p style="font-size: 0.9rem; opacity: 0.9;">Yapay Zeka Entegrasyonlu İlk Müzik Eğitim Platformu.</p>
+                                <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px;">İcranı yükle, anında yorumla.</p>
+                            </div>
+
+                            <div class="dash-card" onclick="sayfaGoster('exam-categories-view')">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h3>YETENEK SINAVI HAZIRLIK</h3>
+                                <p>Dikte çalışmaları, soru çözümleri.</p>
+                            </div>
+                            
+                            <div class="dash-card" onclick="sayfaGoster('fun-learning-view')">
+                                <i class="fas fa-gamepad"></i>
+                                <h3>EĞLENEREK ÖĞREN</h3>
+                                <p>Bilgi yarışması ve eğitici oyunlar.</p>
+                            </div>
+
+                            <div class="dash-card live-class-card" onclick="startLiveClass()">
+                                <i class="fas fa-video"></i>
+                                <h3>CANLI DERS</h3>
+                                <p>Sanal sınıfa bağlanarak canlı derse katılın.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ai-mentor-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2 style="font-family: 'Playfair Display', serif; color: var(--accent); letter-spacing: 1px;">BurakAI Hoca</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← Geri</button>
+                        </div>
+                        <p style="color: #bbb; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Kafana takılan her şeyi sorabilirsin, ben senin için burdayım ciğerim.</p>
+                        
+                        <div class="chat-container">
+                            <div class="chat-box" id="aiChatBox">
+                                <div class="chat-message ai">
+                                    <strong style="color: var(--accent); font-family: 'Playfair Display', serif;">BurakAI Hoca:</strong><br>
+                                    Gel bakalım evladım, hoş geldin. Sazın kucağındaysa, gönlün de aşka hazırsa aşamayacağımız yokuş yok. 'Yorulduk' demek yok, 'yapamıyorum' demek yok. Ben senin her adımda yanındayım. Hadi bismillah diyelim, sor bakalım kafana takılan şey nedir?
+                                </div>
+                            </div>
+                            
+                            <div id="imagePreviewContainer">
+                                <img id="imagePreview" src="" />
+                                <span id="removeImage">Kaldır</span>
+                            </div>
+
+                            <div class="chat-input-area">
+                                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                                
+                                <button class="chat-action-btn" title="Fotoğraf Yükle" onclick="triggerFileUpload()">
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                                <button class="chat-action-btn" title="Video Yükle" onclick="alert('Video özelliği yakında gelecek aslan parçası. Şimdilik fotoğraf gönderebilirsin.')">
+                                    <i class="fas fa-video"></i>
+                                </button>
+                                
+                                <input type="text" class="chat-input" placeholder="Bir soru sor..." id="aiUserInput">
+                                
+                                <button class="chat-mute-btn" title="Okumayı Durdur" onclick="window.speechSynthesis.cancel()">
+                                    <i class="fas fa-volume-mute"></i>
+                                </button>
+                                
+                                <button class="chat-send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="metronome-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Metronom</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+
+                        <div class="metronome-container">
+                            <div class="beat-dots" id="beatDots">
+                                <div class="beat-dot active"></div>
+                                <div class="beat-dot"></div>
+                                <div class="beat-dot"></div>
+                                <div class="beat-dot"></div>
+                            </div>
+
+                            <div class="bpm-display-area">
+                                <button class="bpm-btn" onclick="changeBpm(-1)">-</button>
+                                <div class="bpm-value-box">
+                                    <span id="bpmDisplay">100</span>
+                                    <span class="bpm-label">BPM</span>
+                                </div>
+                                <button class="bpm-btn" onclick="changeBpm(1)">+</button>
+                            </div>
+
+                            <div class="slider-container">
+                                <input type="range" min="40" max="240" value="100" class="bpm-slider" id="bpmSlider" oninput="updateBpmFromSlider(this.value)">
+                            </div>
+
+                            <div class="controls-row">
+                                <div class="select-wrapper">
+                                    <select id="measureSelect" onchange="createDots()">
+                                        <option value="2">2/4 (Halay/Oyun)</option>
+                                        <option value="3">3/4 (Vals/Semah)</option>
+                                        <option value="4" selected>4/4 (Deyiş)</option>
+                                        <option value="5">5/8 (Aksak)</option>
+                                        <option value="6">6/8 (Azeri)</option>
+                                        <option value="7">7/8 (Karadeniz/Devr-i Turan)</option>
+                                        <option value="9">9/8 (Roman/Zeybek)</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="play-btn" id="playBtn" onclick="toggleMetronome()">
+                                    <i class="fas fa-play"></i> BAŞLAT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tuner-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Akort Cihazı</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+
+                        <div class="tuner-container">
+                            <canvas id="tunerGauge" width="400" height="250"></canvas>
+                            
+                            <div class="note-display">
+                                <span id="noteName">--</span>
+                                <span id="noteOctave"></span>
+                            </div>
+                            
+                            <div class="frequency-display">
+                                <span id="frequencyValue">0.0</span> Hz
+                            </div>
+
+                            <p id="tunerStatus" style="color:#888; font-size: 0.9rem; margin: 15px 0;">Başlamak için butona bas ve teline vur.</p>
+
+                            <button class="play-btn" id="tunerBtn" onclick="toggleTuner()">
+                                <i class="fas fa-microphone"></i> AKORTU BAŞLAT
+                            </button>
+                            
+                            <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div>
+                                    <h4 style="color:var(--accent); font-size: 0.85rem; margin-bottom:5px;">KISA SAP</h4>
+                                    <p style="font-size: 0.8rem; color: #ccc; line-height: 1.4;">
+                                        Alt: <strong>F (Fa)</strong> / E (Mi)<br>
+                                        Orta: <strong>Bb (Si Bemol)</strong> / A (La)<br>
+                                        Üst: <strong>C (Do)</strong> / B (Si)
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 style="color:var(--accent); font-size: 0.85rem; margin-bottom:5px;">UZUN SAP</h4>
+                                    <p style="font-size: 0.8rem; color: #ccc; line-height: 1.4;">
+                                        Alt: <strong>Si (A) / Do (C)</strong><br>
+                                        Orta: <strong>Mi (E) / Fa (F)</strong><br>
+                                        Üst: <strong>La (A) / La# (A#)</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="live-class-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Sanal Sınıf</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; transition:0.3s;">← Geri</button>
+                        </div>
+                        
+                        <div style="width: 100%; height: 600px; border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); background: #000;">
+                             <iframe 
+                                id="whereby-frame"
+                                src="" 
+                                allow="camera; microphone; fullscreen; speaker; display-capture" 
+                                style="width: 100%; height: 100%; border: none;">
+                            </iframe>
+                        </div>
+                        <p style="text-align:center; color:#666; font-size:0.8rem; margin-top:10px;">En iyi performans için kulaklık kullanınız.</p>
+                    </div>
+
+                    <div id="baglama-menu-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Bağlama Eğitimi</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <br>
+                        <div class="category-grid">
+                            <div class="cat-box" onclick="materyalAc('Teorik Bilgi')"><span class="cat-title">Ders Notları (Teorik Bilgi)</span><span class="cat-desc">Müzik teorisi ve makamlar.</span></div>
+                            <div class="cat-box" onclick="materyalAc('Kısa Sap Notaları')"><span class="cat-title">Kısa Sap Türkü Notaları</span><span class="cat-desc">Kısa sap repertuvarı.</span></div>
+                            <div class="cat-box" onclick="materyalAc('Uzun Sap Notaları')"><span class="cat-title">Uzun Sap Türkü Notaları</span><span class="cat-desc">Uzun sap icra teknikleri.</span></div>
+                            <div class="cat-box" onclick="materyalAc('Parmak Egzersizleri')"><span class="cat-title">Parmak Egzersizleri</span><span class="cat-desc">Hız ve teknik geliştirici etütler.</span></div>
+                        </div>
+                    </div>
+
+                    <div id="materials-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2 id="mat-category-title">Materyaller</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <div class="materials-grid" id="materials-container">
+                            </div>
+                    </div>
+
+                    <div id="exam-categories-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Yetenek Sınavı Hazırlık</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <br>
+                        <div class="category-grid">
+                            <div class="cat-box" onclick="yetenekKategoriAc('Dikte Soruları')"><span class="cat-title">Dikte Soruları</span><span class="cat-desc">İşitme ve yazma çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Ritim Tekrarı Soruları')"><span class="cat-title">Ritim Tekrarı Soruları</span><span class="cat-desc">Ritim kulağını geliştirme.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Tek Ses Tekrarı Soruları')"><span class="cat-title">Tek Ses Tekrarı Soruları</span><span class="cat-desc">Tek ses duyma çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Çift Ses Tekrarı Soruları')"><span class="cat-title">Çift Ses Tekrarı Soruları</span><span class="cat-desc">İki ses duyma çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Üç Ses Tekrarı Soruları')"><span class="cat-title">Üç Ses Tekrarı Soruları</span><span class="cat-desc">Akor duyma çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Dört Ses Tekrarı Soruları')"><span class="cat-title">Dört Ses Tekrarı Soruları</span><span class="cat-desc">İleri seviye akor çalışmaları.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Solfej Notaları')"><span class="cat-title">Solfej Notaları</span><span class="cat-desc">Deşifre ve okuma.</span></div>
+                            <div class="cat-box" onclick="yetenekKategoriAc('Ezgi Tekrarı Soruları')"><span class="cat-title">Ezgi Tekrarı Soruları</span><span class="cat-desc">Melodik hafıza çalışmaları.</span></div>
+                        </div>
+                    </div>
+                    
+                    <div id="fun-learning-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Eğlenerek Öğren</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <br>
+                        <div class="category-grid">
+                            <div class="cat-box" onclick="sayfaGoster('quiz-game-view')">
+                                <span class="cat-title">Bilgi Yarışması</span>
+                                <span class="cat-desc">Halk müziği bilginizi test edin ve yarışın.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-game-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2>Bilgi Yarışması</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Çıkış</button>
+                        </div>
+                        
+                        <iframe 
+                            src="bilgi-yarismasi/oyun.html" 
+                            width="100%" 
+                            height="750" 
+                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+                            title="Bağlamagram Yarışması">
+                        </iframe>
+                    </div>
+
+                    <div id="exam-list-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2 id="exam-list-title">Çalışmalar</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Geri</button>
+                        </div>
+                        <br>
+                        <div id="exam-list-container" style="display: flex; flex-direction: column; gap: 10px;">
+                            </div>
+                    </div>
+
+                    <div id="exam-detail-view" class="view-section">
+                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+                            <h2 id="exam-detail-title">Çalışma X</h2>
+                            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← Listeye Dön</button>
+                        </div>
+                        <div class="exam-detail-container">
+                            <p style="color:#888; margin-bottom:15px;">🎧 Dikte Kaydını Dinle:</p>
+                            <iframe id="exam-audio-player" src="" width="100%" height="150" style="border:none; border-radius: 10px;" allow="autoplay"></iframe>
+                            
+                            <div class="answer-key-btn" onclick="cevapGoster()">
+                                <i class="fas fa-eye"></i> CEVAP ANAHTARINI GÖRÜNTÜLE
+                            </div>
+                            <input type="hidden" id="current-answer-img" value="">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="image-modal" id="imgModal">
+        <span class="close-modal" onclick="modalKapat()">×</span>
+        <img id="modalImg" src="" alt="Cevap Anahtarı">
+    </div>
+
+    <footer>
+        <div class="social-wrapper">
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item"><i class="fab fa-spotify"></i></a>
+            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p style="font-size: 0.8rem; color: #555;">© 2026 Mahmut Burak ASLANTAŞ.</p>
+    </footer>
+
+   <script>
+        // --- 1. DİKTE SES DOSYALARI ---
+        const dikteVerileri = {
+            1: "1CprU3vYtFIEZ0gRgReVEye4IHShh0y0_",
+            2: "1F47H-u9OgakbY-Y8o0X3s_ago7C9x-RO",
+            3: "1l11yz8LBCdNAVkA4dJDF_YefA4m62PxH",
+            4: "1h_BxQSVd1saDgertInDrXgbU7p8kPdrT",
+            5: "16zIsIzjvmznslqO4xi8LtvSE0H3UgEDf",
+            6: "1cXuv3Qe-WgDNGP4tCgyDyHTrZAhmWiEK",
+            7: "1ShwDrGKN0r1Q5WMrz1saX_KYFPDx1RdV",
+            8: "1uyYxuJmbniDOLy5k9_C7ZcGI1yTwvdgx",
+            9: "18RLPOB99gTjDZGqbPmanEIQ-nKFxIoa9",
+            10: "1oMr4u1WJLiFxLLbMzAP3_40umU_Y3vq8",
+            11: "1LyrE3Yi_xECEqIlwCP3-3FsrVtDBqjFs",
+            12: "1fXUzZE1pIa-m1XtgD7giY-uiikdknZbc",
+            13: "1TF_rBm31Ww8AszjQud4OCQP7SvWG2UK-",
+            14: "12ckOq7FvW_tAIteDVxs11hNwpXw1mGmE",
+            15: "1u0Gcj0M_Et5vXtBC1VUJeSJdg7VsqMCu",
+            16: "1og4IiBkpgsxz2-zZF0TWCRRncWoW8eOB",
+            17: "1qsJ-nLKY4V0-jQLoMxLxFOeVfD1u7rfg",
+            19: "137H1eOM8qQoWZPDPi0QHyyKaiAbjMR1Q",
+            20: "1327Yis-EDSEvKPxZu-H5wSA3mUC5IEXC",
+            21: "1Ydo02tIquSSqO-cuF5fJ5jVBuI-X3rLj",
+            22: "1pdHx7gHYkg1sEfu01AfVTxbpHQJ3GCOS"
+        };
+
+        // --- 2. DERS NOTLARI LİSTESİ ---
+        const dersNotlariDosyalari = [
+            { ad: "Temel Müzik Bilgileri 1", dosya: "1.png" },
+            { ad: "Temel Müzik Bilgileri 2", dosya: "2.png" },
+            { ad: "Nota Süre Değerleri 1", dosya: "3.png" },
+            { ad: "Nota İsimleri ve Notaların Yerleri", dosya: "4.png" },
+            { ad: "Bağlamanın Bölümleri", dosya: "5.png" },
+            { ad: "Ders Notu 6", dosya: "6.png" },
+            { ad: "Parmak Numaraları (Kısa Sap)", dosya: "7.png" },
+            { ad: "Klavyede (Sapta) Notaların Yerleri", dosya: "8.png" },
+            { ad: "Sesli ve Sessiz Süre Değerleri", dosya: "9.png" },
+            { ad: "Nota Süreleri", dosya: "nota-sureleri.png" },
+            { ad: "Nota Süreleri 2", dosya: "nota-sureleri1.png" }
+        ];
+
+        // --- 3. KISA SAP NOTALARI ---
+        const kisaSapNotalari = [
+            { ad: "Gelin Ayşem", dosya: "a.jpg" },
+            { ad: "Eklemedir Koca Konak", dosya: "b.jpg" },
+            { ad: "Urfa'nın Etrafı", dosya: "c.jpg" },
+            { ad: "Yeşil Başlı Telli Turnam", dosya: "d.jpg" },
+            { ad: "Karahisar Kalesi", dosya: "e.jpg" },
+            { ad: "Urfa'nın Etrafı Dumanlı Dağlar", dosya: "f.jpg" },
+            { ad: "Uzun İnce Bir Yoldayım", dosya: "g.jpg" },
+            { ad: "İşte Gidiyorum Çeşm-i Siyahım", dosya: "h.jpg" },
+            { ad: "Basit Türküler", dosya: "i.jpg" },
+            { ad: "Felek Çakmağını Üstüme Çaktı", dosya: "j.jpg" },
+            { ad: "Telli Turnam", dosya: "k.jpg" },
+            { ad: "Emirim Suya Gider", dosya: "l.jpg" },
+            { ad: "Denizlerin Kumuyum", dosya: "m.jpg" },
+            { ad: "Aynalı Körük", dosya: "n.jpg" },
+            { ad: "Değmen Benim Gamlı Yaslı Gönlüme", dosya: "o.jpg" },
+            { ad: "Denizin Dibinde Hatçam", dosya: "p.jpg" },
+            { ad: "Kütahyanın Pınarları", dosya: "r.jpg" },
+            { ad: "Dostum Dostum", dosya: "s.png?v=1" }, 
+            { ad: "Han Sarhoş Hancı Sarhoş", dosya: "t.jpg" },
+            { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
+        ];
+
+        // --- 4. PARMAK EGZERSİZLERİ ---
+        const parmakEgzersizleri = [
+            { ad: "Alıştırma 1", dosya: "alistirma-1.png" },
+            { ad: "Alıştırma 2", dosya: "alistirma-2.png" },
+            { ad: "4 Parmak Etüdü 1", dosya: "4-parmak-etutdu1.png" },
+            { ad: "4 Parmak Etüdü 2", dosya: "4-parmak-etudu2.png" }
+        ];
+
+        function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
+        function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
+        function girisAc() { document.getElementById("login-overlay").style.display = "flex"; }
+        function girisKapat() { document.getElementById("login-overlay").style.display = "none"; }
+
+        function sayfaGoster(id, addToHistory = true) {
+            document.querySelectorAll(".view-section").forEach(s => s.classList.remove("active"));
+            document.getElementById(id).classList.add("active");
+            if(addToHistory) history.pushState({view: id}, "", "#" + id.replace("-view", ""));
+            if(window.innerWidth < 900) { document.getElementById("sidebar").classList.add("collapsed"); }
+        }
+
+        window.onpopstate = function(event) {
+            if(event.state && event.state.view) sayfaGoster(event.state.view, false);
+            else sayfaGoster('dashboard-view', false);
+        };
+
+        function materyalAc(kategori) {
+            document.getElementById("mat-category-title").innerText = kategori;
+            const container = document.getElementById("materials-container");
+            container.innerHTML = ""; 
+
+            if (kategori === 'Teorik Bilgi') {
+                dersNotlariDosyalari.forEach(item => {
+                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./baglama-ders-teori/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-file-image" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${item.ad}</span></div>`;
+                });
+            } else if (kategori === 'Kısa Sap Notaları') {
+                kisaSapNotalari.forEach(item => {
+                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./kisa-sap/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-music" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${item.ad}</span></div>`;
+                });
+            } else if (kategori === 'Parmak Egzersizleri') {
+                parmakEgzersizleri.forEach(item => {
+                    container.innerHTML += `<div class="mat-item" onclick="resimGosterModal('./parmak-egzersiz/${item.dosya}')" style="cursor:pointer;"><i class="fas fa-hand-paper" style="color: var(--yellow-portal); font-size: 2rem; display: block; margin-bottom: 10px;"></i><span>${item.ad}</span></div>`;
+                });
+            } else {
+                container.innerHTML = "<p style='color:#888; padding: 20px;'>Bu kategoride henüz materyal bulunmuyor.</p>";
+            }
+            sayfaGoster("materials-view");
+        }
+
+        function yetenekKategoriAc(kategoriAdi) {
+            document.getElementById("exam-list-title").innerText = kategoriAdi;
+            const listeContainer = document.getElementById("exam-list-container");
+            listeContainer.innerHTML = "";
+            if (kategoriAdi === "Dikte Soruları") {
+                for (let i = 1; i <= 22; i++) {
+                    if (i === 18) continue;
+                    let driveId = dikteVerileri[i] || ""; 
+                    listeContainer.innerHTML += `<div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', 'Çalışma ${i}')"><span style="color:#fff; font-weight:500;">Çalışma ${i}</span><i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i></div>`;
+                }
+            } else {
+                listeContainer.innerHTML = "<p style='color:#888;'>Bu kategoride henüz içerik yok.</p>";
+            }
+            sayfaGoster("exam-list-view");
+        }
+
+        function dikteDetayAc(no, audioId, baslik) {
+            document.getElementById("exam-detail-title").innerText = baslik;
+            let embedUrl = audioId ? "https://drive.google.com/file/d/" + audioId + "/preview" : "";
+            document.getElementById("exam-audio-player").src = embedUrl;
+            document.getElementById("current-answer-img").value = "./dikte-cevaplar/calisma-" + no + ".png"; 
+            sayfaGoster("exam-detail-view");
+        }
+
+        function resimGosterModal(yol) {
+            document.getElementById("modalImg").src = yol;
+            document.getElementById("imgModal").style.display = "flex";
+        }
+
+        function cevapGoster() {
+            const link = document.getElementById("current-answer-img").value;
+            if(link) {
+                resimGosterModal(link);
+            } else {
+                alert("Cevap anahtarı bulunamadı.");
+            }
+        }
+        function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
+
+        function startLiveClass() {
+            // Whereby Oda Linki
+            const myRoomUrl = "https://whereby.com/baglamagram"; 
+            const frame = document.getElementById('whereby-frame');
+            
+            // Linki sadece boşsa yükle (Sayfa yenilenmesini önler)
+            if(frame.src === "" || !frame.src.includes("whereby.com")) {
+                frame.src = myRoomUrl + "?embed&minimal&background=off&chat=on"; 
+            }
+            
+            sayfaGoster('live-class-view');
+        }
+
+        // --- PROFİL FOTOĞRAFI YÜKLEME (GÜNCELLENMİŞ SIKIŞTIRMALI VERSİYON) ---
+        function saveProfilePhoto(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        const MAX_SIZE = 300; 
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        if (width > height) {
+                            if (width > MAX_SIZE) {
+                                height *= MAX_SIZE / width;
+                                width = MAX_SIZE;
+                            }
+                        } else {
+                            if (height > MAX_SIZE) {
+                                width *= MAX_SIZE / height;
+                                height = MAX_SIZE;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7); 
+                        
+                        document.getElementById('userAvatar').src = dataUrl;
+                        
+                        // KİŞİYE ÖZEL KAYDETME
+                        const aktifMail = localStorage.getItem('aktifKullaniciMail');
+                        if (aktifMail) {
+                            localStorage.setItem('foto_' + aktifMail, dataUrl);
+                        } else {
+                            localStorage.setItem('geciciFoto', dataUrl);
+                        }
+                    };
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // --- CHAT VE BURAKAI (BUG FİXLENDİ) ---
+        let selectedImageBase64 = null;
+        let lastAiResponse = "";
+
+        function metniSeslendir(htmlMetin) {
+            let temizMetin = htmlMetin.replace(/<[^>]*>?/gm, ''); 
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                let ses = new SpeechSynthesisUtterance(temizMetin);
+                ses.lang = 'tr-TR';
+                ses.rate = 1.0; 
+                window.speechSynthesis.speak(ses);
+            }
+        }
+
+        function toggleSpeech() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            } else if (lastAiResponse) {
+                metniSeslendir(lastAiResponse);
+            }
+        }
+
+        function triggerFileUpload() {
+            document.getElementById('fileInput').click();
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    selectedImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+                    const imgPreview = document.getElementById('imagePreview');
+                    imgPreview.src = selectedImageBase64;
+                    document.getElementById('imagePreviewContainer').style.display = 'block';
+                }
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('removeImage').onclick = function() {
+            selectedImageBase64 = null;
+            document.getElementById('fileInput').value = "";
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+        }
+
+        // --- ENTER TUŞU İLE MESAJ GÖNDERME ---
+        document.getElementById("aiUserInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); 
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const input = document.getElementById("aiUserInput");
+            const box = document.getElementById("aiChatBox");
+            const msgText = input.value.trim();
+            
+            if(msgText === "" && !selectedImageBase64) return;
+
+            const userMsg = document.createElement("div");
+            userMsg.className = "chat-message user";
+            
+            let userContent = "";
+            if (selectedImageBase64) {
+                userContent += `<img src="${selectedImageBase64}" style="max-width:200px; display:block; margin-bottom:5px;">`;
+            }
+            if (msgText) {
+                userContent += `<strong>Sen:</strong><br>${msgText}`;
+            }
+            userMsg.innerHTML = userContent;
+            box.appendChild(userMsg);
+            
+            input.value = "";
+            const imageToSend = selectedImageBase64;
+            
+            selectedImageBase64 = null;
+            document.getElementById('fileInput').value = "";
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            
+            box.scrollTop = box.scrollHeight;
+
+            const loadingBubble = document.createElement("div");
+            loadingBubble.className = "chat-message ai";
+            loadingBubble.id = "loadingBubble";
+            loadingBubble.innerHTML = "<em>Burak Hoca inceliyor... (Yazıyor)</em>";
+            box.appendChild(loadingBubble);
+            box.scrollTop = box.scrollHeight;
+
+            try {
+                const response = await fetch('https://baglamagram.vercel.app/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: msgText || "Şu gönderdiğim görsele bir bak hocam.", 
+                        image: imageToSend 
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.reply || errorData.error || `Sunucu Hatası: ${response.status}`);
+                }
+
+                const data = await response.json();
+                document.getElementById("loadingBubble").remove();
+                
+                const aiMsg = document.createElement("div");
+                aiMsg.className = "chat-message ai";
+                
+                if (data.reply && (data.reply.includes("HATA") || data.reply.includes("Hatası"))) {
+                        aiMsg.style.color = "red";
+                }
+                
+                lastAiResponse = data.reply;
+
+                aiMsg.innerHTML = "<strong style='color: var(--accent); font-family: \"Playfair Display\", serif;'>BurakAI Hoca:</strong><br>" + (data.reply ? data.reply.replace(/\n/g, "<br>") : "Cevap boş geldi.");
+                box.appendChild(aiMsg);
+
+            } catch (err) {
+                const bubble = document.getElementById("loadingBubble");
+                if(bubble) bubble.innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
+                console.error(err);
+            }
+            
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // --- METRONOM MANTIĞI (BUG FİXLENDİ) ---
+        let audioCtx = null;
+        let isPlaying = false;
+        let tempo = 100;
+        let currentBeat = 0;
+        let nextNoteTime = 0.0;
+        let timerID = null;
+        let beatsPerMeasure = 4;
+        const lookahead = 25.0; // ms
+        const scheduleAheadTime = 0.1; // sn
+
+        function nextNote() {
+            const secondsPerBeat = 60.0 / tempo;
+            nextNoteTime += secondsPerBeat;
+            currentBeat++;
+            if (currentBeat >= beatsPerMeasure) {
+                currentBeat = 0;
+            }
+        }
+
+        function scheduleNote(beatNumber, time) {
+            setTimeout(() => {
+                updateVisuals(beatNumber);
+            }, (time - audioCtx.currentTime) * 1000);
+
+            const osc = audioCtx.createOscillator();
+            const envelope = audioCtx.createGain();
+
+            osc.frequency.value = (beatNumber === 0) ? 1000 : 800;
+
+            envelope.gain.value = 1;
+            envelope.gain.exponentialRampToValueAtTime(1, time + 0.001);
+            envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+
+            osc.connect(envelope);
+            envelope.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.05);
+        }
+
+        function scheduler() {
+            while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
+                scheduleNote(currentBeat, nextNoteTime);
+                nextNote();
+            }
+            timerID = setTimeout(scheduler, lookahead);
+        }
+
+        function toggleMetronome() {
+            const btn = document.getElementById('playBtn');
+            
+            if (isPlaying) {
+                isPlaying = false;
+                clearTimeout(timerID);
+                btn.innerHTML = '<i class="fas fa-play"></i> BAŞLAT';
+                btn.classList.remove('playing');
+                resetVisuals();
+            } else {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                // Browser politikası gereği resume gerekebilir
+                if(audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                isPlaying = true;
+                currentBeat = 0;
+                nextNoteTime = audioCtx.currentTime + 0.05;
+                scheduler();
+                btn.innerHTML = '<i class="fas fa-stop"></i> DURDUR';
+                btn.classList.add('playing');
+            }
+        }
+
+        function changeBpm(amount) {
+            tempo += amount;
+            if (tempo < 40) tempo = 40;
+            if (tempo > 240) tempo = 240;
+            updateUi();
+        }
+
+        function updateBpmFromSlider(val) {
+            tempo = parseInt(val);
+            updateUi();
+        }
+
+        function updateUi() {
+            document.getElementById('bpmDisplay').innerText = tempo;
+            document.getElementById('bpmSlider').value = tempo;
+        }
+
+        function createDots() {
+            beatsPerMeasure = parseInt(document.getElementById('measureSelect').value);
+            const container = document.getElementById('beatDots');
+            container.innerHTML = '';
+            for (let i = 0; i < beatsPerMeasure; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'beat-dot';
+                container.appendChild(dot);
+            }
+            if(isPlaying) {
+                currentBeat = 0; 
+            }
+        }
+
+        function updateVisuals(beat) {
+            const dots = document.querySelectorAll('.beat-dot');
+            dots.forEach(d => d.classList.remove('active'));
+            if (dots[beat]) {
+                dots[beat].classList.add('active');
+            }
+        }
+
+        function resetVisuals() {
+            document.querySelectorAll('.beat-dot').forEach(d => d.classList.remove('active'));
+        }
+
+        // --- AKORT CİHAZI (TUNER) MANTIĞI (BUG FİXLENDİ) ---
+        let tunerAudioCtx = null;
+        let analyser = null;
+        let rafID = null;
+        let isTunerRunning = false;
+        let mediaStreamSource = null;
+        const tunerCanvas = document.getElementById('tunerGauge');
+        const tunerCtx = tunerCanvas.getContext('2d');
+        
+        const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+        function toggleTuner() {
+            const btn = document.getElementById('tunerBtn');
+            const status = document.getElementById('tunerStatus');
+
+            if (isTunerRunning) {
+                isTunerRunning = false;
+                window.cancelAnimationFrame(rafID);
+                if(tunerAudioCtx) tunerAudioCtx.suspend();
+                if(mediaStreamSource) mediaStreamSource.disconnect();
+                
+                btn.innerHTML = '<i class="fas fa-microphone"></i> AKORTU BAŞLAT';
+                btn.classList.remove('tuner-btn-active');
+                status.innerText = "Akort cihazı durduruldu.";
+                status.style.color = "#888";
+                
+                drawGauge(0, false); 
+            } else {
+                startTuner();
+                btn.innerHTML = '<i class="fas fa-stop"></i> DURDUR';
+                btn.classList.add('tuner-btn-active');
+                status.innerText = "Mikrofon dinleniyor...";
+                status.style.color = "var(--yellow-portal)";
+            }
+        }
+
+        async function startTuner() {
+            if (!tunerAudioCtx) {
+                tunerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            await tunerAudioCtx.resume();
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                isTunerRunning = true;
+                
+                analyser = tunerAudioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                mediaStreamSource = tunerAudioCtx.createMediaStreamSource(stream);
+                mediaStreamSource.connect(analyser);
+                
+                updatePitch();
+            } catch (err) {
+                console.error(err);
+                alert("Mikrofon erişim hatası! Lütfen izin verin.");
+                toggleTuner();
+            }
+        }
+
+        function updatePitch() {
+            if (!isTunerRunning) return;
+
+            const bufferLength = analyser.fftSize;
+            const buffer = new Float32Array(bufferLength);
+            analyser.getFloatTimeDomainData(buffer);
+
+            const frequency = autoCorrelate(buffer, tunerAudioCtx.sampleRate);
+
+            if (frequency > -1) {
+                const note = getNote(frequency);
+                const cents = getCents(frequency, note);
+                
+                document.getElementById('noteName').innerText = noteStrings[note % 12];
+                document.getElementById('noteOctave').innerText = Math.floor(note / 12) - 1;
+                document.getElementById('frequencyValue').innerText = frequency.toFixed(1);
+                
+                drawGauge(cents, true);
+            }
+
+            rafID = window.requestAnimationFrame(updatePitch);
+        }
+
+        function autoCorrelate(buf, sampleRate) {
+            let SIZE = buf.length;
+            let rms = 0;
+            let rms_sum = 0;
+            for (let i = 0; i < SIZE; i++) {
+                const val = buf[i];
+                rms_sum += val * val;
+            }
+            rms = Math.sqrt(rms_sum / SIZE);
+            if (rms < 0.01) return -1;
+
+            let r1 = 0, r2 = SIZE - 1, thres = 0.2;
+            for (let i = 0; i < SIZE / 2; i++) {
+                if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+            }
+            for (let i = 1; i < SIZE / 2; i++) {
+                if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+            }
+
+            buf = buf.slice(r1, r2);
+            SIZE = buf.length;
+
+            const c = new Array(SIZE).fill(0);
+            for (let i = 0; i < SIZE; i++) {
+                for (let j = 0; j < SIZE - i; j++) {
+                    c[i] = c[i] + buf[j] * buf[j + i];
+                }
+            }
+
+            let d = 0;
+            while (c[d] > c[d + 1]) d++;
+            let maxval = -1, maxpos = -1;
+            for (let i = d; i < SIZE; i++) {
+                if (c[i] > maxval) {
+                    maxval = c[i];
+                    maxpos = i;
+                }
+            }
+            let T0 = maxpos;
+
+            const x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+            const a = (x1 + x3 - 2 * x2) / 2;
+            const b = (x3 - x1) / 2;
+            if (a) T0 = T0 - b / (2 * a);
+
+            return sampleRate / T0;
+        }
+
+        function getNote(frequency) {
+            const note = 12 * (Math.log(frequency / 440) / Math.log(2));
+            return Math.round(note) + 69;
+        }
+
+        function getCents(frequency, note) {
+            return Math.floor(1200 * Math.log(frequency / frequencyFromNoteNumber(note)) / Math.log(2));
+        }
+
+        function frequencyFromNoteNumber(note) {
+            return 440 * Math.pow(2, (note - 69) / 12);
+        }
+
+        function drawGauge(cents, hasSignal) {
+            const w = tunerCanvas.width;
+            const h = tunerCanvas.height;
+            const cx = w / 2;
+            const cy = h - 40;
+            const radius = 180;
+
+            tunerCtx.clearRect(0, 0, w, h);
+
+            tunerCtx.beginPath();
+            tunerCtx.arc(cx, cy, radius, Math.PI, 2 * Math.PI);
+            tunerCtx.lineWidth = 5;
+            tunerCtx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+            tunerCtx.stroke();
+
+            tunerCtx.beginPath();
+            tunerCtx.arc(cx, cy, radius, 1.45 * Math.PI, 1.55 * Math.PI);
+            tunerCtx.lineWidth = 10;
+            tunerCtx.strokeStyle = "rgba(37, 211, 102, 0.5)"; 
+            tunerCtx.stroke();
+
+            for (let i = -50; i <= 50; i += 10) {
+                const angle = map(i, -50, 50, Math.PI, 2 * Math.PI);
+                const x1 = cx + Math.cos(angle) * (radius - 10);
+                const y1 = cy + Math.sin(angle) * (radius - 10);
+                const x2 = cx + Math.cos(angle) * radius;
+                const y2 = cy + Math.sin(angle) * radius;
+                
+                tunerCtx.beginPath();
+                tunerCtx.moveTo(x1, y1);
+                tunerCtx.lineTo(x2, y2);
+                tunerCtx.lineWidth = (i === 0) ? 3 : 1;
+                tunerCtx.strokeStyle = (i === 0) ? "#ffd700" : "#666";
+                tunerCtx.stroke();
+            }
+
+            let safeCents = Math.max(-50, Math.min(50, cents));
+            
+            if (!hasSignal) safeCents = -90; 
+
+            const needleAngle = map(safeCents, -50, 50, Math.PI, 2 * Math.PI);
+            
+            let needleColor = "#c5a059"; 
+            if (Math.abs(cents) < 5 && hasSignal) needleColor = "#25d366"; 
+            else if (Math.abs(cents) > 20 && hasSignal) needleColor = "#ff4d4d"; 
+
+            const nx = cx + Math.cos(needleAngle) * (radius - 20);
+            const ny = cy + Math.sin(needleAngle) * (radius - 20);
+
+            tunerCtx.beginPath();
+            tunerCtx.moveTo(cx, cy);
+            tunerCtx.lineTo(nx, ny);
+            tunerCtx.lineWidth = 4;
+            tunerCtx.strokeStyle = needleColor;
+            tunerCtx.lineCap = "round";
+            tunerCtx.stroke();
+
+            tunerCtx.beginPath();
+            tunerCtx.arc(cx, cy, 10, 0, 2 * Math.PI);
+            tunerCtx.fillStyle = needleColor;
+            tunerCtx.fill();
+            
+            tunerCtx.font = "14px Montserrat";
+            tunerCtx.fillStyle = "#aaa";
+            tunerCtx.textAlign = "center";
+            tunerCtx.fillText("-50", cx - radius + 20, cy);
+            tunerCtx.fillText("+50", cx + radius - 20, cy);
+            tunerCtx.fillText("0", cx, cy - radius - 15);
+        }
+
+        function map(value, x1, y1, x2, y2) {
+            return (value - x1) * (y2 - x2) / (y1 - x1) + x2;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createDots(); 
+            drawGauge(0, false); 
+        });
+
+    
+    </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+  // Firestore (Veritabanı) kütüphaneleri
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBIx9TujKPX82NaWXGh2QTxyG6TEQ-abi8",
+    authDomain: "baglamagram-portal.firebaseapp.com",
+    projectId: "baglamagram-portal",
+    storageBucket: "baglamagram-portal.firebasestorage.app",
+    messagingSenderId: "498044667137",
+    appId: "1:498044667137:web:e1a75ef1a0f0edf1330700",
+    measurementId: "G-RD5H01SSTH"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Şifre Çözücü Fonksiyon
+  function sifreCo(sifreliMetin) {
+      try {
+          return decodeURIComponent(escape(window.atob(sifreliMetin)));
+      } catch (e) {
+          console.error("Şifre çözme hatası:", e);
+          return sifreliMetin;
+      }
+  }
+
+  // YENİ ÖĞRENCİLERİN AD-SOYADINI İLK BAŞTA BURAYA GİRECEKSİN.
+  const ogrenciListesi = {
+      "Z29rYm95MDlAZ21haWwuY29t": { ad: "R29rMg==", soyad: "UEFJTlRFUg==" },
+        "elifin-epostası-gelecek@xyz.com": { ad: "RWxpZg==", soyad: "S0FSTUFO" },
+      "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" }
+  };
+
+  // --- ŞİFRE SIFIRLAMA FONKSİYONU EKLENDİ ---
+  window.sifreSifirla = function() {
+      const email = document.getElementById('emailInput').value;
+      const status = document.getElementById('loginStatus');
+
+      if (!email) {
+          status.style.color = "orange";
+          status.innerText = "Lütfen önce yukarıya e-posta adresini yaz.";
+          return;
+      }
+
+      status.style.color = "yellow";
+      status.innerText = "Sıfırlama bağlantısı gönderiliyor...";
+
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+            status.style.color = "#4CAF50"; // Yeşil
+            status.innerText = "E-postanı kontrol et! Sıfırlama linki gönderildi.";
+        })
+        .catch((error) => {
+            status.style.color = "#ff4d4d"; // Kırmızı
+            console.error(error);
+            if (error.code === "auth/user-not-found") {
+                status.innerText = "Bu e-posta adresi kayıtlı değil.";
+            } else if (error.code === "auth/invalid-email") {
+                status.innerText = "Geçersiz e-posta formatı.";
+            } else {
+                status.innerText = "Hata: " + error.code;
+            }
+        });
+  }
+
+  // --- FOTOĞRAF KAYDETME (VERİTABANINA) ---
+  // Bu fonksiyonu window'a atıyoruz ki HTML'den çağrılabilsin
+  window.saveProfilePhoto = function(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // 1. Resmi Küçült (Veritabanına sığması için)
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                const MAX_SIZE = 300; 
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > height) {
+                    if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+                } else {
+                    if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                // Kaliteyi biraz daha düşürdük (0.6) ki hızlı olsun
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
+
+                // 2. Ekrana bas (Kullanıcı anında görsün)
+                document.getElementById('userAvatar').src = dataUrl;
+
+                // 3. VERİTABANINA KAYDET
+                const user = auth.currentUser;
+                if (user) {
+                    const userRef = doc(db, "kullanicilar", user.email);
+                    setDoc(userRef, { profil_fotosu: dataUrl }, { merge: true })
+                        .then(() => { console.log("Fotoğraf buluta kaydedildi!"); })
+                        .catch((error) => { console.error("Yazma hatası:", error); });
+                }
+            };
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+  }
+
+  const loginBtn = document.getElementById('firebaseLoginBtn');
+  const emailInput = document.getElementById('emailInput');
+  const passInput = document.getElementById('passwordInput');
+  
+  function enterKontrol(e) {
+      if (e.key === "Enter") loginBtn.click();
+  }
+  if(emailInput) emailInput.addEventListener("keyup", enterKontrol);
+  if(passInput) passInput.addEventListener("keyup", enterKontrol);
+
+  if(loginBtn) {
+      loginBtn.addEventListener('click', () => {
+          const email = emailInput.value;
+          const pass = passInput.value;
+          const status = document.getElementById('loginStatus');
+
+          status.style.color = "yellow";
+          status.innerText = "Bilgiler kontrol ediliyor...";
+
+          signInWithEmailAndPassword(auth, email, pass)
+            .then((userCredential) => {
+                status.style.color = "#4CAF50"; 
+                status.innerText = "Giriş Başarılı! Yönlendiriliyorsun...";
+
+                const girisYapanMail = userCredential.user.email;
+                const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
+                
+                // Maili yine de hafızada tutalım (yedek olsun)
+                localStorage.setItem('aktifKullaniciMail', girisYapanMail);
+
+                setTimeout(() => {
+                    document.getElementById("login-overlay").style.display = "none";
+                    document.getElementById("portal-entry-btn-section").style.display = "none";
+                    document.getElementById("public-content").style.display = "none";
+                    document.getElementById("student-portal").style.display = "block";
+                    document.body.classList.add("portal-active");
+
+                    // İSİM AYARLAMA
+                    let ogrenci = ogrenciListesi[sifreliMail];
+                    if (ogrenci) {
+                        const gercekAd = sifreCo(ogrenci.ad);
+                        const gercekSoyad = sifreCo(ogrenci.soyad);
+                        document.getElementById("displayAd").innerText = gercekAd;
+                        document.getElementById("displaySoyad").innerText = gercekSoyad;
+                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + gercekAd + "!";
+                    } else {
+                        const varsayilanAd = girisYapanMail.split('@')[0];
+                        document.getElementById("displayAd").innerText = varsayilanAd;
+                        document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
+                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
+                    }
+
+                    // FOTOĞRAFI VERİTABANINDAN ÇEK
+                    document.getElementById('userAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+                    
+                    const userRef = doc(db, "kullanicilar", girisYapanMail);
+                    getDoc(userRef).then((docSnap) => {
+                        if (docSnap.exists() && docSnap.data().profil_fotosu) {
+                            document.getElementById('userAvatar').src = docSnap.data().profil_fotosu;
+                        }
+                    }).catch((error) => {
+                        console.log("Fotoğraf çekilemedi (Henüz yüklenmemiş olabilir).");
+                    });
+                    
+                    history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
+                }, 1500);
+            })
+            .catch((error) => {
+                status.style.color = "#ff4d4d";
+                console.error(error);
+                if (error.code === "auth/invalid-credential") {
+                    status.innerText = "E-posta veya şifre hatalı!";
+                } else {
+                    status.innerText = "Hata oluştu.";
+                }
+            });
+      });
+  }
+</script>
+</script>
+    
+</body>
+</html>

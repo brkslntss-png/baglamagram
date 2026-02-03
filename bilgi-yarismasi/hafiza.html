@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müzik Hafıza Oyunu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2c3e50;
+            --card-back: #ffd700; /* Altın Sarısı */
+            --card-front: #ffffff;
+            --text-color: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            /* BACKGROUND GÜNCELLENDİ: Çocuklar için renkli gradyan */
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        /* --- BAŞLANGIÇ EKRANI STİLLERİ --- */
+        #start-screen {
+            text-align: center;
+            animation: fadeIn 0.5s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Başlangıç ekranının daha net okunması için hafif bir arka plan */
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .big-icon {
+            font-size: 6rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        .game-title {
+            color: #fff;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-weight: 800;
+        }
+
+        .game-desc {
+            color: #eee;
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .start-btn-big {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: #000;
+            border: none;
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            transition: transform 0.2s;
+            animation: pulse 1.5s infinite;
+        }
+
+        .start-btn-big:hover {
+            transform: scale(1.05);
+            background: #fff;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        /* --- OYUN ALANI STİLLERİ (Başlangıçta gizli) --- */
+        #game-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        h2.small-title {
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            backdrop-filter: blur(5px);
+        }
+
+        .card {
+            background-color: transparent;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+
+        .card.matched .card-inner {
+            transform: rotateY(180deg);
+            box-shadow: 0 0 20px #fff, 0 0 10px #51cf66;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #ffd700 0%, #ff9a44 100%);
+            color: #fff;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .card-front {
+            background-color: #fff;
+            transform: rotateY(180deg);
+        }
+
+        .btn-restart {
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.25);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-restart:hover { background: rgba(255,255,255,0.4); transform: translateY(-2px); }
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background-color: #f00;
+            animation: fall linear forwards;
+            top: -10px;
+            z-index: 999;
+            border-radius: 50%;
+        }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+
+        @media (max-width: 500px) {
+            .game-grid { gap: 10px; max-width: 350px; padding: 10px; }
+            .card-front { font-size: 2.5rem; }
+            .game-title { font-size: 2rem; }
+            .big-icon { font-size: 5rem; }
+            .start-btn-big { padding: 15px 40px; font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <div class="big-icon">🧩</div>
+        <h1 class="game-title">Müzik Hafıza</h1>
+        <p class="game-desc">Kartları eşleştir, enstrümanları bul!</p>
+        <button class="start-btn-big" onclick="initGame()">OYUNA BAŞLA</button>
+    </div>
+
+    <div id="game-container">
+        <h2 class="small-title">🎵 Eşini Bul 🎵</h2>
+
+        <div class="stats">
+            <span>Hamle: <b id="move-count">0</b></span>
+            <span>Süre: <b id="time-count">00:00</b></span>
+        </div>
+
+        <div class="game-grid" id="grid">
+            </div>
+
+        <button class="btn-restart" onclick="startGameLogic()">Yeniden Karıştır</button>
+    </div>
+
+    <script>
+        const icons = ['🎸', '🎹', '🥁', '🎻', '🎤', '🎧', '🎼', '🎵']; 
+        let cardsArray = [];
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard, secondCard;
+        let moves = 0;
+        let timer;
+        let seconds = 0;
+        let matchedPairs = 0;
+
+        const grid = document.getElementById('grid');
+        const moveDisplay = document.getElementById('move-count');
+        const timeDisplay = document.getElementById('time-count');
+        const startScreen = document.getElementById('start-screen');
+        const gameContainer = document.getElementById('game-container');
+
+        // İlk Giriş Fonksiyonu
+        function initGame() {
+            startScreen.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            startGameLogic();
+        }
+
+        // Oyun Mantığını Başlatan Fonksiyon
+        function startGameLogic() {
+            moves = 0;
+            seconds = 0;
+            matchedPairs = 0;
+            hasFlippedCard = false;
+            lockBoard = false;
+            moveDisplay.innerText = moves;
+            timeDisplay.innerText = "00:00";
+            
+            clearInterval(timer);
+            startTimer();
+
+            cardsArray = [...icons, ...icons];
+            cardsArray.sort(() => 0.5 - Math.random());
+
+            grid.innerHTML = '';
+            cardsArray.forEach(icon => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-back">♫</div>
+                        <div class="card-front">${icon}</div>
+                    </div>
+                `;
+                card.addEventListener('click', flipCard);
+                grid.appendChild(card);
+            });
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                seconds++;
+                let mins = Math.floor(seconds / 60);
+                let secs = seconds % 60;
+                timeDisplay.innerText = 
+                    (mins < 10 ? "0" + mins : mins) + ":" + 
+                    (secs < 10 ? "0" + secs : secs);
+            }, 1000);
+        }
+
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+
+            this.classList.add('flipped');
+
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            incrementMoves();
+            checkForMatch();
+        }
+
+        function incrementMoves() {
+            moves++;
+            moveDisplay.innerText = moves;
+        }
+
+        function checkForMatch() {
+            let isMatch = firstCard.innerHTML === secondCard.innerHTML;
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.classList.add('matched');
+            secondCard.classList.add('matched');
+            
+            firstCard.removeEventListener('click', flipCard);
+            secondCard.removeEventListener('click', flipCard);
+
+            matchedPairs++;
+            resetBoard();
+
+            if (matchedPairs === icons.length) {
+                clearInterval(timer);
+                celebrate();
+            }
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+                resetBoard();
+            }, 1000);
+        }
+
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+
+        function celebrate() {
+            const colors = ['#ff0', '#f00', '#0f0', '#00f', '#f0f', '#0ff', '#ffbf00'];
+            for(let i=0; i<60; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = Math.random() * 2 + 1 + 's';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+            setTimeout(() => {
+                const playAgain = confirm(`Harikasın! 🌟\n${moves} hamlede tamamladın.\nTekrar oynamak ister misin?`);
+                if(playAgain) startGameLogic();
+                else initGame(); // Başlangıç ekranına dön
+            }, 800);
+        }
+    </script>
+</body>
+</html>
