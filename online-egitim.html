@@ -1592,12 +1592,12 @@
           const status = document.getElementById('loginStatus');
 
           status.style.color = "yellow";
-          status.innerText = "Bilgiler kontrol ediliyor...";
+          status.innerText = "Bakalım sen premium üye misin? biraz bekle... :D";
 
           signInWithEmailAndPassword(auth, email, pass)
             .then((userCredential) => {
                 status.style.color = "#4CAF50"; 
-                status.innerText = "Giriş Başarılı! Yönlendiriliyorsun...";
+                status.innerText = "Giriş Başarılı! Ayrıcalıklı Öğrenci Portalına HOŞ GELDİNİZ!";
 
                 const girisYapanMail = userCredential.user.email;
                 const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
