@@ -27,14 +27,14 @@
             margin: 0;
             user-select: none;
             overflow: hidden;
-            position: relative; /* Konumlandırma için önemli */
+            position: relative;
         }
 
         /* --- MERKEZİ EKRANLAR (BAŞLANGIÇ & BİTİŞ) --- */
         #start-screen, #game-over-screen {
             text-align: center;
             padding: 40px;
-            background: rgba(20, 20, 20, 0.85); /* Daha koyu arka plan */
+            background: rgba(20, 20, 20, 0.85);
             border-radius: 20px;
             backdrop-filter: blur(15px);
             border: 2px solid rgba(255, 215, 0, 0.2);
@@ -43,8 +43,6 @@
             max-width: 500px;
             width: 90%;
             z-index: 1000;
-            
-            /* İŞTE DÜZELTME BURADA: TAM MERKEZLEME */
             position: absolute;
             top: 50%;
             left: 50%;
@@ -79,7 +77,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            display: none; /* JS ile açılır */
+            display: none;
         }
 
         /* Düşen Nota Kartı */
@@ -152,12 +150,33 @@
         .lives {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: 80px;
             font-size: 1.5rem;
             color: #ff4d4d;
             z-index: 20;
             text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
+
+        /* Müzik Butonu */
+        .music-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .music-toggle:hover { background: rgba(255,255,255,0.1); transform: scale(1.1); }
 
         /* Lazer Efekti */
         .laser-beam {
@@ -174,7 +193,6 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translate(-50%, -60%); } to { opacity: 1; transform: translate(-50%, -50%); } }
         
-        /* Yanlış Cevap Efekti */
         @keyframes shake {
             0% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
@@ -185,6 +203,11 @@
     </style>
 </head>
 <body>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Carefree.mp3" type="audio/mpeg">
+        Tarayıcınız ses elementini desteklemiyor.
+    </audio>
 
     <div id="start-screen">
         <i class="fas fa-cloud-rain" style="font-size: 5rem; color: var(--accent); margin-bottom: 20px;"></i>
@@ -203,6 +226,10 @@
     <div id="game-area">
         <div class="hud">PUAN: <span id="score">0</span></div>
         <div class="lives" id="lives">❤️❤️❤️</div>
+        
+        <button class="music-toggle" onclick="toggleMusic()">
+            <i class="fas fa-volume-up" id="musicIcon"></i>
+        </button>
 
         <div class="controls-bar">
             <button class="note-btn" onmousedown="checkInput('Do')" ontouchstart="checkInput('Do')">DO</button>
@@ -216,28 +243,50 @@
     </div>
 
     <script>
-        // Nota Verileri (SVG Konumları - Sol Anahtarı)
         const notesDB = [
-            { name: "Do", y: 150, ledger: true }, // Ek çizgili Kalın Do
+            { name: "Do", y: 150, ledger: true }, 
             { name: "Re", y: 140, ledger: false },
-            { name: "Mi", y: 130, ledger: false }, // 1. Çizgi
+            { name: "Mi", y: 130, ledger: false }, 
             { name: "Fa", y: 120, ledger: false },
-            { name: "Sol", y: 110, ledger: false }, // 2. Çizgi
+            { name: "Sol", y: 110, ledger: false }, 
             { name: "La", y: 100, ledger: false },
             { name: "Si", y: 90, ledger: false },
-            { name: "Do", y: 80, ledger: false }, // 3. Aralık (İnce Do)
-            { name: "Re", y: 70, ledger: false }, // 4. Çizgi
+            { name: "Do", y: 80, ledger: false }, 
+            { name: "Re", y: 70, ledger: false }, 
             { name: "Mi", y: 60, ledger: false },
-            { name: "Fa", y: 50, ledger: false }  // 5. Çizgi
+            { name: "Fa", y: 50, ledger: false } 
         ];
 
         let score = 0;
         let lives = 3;
-        let spawnRate = 2500; // Başlangıçta 2.5 saniyede bir
-        let fallSpeed = 1.2; // Başlangıç hızı düşürüldü (1.5 -> 1.2)
+        let spawnRate = 2500; 
+        let fallSpeed = 1.2; 
         let activeNotes = [];
         let isGameRunning = false;
         let spawnTimeout;
+        
+        // Müzik Kontrolü
+        const bgMusic = document.getElementById('bgMusic');
+        let isMusicPlaying = false;
+
+        // Müzik sesini biraz kısalım ki rahatsız etmesin
+        bgMusic.volume = 0.3; 
+
+        function toggleMusic() {
+            const icon = document.getElementById('musicIcon');
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                icon.className = "fas fa-volume-mute";
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    icon.className = "fas fa-volume-up";
+                    isMusicPlaying = true;
+                }).catch(e => {
+                    console.log("Müzik çalma hatası:", e);
+                });
+            }
+        }
 
         function startGame() {
             document.getElementById('start-screen').style.display = 'none';
@@ -246,10 +295,18 @@
             isGameRunning = true;
             score = 0;
             lives = 3;
-            
-            // Sıfırlama
             fallSpeed = 1.2; 
             spawnRate = 2500; 
+            
+            // Müziği BAŞLAT (Kullanıcı etkileşimi olduğu için burada kesin çalışır)
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                document.getElementById('musicIcon').className = "fas fa-volume-up";
+            }).catch(e => {
+                console.log("Tarayıcı otonom sesi engelledi:", e);
+            });
+            
+            // Temizlik
             activeNotes.forEach(el => el.remove());
             activeNotes = [];
             
@@ -265,7 +322,6 @@
             const noteEl = document.createElement('div');
             noteEl.className = 'falling-note';
             
-            // Ek çizgi mantığı
             let ledgerLine = noteData.ledger ? `<line x1="30" y1="150" x2="90" y2="150" stroke="black" stroke-width="3" />` : '';
             
             noteEl.innerHTML = `
@@ -275,17 +331,13 @@
                     <line x1="10" y1="90" x2="110" y2="90" stroke="black" stroke-width="2" />
                     <line x1="10" y1="110" x2="110" y2="110" stroke="black" stroke-width="2" />
                     <line x1="10" y1="130" x2="110" y2="130" stroke="black" stroke-width="2" />
-                    
                     <path d="M 40 120 Q 55 70 40 40 Q 25 30 40 100 Q 60 150 30 130" stroke="black" fill="none" stroke-width="3"/>
-
                     ${ledgerLine}
-
                     <ellipse cx="60" cy="${noteData.y}" rx="12" ry="10" fill="black" />
                     <line x1="72" y1="${noteData.y}" x2="72" y2="${noteData.y - 45}" stroke="black" stroke-width="3" />
                 </svg>
             `;
 
-            // Rastgele Yatay Pozisyon
             const minX = 20;
             const maxX = window.innerWidth - 140; 
             const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
@@ -297,9 +349,6 @@
             document.getElementById('game-area').appendChild(noteEl);
             activeNotes.push(noteEl);
 
-            // GÜNCELLEME: Yeni nota gelme süresi çok daha yavaş azalacak
-            // Eskiden: score * 20 (Her 10 puanda 200ms hızlanıyordu)
-            // Şimdi: score * 5 (Her 10 puanda sadece 50ms hızlanacak)
             let nextSpawn = Math.max(1000, 2500 - (score * 5)); 
             spawnTimeout = setTimeout(spawnNote, nextSpawn);
         }
@@ -309,19 +358,14 @@
 
             activeNotes.forEach((noteEl, index) => {
                 let currentY = parseFloat(noteEl.dataset.yPos);
-                
-                // GÜNCELLEME: Düşme hızı çok daha yavaş artacak
-                // Eskiden: score * 0.05
-                // Şimdi: score * 0.01
                 let currentSpeed = fallSpeed + (score * 0.01); 
                 
                 currentY += currentSpeed;
                 noteEl.style.top = currentY + 'px';
                 noteEl.dataset.yPos = currentY;
 
-                // Yere Çarpma Kontrolü
                 if (currentY > window.innerHeight - 100) {
-                    removeNote(index, false); // Yanlış (Kaçırıldı)
+                    removeNote(index, false); 
                 }
             });
 
@@ -331,7 +375,6 @@
         function checkInput(noteName) {
             if (!isGameRunning) return;
 
-            // En alttaki notayı bul
             let targetIndex = -1;
             let maxY = -1000;
 
@@ -412,11 +455,16 @@
             isGameRunning = false;
             clearTimeout(spawnTimeout);
             
+            // Müziği durdur
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+            isMusicPlaying = false;
+            document.getElementById('musicIcon').className = "fas fa-volume-mute";
+
             document.getElementById('game-area').style.display = 'none';
             document.getElementById('game-over-screen').style.display = 'block';
             document.getElementById('final-score-text').innerText = score;
             
-            // Kalan notaları temizle
             activeNotes.forEach(el => {
                 if(el.parentNode) el.parentNode.removeChild(el);
             });
