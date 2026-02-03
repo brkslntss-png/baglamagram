@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutlak Duyum Testi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --accent: #ffd700;
+            --glass: rgba(255, 255, 255, 0.1);
+            --correct: #2ecc71;
+            --wrong: #e74c3c;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1e1e2f 0%, #0a0a0a 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+        }
+
+        /* Ortak Ekran Stili */
+        .screen {
+            text-align: center;
+            padding: 40px;
+            background: var(--glass);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: fadeIn 0.5s;
+            width: 90%;
+            max-width: 600px;
+            display: none; /* JS ile açılacak */
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Aktif Ekran */
+        .screen.active {
+            display: flex;
+        }
+
+        h1 { color: var(--accent); margin-bottom: 10px; font-size: 2.5rem; }
+        p { color: #ccc; margin-bottom: 30px; font-size: 1.1rem; line-height: 1.6; }
+
+        .btn-start, .btn-restart {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            margin-top: 20px;
+        }
+        .btn-start:hover, .btn-restart:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+
+        /* Oyun Ekranı Detayları */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #aaa;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+        
+        .score-box { color: var(--accent); font-weight: bold; }
+
+        .listen-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #2a2a2a, #333);
+            border: 4px solid var(--accent);
+            color: var(--accent);
+            font-size: 3rem;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .listen-btn:active { transform: scale(0.95); }
+        .listen-btn.playing { animation: pulse 0.5s infinite; }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .option-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 20px;
+            font-size: 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Outfit', sans-serif;
+        }
+        .option-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); }
+        
+        .correct { background: var(--correct) !important; color: #000 !important; border-color: var(--correct) !important; }
+        .wrong { background: var(--wrong) !important; color: white !important; border-color: var(--wrong) !important; }
+
+        /* Sonuç Ekranı Detayları */
+        .result-percent { font-size: 4rem; color: var(--accent); font-weight: 800; margin: 10px 0; }
+        .result-title { font-size: 1.8rem; color: #fff; margin-bottom: 10px; font-weight: bold; }
+        .result-comment { font-style: italic; color: #bbb; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; border-left: 4px solid var(--accent); }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen" class="screen active">
+        <i class="fas fa-ear-listen" style="font-size: 5rem; color: var(--accent); margin-bottom: 20px;"></i>
+        <h1>Mutlak Duyum Testi</h1>
+        <p>Kulağına ne kadar güveniyorsun?<br>Toplam <b>20 Soru</b> sorulacak.<br>Her soruda çalan notayı bilmeye çalış.</p>
+        <button class="btn-start" onclick="initGame()">TESTİ BAŞLAT</button>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <div class="game-header">
+            <span id="question-indicator">Soru: 1 / 20</span>
+            <span class="score-box">Doğru: <span id="current-score">0</span></span>
+        </div>
+        
+        <button class="listen-btn" onclick="playCurrentNote()" id="playBtn">
+            <i class="fas fa-volume-high"></i>
+        </button>
+        <p style="font-size: 0.9rem; color: #888; margin-bottom:30px;">Tekrar dinlemek için butona bas</p>
+
+        <div class="options-grid" id="options-container">
+            </div>
+    </div>
+
+    <div id="result-screen" class="screen">
+        <i class="fas fa-chart-pie" style="font-size: 3rem; color: #fff; opacity:0.5; margin-bottom:10px;"></i>
+        <h1>Test Sonucu</h1>
+        
+        <div class="result-percent" id="final-percent">%0</div>
+        <div class="result-title" id="final-title">Seviye Hesaplanıyor...</div>
+        
+        <div class="result-comment">
+            <i class="fas fa-quote-left" style="color:var(--accent); margin-right:10px;"></i>
+            <span id="final-comment">Yorum yükleniyor...</span>
+        </div>
+
+        <button class="btn-restart" onclick="location.reload()">TEKRAR DENE</button>
+    </div>
+
+    <script>
+        // --- NOTA VERİ TABANI ---
+        const notesData = [
+            // Naturel Notalar
+            { name: "Do", freq: 261.63, type: "naturel" }, 
+            { name: "Re", freq: 293.66, type: "naturel" }, 
+            { name: "Mi", freq: 329.63, type: "naturel" }, 
+            { name: "Fa", freq: 349.23, type: "naturel" }, 
+            { name: "Sol", freq: 392.00, type: "naturel" }, 
+            { name: "La", freq: 440.00, type: "naturel" }, 
+            { name: "Si", freq: 493.88, type: "naturel" },
+            { name: "Do (İnce)", freq: 523.25, type: "naturel" },
+            
+            // Arızalı Notalar
+            { name: "Do# / Re♭", freq: 277.18, type: "arizali" }, 
+            { name: "Re# / Mi♭", freq: 311.13, type: "arizali" }, 
+            { name: "Fa# / Sol♭", freq: 369.99, type: "arizali" }, 
+            { name: "Sol# / La♭", freq: 415.30, type: "arizali" }, 
+            { name: "La# / Si♭", freq: 466.16, type: "arizali" }
+        ];
+
+        // --- SONUÇ YORUMLARI ---
+        const resultLevels = [
+            { min: 90, title: "Mutlak Kulak (Absolut)", comment: "Kusursuz. Sen frekansları resmen görüyorsun! Kesinlikle müzik ile ilgilenmelisin, çünkü senin bir süper gücün var. Ve bu çok az insanda var, mutlaka ama mutlaka bir uzmana danış." },
+            { min: 80, title: "Üst Düzey Kulak", comment: "Mükemmel. Sahne tozunu yutmaya hazırsın, bir insanın doğuştan kazandığı Mutlak Duyum - Absolute kulak seviyesine çok yakınsın. Bir uzmana danışabilirsin." },
+            { min: 70, title: "Eğitimli Kulak", comment: "Gayet iyi. Teknik altyapın sağlam, kulakların notaları seçmekte zorlanmıyor. Hatalarına biraz daha dikkat edersen çok iyi olur." },
+            { min: 60, title: "İyi Seviyede Kulak", comment: "Ortalamanın üzerindesin. Biraz daha pratikle notalarla dostluğunu pekiştirebilirsin. Bir çok insana göre öndesin." },
+            { min: 50, title: "Müzik Sever (Baraj)", comment: "Tam sınırdasın. Müziği duyuyorsun ama notaların dilini henüz tam sökememişsin." },
+            { min: 40, title: "Ortalama Seviye", comment: "Sesleri ayırt ediyorsun ama aralarındaki o ince farklarda kafan karışıyor. Çalışmaya devam!" },
+            { min: 30, title: "Nota Avcısı", comment: "Biraz şans, biraz kulak... Notaları yakalamaya çalışıyorsun ama çoğu elinden kaçıyor." },
+            { min: 20, title: "Rastgele Tuturan", comment: "Sesler kulağına geliyor ama beyne gidene kadar yolda kayboluyorlar ciğerim. Ama bir çok insana göre fena değilsin, çalışmaya devam et." },
+            { min: 10, title: "Kulak Uyanıyor", comment: "Daha çok fırın ekmek yemen lazım. Çalışmaya devam!" },
+            { min: 0,  title: "Müzik Kulağın Yok Gibi...", comment: "Ses dünyasına yabancısın. Sen en iyisi bir uzmana danış, bu konuda sıfırsın. Galiba daha önce müzik geçmişin yok ama üzülme, çalışarak düzelir." }
+        ];
+
+        let audioCtx;
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let totalQuestions = 20;
+        let currentNoteObj = null;
+        let isProcessing = false;
+        
+        // SON SORULARI TAKİP ETMEK İÇİN DİZİ
+        let recentQuestions = [];
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function initGame() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            currentQuestion = 0;
+            correctAnswers = 0;
+            recentQuestions = []; // Hafızayı sıfırla
+            showScreen('game-screen');
+            nextRound();
+        }
+
+        function nextRound() {
+            currentQuestion++;
+            
+            if(currentQuestion > totalQuestions) {
+                endGame();
+                return;
+            }
+
+            document.getElementById('question-indicator').innerText = `Soru: ${currentQuestion} / ${totalQuestions}`;
+            document.getElementById('current-score').innerText = correctAnswers;
+            
+            isProcessing = false;
+            generateQuestion();
+        }
+
+        function generateQuestion() {
+            let randomIndex;
+            let candidateNote;
+            let attempts = 0;
+
+            // --- TEKRAR ENGELLEME ALGORİTMASI ---
+            do {
+                randomIndex = Math.floor(Math.random() * notesData.length);
+                candidateNote = notesData[randomIndex];
+                attempts++;
+                // Sonsuz döngü koruması (100 deneme limiti)
+                if (attempts > 100) break;
+                
+            } while (recentQuestions.includes(candidateNote.name)); // Son 3 soruda var mı kontrol et
+
+            // Seçilen notayı mevcut soru yap
+            currentNoteObj = candidateNote;
+
+            // Son sorulanlar listesine ekle
+            recentQuestions.push(currentNoteObj.name);
+            // Eğer liste 3'ten büyükse en eskisini çıkar (Kaydırma penceresi)
+            if (recentQuestions.length > 3) {
+                recentQuestions.shift();
+            }
+            // ------------------------------------
+
+            // Şıkları Oluştur (2 Naturel + 2 Arızalı KURALI)
+            let options = [];
+            const naturals = notesData.filter(n => n.type === 'naturel');
+            const accidentals = notesData.filter(n => n.type === 'arizali');
+
+            // Doğru cevabı ekle
+            options.push(currentNoteObj);
+
+            // Kalan 3 şıkkı dengele
+            let neededNaturals = (currentNoteObj.type === 'naturel') ? 1 : 2;
+            let neededAccidentals = (currentNoteObj.type === 'arizali') ? 1 : 2;
+
+            while(neededNaturals > 0) {
+                let rnd = naturals[Math.floor(Math.random() * naturals.length)];
+                if(!options.some(o => o.name === rnd.name)) {
+                    options.push(rnd);
+                    neededNaturals--;
+                }
+            }
+
+            while(neededAccidentals > 0) {
+                let rnd = accidentals[Math.floor(Math.random() * accidentals.length)];
+                if(!options.some(o => o.name === rnd.name)) {
+                    options.push(rnd);
+                    neededAccidentals--;
+                }
+            }
+
+            // Şıkları Karıştır
+            options.sort(() => Math.random() - 0.5);
+
+            // HTML'e Bas
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            options.forEach(note => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = note.name;
+                btn.onclick = () => checkAnswer(btn, note);
+                container.appendChild(btn);
+            });
+
+            // Sesi Çal
+            setTimeout(() => playTone(currentNoteObj.freq), 500);
+        }
+
+        function checkAnswer(btn, selectedNote) {
+            if (isProcessing) return;
+            isProcessing = true;
+
+            if (selectedNote.name === currentNoteObj.name) {
+                btn.classList.add('correct');
+                correctAnswers++;
+                playSuccessSound();
+            } else {
+                btn.classList.add('wrong');
+                const allBtns = document.querySelectorAll('.option-btn');
+                allBtns.forEach(b => {
+                    if (b.innerText === currentNoteObj.name) b.classList.add('correct');
+                });
+                playErrorSound();
+            }
+
+            document.getElementById('current-score').innerText = correctAnswers;
+            setTimeout(nextRound, 1500);
+        }
+
+        function endGame() {
+            showScreen('result-screen');
+            
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            document.getElementById('final-percent').innerText = `%${percentage}`;
+
+            let result = resultLevels.find(r => percentage >= r.min);
+            if (!result) result = resultLevels[resultLevels.length - 1];
+
+            document.getElementById('final-title').innerText = result.title;
+            document.getElementById('final-comment').innerText = result.comment;
+        }
+
+        // --- SES MOTORU ---
+        function playTone(freq, type = 'triangle', duration = 1.5) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+
+            const btn = document.getElementById('playBtn');
+            if(btn) {
+                btn.classList.add('playing');
+                setTimeout(() => btn.classList.remove('playing'), duration * 1000);
+            }
+        }
+
+        function playCurrentNote() {
+            if (currentNoteObj) playTone(currentNoteObj.freq);
+        }
+
+        function playSuccessSound() {
+            playTone(523.25, 'sine', 0.1); 
+            setTimeout(() => playTone(659.25, 'sine', 0.2), 100); 
+        }
+
+        function playErrorSound() {
+            playTone(150, 'sawtooth', 0.3);
+            setTimeout(() => playTone(100, 'sawtooth', 0.3), 200);
+        }
+
+    </script>
+</body>
+</html>
