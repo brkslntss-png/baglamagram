@@ -1409,23 +1409,10 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // --- TÜRKÇE KARAKTER DESTEKLİ ÇÖZÜCÜ ---
-  function sifreCo(str) {
-      try {
-          return decodeURIComponent(escape(window.atob(str)));
-      } catch (e) {
-          return str; // Şifreli değilse olduğu gibi döndür
-      }
-  }
-
-  // --- ŞİFRELENMİŞ ÖĞRENCİ LİSTESİ (BASE64) ---
-  // Buradaki anahtarlar (email) ve değerler (ad, soyad) Base64 halindedir.
-  // Meraklı gözler bakınca anlamsız harfler görür.
+  //ÖĞRENCİ EKLERKEN BURDAN AD-SOYAD DEĞİŞİRSİN VEYA BELİRLERSİN. ÖĞRENCİ EKLEME PANELİ
   const ogrenciListesi = {
-      // gokboy09@gmail.com : { Gökhan, BOY }
-      "Z29rYm95MDlAZ21haWwuY29t": { ad: "R8OkaGFu", soyad: "Qk9Z" },
       
-      // brkslntss@gmail.com : { Burak, ASLANTAŞ }
+      "Z29rYm95MDlAZ21haWwuY29t": { ad: "R8OkaGFu", soyad: "Qk9Z" },
       "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "QnVyYWs=", soyad: "QVNMQU5UQcWe" }
   };
 
