@@ -1,4 +1,505 @@
 const tumSorular = [
+    // --- EKSTRA: GENEL MÜZİK KÜLTÜRÜ & TEORİSİ (100 SORU) ---
+    {
+        "soru": "Standart bir piyanoda toplam kaç tuş bulunur?",
+        "secenekler": ["88", "61", "76", "92"],
+        "dogru": "88"
+    },
+    {
+        "soru": "Müzikte seslerin yüksekliğini (inceliğini/kalınlığını) belirten işaretlere ne denir?",
+        "secenekler": ["Nota", "Es", "Ritim", "Ölçü"],
+        "dogru": "Nota"
+    },
+    {
+        "soru": "Klasik gitarda genellikle kaç tel bulunur?",
+        "secenekler": ["6", "4", "5", "12"],
+        "dogru": "6"
+    },
+    {
+        "soru": "Keman ailesinin en kalın sesli çalgısı hangisidir?",
+        "secenekler": ["Kontrbas", "Viyolonsel (Çello)", "Viyola", "Keman"],
+        "dogru": "Kontrbas"
+    },
+    {
+        "soru": "\"Sol Anahtarı\" portenin (dizeğin) kaçıncı çizgisine çizilir?",
+        "secenekler": ["2. çizgi", "1. çizgi", "3. çizgi", "4. çizgi"],
+        "dogru": "2. çizgi"
+    },
+    {
+        "soru": "Müzikte vuruşların hızını belirleyen terim nedir?",
+        "secenekler": ["Tempo", "Ritim", "Melodi", "Armoni"],
+        "dogru": "Tempo"
+    },
+    {
+        "soru": "\"Pop Müziğin Kralı\" (King of Pop) olarak bilinen sanatçı kimdir?",
+        "secenekler": ["Michael Jackson", "Elvis Presley", "Prince", "Madonna"],
+        "dogru": "Michael Jackson"
+    },
+    {
+        "soru": "Dünyaca ünlü \"Dört Mevsim\" (The Four Seasons) konçertosunun bestecisi kimdir?",
+        "secenekler": ["Antonio Vivaldi", "Bach", "Mozart", "Beethoven"],
+        "dogru": "Antonio Vivaldi"
+    },
+    {
+        "soru": "Türk müziğindeki \"Usul\" kavramının Batı müziğindeki karşılığına en yakın terim nedir?",
+        "secenekler": ["Ritim / Ölçü", "Makam", "Gam", "Akor"],
+        "dogru": "Ritim / Ölçü"
+    },
+    {
+        "soru": "Orkestrayı yöneten, elinde baget tutan kişiye ne denir?",
+        "secenekler": ["Orkestra Şefi (Maestro)", "Solist", "Konsertmeister", "Besteci"],
+        "dogru": "Orkestra Şefi (Maestro)"
+    },
+    {
+        "soru": "Bateri (Davul) çalmak için kullanılan ahşap çubuklara ne ad verilir?",
+        "secenekler": ["Baget", "Mızrap", "Yay", "Tezene"],
+        "dogru": "Baget"
+    },
+    {
+        "soru": "Müzikte \"Do\" sesinden sonra gelen ses hangisidir?",
+        "secenekler": ["Re", "Mi", "Fa", "Si"],
+        "dogru": "Re"
+    },
+    {
+        "soru": "İstiklal Marşı'mızın şairi kimdir?",
+        "secenekler": ["Mehmet Akif Ersoy", "Osman Zeki Üngör", "Ziya Gökalp", "Namık Kemal"],
+        "dogru": "Mehmet Akif Ersoy"
+    },
+    {
+        "soru": "Müzikte \"Sessizlik\" süresini gösteren işaretlere ne denir?",
+        "secenekler": ["Es (Sus)", "Nota", "Diyez", "Bemol"],
+        "dogru": "Es (Sus)"
+    },
+    {
+        "soru": "Aşağıdakilerden hangisi vurmalı bir çalgıdır?",
+        "secenekler": ["Davul", "Keman", "Flüt", "Gitar"],
+        "dogru": "Davul"
+    },
+    {
+        "soru": "Aşağıdakilerden hangisi üflemeli bir çalgıdır?",
+        "secenekler": ["Yan Flüt", "Piyano", "Gitar", "Viyola"],
+        "dogru": "Yan Flüt"
+    },
+    {
+        "soru": "Beethoven hangi ülkenin bestecisidir?",
+        "secenekler": ["Almanya", "Fransa", "İtalya", "Rusya"],
+        "dogru": "Almanya"
+    },
+    {
+        "soru": "\"9. Senfoni\" kime aittir?",
+        "secenekler": ["Beethoven", "Mozart", "Bach", "Chopin"],
+        "dogru": "Beethoven"
+    },
+    {
+        "soru": "Bir müzik eserinin birden fazla enstrümanla çalınmak üzere düzenlenmesine ne denir?",
+        "secenekler": ["Aranje (Düzenleme)", "Beste", "Güfte", "Doğaçlama"],
+        "dogru": "Aranje (Düzenleme)"
+    },
+    {
+        "soru": "Müzikte \"Forte\" (f) terimi ne anlama gelir?",
+        "secenekler": ["Kuvvetli / Gür", "Hafif", "Hızlı", "Yavaş"],
+        "dogru": "Kuvvetli / Gür"
+    },
+    {
+        "soru": "Müzikte \"Piano\" (p) terimi ne anlama gelir?",
+        "secenekler": ["Hafif / Yumuşak", "Gür", "Hızlı", "Sert"],
+        "dogru": "Hafif / Yumuşak"
+    },
+    {
+        "soru": "Aşağıdakilerden hangisi telli bir çalgı değildir?",
+        "secenekler": ["Trompet", "Bağlama", "Gitar", "Keman"],
+        "dogru": "Trompet"
+    },
+    {
+        "soru": "Müzik eserlerini kağıda dökmek için kullanılan 5 çizgi ve 4 aralıktan oluşan şekle ne denir?",
+        "secenekler": ["Dizek (Porte)", "Tablature", "Akor", "Gam"],
+        "dogru": "Dizek (Porte)"
+    },
+    {
+        "soru": "Eurovision Şarkı Yarışması'nı 2003 yılında kazanan Türk sanatçı kimdir?",
+        "secenekler": ["Sertab Erener", "Athena", "Şebnem Paker", "Hadise"],
+        "dogru": "Sertab Erener"
+    },
+    {
+        "soru": "Sertab Erener'in Eurovision'u kazandığı şarkının adı nedir?",
+        "secenekler": ["Everyway That I Can", "Düm Tek Tek", "Dinle", "For Real"],
+        "dogru": "Everyway That I Can"
+    },
+    {
+        "soru": "Aşağıdakilerden hangisi bir Türk Sanat Müziği makamıdır?",
+        "secenekler": ["Nihavend", "Minör", "Majör", "Blues"],
+        "dogru": "Nihavend"
+    },
+    {
+        "soru": "\"Soprano\" hangi ses grubunu ifade eder?",
+        "secenekler": ["En ince kadın sesi", "En kalın erkek sesi", "Orta kadın sesi", "Çocuk sesi"],
+        "dogru": "En ince kadın sesi"
+    },
+    {
+        "soru": "\"Bas\" hangi ses grubunu ifade eder?",
+        "secenekler": ["En kalın erkek sesi", "En ince kadın sesi", "Orta erkek sesi", "Çocuk sesi"],
+        "dogru": "En kalın erkek sesi"
+    },
+    {
+        "soru": "Piyanoda siyah tuşlar kaçlı gruplar halindedir?",
+        "secenekler": ["2'li ve 3'lü", "Sadece 2'li", "Sadece 3'lü", "4'lü ve 5'li"],
+        "dogru": "2'li ve 3'lü"
+    },
+    {
+        "soru": "Yaylı çalgılarda sesi oluşturmak için tele sürtülen çubuğa ne denir?",
+        "secenekler": ["Yay (Arşe)", "Baget", "Mızrap", "Pençe"],
+        "dogru": "Yay (Arşe)"
+    },
+    {
+        "soru": "\"Do - Re - Mi - Fa - Sol - La - Si\" dizisine ne ad verilir?",
+        "secenekler": ["Gam (Dizi)", "Akor", "Ritim", "Ölçü"],
+        "dogru": "Gam (Dizi)"
+    },
+    {
+        "soru": "Müzikte 3 veya daha fazla sesin aynı anda tınlamasına ne denir?",
+        "secenekler": ["Akor", "Melodi", "Solo", "Gam"],
+        "dogru": "Akor"
+    },
+    {
+        "soru": "Aşağıdakilerden hangisi bakır üflemeli bir çalgıdır?",
+        "secenekler": ["Trompet", "Klarnet", "Ney", "Fagot"],
+        "dogru": "Trompet"
+    },
+    {
+        "soru": "Caz müziğinin doğduğu şehir olarak bilinen yer neresidir?",
+        "secenekler": ["New Orleans", "New York", "Londra", "Paris"],
+        "dogru": "New Orleans"
+    },
+    {
+        "soru": "\"Rock and Roll'un Kralı\" olarak bilinen efsanevi sanatçı kimdir?",
+        "secenekler": ["Elvis Presley", "John Lennon", "Freddie Mercury", "Mick Jagger"],
+        "dogru": "Elvis Presley"
+    },
+    {
+        "soru": "Beatles grubu hangi ülkenin müzik grubudur?",
+        "secenekler": ["İngiltere", "ABD", "Almanya", "Avustralya"],
+        "dogru": "İngiltere"
+    },
+    {
+        "soru": "Queen grubunun efsanevi solisti kimdir?",
+        "secenekler": ["Freddie Mercury", "Brian May", "Roger Taylor", "David Bowie"],
+        "dogru": "Freddie Mercury"
+    },
+    {
+        "soru": "Müzikte \"A Capella\" ne demektir?",
+        "secenekler": ["Enstrümansız, sadece insan sesiyle yapılan müzik", "Çok hızlı müzik", "Sadece piyano ile yapılan müzik", "Koro müziği"],
+        "dogru": "Enstrümansız, sadece insan sesiyle yapılan müzik"
+    },
+    {
+        "soru": "\"Virtüöz\" kime denir?",
+        "secenekler": ["Bir enstrümanı ustalıkla çalan kişiye", "Şarkı söyleyen kişiye", "Besteci olan kişiye", "Konser izleyicisine"],
+        "dogru": "Bir enstrümanı ustalıkla çalan kişiye"
+    },
+    {
+        "soru": "Müzikte \"Düet\" kaç kişiyle yapılır?",
+        "secenekler": ["2", "3", "4", "1"],
+        "dogru": "2"
+    },
+    {
+        "soru": "Mozart hangi dönemin bestecisidir?",
+        "secenekler": ["Klasik Dönem", "Barok Dönem", "Romantik Dönem", "Modern Dönem"],
+        "dogru": "Klasik Dönem"
+    },
+    {
+        "soru": "İnsan sesine en yakın enstrüman olarak kabul edilen yaylı çalgı hangisidir?",
+        "secenekler": ["Viyolonsel (Çello)", "Keman", "Gitar", "Arp"],
+        "dogru": "Viyolonsel (Çello)"
+    },
+    {
+        "soru": "Piyanoda \"Do\" notasını bulmak için hangi tuş grubuna bakılır?",
+        "secenekler": ["İkili siyah tuş grubunun solundaki beyaz tuş", "Üçlü siyah tuş grubunun solu", "İkili siyah tuşun sağı", "Herhangi bir beyaz tuş"],
+        "dogru": "İkili siyah tuş grubunun solundaki beyaz tuş"
+    },
+    {
+        "soru": "Türk müziğinde kullanılan, gitara benzeyen ama perdesiz olan enstrüman hangisidir?",
+        "secenekler": ["Ud", "Tanbur", "Cümbüş", "Mandolin"],
+        "dogru": "Ud"
+    },
+    {
+        "soru": "\"Minör\" tonlar genellikle insanda nasıl bir duygu uyandırır?",
+        "secenekler": ["Hüzünlü / Melankolik", "Neşeli", "Hareketli", "Sert"],
+        "dogru": "Hüzünlü / Melankolik"
+    },
+    {
+        "soru": "\"Majör\" tonlar genellikle insanda nasıl bir duygu uyandırır?",
+        "secenekler": ["Neşeli / Mutlu", "Hüzünlü", "Karanlık", "Korku"],
+        "dogru": "Neşeli / Mutlu"
+    },
+    {
+        "soru": "Operada metinlerin yazılı olduğu kitapçığa ne denir?",
+        "secenekler": ["Libretto", "Senaryo", "Nota", "Partisyon"],
+        "dogru": "Libretto"
+    },
+    {
+        "soru": "Müzikte \"Oktav\" ne demektir?",
+        "secenekler": ["Bir sesin 8 ses incesi veya kalını", "Bir vuruş", "Beş ses aralığı", "Sus işareti"],
+        "dogru": "Bir sesin 8 ses incesi veya kalını"
+    },
+    {
+        "soru": "Aşağıdakilerden hangisi bir Türk Pop Müziği sanatçısıdır?",
+        "secenekler": ["Tarkan", "Münir Nurettin Selçuk", "Neşet Ertaş", "Aşık Veysel"],
+        "dogru": "Tarkan"
+    },
+    {
+        "soru": "Türk Marşı'nın (Rondo Alla Turca) bestecisi kimdir?",
+        "secenekler": ["Mozart", "Beethoven", "Bach", "Chopin"],
+        "dogru": "Mozart"
+    },
+    {
+        "soru": "Mehter marşlarında en çok kullanılan vurmalı çalgı hangisidir?",
+        "secenekler": ["Kös", "Trampet", "Bongo", "Darbuka"],
+        "dogru": "Kös"
+    },
+    {
+        "soru": "Flamenko müziği hangi ülkenin kültürüdür?",
+        "secenekler": ["İspanya", "İtalya", "Meksika", "Arjantin"],
+        "dogru": "İspanya"
+    },
+    {
+        "soru": "Reggae müziğinin efsanevi ismi kimdir?",
+        "secenekler": ["Bob Marley", "Jimi Hendrix", "Sting", "Bono"],
+        "dogru": "Bob Marley"
+    },
+    {
+        "soru": "Rap müziğin temelini oluşturan, ritmik konuşma tarzına ne denir?",
+        "secenekler": ["Flow", "Melodi", "Aria", "Solo"],
+        "dogru": "Flow"
+    },
+    {
+        "soru": "Elektronik müzik yapmak için kullanılan, ses sentezleyen cihaza ne denir?",
+        "secenekler": ["Synthesizer (Sentezleyici)", "Amfi", "Mikser", "Hoparlör"],
+        "dogru": "Synthesizer (Sentezleyici)"
+    },
+    {
+        "soru": "Müzikte \"Allegro\" terimi neyi ifade eder?",
+        "secenekler": ["Hızlı ve neşeli", "Yavaş", "Çok yavaş", "Hüzünlü"],
+        "dogru": "Hızlı ve neşeli"
+    },
+    {
+        "soru": "Müzikte \"Adagio\" terimi neyi ifade eder?",
+        "secenekler": ["Yavaş ve ağır", "Çok hızlı", "Orta hız", "Kesik kesik"],
+        "dogru": "Yavaş ve ağır"
+    },
+    {
+        "soru": "Bir şarkının sözlerine ne ad verilir?",
+        "secenekler": ["Güfte", "Beste", "Makam", "Usul"],
+        "dogru": "Güfte"
+    },
+    {
+        "soru": "Bir şarkının müziğini (melodisini) yazan kişiye ne denir?",
+        "secenekler": ["Besteci", "Güftekar", "Yorumcu", "Aranjör"],
+        "dogru": "Besteci"
+    },
+    {
+        "soru": "Aşağıdakilerden hangisi bir nefesli çalgı değildir?",
+        "secenekler": ["Viyola", "Klarnet", "Obua", "Saksafon"],
+        "dogru": "Viyola"
+    },
+    {
+        "soru": "Orkestrada enstrümanların akort edildiği temel ses hangisidir?",
+        "secenekler": ["La (A)", "Do (C)", "Sol (G)", "Si (B)"],
+        "dogru": "La (A)"
+    },
+    {
+        "soru": "Piyanoda pedalların görevi nedir?",
+        "secenekler": ["Sesin süresini uzatmak veya yumuşatmak", "Sesi kapatmak", "Ritim tutmak", "Akort yapmak"],
+        "dogru": "Sesin süresini uzatmak veya yumuşatmak"
+    },
+    {
+        "soru": "\"Moonwalk\" dansı ile özdeşleşen sanatçı kimdir?",
+        "secenekler": ["Michael Jackson", "Madonna", "Justin Timberlake", "Usher"],
+        "dogru": "Michael Jackson"
+    },
+    {
+        "soru": "\"Bohemian Rhapsody\" şarkısı hangi gruba aittir?",
+        "secenekler": ["Queen", "Pink Floyd", "Led Zeppelin", "The Rolling Stones"],
+        "dogru": "Queen"
+    },
+    {
+        "soru": "Gitarda sesi değiştirmek için takılan, perdeyi sıkıştıran alete ne denir?",
+        "secenekler": ["Kapo (Capo)", "Pena", "Burgu", "Eşik"],
+        "dogru": "Kapo (Capo)"
+    },
+    {
+        "soru": "Bateri setinde, ayakla çalınan en büyük davula ne denir?",
+        "secenekler": ["Kick (Bass Drum)", "Trampet", "Tom", "Zil"],
+        "dogru": "Kick (Bass Drum)"
+    },
+    {
+        "soru": "Türk müziğinde kullanılan, diz üstünde çalınan, metal gövdeli çalgı nedir?",
+        "secenekler": ["Cümbüş", "Ud", "Tanbur", "Lavta"],
+        "dogru": "Cümbüş"
+    },
+    {
+        "soru": "Karadeniz bölgesinin simgesi olan, üç telli yaylı çalgı hangisidir?",
+        "secenekler": ["Kemençe", "Tulum", "Zurna", "Saz"],
+        "dogru": "Kemençe"
+    },
+    {
+        "soru": "Barok dönemin en önemli bestecisi, \"Toccata ve Füg\"ün sahibi kimdir?",
+        "secenekler": ["Johann Sebastian Bach", "Mozart", "Haydn", "Schubert"],
+        "dogru": "Johann Sebastian Bach"
+    },
+    {
+        "soru": "Müzikte \"Crescendo\" terimi ne anlama gelir?",
+        "secenekler": ["Sesin giderek kuvvetlenmesi", "Sesin giderek azalması", "Sesin bitmesi", "Hızlanmak"],
+        "dogru": "Sesin giderek kuvvetlenmesi"
+    },
+    {
+        "soru": "Müzikte \"Decrescendo\" terimi ne anlama gelir?",
+        "secenekler": ["Sesin giderek azalması", "Sesin giderek artması", "Hızlanmak", "Durmak"],
+        "dogru": "Sesin giderek azalması"
+    },
+    {
+        "soru": "Kemanın atası olarak kabul edilen eski çalgı hangisidir?",
+        "secenekler": ["Rebab", "Gitar", "Lir", "Arp"],
+        "dogru": "Rebab"
+    },
+    {
+        "soru": "Elektronik gitarda sesi yükseltmeye yarayan cihaza ne denir?",
+        "secenekler": ["Amfi (Amplifikatör)", "Ekolayzer", "Pedal", "Mikser"],
+        "dogru": "Amfi (Amplifikatör)"
+    },
+    {
+        "soru": "\"Çardaş\" (Czardas) hangi ülkenin geleneksel dans müziğidir?",
+        "secenekler": ["Macaristan", "Rusya", "Polonya", "Almanya"],
+        "dogru": "Macaristan"
+    },
+    {
+        "soru": "Sirtaki hangi ülkenin dansıdır?",
+        "secenekler": ["Yunanistan", "İtalya", "İspanya", "Türkiye"],
+        "dogru": "Yunanistan"
+    },
+    {
+        "soru": "Vals hangi ülkenin saraylarından dünyaya yayılmıştır?",
+        "secenekler": ["Avusturya (Viyana)", "Fransa", "İngiltere", "Rusya"],
+        "dogru": "Avusturya (Viyana)"
+    },
+    {
+        "soru": "Müzikte \"Diyez\" (#) işareti ne işe yarar?",
+        "secenekler": ["Sesi yarım ses inceltir", "Sesi yarım ses kalınlaştırır", "Sesi uzatır", "Sesi keser"],
+        "dogru": "Sesi yarım ses inceltir"
+    },
+    {
+        "soru": "Müzikte \"Bemol\" (b) işareti ne işe yarar?",
+        "secenekler": ["Sesi yarım ses kalınlaştırır", "Sesi yarım ses inceltir", "Sesi uzatır", "Sesi keser"],
+        "dogru": "Sesi yarım ses kalınlaştırır"
+    },
+    {
+        "soru": "Müzikte \"Naturel\" işareti ne işe yarar?",
+        "secenekler": ["Değiştirilmiş sesi doğal haline döndürür", "Sesi inceltir", "Sesi kalınlaştırır", "Sesi bitirir"],
+        "dogru": "Değiştirilmiş sesi doğal haline döndürür"
+    },
+    {
+        "soru": "Bir şarkının nakarat (kavuştak) bölümü nedir?",
+        "secenekler": ["Şarkının en akılda kalıcı ve tekrar eden kısmı", "Şarkının girişi", "Şarkının bitişi", "Şarkının en yavaş kısmı"],
+        "dogru": "Şarkının en akılda kalıcı ve tekrar eden kısmı"
+    },
+    {
+        "soru": "Batı müziğinde \"Do\" notasının harf karşılığı nedir?",
+        "secenekler": ["C", "D", "E", "F"],
+        "dogru": "C"
+    },
+    {
+        "soru": "Batı müziğinde \"La\" notasının harf karşılığı nedir?",
+        "secenekler": ["A", "B", "C", "D"],
+        "dogru": "A"
+    },
+    {
+        "soru": "Batı müziğinde \"Sol\" notasının harf karşılığı nedir?",
+        "secenekler": ["G", "F", "A", "E"],
+        "dogru": "G"
+    },
+    {
+        "soru": "Orkestrada en kalın sesi veren dev yaylı çalgı hangisidir?",
+        "secenekler": ["Kontrbas", "Çello", "Viyola", "Tuba"],
+        "dogru": "Kontrbas"
+    },
+    {
+        "soru": "Saksofon en çok hangi müzik türünde kullanılır?",
+        "secenekler": ["Caz (Jazz)", "Klasik", "Halk Müziği", "Elektronik"],
+        "dogru": "Caz (Jazz)"
+    },
+    {
+        "soru": "Tango müziği hangi ülkeden doğmuştur?",
+        "secenekler": ["Arjantin", "Brezilya", "İspanya", "Meksika"],
+        "dogru": "Arjantin"
+    },
+    {
+        "soru": "\"Kuğu Gölü Balesi\"nin bestecisi kimdir?",
+        "secenekler": ["Çaykovski", "Stravinsky", "Bach", "Vivaldi"],
+        "dogru": "Çaykovski"
+    },
+    {
+        "soru": "Piyanoda bir oktavda kaç beyaz, kaç siyah tuş vardır?",
+        "secenekler": ["7 beyaz, 5 siyah", "8 beyaz, 4 siyah", "6 beyaz, 6 siyah", "10 beyaz, 2 siyah"],
+        "dogru": "7 beyaz, 5 siyah"
+    },
+    {
+        "soru": "\"Polka\" dansı hangi bölgeye özgüdür?",
+        "secenekler": ["Orta Avrupa (Çekya/Polonya)", "Güney Amerika", "Uzak Doğu", "Afrika"],
+        "dogru": "Orta Avrupa (Çekya/Polonya)"
+    },
+    {
+        "soru": "Gitarın gövdesindeki boşluğa ne ad verilir?",
+        "secenekler": ["Ses Deliği", "Rezonans Kutusu", "Kapak", "Sap"],
+        "dogru": "Ses Deliği"
+    },
+    {
+        "soru": "Yaylı çalgılarda telin titreşimini gövdeye ileten küçük tahta parçaya ne denir?",
+        "secenekler": ["Eşik (Köprü)", "Klavye", "Burgu", "Salyangoz"],
+        "dogru": "Eşik (Köprü)"
+    },
+    {
+        "soru": "Akustik gitarın tellerinden en incesi hangisidir?",
+        "secenekler": ["Mi (E) - 1. Tel", "La (A)", "Re (D)", "Sol (G)"],
+        "dogru": "Mi (E) - 1. Tel"
+    },
+    {
+        "soru": "Akustik gitarın tellerinden en kalını hangisidir?",
+        "secenekler": ["Mi (E) - 6. Tel", "La (A)", "Re (D)", "Do (C)"],
+        "dogru": "Mi (E) - 6. Tel"
+    },
+    {
+        "soru": "Müzikte \"Solfej\" ne demektir?",
+        "secenekler": ["Notaları isimleriyle ve sesleriyle okumak", "Enstrüman çalmak", "Şarkı sözü yazmak", "Dans etmek"],
+        "dogru": "Notaları isimleriyle ve sesleriyle okumak"
+    },
+    {
+        "soru": "Bir şarkının giriş bölümüne ne ad verilir?",
+        "secenekler": ["Intro", "Outro", "Nakarat", "Köprü"],
+        "dogru": "Intro"
+    },
+    {
+        "soru": "Bir şarkının bitiş bölümüne ne ad verilir?",
+        "secenekler": ["Outro (Final)", "Intro", "Solo", "Riff"],
+        "dogru": "Outro (Final)"
+    },
+    {
+        "soru": "\"Phantom of the Opera\" hangi grubun şarkısıdır?",
+        "secenekler": ["Queen", "Metallica", "AC/DC", "Nirvana"],
+        "dogru": "Queen"
+    },
+    {
+        "soru": "Keman çalarken çeneyi dayadığımız parçaya ne denir?",
+        "secenekler": ["Çenelik", "Yastık", "Destek", "Sap"],
+        "dogru": "Çenelik"
+    },
+    {
+        "soru": "Müzikte \"Legato\" ne demektir?",
+        "secenekler": ["Notaları birbirine bağlı, kesintisiz çalmak", "Notaları kesik çalmak", "Hızlı çalmak", "Sessiz çalmak"],
+        "dogru": "Notaları birbirine bağlı, kesintisiz çalmak"
+    },
+    {
+        "soru": "\"Moonlight Sonata\" (Ayışığı Sonatı) kime aittir?",
+        "secenekler": ["Beethoven", "Mozart", "Chopin", "Liszt"],
+        "dogru": "Beethoven"
+    }
     // --- BÖLÜM 1: HALK OZANLARI & SANATÇILAR ---
     {"soru": "\"Bozkırın Tezenesi\" lakabıyla bilinen, \"Gönül Dağı\" ve \"Ah Yalan Dünya\" eserlerinin sahibi usta kimdir?", "secenekler": ["Neşet Ertaş", "Mahzuni Şerif", "Muharrem Ertaş", "Hacı Taşan"], "dogru": "Neşet Ertaş"},
     {"soru": "\"Uzun İnce Bir Yoldayım\" ve \"Dostlar Beni Hatırlasın\" eserlerinin sahibi Sivaslı ozan kimdir?", "secenekler": ["Aşık Veysel", "Aşık Daimi", "Pir Sultan Abdal", "Ali Ekber Çiçek"], "dogru": "Aşık Veysel"},
