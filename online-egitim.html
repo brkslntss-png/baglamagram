@@ -1395,6 +1395,8 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+  // Storage yerine FIRESTORE (Veritabanı) kütüphanelerini çağırıyoruz
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBIx9TujKPX82NaWXGh2QTxyG6TEQ-abi8",
@@ -1408,13 +1410,71 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app); // Veritabanını başlat
 
-  //ÖĞRENCİ EKLERKEN BURDAN AD-SOYAD DEĞİŞİRSİN VEYA BELİRLERSİN. ÖĞRENCİ EKLEME PANELİ
+  function sifreCo(str) {
+      try { return decodeURIComponent(escape(window.atob(str))); } 
+      catch (e) { return str; }
+  }
+
+  // --- ŞİFRELENMİŞ LİSTE ---
   const ogrenciListesi = {
-      
       "Z29rYm95MDlAZ21haWwuY29t": { ad: "R8OkaGFu", soyad: "Qk9Z" },
       "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "QnVyYWs=", soyad: "QVNMQU5UQcWe" }
   };
+
+  // --- FOTOĞRAF KAYDETME (VERİTABANINA YAZIYOR) ---
+  window.saveProfilePhoto = function(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // 1. Resmi Küçült
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                const MAX_SIZE = 300; 
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > height) {
+                    if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+                } else {
+                    if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.6); // Biraz daha sıkıştırdık (0.6)
+
+                // 2. Ekrana bas
+                document.getElementById('userAvatar').src = dataUrl;
+
+                // 3. VERİTABANINA KAYDET (Firestore)
+                const user = auth.currentUser;
+                if (user) {
+                    // "kullanicilar" tablosunda, mail adresiyle doküman oluştur
+                    const userRef = doc(db, "kullanicilar", user.email);
+                    
+                    // İçine "profil_fotosu" alanını yaz
+                    setDoc(userRef, { profil_fotosu: dataUrl }, { merge: true })
+                        .then(() => {
+                            console.log("Fotoğraf veritabanına işlendi!");
+                        })
+                        .catch((error) => {
+                            console.error("Yazma hatası:", error);
+                            alert("Kaydetme başarısız! İnternetini kontrol et.");
+                        });
+                }
+            };
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+  }
 
   const loginBtn = document.getElementById('firebaseLoginBtn');
   const emailInput = document.getElementById('emailInput');
@@ -1440,13 +1500,8 @@
                 status.style.color = "#4CAF50"; 
                 status.innerText = "Giriş Başarılı! Yönlendiriliyorsun...";
 
-                // --- GİRİŞ YAPAN MAİLİ ŞİFRELE Kİ LİSTEDE BULALIM ---
-                // (Türkçe karakter sorunu olmasın diye özel kodlama ile şifreliyoruz)
                 const girisYapanMail = userCredential.user.email;
                 const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
-                
-                // Hafızaya maili kaydet (Şifresiz kaydetmekte sorun yok, tarayıcı kişiye özeldir)
-                localStorage.setItem('aktifKullaniciMail', girisYapanMail);
 
                 setTimeout(() => {
                     document.getElementById("login-overlay").style.display = "none";
@@ -1455,31 +1510,31 @@
                     document.getElementById("student-portal").style.display = "block";
                     document.body.classList.add("portal-active");
 
-                    // İsim Ayarlama (Şifreli listeden bulup çözüyoruz)
                     let ogrenci = ogrenciListesi[sifreliMail];
-
                     if (ogrenci) {
-                        // Şifreli veriyi çözüp (atob) ekrana basıyoruz
                         const gercekAd = sifreCo(ogrenci.ad);
                         const gercekSoyad = sifreCo(ogrenci.soyad);
-                        
                         document.getElementById("displayAd").innerText = gercekAd;
                         document.getElementById("displaySoyad").innerText = gercekSoyad;
                         document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + gercekAd + "!";
                     } else {
-                        // Listede yoksa mailden isim uydur
                         const varsayilanAd = girisYapanMail.split('@')[0];
                         document.getElementById("displayAd").innerText = varsayilanAd;
                         document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
                         document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
                     }
 
-                    // Fotoğraf Getirme
+                    // --- FOTOĞRAFI VERİTABANINDAN ÇEK ---
                     document.getElementById('userAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-                    const kisiselFoto = localStorage.getItem('foto_' + girisYapanMail);
-                    if (kisiselFoto) {
-                        document.getElementById('userAvatar').src = kisiselFoto;
-                    }
+                    
+                    const userRef = doc(db, "kullanicilar", girisYapanMail);
+                    getDoc(userRef).then((docSnap) => {
+                        if (docSnap.exists() && docSnap.data().profil_fotosu) {
+                            document.getElementById('userAvatar').src = docSnap.data().profil_fotosu;
+                        }
+                    }).catch((error) => {
+                        console.log("Fotoğraf çekilemedi:", error);
+                    });
                     
                     history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
                 }, 1500);
