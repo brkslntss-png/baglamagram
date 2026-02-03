@@ -16,6 +16,7 @@
         :root {
             --primary: #000000;
             --accent: #c5a059; /* Altın Rengi */
+            --accent-hover: #d4b06a;
             --bg-dark: #0f0f0f;
             --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
             --box-bg: rgba(30, 30, 30, 0.4);
@@ -39,40 +40,43 @@
             min-height: 100vh;
         }
 
-        /* --- DİL SEÇİCİ STİLLERİ --- */
+        /* --- DİL SEÇİCİ STİLLERİ (SOL ÜST KÖŞE) --- */
         .language-wrapper {
             position: fixed;
             top: 25px;
-            right: 30px;
-            z-index: 1002;
+            left: 30px; /* Sola sabitlendi */
+            right: auto;
+            z-index: 1100;
             font-family: 'Montserrat', sans-serif;
         }
         .lang-btn {
             background: rgba(0, 0, 0, 0.6); 
             border: 1px solid var(--accent);
             color: #fff;
-            padding: 8px 15px;
+            padding: 8px 18px;
             border-radius: 30px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            gap: 10px;
+            font-size: 12px;
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 600;
         }
         .lang-btn:hover {
-            background: rgba(197, 160, 89, 0.2);
-            box-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
         }
         .lang-dropdown {
             display: none;
             position: absolute;
             top: 120%;
-            right: 0;
-            background: rgba(10, 10, 10, 0.95);
+            left: 0;
+            background: rgba(15, 15, 15, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             overflow: hidden;
@@ -116,7 +120,6 @@
         .nav-container {
             display: flex; justify-content: center; align-items: center; 
             max-width: 1200px; margin: 0 auto; position: relative;
-            padding-right: 100px; 
         }
 
         nav ul { 
@@ -202,7 +205,7 @@
         .highlight-box li { margin-bottom: 18px; position: relative; padding-left: 25px; color: var(--text-secondary); font-size: 0.95rem; }
         .highlight-box li::before { content: "◈"; color: var(--accent); position: absolute; left: 0; font-size: 0.8rem; }
 
-        /* --- SOSYAL MEDYA (Kullanıcının Orijinal Tasarımı) --- */
+        /* --- SOSYAL MEDYA --- */
         .social-wrapper {
             display: flex; flex-direction: column; align-items: center;
             gap: 15px; margin-top: 50px;
@@ -237,7 +240,7 @@
         @media (max-width: 768px) {
             nav { padding: 15px 0; background: #000; }
             .menu-toggle { display: block; right: 20px; }
-            .language-wrapper { top: 20px; right: 70px; }
+            .language-wrapper { top: 20px; left: 20px; }
             .lang-btn span { display: none; }
             
             nav ul {
@@ -254,12 +257,7 @@
 
     <div class="language-wrapper">
         <button class="lang-btn" onclick="toggleLanguageMenu()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-            <span>Language</span>
+            <i class="fas fa-globe"></i> <span id="lang-label">LANGUAGE</span>
         </button>
         
         <div class="lang-dropdown" id="langDropdown">
@@ -363,9 +361,14 @@
             menu.classList.toggle("aktif");
         }
 
+        function toggleLanguageMenu() {
+            document.getElementById("langDropdown").classList.toggle("active");
+        }
+
         // --- ÇEVİRİ VERİLERİ ---
         const translations = {
             tr: {
+                lang_label: "LANGUAGE",
                 menu_home: "ANA SAYFA",
                 menu_about: "HAKKINDA",
                 menu_edu: "ONLINE EĞİTİM",
@@ -384,6 +387,7 @@
                 footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır."
             },
             en: {
+                lang_label: "LANGUAGE",
                 menu_home: "HOME",
                 menu_about: "ABOUT ME",
                 menu_edu: "ONLINE LESSONS",
@@ -402,6 +406,7 @@
                 footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved."
             },
             lt: {
+                lang_label: "KALBA",
                 menu_home: "PAGRINDINIS",
                 menu_about: "APIE MANE",
                 menu_edu: "INTERNETINĖS PAMOKOS",
@@ -420,6 +425,7 @@
                 footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos."
             },
             de: {
+                lang_label: "SPRACHE",
                 menu_home: "STARTSEITE",
                 menu_about: "ÜBER MICH",
                 menu_edu: "ONLINE-UNTERRICHT",
@@ -434,12 +440,13 @@
                 career_li2: "<strong>Teilgenommene Programme:</strong> Teilnahme als Gastkünstler und Orchestermitglied an den Sendungen „Lieder der jungen Generation“ auf TRT Türkü.",
                 projects_title: "Kunstprojekte",
                 projects_li1: "<strong>East to West:</strong> Internationale Konzertreihe, die anatolische Melodien mit westlichen Klassikern zusammenbringt, mit der Pianistin Elzė Markevičiūtė.",
-                projects_li2: "<strong>Literarische Versuche:</strong> Er produziert originelle Gedichte unter Verwendung von Aruz- und Silbenmaßen. Er macht durch den klaren und direkten Stil in seinen Gedichten auf sich aufmerksam.",
+                projects_li2: "<strong>Literary Essays:</strong> Er produziert originelle Gedichte unter Verwendung von Aruz- und Silbenmaßen. Er macht durch den klaren und direkten Stil in seinen Gedichten auf sich aufmerksam.",
                 footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten."
             },
             ru: {
+                lang_label: "ЯЗЫК",
                 menu_home: "ГЛАВНАЯ",
-                menu_about: "ОБО МНЕ",
+                menu_about: "О НАС",
                 menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ",
                 menu_notes: "НОТЫ",
                 menu_poems: "СТИХИ",
@@ -452,23 +459,21 @@
                 career_li2: "<strong>Участие в программах:</strong> Участвовал в качестве приглашенного артиста и участника оркестра в программах «Песни молодого поколения», транслируемых на TRT Türkü.",
                 projects_title: "Арт-проекты",
                 projects_li1: "<strong>East to West:</strong> Международная серия концертов, объединяющая анатолийские мелодии с западной классикой с пианисткой Эльзе Маркевичюте.",
-                projects_li2: "<strong>Литературные опыты:</strong> Пишет оригинальные стихи, используя метры Аруз и слоговой размер. Привлекает внимание ясным и прямым стилем своих стихов.",
+                projects_li2: "<strong>Literary Essays:</strong> Пишет оригинальные стихи, используя метры Аруз и слоговой размер. Привлекает внимание ясным и прямым стилем своих стихов.",
                 footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены."
             }
         };
 
-        // --- DİL FONKSİYONLARI ---
-        function toggleLanguageMenu() {
-            document.getElementById("langDropdown").classList.toggle("active");
-        }
-
         function changeLanguage(lang) {
             const data = translations[lang] || translations['tr'];
             
+            // Buton üzerindeki metni güncelle
+            document.getElementById('lang-label').innerText = data.lang_label;
+
+            // data-lang içeren tüm elementleri çevir
             document.querySelectorAll("[data-lang]").forEach(element => {
                 const key = element.getAttribute("data-lang");
                 if (data[key]) {
-                    // innerHTML kullanarak <strong> etiketlerini koruyoruz
                     element.innerHTML = data[key];
                 }
             });
@@ -477,12 +482,9 @@
             localStorage.setItem("selectedLang", lang);
         }
 
-        // Sayfa açıldığında hafızayı kontrol et
         window.onload = function() {
-            const savedLang = localStorage.getItem("selectedLang");
-            if(savedLang && translations[savedLang]) {
-                changeLanguage(savedLang);
-            }
+            const savedLang = localStorage.getItem("selectedLang") || "tr";
+            changeLanguage(savedLang);
         };
     </script>
 
