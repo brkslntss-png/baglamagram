@@ -4,127 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notalar | Mahmut Burak ASLANTAŞ</title>
-    <meta name="description" content="Bağlama notaları arşivi. Kısa sap, uzun sap ve egzersiz notaları.">
     <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- GENEL AYARLAR --- */
         :root {
             --primary: #000000;
             --accent: #c5a059;
             --bg-dark: #0f0f0f;
             --text: #ffffff;
-            --text-secondary: #b0b0b0;
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-muted: #888;
+            --border-color: rgba(197, 160, 89, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-dark);
-            background-image: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
+            background-color: var(--primary);
             color: var(--text);
             line-height: 1.6;
             display: flex; flex-direction: column; min-height: 100vh;
         }
 
-        /* --- ORTALANMIŞ MENÜ (İSTEDİĞİN KISIM) --- */
-        nav { 
-            background: rgba(0, 0, 0, 0.95); 
-            padding: 20px 0; 
-            border-bottom: 1px solid rgba(197, 160, 89, 0.2); 
-            position: sticky; top: 0; z-index: 1000; 
-        }
-        
-        .nav-container { 
-            display: flex; 
-            justify-content: center; /* İŞTE BU SATIR MENÜYÜ ORTALAR */
-            align-items: center; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            position: relative;
-        }
-
-        nav ul { 
-            display: flex; 
-            list-style: none; 
-            gap: 40px; 
-            padding: 0 20px; 
-        }
-
+        /* --- ORTALI MENÜ --- */
+        nav { background: #000; padding: 25px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .nav-container { display: flex; justify-content: center; align-items: center; }
+        nav ul { display: flex; list-style: none; gap: 35px; padding: 0; margin: 0; }
         nav a { 
-            color: var(--text-secondary); 
-            text-decoration: none; 
-            font-size: 0.8rem; 
-            font-weight: 500; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            transition: all 0.3s ease; 
+            color: var(--text-muted); text-decoration: none; font-size: 0.75rem; 
+            font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; 
         }
-
         nav a:hover, nav a.active { color: var(--accent); }
 
-        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
-
-        /* --- BAŞLIK ALANI --- */
-        .page-header { text-align: center; padding: 60px 20px 30px; }
-        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--accent); margin-bottom: 10px; }
-        .separator { width: 60px; height: 2px; background: var(--accent); margin: 0 auto 20px; }
-        .page-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 0.95rem; }
-
-        /* --- GALERİ VE FİLTRELER --- */
-        .gallery-wrapper { max-width: 1200px; margin: 0 auto; padding: 20px; flex: 1; width: 100%; }
-
-        .filter-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
-        .filter-btn {
-            background: transparent; border: 1px solid var(--accent); color: var(--text);
-            padding: 10px 30px; font-family: 'Montserrat', sans-serif; cursor: pointer;
-            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;
+        /* --- BAŞLIK --- */
+        .header-section { text-align: center; padding: 80px 20px 50px; }
+        .header-section h1 { 
+            font-family: 'Playfair Display', serif; font-size: 3.5rem; color: #fff; 
+            letter-spacing: 2px; margin-bottom: 20px; font-weight: 400;
         }
-        .filter-btn:hover, .filter-btn.active { background: var(--accent); color: #000; font-weight: bold; }
+        .divider { width: 50px; height: 3px; background: var(--accent); margin: 0 auto 20px; }
+        .subtitle { font-family: 'Playfair Display', serif; font-style: italic; color: #888; font-size: 1.1rem; }
 
-        .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
-
-        .note-card {
-            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;
-            overflow: hidden; transition: transform 0.3s, border-color 0.3s; cursor: pointer;
+        /* --- ARAMA --- */
+        .search-container { max-width: 600px; margin: 0 auto 60px; position: relative; }
+        .search-box {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid #333;
+            padding: 15px 50px 15px 20px; border-radius: 5px; color: #fff;
+            font-family: 'Montserrat', sans-serif; font-size: 0.95rem; outline: none; transition: 0.3s;
         }
-        .note-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .search-box:focus { border-color: var(--accent); background: rgba(0,0,0,0.3); }
+        .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        .note-icon-box {
-            height: 140px; background: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center;
-            font-size: 3.5rem; color: #333; transition: 0.3s;
+        /* --- TABLO --- */
+        .table-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; flex: 1; }
+        .notes-table { width: 100%; border-collapse: collapse; margin-bottom: 50px; }
+        
+        .notes-table thead { border-bottom: 1px solid var(--accent); }
+        .notes-table th {
+            text-align: left; padding: 20px; color: var(--accent);
+            font-family: 'Playfair Display', serif; font-size: 0.9rem; letter-spacing: 1px; font-weight: 400;
         }
-        .note-card:hover .note-icon-box { color: var(--accent); }
+        .notes-table th:last-child { text-align: right; }
 
-        .note-info { padding: 15px; text-align: center; }
-        .note-title { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 1rem; margin-bottom: 5px; }
-        .note-cat { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        .notes-table tbody tr { 
+            border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s;
+        }
+        .notes-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+        
+        .notes-table td { padding: 25px 20px; color: #ccc; font-size: 0.95rem; vertical-align: middle; }
+        .notes-table td strong { color: #fff; font-weight: 500; font-size: 1rem; }
+        
+        .download-btn {
+            display: inline-flex; width: 40px; height: 40px; border: 1px solid #444; border-radius: 50%;
+            justify-content: center; align-items: center; color: var(--text-muted); transition: 0.3s;
+        }
+        .download-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-        /* --- MODAL (RESİM BÜYÜTME) --- */
-        .modal {
+        /* --- SÖZLER MODALI --- */
+        .lyrics-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center;
+            backdrop-filter: blur(8px);
         }
-        .modal img { max-width: 90%; max-height: 90vh; border: 2px solid var(--accent); box-shadow: 0 0 40px rgba(197, 160, 89, 0.3); }
-        .close-modal { position: absolute; top: 20px; right: 30px; font-size: 3rem; color: #fff; cursor: pointer; }
+        .lyrics-content {
+            background: #111; border: 1px solid var(--accent); padding: 40px; border-radius: 10px;
+            max-width: 500px; width: 90%; text-align: center; position: relative;
+            box-shadow: 0 0 50px rgba(197, 160, 89, 0.15);
+        }
+        .close-lyrics { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: #666; cursor: pointer; }
+        .close-lyrics:hover { color: #fff; }
+        .lyrics-title { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 1.8rem; margin-bottom: 20px; }
+        .lyrics-text { white-space: pre-line; color: #ddd; font-size: 0.95rem; line-height: 1.8; max-height: 60vh; overflow-y: auto; }
 
-        /* --- FOOTER --- */
-        footer { background: #050505; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
-        .social-item { color: #555; font-size: 1.5rem; margin: 0 15px; transition: 0.3s; }
-        .social-item:hover { color: var(--accent); }
+        /* FOOTER */
+        footer { padding: 40px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
+        .social-link { color: #555; margin: 0 10px; font-size: 1.2rem; transition: 0.3s; }
+        .social-link:hover { color: var(--accent); }
 
-        /* MOBİL UYUM */
-        @media (max-width: 900px) {
-            .nav-container { justify-content: space-between; padding: 0 20px; }
-            nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
-            nav ul.aktif { display: flex; }
-            .menu-toggle { display: block; position: static; }
+        @media (max-width: 768px) {
+            .header-section h1 { font-size: 2.5rem; }
+            .notes-table th, .notes-table td { padding: 15px 10px; }
+            nav ul { display: none; } /* Mobilde menü gizli (basitlik için) */
         }
     </style>
 </head>
@@ -132,9 +115,6 @@
 
     <nav>
         <div class="nav-container">
-            <div class="menu-toggle" onclick="document.querySelector('nav ul').classList.toggle('aktif')">
-                <i class="fas fa-bars"></i>
-            </div>
             <ul>
                 <li><a href="index.html">ANA SAYFA</a></li>
                 <li><a href="hakkinda.html">HAKKINDA</a></li>
@@ -146,99 +126,130 @@
         </div>
     </nav>
 
-    <header class="page-header">
-        <h1>Nota Arşivi</h1>
-        <div class="separator"></div>
-        <p>Repertuvarınızı genişletmek için hazırladığım nota arşivi.</p>
-    </header>
-
-    <div class="gallery-wrapper">
-        <div class="filter-buttons">
-            <button class="filter-btn active" onclick="filtrele('hepsi')">Tümü</button>
-            <button class="filter-btn" onclick="filtrele('kisa-sap')">Kısa Sap</button>
-            <button class="filter-btn" onclick="filtrele('uzun-sap')">Uzun Sap</button>
-            <button class="filter-btn" onclick="filtrele('egzersiz')">Egzersizler</button>
-        </div>
-
-        <div class="notes-grid" id="notaGrid"></div>
+    <div class="header-section">
+        <h1>NOTALAR</h1>
+        <div class="divider"></div>
+        <p class="subtitle">Bağlama repertuvarı ve döküman arşivi...</p>
     </div>
 
-    <div class="modal" id="imgModal" onclick="this.style.display='none'">
-        <span class="close-modal">&times;</span>
-        <img id="modalImg" src="">
+    <div class="table-container">
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Eser adı veya besteci ara..." onkeyup="listeyiFiltrele(this.value)">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <table class="notes-table">
+            <thead>
+                <tr>
+                    <th>ESER ADI</th>
+                    <th>BESTECİ / KAYNAK KİŞİ</th>
+                    <th style="text-align: right;">İNDİR</th>
+                </tr>
+            </thead>
+            <tbody id="notesBody">
+                </tbody>
+        </table>
+    </div>
+
+    <div class="lyrics-modal" id="lyricsModal">
+        <div class="lyrics-content">
+            <span class="close-lyrics" onclick="modalKapat()">×</span>
+            <h2 id="modalTitle" class="lyrics-title">Eser Adı</h2>
+            <div class="divider" style="width: 30px; margin: 0 auto 20px;"></div>
+            <div id="modalText" class="lyrics-text">
+                Sözler buraya gelecek...
+            </div>
+        </div>
     </div>
 
     <footer>
-        <div style="margin-bottom: 20px;">
-            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item"><i class="fab fa-instagram"></i></a>
-            <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" class="social-item"><i class="fab fa-spotify"></i></a>
-            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><i class="fab fa-youtube"></i></a>
+        <div style="margin-bottom: 15px;">
+            <a href="https://instagram.com/baglamagram" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
         </div>
-        <p style="font-size: 0.8rem; color: #555;">© 2026 Mahmut Burak ASLANTAŞ.</p>
+        <p style="font-size: 0.8rem; color: #444;">© 2026 Mahmut Burak ASLANTAŞ</p>
     </footer>
 
     <script>
-        // NOTA LİSTESİ (Buraya yeni notalarını ekleyebilirsin)
-        const notalar = [
-            // KISA SAPLAR
-            { baslik: "Gelin Ayşem", tur: "kisa-sap", dosya: "a.jpg" },
-            { baslik: "Eklemedir Koca Konak", tur: "kisa-sap", dosya: "b.jpg" },
-            { baslik: "Urfa'nın Etrafı", tur: "kisa-sap", dosya: "c.jpg" },
-            { baslik: "Yeşil Başlı Telli Turnam", tur: "kisa-sap", dosya: "d.jpg" },
-            { baslik: "Uzun İnce Bir Yoldayım", tur: "kisa-sap", dosya: "g.jpg" },
-            { baslik: "Dostum Dostum", tur: "kisa-sap", dosya: "s.png" },
-
-            // UZUN SAPLAR (Örnek)
-            // { baslik: "Örnek Uzun Sap", tur: "uzun-sap", dosya: "uzun1.jpg" },
-
-            // EGZERSİZLER
-            { baslik: "Alıştırma 1", tur: "egzersiz", dosya: "alistirma-1.png" },
-            { baslik: "Alıştırma 2", tur: "egzersiz", dosya: "alistirma-2.png" },
-            { baslik: "4 Parmak Etüdü", tur: "egzersiz", dosya: "4-parmak-etudu1.png" },
+        // --- VERİTABANI (Resimdeki 3 Eser) ---
+        const eserler = [
+            {
+                ad: "Yoruldum",
+                kaynak: "Mahmut Burak ASLANTAŞ",
+                dosya: "yoruldum.pdf",
+                sozler: "Şu yalan dünyanın dertleri bitmez\nÖmür gelip geçer, çileler gitmez\nGönül kuşum uçar, geri de dönmez\nYoruldum yoruldum, ben çok yoruldum.\n\nDağlar duman oldu, yollar kapandı\nGençliğim virane, güller sarardı\nDost bildiklerim hep bir bir karardı\nYoruldum yoruldum, ben çok yoruldum."
+            },
+            {
+                ad: "Cehennem Narı",
+                kaynak: "Mahmut Burak ASLANTAŞ",
+                dosya: "cehennem-nari.pdf",
+                sozler: "Yüreğim yanıyor cehennem narı\nSöndüremez oldu kimse bu harı\nKaybettim yolumu, bulmam diyarı\nYandım ataşlarda, kül oldum gardaş.\n\nBir sevda uğruna düştüm bu hale\nNe mecnun anladı ne de bir lale\nGönlümde açılan derin yare\nYandım ataşlarda, kül oldum gardaş."
+            },
+            {
+                ad: "Ardıç Sazım",
+                kaynak: "Mahmut Burak ASLANTAŞ",
+                dosya: "ardic-sazim.pdf",
+                sozler: "Ardıç ağacından oyma teknem var\nTelimde inleyen dertli namem var\nŞu garip dünyada bir tek neşem var\nO da benim dertli, ardıç sazımdır.\n\nVurursam teline dertler dökülür\nAğlayan gözlerin yaşı silinir\nSanma ki bu sevda burda bitirilir\nO da benim dertli, ardıç sazımdır."
+            }
         ];
 
-        const grid = document.getElementById('notaGrid');
-        const modalImg = document.getElementById('modalImg');
-        const modal = document.getElementById('imgModal');
+        const tbody = document.getElementById("notesBody");
+        const modal = document.getElementById("lyricsModal");
 
-        function notalariListele(filtre) {
-            grid.innerHTML = "";
-            notalar.forEach(nota => {
-                if (filtre === 'hepsi' || nota.tur === filtre) {
-                    
-                    // Klasör yollarını burada ayarlıyoruz
-                    let klasor = "kisa-sap/"; // Varsayılan klasör
-                    if(nota.tur === 'egzersiz') klasor = "parmak-egzersiz/";
-                    else if(nota.tur === 'uzun-sap') klasor = "uzun-sap/"; // Eğer varsa
+        function listeyiYazdir(liste) {
+            tbody.innerHTML = "";
+            liste.forEach((eser, index) => {
+                const tr = document.createElement("tr");
+                // Satıra tıklayınca sözleri aç (İndir butonu hariç)
+                tr.onclick = (e) => {
+                    if(!e.target.closest('.download-btn')) {
+                        sozleriAc(index);
+                    }
+                };
 
-                    const yol = `./${klasor}${nota.dosya}`;
-
-                    grid.innerHTML += `
-                        <div class="note-card" onclick="resimAc('${yol}')">
-                            <div class="note-icon-box"><i class="fas fa-music"></i></div>
-                            <div class="note-info">
-                                <h3 class="note-title">${nota.baslik}</h3>
-                                <span class="note-cat">${nota.tur.replace('-',' ').toUpperCase()}</span>
-                            </div>
-                        </div>
-                    `;
-                }
+                tr.innerHTML = `
+                    <td><strong>${eser.ad}</strong></td>
+                    <td>${eser.kaynak}</td>
+                    <td style="text-align: right;">
+                        <a href="${eser.dosya}" class="download-btn" download title="Notayı İndir">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
         }
 
-        function filtrele(kategori) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            notalariListele(kategori);
+        function listeyiFiltrele(kelime) {
+            const filtrelenmis = eserler.filter(eser => 
+                eser.ad.toLowerCase().includes(kelime.toLowerCase()) || 
+                eser.kaynak.toLowerCase().includes(kelime.toLowerCase())
+            );
+            listeyiYazdir(filtrelenmis);
         }
 
-        function resimAc(src) {
-            modalImg.src = src;
+        // --- SÖZLERİ AÇMA FONKSİYONU ---
+        function sozleriAc(index) {
+            const eser = eserler[index];
+            document.getElementById("modalTitle").innerText = eser.ad;
+            document.getElementById("modalText").innerText = eser.sozler;
             modal.style.display = "flex";
         }
 
-        // Başlangıçta hepsini yükle
-        notalariListele('hepsi');
+        function modalKapat() {
+            modal.style.display = "none";
+        }
+
+        // Dışarı tıklayınca kapatma
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modalKapat();
+            }
+        }
+
+        // İlk açılış
+        listeyiYazdir(eserler);
+
     </script>
 
 </body>
