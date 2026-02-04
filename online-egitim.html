@@ -117,6 +117,37 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+/* --- GÜNÜN BİLGİSİ KUTUSU STİLİ --- */
+.daily-info-box {
+    background: rgba(255, 215, 0, 0.05); /* Çok hafif sarı transparan */
+    border-left: 4px solid var(--yellow-portal);
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    color: #ddd;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+.daily-info-box:hover {
+    transform: translateX(5px);
+    background: rgba(255, 215, 0, 0.1);
+}
+.daily-info-box i {
+    color: var(--yellow-portal);
+    font-size: 1.5rem;
+    animation: glowPulse 2s infinite alternate;
+}
+@keyframes glowPulse {
+    from { text-shadow: 0 0 5px rgba(255, 215, 0, 0.2); }
+    to { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+}
+
         /* --- MENÜ --- */
         nav { background: rgba(0, 0, 0, 0.95); padding: 20px 0; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(197, 160, 89, 0.2); }
         .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
@@ -540,6 +571,10 @@
                     <div id="dashboard-view" class="view-section active">
                         <div class="dashboard-header">
                             <h1 id="welcomeTitle" data-translate="portal_welcome">Merhaba!</h1>
+<div class="daily-info-box">
+    <i class="fas fa-lightbulb"></i>
+    <span id="gunun-bilgisi">Günün bilgisi yükleniyor...</span>
+</div>
                         </div>
                         <br>
                         <div class="dashboard-grid">
@@ -1017,7 +1052,7 @@
                         </iframe>
                     </div>
 
-                </div> </div> </div> </div> ```
+                </div> </div> </div> </div> 
 
 
     <footer>
@@ -1835,9 +1870,114 @@
             return (value - x1) * (y2 - x2) / (y1 - x1) + x2;
         }
 
+// --- GÜNÜN MÜZİK BİLGİSİ BANKASI ---
+    const muzikBilgileri = [
+        "Neşet Ertaş'a 'Bozkırın Tezenesi' lakabını usta yazar Yaşar Kemal vermiştir.",
+        "Bağlamada 'Bozuk Düzen' (Kara Düzen), en yaygın kullanılan akort sistemidir (Alt: La, Orta: Re, Üst: Sol).",
+        "Aşık Veysel, şiirlerini ve türkülerini hiçbir zaman bir yere yazmamış, hafızasında tutmuştur.",
+        "Müzik dinlemek, beynin dopamin salgılamasını sağlayarak mutluluk hissi yaratır.",
+        "İlk bağlama benzeri enstrümanların kökeni M.Ö. 2000'li yıllara, Kopuz'a dayanır.",
+        "Bir eseri yavaş çalmak, hızlı çalmaktan daha zordur; çünkü tüm hatalar duyulur.",
+        "Kısa sap bağlamada Çöğür düzeni kullanılırken, uzun sapta Bozuk düzen tercih edilir.",
+        "Türkülerin babası sayılan Muzaffer Sarısözen, binlerce türküyü derleyip notaya almıştır.",
+        "Dünyanın en eski şarkısı, M.Ö. 1400 yılına ait Sümerlere ait bir kil tablette bulunmuştur.",
+        "Bağlamada tezene vuruş yönleri, tavırları (Konya, Yozgat vb.) belirleyen en önemli unsurdur.",
+        "Neşet Ertaş'a 'Bozkırın Tezenesi' lakabını usta yazar Yaşar Kemal vermiştir.",
+        "Bağlamada 'Bozuk Düzen' (Kara Düzen), en yaygın kullanılan akort sistemidir (Alt: La, Orta: Re, Üst: Sol).",
+        "Aşık Veysel, şiirlerini ve türkülerini hiçbir zaman bir yere yazmamış, hafızasında tutmuştur.",
+        "Müzik dinlemek, beynin dopamin salgılamasını sağlayarak mutluluk hissi yaratır.",
+        "İlk bağlama benzeri enstrümanların kökeni M.Ö. 2000'li yıllara, Kopuz'a dayanır.",
+        "Bir eseri yavaş çalmak, hızlı çalmaktan daha zordur; çünkü tüm hatalar duyulur.",
+        "Kısa sap bağlamada Çöğür düzeni kullanılırken, uzun sapta Bozuk düzen tercih edilir.",
+        "Türkülerin babası sayılan Muzaffer Sarısözen, binlerce türküyü derleyip notaya almıştır.",
+        "Dünyanın en eski şarkısı, M.Ö. 1400 yılına ait Sümerlere ait bir kil tablette bulunmuştur.",
+        "Bağlamada tezene vuruş yönleri, tavırları (Konya, Yozgat vb.) belirleyen en önemli unsurdur.",
+        "Ludwig van Beethoven, en ünlü eseri olan 9. Senfoni'yi tamamen sağır olduğu dönemde bestelemiştir.",
+        "Nota isimleri (Do, Re, Mi...), Guido d'Arezzo tarafından bir ilahinin hecelerinden türetilmiştir.",
+        "Piyano, icadı sırasında 'Sessiz ve Gürültülü' çalabilen klavsen (Pianoforte) olarak adlandırılmıştır.",
+        "Bağlamanın teknesi en iyi sesi vermesi için genellikle dut, ardıç veya kestane ağacından yapılır.",
+        "Türk Müziği'nde 600'den fazla makam vardır, ancak günümüzde yaklaşık 40 tanesi yaygın kullanılır.",
+        "Mozart, ilk bestesini henüz 5 yaşındayken yapmıştır.",
+        "Eskiden saz telleri için metal yerine hayvan bağırsaklarından yapılan 'kiriş'ler kullanılırdı.",
+        "Kalp atışlarımız, dinlediğimiz müziğin ritmine göre yavaşlayıp hızlanabilir.",
+        "İstiklal Marşı'nın bestecisi Osman Zeki Üngör, güftesi (sözleri) ise Mehmet Akif Ersoy'a aittir.",
+        "UNESCO, Neşet Ertaş'ı 'Yaşayan İnsan Hazinesi' olarak ilan etmiştir.",
+        "Çağdaş Akıncı Ülkenin En İyi Bağlama Virtüözlerindendir.",
+        "Aşık Mahzuni Şerif, 400'den fazla plak ve 100'e yakın kaset ile Türk halk müziğinin en üretken ozanlarından biridir.",
+        "Müzikte 'oktav', frekansın iki katına çıkması veya yarıya inmesi demektir (Örn: A4=440Hz, A5=880Hz).",
+        "Efsaneye göre CD'lerin kapasitesi (74 dakika), Beethoven'ın 9. Senfonisi'nin tek bir diske sığması için belirlenmiştir.",
+        "Bağlamada 'Şelpe' tekniği, mızrap (tezene) kullanılmadan, parmaklarla tellere vurularak icra edilir.",
+        "Leo Fender, dünyanın en ünlü elektro gitarlarını (Stratocaster) tasarlamış olmasına rağmen gitar çalmayı bilmezdi.",
+        "Türk musikisinin büyük bestekarı Buhurizade Mustafa Itri'nin resmi, 100 Türk Lirası banknotlarının üzerinde yer alır.",
+        "Müzikte 'Crescendo', ses şiddetinin giderek artması; 'Decrescendo' ise azalması anlamına gelir.",
+        "Mozart'ın eserlerini dinlemenin zekayı artırdığına dair inanç 'Mozart Etkisi' olarak bilinir, ancak bilimsel olarak tam kanıtlanmamıştır.",
+        "Bağlamanın atası sayılan 'Kopuz', Orta Asya Türkleri tarafından şaman ayinlerinde ve destan anlatımlarında kullanılmıştır.",
+        "Bir piyanonun içindeki tellerin toplam gerilimi yaklaşık 18-20 ton ağırlığa eşittir.",
+        "Türk Müziği'nde 'Taksim', bir makamın özelliklerini göstermek amacıyla yapılan, ritimsiz ve doğaçlama icradır.",
+        "Arif Sağ, bağlamayı çok sesli müziğe uyarlayan ve 'Bağlama Konçertosu'nu yazan ilk sanatçılardan biridir.",
+        "Dünyanın en pahalı enstrümanları arasında, 17. yüzyılda Antonio Stradivari tarafından yapılan kemanlar yer alır.",
+        "Müzik terimlerinin çoğu (Adagio, Allegro, Piano, Forte) İtalyanca kökenlidir.",
+        "Aşık Veysel, 7 yaşında çiçek hastalığı yüzünden gözlerini kaybettikten sonra babasının ona aldığı saz ile hayata tutunmuştur.",
+        "İnsan kalbi, dinlediği müziğin ritmine (BPM) uyum sağlayarak atış hızını değiştirebilir.",
+        "Bağlama yapımında en çok tercih edilen ağaçlar; Dut (tekne), Ardıç, Kestane ve Gürgen'dir.",
+        "Ünlü besteci Beethoven'ın her sabah kahvesini tam olarak 60 adet kahve çekirdeği sayarak hazırladığı söylenir.",
+        "Kanun enstrümanı, üzerindeki mandallar sayesinde icra sırasında makam komalarını hızlıca değiştirmeye olanak tanır.",
+        "Osmanlı döneminde akıl hastalarının tedavisinde su sesi ve makam müziği kullanılırdı (Edirne Şifahanesi).",
+        "Saz ailesinde boyutlarına göre sıralama: Cura (en küçük), Tambura (orta), Bağlama (büyük) ve Divan Sazı (en büyük) şeklindedir.",
+        "Müzikte 'A Capella', enstrüman eşliği olmadan sadece insan sesiyle yapılan müzik türüdür.",
+        "Erkan Oğur, perdesiz gitarı icat ederek dünya müzik literatürüne kazandıran Türk müzisyendir.",
+        "Keman yayları genellikle at kılından (özellikle erkek atların kuyruk kıllarından) yapılır.",
+        "Cem Karaca, Anadolu ezgilerini Rock müzikle harmanlayarak evrensel bir tarz oluşturmuştur.",
+        "İstiklal Marşı'mız, 'Zeki Üngör' tarafından bestelenmeden önce farklı besteciler tarafından da bestelenmiştir.",
+        "Müzikte 'Bemol' sesi yarım ses (veya koma) kalınlaştırır, 'Diyez' ise inceltir.",
+        "Kısa sap bağlamada alt tel boş 'Re' sesine, uzun sap bağlamada ise 'La' sesine akort edilir (karar sesi).",
+        "Çiçeklerin klasik müzik dinletildiğinde daha hızlı büyüdüğüne dair bilimsel çalışmalar vardır.",
+        "Ud enstrümanı perdesiz olduğu için, piyanoda olmayan ara sesleri (komaları) çalmak mümkündür.",
+        "Müzik, beynin hem sağ hem de sol yarım küresini aynı anda çalıştıran nadir aktivitelerden biridir.",
+        "Dünyanın en çok cover'lanan (tekrar yorumlanan) şarkısı, The Beatles grubunun 'Yesterday' adlı eseridir.",
+        "Türk Sanat Müziği'nin 'Sanat Güneşi' Zeki Müren, sahne kıyafetlerini bizzat kendisi tasarlardı.",
+        "Kemanın atası sayılan 'Rebab', Orta Asya Türkleri tarafından icat edilip Avrupa'ya taşınmıştır.",
+        "Bir senfoni orkestrasında genellikle en kalabalık grup keman ailesidir.",
+        "Aşık Veysel, Köy Enstitüleri'nde bir dönem saz hocalığı yaparak binlerce öğrenciye ilham olmuştur.",
+        "Müzik notaları, 11. yüzyılda İtalyan rahip Guido d'Arezzo tarafından elindeki parmak boğumlarını kullanarak öğretilmeye başlanmıştır.",
+        "Jimi Hendrix, gitarı sağ eliyle değil sol eliyle çalar ve telleri ters takardı.",
+        "Osmanlı mehter marşları, ritmik yapısıyla Mozart ve Beethoven gibi batılı bestecilere ilham kaynağı olmuştur (Alla Turca).",
+        "Bağlama icrasında 'Tavır', yöresel çalış biçimini ifade eder (Zeybek tavrı, Teke tavrı gibi).",
+        "Dünyanın en uzun süren konseri Almanya'da bir kilisede devam etmektedir ve 639 yıl sürmesi planlanmıştır.",
+        "Cem Karaca, 12 Eylül darbesinden sonra vatandaşlıktan çıkarılmış, yıllar sonra Turgut Özal'ın desteğiyle ülkeye dönebilmiştir.",
+        "İnsan sesi, enstrümanlar arasında 'en doğal ve en karmaşık' enstrüman olarak kabul edilir.",
+        "Gitarda 'Distortion' efekti, aslında ilk başlarda amplifikatörlerin bozulması sonucu tesadüfen keşfedilmiştir.",
+        "Türk Halk Müziği'nde 'Hoyrat', genellikle Urfa ve Kerkük yöresine ait, tiz sesle okunan uzun havalara denir.",
+        "Bob Marley, son sözlerinde oğluna 'Para hayatı satın alamaz' demiştir.",
+        "Piyanoda 88 tuşu aynı anda basarsanız, yaklaşık 3 saniye süren devasa bir gürültü (cluster) duyarsınız.",
+        "Muharrem Ertaş, Neşet Ertaş'ın babası ve ustasıdır; Abdal geleneğinin en büyük temsilcilerindendir.",
+        "Müzik dinlerken tüylerin diken diken olması, beynin dopamin salgıladığının fiziksel kanıtıdır.",
+        "Barış Manço'nun '2023' şarkısı, Cumhuriyet'in 100. yılına atfedilmiş fütüristik bir eserdir.",
+        "Kısa sap bağlamada 19 perde varken, uzun sapta perde sayısı 23'e kadar çıkabilir.",
+        "Mozart, Vatikan'da sadece orada çalınmasına izin verilen gizli bir eseri dinleyip, eve gidince hafızasından notaya dökmüştür.",
+        "Elektronik müziğin temelleri, 1900'lerin başında 'Theremin' adı verilen ve temas etmeden çalınan bir aletle atılmıştır.",
+        "Türk müziğinde 'Usul', batı müziğindeki 'Ritim' veya 'Ölçü' kavramına karşılık gelir (Sofyan, Semai vb.).",
+        "Bir gitarın sapının yamulmaması için içinde 'Truss Rod' adı verilen çelik bir çubuk bulunur.",
+        "Dünyanın en hızlı rap söyleyen sanatçısı, saniyede 11 heceden fazla söyleyebilmektedir.",
+        "Bağlamada 'Sap Atma', sapın gövdeye birleştiği yerden zamanla eğilmesi sorununa denir.",
+        "Plakların (Vinyl) üzerindeki girintiler, ses dalgalarının fiziksel bir kopyasıdır.",
+        "Müzik eğitimi alan çocukların matematik ve dil öğrenme becerilerinin daha hızlı geliştiği kanıtlanmıştır."
+    ];
+
+    function gununBilgisiniGetir() {
+        const bilgiKutusu = document.getElementById("gunun-bilgisi");
+        if(bilgiKutusu) {
+            // Rastgele bir sayı seç
+            const rastgeleSayi = Math.floor(Math.random() * muzikBilgileri.length);
+            // O sayıya denk gelen bilgiyi yazdır
+            bilgiKutusu.innerText = '"' + muzikBilgileri[rastgeleSayi] + '"';
+        }
+    }
+
         document.addEventListener('DOMContentLoaded', () => {
             createDots(); 
             drawGauge(0, false); 
+gununBilgisiniGetir();
         });
 
    
@@ -1877,7 +2017,8 @@
       "Z29rYm95MDlAZ21haWwuY29t": { ad: "R29rMg==", soyad: "UEFJTlRFUg==" },
         "elifin-epostası-gelecek@xyz.com": { ad: "RWxpZg==", soyad: "S0FSTUFO" },
       "ZmVyaGF0Y2l2YW4wMjA1QG91dGxvb2suY29t": { ad: "RmVyaGF0ZQ==", soyad: "Q2l2YW5lIEJha2FuZQ==" },
-      "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" }
+      "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },
+      "NDJ0ZXJvYmF5dDYzQGdtYWlsLmNvbQ==": { ad: "ZGVuZW1l", soyad: "aGVzYWLEsW7EsQ==" }
   };
 
   // --- ŞİFRE SIFIRLAMA FONKSİYONU EKLENDİ ---
