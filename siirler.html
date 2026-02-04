@@ -36,40 +36,42 @@
             min-height: 100vh;
         }
 
-        /* --- DİL SEÇİCİ STİLLERİ --- */
+        /* --- DİL SEÇİCİ STİLLERİ (SOL ÜST KÖŞE) --- */
         .language-wrapper {
             position: fixed;
             top: 25px;
-            right: 30px;
-            z-index: 1002;
+            left: 30px; 
+            z-index: 1100;
             font-family: 'Montserrat', sans-serif;
         }
         .lang-btn {
             background: rgba(0, 0, 0, 0.6); 
             border: 1px solid var(--accent);
             color: #fff;
-            padding: 8px 15px;
+            padding: 8px 18px;
             border-radius: 30px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            gap: 10px;
+            font-size: 12px;
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 600;
         }
         .lang-btn:hover {
-            background: rgba(197, 160, 89, 0.2);
-            box-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
         }
         .lang-dropdown {
             display: none;
             position: absolute;
             top: 120%;
-            right: 0;
-            background: rgba(10, 10, 10, 0.95);
+            left: 0;
+            background: rgba(15, 15, 15, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             overflow: hidden;
@@ -109,7 +111,7 @@
             z-index: 1000;
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
-        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; padding-right: 100px; }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
         nav ul { display: flex; gap: 50px; list-style: none; }
         nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         nav a:hover, nav a.active { color: var(--accent); }
@@ -177,8 +179,7 @@
         .social-item:hover { color: #fff; }
         
         @media (max-width: 768px) {
-            .language-wrapper { top: 20px; right: 70px; }
-            .lang-btn span { display: none; }
+            .language-wrapper { top: 20px; left: 20px; }
             .nav-container { padding-right: 0; }
             
             .menu-toggle { display: block; right: 20px; }
@@ -192,12 +193,7 @@
 
     <div class="language-wrapper">
         <button class="lang-btn" onclick="toggleLanguageMenu()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-            <span>Language</span>
+            <i class="fas fa-globe"></i> <span id="lang-label">LANGUAGE</span>
         </button>
         
         <div class="lang-dropdown" id="langDropdown">
@@ -232,7 +228,7 @@
         <div class="search-wrapper">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="siirAra" onkeyup="filtrele()" placeholder="Şiirlerde ara..." data-lang-placeholder="ph_search">
+                <input type="text" id="siirAra" onkeyup="filtrele()" placeholder="Şiirlerde ara..." data-translate-placeholder="ph_search">
             </div>
         </div>
 
@@ -259,7 +255,6 @@
             <a href="siir-ait.html" class="poem-link"><div class="poem-card"><h3 data-lang="p20_title">Ait</h3><p data-lang="p20_desc">"Ne bu şehre aitim, ne sokağa, Düşmüşüm dalımdan kuru toprağa..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
             <a href="siir-nigah-i-revnak.html" class="poem-link"><div class="poem-card"><h3 data-lang="p21_title">Nigah-ı Revnak</h3><p data-lang="p21_desc">"Bir bakışla yaktın gönül evini, Didârın şavkıyla doldum bu gece..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
             <a href="siir-dost-pazari.html" class="poem-link"><div class="poem-card"><h3 data-lang="p22_title">Dost Pazarı</h3><p data-lang="p22_desc">"Dili şeker şerbet, kalbi buz imiş, Dost dediğin meğer, sadece söz imiş..."</p><div class="read-more" data-lang="btn_read">TAMAMINI OKU →</div></div></a>
-
         </div>
         <div id="no-result" data-lang="no_result">Aradığınız kriterlere uygun şiir bulunamadı.</div>
     </div>
@@ -290,10 +285,10 @@
         // --- ÇEVİRİ SİSTEMİ ---
         const translations = {
             tr: {
+                lang_label: "LANGUAGE",
                 menu_home: "ANA SAYFA", menu_about: "HAKKINDA", menu_edu: "ONLINE EĞİTİM", menu_notes: "NOTALAR", menu_poems: "ŞİİRLER", menu_concerts: "KONSERLER",
                 poems_title: "ŞİİRLER", poems_subtitle: "Gönülden dökülen nağmeler...", ph_search: "Şiirlerde ara...", no_result: "Aradığınız kriterlere uygun şiir bulunamadı.",
                 btn_read: "TAMAMINI OKU →", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.",
-                // Şiir Başlıkları ve Özetler (Mevcut TR verileri)
                 p1_title: "Hasret", p1_desc: "\"Her anımda sadece sen varsın. Geceler senin gündüzler senin...\"",
                 p2_title: "Ardıç Sazım", p2_desc: "\"Düştün ustanın eline. Ruhun üfürdü teline. Gel benimle konuş di...\"",
                 p3_title: "Sazıma Meramım", p3_desc: "\"Yarama derman bulunmaz. Dinmez benim gönül sızım. Kimseler bana yar olm...\"",
@@ -318,6 +313,7 @@
                 p22_title: "Dost Pazarı", p22_desc: "\"Dili şeker şerbet, kalbi buz imiş, Dost dediğin meğer, sadece söz imiş...\""
             },
             en: {
+                lang_label: "LANGUAGE",
                 menu_home: "HOME", menu_about: "ABOUT ME", menu_edu: "ONLINE LESSONS", menu_notes: "SHEET MUSIC", menu_poems: "POEMS", menu_concerts: "CONCERTS",
                 poems_title: "POEMS", poems_subtitle: "Melodies pouring from the heart...", ph_search: "Search poems...", no_result: "No poems found matching your criteria.",
                 btn_read: "READ MORE →", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved.",
@@ -345,6 +341,7 @@
                 p22_title: "Market of Friends", p22_desc: "\"Tongue is sugar and sherbet, heart is ice...\""
             },
             lt: {
+                lang_label: "KALBA",
                 menu_home: "PAGRINDINIS", menu_about: "APIE MANE", menu_edu: "INTERNETINĖS PAMOKOS", menu_notes: "NATOS", menu_poems: "EILĖRAŠČIAI", menu_concerts: "KONCERTAI",
                 poems_title: "EILĖRAŠČIAI", poems_subtitle: "Melodijos, liejančios iš širdies...", ph_search: "Ieškoti eilėraščių...", no_result: "Eilėraščių nerasta.",
                 btn_read: "SKAITYTI DAUGIAU →", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos.",
@@ -372,6 +369,7 @@
                 p22_title: "Draugų Turgus", p22_desc: "\"Liežuvis cukrus ir šerbetas, širdis ledas...\""
             },
             de: {
+                lang_label: "SPRACHE",
                 menu_home: "STARTSEITE", menu_about: "ÜBER MICH", menu_edu: "ONLINE-UNTERRICHT", menu_notes: "NOTEN", menu_poems: "GEDICHTE", menu_concerts: "KONZERTE",
                 poems_title: "GEDICHTE", poems_subtitle: "Melodien, die aus dem Herzen strömen...", ph_search: "Gedichte suchen...", no_result: "Keine Gedichte gefunden.",
                 btn_read: "WEITERLESEN →", footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten.",
@@ -399,6 +397,7 @@
                 p22_title: "Markt der Freunde", p22_desc: "\"Zunge ist Zucker und Sorbet, Herz ist Eis...\""
             },
             ru: {
+                lang_label: "ЯЗЫК",
                 menu_home: "ГЛАВНАЯ", menu_about: "ОБО МНЕ", menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ", menu_notes: "НОТЫ", menu_poems: "СТИХИ", menu_concerts: "КОНЦЕРТЫ",
                 poems_title: "СТИХИ", poems_subtitle: "Мелодии, льющиеся из сердца...", ph_search: "Поиск стихов...", no_result: "Стихи не найдены.",
                 btn_read: "ЧИТАТЬ ДАЛЕЕ →", footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены.",
@@ -433,7 +432,8 @@
 
         function changeLanguage(lang) {
             const data = translations[lang] || translations['tr'];
-            
+            document.getElementById('lang-label').innerText = data.lang_label;
+
             // UI Elementlerini Çevir
             document.querySelectorAll("[data-lang]").forEach(element => {
                 const key = element.getAttribute("data-lang");
@@ -443,8 +443,8 @@
             });
 
             // Placeholder'ları Çevir
-            document.querySelectorAll("[data-lang-placeholder]").forEach(element => {
-                const key = element.getAttribute("data-lang-placeholder");
+            document.querySelectorAll("[data-translate-placeholder]").forEach(element => {
+                const key = element.getAttribute("data-translate-placeholder");
                 if (data[key]) {
                     element.placeholder = data[key];
                 }
@@ -456,10 +456,8 @@
 
         // Sayfa Yüklendiğinde Dil Kontrolü
         window.onload = function() {
-            const savedLang = localStorage.getItem("selectedLang");
-            if(savedLang && translations[savedLang]) {
-                changeLanguage(savedLang);
-            }
+            const savedLang = localStorage.getItem("selectedLang") || "tr";
+            changeLanguage(savedLang);
         };
     </script>
 
