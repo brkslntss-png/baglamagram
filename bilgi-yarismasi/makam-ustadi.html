@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makam Üstadı - Kulak Testi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f0f0f;
+            --accent: #c5a059;
+            --glass: rgba(30, 30, 30, 0.95);
+            --correct: #27ae60;
+            --wrong: #c0392b;
+            --text: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: var(--glass);
+            width: 90%;
+            max-width: 600px;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            position: relative;
+            transition: height 0.3s;
+        }
+
+        h1 { font-family: 'Playfair Display', serif; color: var(--accent); margin-bottom: 10px; }
+        h2 { font-family: 'Playfair Display', serif; margin: 10px 0; }
+
+        /* BUTONLAR */
+        .btn-main {
+            background: var(--accent); color: #000; border: none;
+            padding: 15px 40px; font-weight: bold; border-radius: 30px;
+            cursor: pointer; transition: 0.3s; margin-top: 20px; font-size: 1.1rem;
+            display: inline-block;
+        }
+        .btn-main:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--accent); }
+
+        /* SES OYNATICI */
+        .audio-player-wrapper {
+            margin: 20px auto;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
+        }
+        .audio-player-wrapper:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(197, 160, 89, 0.4); }
+        .audio-icon { font-size: 3rem; color: var(--text); }
+        
+        .playing-animation {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            border: 2px solid var(--accent); opacity: 0;
+            animation: ripple 1.5s infinite;
+        }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* SEÇENEKLER */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px; border-radius: 10px; color: #ccc;
+            cursor: pointer; transition: 0.3s; font-size: 1.1rem;
+        }
+        .option-btn:hover { border-color: var(--accent); color: #fff; background: rgba(197, 160, 89, 0.1); }
+        .correct { background: var(--correct) !important; color: white !important; border-color: var(--correct); }
+        .wrong { background: var(--wrong) !important; color: white !important; border-color: var(--wrong); }
+
+        /* AŞAMA GÖSTERGESİ */
+        .progress-indicator {
+            font-size: 0.9rem; color: #888; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .active-step { color: var(--accent); font-weight: bold; }
+
+        /* GİZLEME SINIFLARI */
+        .screen { display: none; animation: fadeIn 0.5s; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        
+        <div id="start-screen" class="screen active">
+            <i class="fas fa-music" style="font-size: 4rem; color: var(--accent); margin-bottom: 20px;"></i>
+            <h1>Makam Üstadı</h1>
+            <p style="color:#ccc; line-height: 1.6; margin-bottom: 30px;">
+                Makam bilginize güveniyor musunuz?<br>
+                Sizi zorlu bir sınav bekliyor.
+            </p>
+            <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: left; font-size: 0.9rem; color: #aaa; margin-bottom: 30px;">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 10px;"><i class="fas fa-check" style="color:var(--accent); width:20px;"></i> Toplam <strong>7 Soru</strong></li>
+                    <li style="margin-bottom: 10px;"><i class="fas fa-times" style="color:var(--wrong); width:20px;"></i> Yanlış cevapta <strong>elenirsiniz</strong>.</li>
+                    <li><i class="fas fa-headphones" style="color:#3498db; width:20px;"></i> Kulaklıkla dinlemeniz önerilir.</li>
+                </ul>
+            </div>
+            <button class="btn-main" onclick="startGame()">BAŞLA</button>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div class="progress-indicator">
+                Soru <span id="q-current" class="active-step">1</span> / 7
+            </div>
+
+            <div class="audio-player-wrapper" onclick="toggleAudio()">
+                <div id="ripple-effect"></div>
+                <i id="play-icon" class="fas fa-play audio-icon"></i>
+            </div>
+            
+            <div id="status-text" style="min-height: 25px; color:#888; font-style: italic;">Dinlemek için butona basın</div>
+
+            <div class="options-grid" id="options-area">
+                </div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <div id="result-icon-container" style="margin-bottom: 20px;"></div>
+            <h2 id="result-title"></h2>
+            <p id="result-msg" style="color:#ccc; margin-bottom: 30px;"></p>
+            <div id="final-score-display" style="font-size: 1.2rem; color: var(--accent); margin-bottom: 30px;"></div>
+            <button class="btn-main" onclick="location.reload()">TEKRAR DENE</button>
+        </div>
+
+        <audio id="game-audio"></audio>
+    </div>
+
+    <script>
+        // --- SES DOSYALARINIZI BURAYA EKLEYİN ---
+        // Not: Gerçek bir deneyim için 'audioSrc' kısımlarına kendi mp3 linklerinizi koymalısınız.
+        const allQuestions = [
+            { id: 1, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/bayati-oyun.mp3", dogru: "Bayati", secenekler: ["Uşşak", "Hüseyni", "Bayati", "Rast"] },
+            { id: 2, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/bueslik-oyun.mp3", dogru: "Buselik", secenekler: ["Buselik", "Nihavend", "Saba", "Hüzzam"] },
+            { id: 3, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/cargah-oyun.mp3", dogru: "Çargâh", secenekler: ["Çargâh", "Hüzzam", "Müstear", "Irak"] },
+            { id: 4, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/neva-oyun.mp3", dogru: "Neva", secenekler: ["Mahur", "Rast", "Acemşiran", "Neva"] },
+            { id: 5, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/muhayyer-oyun.mp3", dogru: "Muhayyer", secenekler: ["Segâh", "Hüzzam", "Karcığar", "Muhayyer"] },
+            { id: 6, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/muhayyer-kurdi-oyun.mp3", dogru: "Muhayyer Kürdi", secenekler: ["Muhayyer Kürdi", "Hicazkar", "Nihavend", "Sultaniyegâh"] },
+            { id: 7, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/huzzam-oyun.mp3", dogru: "Hüzzam", secenekler: ["Hicaz", "Uşşak", "Hüzzam", "Segah"] },
+            { id: 8, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/huseyni-oyun.mp3", dogru: "Hüseyni", secenekler: ["Hüseyni", "Hicaz", "Saba", "Tahir"] },
+            { id: 9, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/hicaz-oyun.mp3", dogru: "Hicaz", secenekler: ["Uzzal", "Hicaz", "Suzinak", "Bestenigar"] },
+            { id: 10, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/nihavent-oyun.mp3", dogru: "Nihavent", secenekler: ["Nihavent", "Hicaz", "Sulant-ı Yegah", "Buselik"] },
+            { id: 11, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/ussak-oyunn.mp3", dogru: "Uşşak", secenekler: ["Bayati", "Zirgüle", "Hüseyni", "Uşşak"] },
+            { id: 12, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/segah-oyun.mp3", dogru: "Segâh", secenekler: ["Nikriz", "Hüzzam", "Segâh", "Kürdili Hicazkar"] },
+            { id: 13, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/rast-oyun.mp3", dogru: "Rast", secenekler: ["Rast", "Hüseyni", "Saba", "Karcığar"] },
+            { id: 14, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/kurdili-hicazkar-oyun.mp3", dogru: "Kürdili Hicazkar", secenekler: ["Kürdi", "Neveser", "Hicazkar", "Kürdili Hicazkar"] },
+            { id: 15, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/kargigar-oyun.mp3", dogru: "Karcığar", secenekler: ["Karcığar", "Hüseyni", "Acem Aşiran", "Büzürk"] },
+            { id: 16, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/saba-oyun.mp3", dogru: "Saba", secenekler: ["Uşşak", "Hicaz", "Saba", "Canfezâ"] },
+            // Havuzda daha fazla soru olabilir, ama oyun 7 tanesini seçecek.
+        ];
+
+        let gameQuestions = [];
+        let currentQIndex = 0;
+        const totalQuestions = 7;
+        
+        const audioEl = document.getElementById('game-audio');
+        const playIcon = document.getElementById('play-icon');
+        const ripple = document.getElementById('ripple-effect');
+        const statusText = document.getElementById('status-text');
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function startGame() {
+            // Soruları karıştır ve ilk 7 tanesini al
+            gameQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
+            currentQIndex = 0;
+            switchScreen('game-screen');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            // Soru sayacını güncelle
+            document.getElementById('q-current').innerText = currentQIndex + 1;
+            
+            const q = gameQuestions[currentQIndex];
+            
+            // Sesi yükle (Otomatik başlatma, kullanıcı tıklasın)
+            audioEl.src = q.audioSrc;
+            stopAudio(); 
+
+            // Şıkları hazırla
+            const area = document.getElementById('options-area');
+            area.innerHTML = "";
+            
+            let opts = [...q.secenekler].sort(() => 0.5 - Math.random());
+            
+            opts.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(btn, opt, q.dogru);
+                area.appendChild(btn);
+            });
+        }
+
+        function toggleAudio() {
+            if (audioEl.paused) {
+                audioEl.play().catch(e => alert("Ses dosyası yüklenemedi."));
+                playIcon.className = "fas fa-pause audio-icon";
+                ripple.className = "playing-animation";
+                statusText.innerText = "Dinleniyor...";
+            } else {
+                stopAudio();
+            }
+        }
+        
+        function stopAudio() {
+            audioEl.pause();
+            playIcon.className = "fas fa-play audio-icon";
+            ripple.className = "";
+            statusText.innerText = "Cevap bekleniyor...";
+        }
+
+        function checkAnswer(btn, selected, correct) {
+            stopAudio();
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.style.pointerEvents = 'none'); // Tıklamayı kilitle
+
+            if (selected === correct) {
+                // DOĞRU CEVAP
+                btn.classList.add('correct');
+                statusText.innerHTML = "<span style='color:var(--correct)'>Doğru!</span>";
+                
+                setTimeout(() => {
+                    currentQIndex++;
+                    if (currentQIndex < totalQuestions) {
+                        loadQuestion();
+                    } else {
+                        endGame(true); // Kazandı
+                    }
+                }, 1500);
+
+            } else {
+                // YANLIŞ CEVAP (KAYBETTİ)
+                btn.classList.add('wrong');
+                statusText.innerHTML = "<span style='color:var(--wrong)'>Yanlış! Doğrusu: " + correct + "</span>";
+                
+                // Doğruyu göster
+                allBtns.forEach(b => {
+                   if(b.innerText === correct) b.classList.add('correct');
+                });
+
+                setTimeout(() => {
+                    endGame(false); // Kaybetti
+                }, 2000);
+            }
+        }
+
+        function endGame(isWin) {
+            switchScreen('result-screen');
+            const iconContainer = document.getElementById('result-icon-container');
+            const title = document.getElementById('result-title');
+            const msg = document.getElementById('result-msg');
+            const scoreDisplay = document.getElementById('final-score-display');
+
+            if (isWin) {
+                iconContainer.innerHTML = '<i class="fas fa-trophy" style="font-size: 5rem; color: var(--accent);"></i>';
+                title.innerText = "TEBRİKLER ÜSTAT!";
+                title.style.color = "var(--accent)";
+                msg.innerText = "7 sorunun tamamını doğru bildiniz. Görünüşe göre musikişinas bir musiki gurmesisiniz. Muazzam bir kulak!👏🏻";
+                scoreDisplay.innerText = "Skor: 7 / 7";
+            } else {
+                iconContainer.innerHTML = '<i class="fas fa-heart-broken" style="font-size: 5rem; color: var(--wrong);"></i>';
+                title.innerText = "ELENDİNİZ";
+                title.style.color = "var(--wrong)";
+                msg.innerText = "Maalesef yanlış cevap verdiniz. Fasıl yarım kaldı.";
+                scoreDisplay.innerText = "Ulaşılan Soru: " + (currentQIndex + 1) + " / 7";
+            }
+        }
+    </script>
+</body>
+</html>
