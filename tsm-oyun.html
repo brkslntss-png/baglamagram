@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TSM Bilgi Yarışması - Üstat Seviyesi</title>
+    <title>TSM Quiz Master</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
             --bg-dark: #0f0f0f;
             --accent: #c5a059;
-            --glass: rgba(30, 30, 30, 0.9);
+            --glass: rgba(30, 30, 30, 0.95);
             --correct: #27ae60;
             --wrong: #c0392b;
             --text: #f0f0f0;
@@ -58,7 +58,7 @@
             animation: slideUp 0.6s ease-out;
         }
 
-        h1 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 2.5rem; }
+        h1 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 2.5rem; margin-top: 0; }
         .question-text { font-size: 1.3rem; margin: 30px 0; min-height: 80px; }
 
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -66,51 +66,56 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 20px; border-radius: 10px; color: #ccc;
-            cursor: pointer; transition: 0.3s;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center;
         }
         .option-btn:hover { background: rgba(197, 160, 89, 0.1); border-color: var(--accent); color: #fff; }
         
-        .correct { background: var(--correct) !important; color: white !important; }
-        .wrong { background: var(--wrong) !important; color: white !important; }
+        .correct { background: var(--correct) !important; color: white !important; border-color: var(--correct) !important; }
+        .wrong { background: var(--wrong) !important; color: white !important; border-color: var(--wrong) !important; }
 
         .btn-main {
             background: var(--accent); color: #000; border: none;
             padding: 15px 40px; font-weight: bold; border-radius: 30px;
-            cursor: pointer; transition: 0.3s; margin-top: 20px;
+            cursor: pointer; transition: 0.3s; margin-top: 20px; font-size: 1.1rem;
+        }
+        .btn-main:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--accent); }
+
+        /* DİL SEÇİM BUTONLARI */
+        .lang-container {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;
+        }
+        .lang-btn {
+            background: transparent; border: 1px solid #555;
+            color: #888; padding: 10px 15px; border-radius: 8px;
+            cursor: pointer; transition: 0.3s; font-size: 1.5rem;
+        }
+        .lang-btn:hover, .lang-btn.active {
+            border-color: var(--accent); color: #fff; background: rgba(197, 160, 89, 0.2);
+            transform: translateY(-3px);
         }
 
-        /* --- SAYAÇ STİLİ --- */
+        /* SAYAÇ STİLİ */
         .timer-badge {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 60px;
-            background: var(--accent);
-            color: #000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.6);
-            border: 4px solid #1a1a1a;
-            z-index: 10;
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 60px; background: var(--accent); color: #000;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: bold; box-shadow: 0 0 20px rgba(197, 160, 89, 0.6);
+            border: 4px solid #1a1a1a; z-index: 10;
         }
-        
-        /* Süre azalınca yanıp sönme efekti */
         .timer-warning {
-            background: var(--wrong) !important;
-            color: white !important;
+            background: var(--wrong) !important; color: white !important;
             animation: pulse 0.5s infinite alternate;
         }
 
         @keyframes pulse { from { box-shadow: 0 0 10px var(--wrong); } to { box-shadow: 0 0 30px var(--wrong); } }
-        
         #game-screen, #result-screen { display: none; }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Mobil düzenleme */
+        @media (max-width: 600px) {
+            .options-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -128,58 +133,3723 @@
     </div>
 
     <div id="start-screen" class="game-container">
+        <div class="lang-container">
+            <button class="lang-btn active" onclick="setLanguage('tr')">🇹🇷</button>
+            <button class="lang-btn" onclick="setLanguage('en')">🇬🇧</button>
+            <button class="lang-btn" onclick="setLanguage('lt')">🇱🇹</button>
+            <button class="lang-btn" onclick="setLanguage('ru')">🇷🇺</button>
+        </div>
+
         <i class="fas fa-music" style="font-size: 4rem; color: var(--accent); margin-bottom: 20px;"></i>
-        <h1>Türk Sanat Müziği<br>Bilgi Yarışması</h1>
-        <p style="color:#aaa; margin-bottom:30px;">
+        <h1 id="lbl-title">Türk Sanat Müziği<br>Bilgi Yarışması</h1>
+        <p id="lbl-desc" style="color:#aaa; margin-bottom:30px;">
             Her soru için <strong>30 saniyeniz</strong> var.<br>
-            Süre biterse soru yanlış sayılır!<br>
-            <br>
-            Baglamagram Games
+            Süre biterse soru yanlış sayılır!
         </p>
-        <button class="btn-main" onclick="startGame()">YARIŞMAYA BAŞLA</button>
+        <button id="btn-start" class="btn-main" onclick="startGame()">YARIŞMAYA BAŞLA</button>
     </div>
 
     <div id="game-screen" class="game-container">
         <div id="timer" class="timer-badge">30</div>
 
         <div style="display:flex; justify-content: space-between; color: #888; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
-            <span>Soru: <span id="q-index">1</span> / 10</span>
-            <div style="color: var(--accent); font-weight: bold;">Puan: <span id="score">0</span></div>
+            <span><span id="lbl-q">Soru</span>: <span id="q-index">1</span> / 10</span>
+            <div style="color: var(--accent); font-weight: bold;"><span id="lbl-score">Puan</span>: <span id="score">0</span></div>
         </div>
-        <div class="question-text" id="question-text">Soru yükleniyor...</div>
+        <div class="question-text" id="question-text">...</div>
         <div class="options-grid" id="options-area"></div>
     </div>
 
     <div id="result-screen" class="game-container">
         <i class="fas fa-award" style="font-size: 4rem; color: var(--accent); margin-bottom: 20px;"></i>
-        <h2>Fasıl Tamamlandı</h2>
+        <h2 id="lbl-result-title">Fasıl Tamamlandı</h2>
         <div style="font-size: 4rem; color:var(--accent); font-weight:bold; margin: 10px 0;" id="final-score">0</div>
         <p id="feedback-text" style="color:#ccc; margin-bottom: 30px; font-style: italic;"></p>
-        <button class="btn-main" onclick="location.reload()">TEKRAR DENE</button>
+        <button id="btn-restart" class="btn-main" onclick="location.reload()">TEKRAR DENE</button>
     </div>
 
     <script>
-        const allQuestions = [
-            { soru: "Türk Müziğinde 'Ana Dizi' kabul edilen dizi hangisidir?", secenekler: ["Çargâh Dizisi", "Rast Dizisi", "Hicaz Dizisi", "Kürdi Dizisi"], dogru: "Çargâh Dizisi" },
-            { soru: "9 komalık tam ses aralığına ne ad verilir?", secenekler: ["Tanini (T)", "Bakiye (B)", "Mücennep (M)", "Artık (A)"], dogru: "Tanini (T)" },
-            { soru: "10 zamanlı olup, 3+2+2+3 şeklinde vurulan usul nedir?", secenekler: ["Aksak Semai", "Düyek", "Sofyan", "Semai"], dogru: "Aksak Semai" },
-            { soru: "100 TL üzerinde resmi olan büyük bestekâr kimdir?", secenekler: ["Itrî", "Dede Efendi", "Hacı Arif Bey", "Tanburi Cemil Bey"], dogru: "Itrî" },
-            { soru: "Arel sistemine göre bir oktav kaç komadır?", secenekler: ["53 Koma", "24 Koma", "9 Koma", "12 Koma"], dogru: "53 Koma" },
-            { soru: "Batı müziğindeki 'La' notasının TSM'deki ana perde karşılığı nedir?", secenekler: ["Dügâh", "Rast", "Buselik", "Hüseyni"], dogru: "Dügâh" },
-            { soru: "Nihavend makamı Batı müziğindeki hangi diziye çok benzer?", secenekler: ["Sol Minör", "La Minör", "Do Majör", "Re Minör"], dogru: "Sol Minör" },
-            { soru: "Mevlevi ayinindeki dört bölüme ne ad verilir?", secenekler: ["Selam", "Hane", "Fasıl", "Teslim"], dogru: "Selam" },
-            { soru: "Segâh makamının karar perdesi (durağı) hangi notadır?", secenekler: ["Si (1 Koma Bemol)", "La", "Sol", "Do"], dogru: "Si (1 Koma Bemol)" },
-            { soru: "Hangisi 'Yaylı' bir TSM çalgısıdır?", secenekler: ["Yaylı Tanbur", "Ud", "Kanun", "Lavta"], dogru: "Yaylı Tanbur" }
-        ];
+        // --- ÇOKLU DİL VERİTABANI ---
+        const translations = {
+            tr: {
+                title: "Türk Sanat Müziği<br>Bilgi Yarışması",
+                desc: "Her soru için <strong>30 saniyeniz</strong> var.<br>Süre biterse soru yanlış sayılır!",
+                startBtn: "YARIŞMAYA BAŞLA",
+                qLabel: "Soru",
+                scoreLabel: "Puan",
+                resTitle: "Fasıl Tamamlandı",
+                restartBtn: "TEKRAR DENE",
+                goodJob: "Tebrikler üstat!",
+                badJob: "Süreyle yarışmak zordur, tekrar deneyin.",
+                timeUp: "SÜRE DOLDU!"
+            },
+            en: {
+                title: "Turkish Classical Music<br>Quiz Challenge",
+                desc: "You have <strong>30 seconds</strong> per question.<br>If time runs out, it counts as wrong!",
+                startBtn: "START QUIZ",
+                qLabel: "Question",
+                scoreLabel: "Score",
+                resTitle: "Session Completed",
+                restartBtn: "TRY AGAIN",
+                goodJob: "Congratulations, Maestro!",
+                badJob: "It's hard to race against time, try again.",
+                timeUp: "TIME'S UP!"
+            },
+            lt: {
+                title: "Turkų Klasikinės Muzikos<br>Viktorina",
+                desc: "Kiekvienam klausimui turite <strong>30 sekundžių</strong>.<br>Jei laikas baigiasi, atsakymas neteisingas!",
+                startBtn: "PRADĖTI ŽAIDIMĄ",
+                qLabel: "Klausimas",
+                scoreLabel: "Taškai",
+                resTitle: "Sesija Baigta",
+                restartBtn: "BANDYTI DAR KARTĄ",
+                goodJob: "Sveikiname, Maestro!",
+                badJob: "Sunku lenktyniauti su laiku, bandykite dar kartą.",
+                timeUp: "LAIKAS BAIGĖSI!"
+            },
+            ru: {
+                title: "Викторина по Турецкой<br>Классической Музыке",
+                desc: "У вас есть <strong>30 секунд</strong> на каждый вопрос.<br>Если время истечет, ответ засчитывается как неверный!",
+                startBtn: "НАЧАТЬ ВИКТОРИНУ",
+                qLabel: "Вопрос",
+                scoreLabel: "Очки",
+                resTitle: "Сессия Завершена",
+                restartBtn: "ПОПРОБОВАТЬ СНОВА",
+                goodJob: "Поздравляем, Маэстро!",
+                badJob: "Трудно соревноваться со временем, попробуйте снова.",
+                timeUp: "ВРЕМЯ ВЫШЛО!"
+            }
+        };
 
+      //====SORULARIN DİLİ======
+
+        const questionsDB = {
+            tr: [
+                {
+    soru: "Arel-Ezgi-Uzdilek sistemine göre 'Tanini' (T) aralığı kaç komadan oluşur?",
+    secenekler: ["4 Koma", "5 Koma", "8 Koma", "9 Koma"],
+    dogru: "9 Koma"
+  },
+  {
+    soru: "Türk Müziğinde 'Ana Dizi' kabul edilen ve aralıkları T-T-B-T-T-B-T şeklinde olan dizi hangisidir?",
+    secenekler: ["Rast Dizisi", "Çargâh Dizisi", "Hüseyni Dizisi", "Buselik Dizisi"],
+    dogru: "Çargâh Dizisi"
+  },
+  {
+    soru: "Mürekkep bir makam olan 'Segâh' makamının oluşumu aşağıdakilerden hangisidir?",
+    secenekler: ["Yerinde Segâh beşlisine Neva'da Hicaz dörtlüsü", "Yerinde Segâh beşlisine Neva'da Uşşak dörtlüsü", "Yerinde Hüzzam beşlisine Neva'da Hicaz dörtlüsü", "Yerinde Rast beşlisine Neva'da Segâh dörtlüsü"],
+    dogru: "Yerinde Segâh beşlisine Neva'da Hicaz dörtlüsü"
+  },
+  {
+    soru: "Hicaz, Uzzal, Hümayun ve Zengüle makamlarının oluşturduğu ailede 'Hümayun' makamını diğerlerinden ayıran teorik özellik nedir?",
+    secenekler: ["Güçlüsünün Neva olması", "Tiz durakta Buselik çeşnisiyle kalması", "Tiz durakta Uşşak çeşnisiyle kalması", "Kararda Rast çeşnisi yapması"],
+    dogru: "Tiz durakta Buselik çeşnisiyle kalması"
+  },
+  {
+    soru: "10 zamanlı usullerden olan 'Lenk Fahte' usulünün zaman yapısı nasıldır?",
+    secenekler: ["5 + 5", "2 + 3 + 2 + 3", "2 + 2 + 3 + 3", "3 + 2 + 2 + 3"],
+    dogru: "2 + 3 + 2 + 3"
+  },
+  {
+    soru: "Klasik Fasıl düzeninde eserlerin icra sırası aşağıdakilerden hangisinde doğru verilmiştir?",
+    secenekler: ["Peşrev - Şarkı - Kâr - Ağır Semai - Yürük Semai", "Taksim - Peşrev - Kâr (veya Beste) - Ağır Semai - Şarkı - Yürük Semai - Saz Semaisi", "Saz Semaisi - Peşrev - Beste - Ağır Semai - Şarkı", "Peşrev - Ağır Semai - Beste - Şarkı - Yürük Semai"],
+    dogru: "Taksim - Peşrev - Kâr (veya Beste) - Ağır Semai - Şarkı - Yürük Semai - Saz Semaisi"
+  },
+  {
+    soru: "Uşşak dörtlüsünün aralık yapısı (kalından inceye) aşağıdakilerden hangisidir? (K: Büyük Mücennep, S: Küçük Mücennep, T: Tanini)",
+    secenekler: ["K - S - T", "S - T - K", "T - S - K", "T - T - B"],
+    dogru: "K - S - T"
+  },
+  {
+    soru: "Acem Aşiran makamının güçlüsü (hakim perdesi) hangisidir?",
+    secenekler: ["Acem Perdesi", "Dügah Perdesi", "Neva Perdesi", "Çargâh Perdesi"],
+    dogru: "Acem Perdesi"
+  },
+  {
+    soru: "Aşağıdaki makamlardan hangisi 'Şed' (Transpoze) bir makamdır?",
+    secenekler: ["Hüzzam", "Rast", "Hüseyni", "Ferahnak"],
+    dogru: "Ferahnak"
+  },
+  {
+    soru: "'Bakiye' (B) aralığı kaç komadır?",
+    secenekler: ["1 Koma", "4 Koma", "5 Koma", "8 Koma"],
+    dogru: "4 Koma"
+  },
+  {
+    soru: "Hangi makam 'İnici' (Tizden başlayıp karara inen) bir seyre sahiptir?",
+    secenekler: ["Uşşak", "Rast", "Hicaz", "Muhayyer"],
+    dogru: "Muhayyer"
+  },
+  {
+    soru: "Beste formunda, eserin her bir mısrasına ne ad verilir?",
+    secenekler: ["Hane", "Murabba", "Terennüm", "Miyan"],
+    dogru: "Hane"
+  },
+  {
+    soru: "Porte üzerinde 'Neva' perdesi hangi nota ile gösterilir (G Sol Anahtarı sisteminde)?",
+    secenekler: ["Dördüncü çizgideki Re", "Üçüncü çizgideki Si", "İkinci aralıktaki La", "Beşinci çizgideki Fa"],
+    dogru: "Dördüncü çizgideki Re"
+  },
+  {
+    soru: "Saba makamı hangi perdede karar verir?",
+    secenekler: ["Rast", "Dügah", "Segâh", "Çargâh"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "Ağır Aksak usulü kaç zamanlıdır?",
+    secenekler: ["9 Zamanlı", "10 Zamanlı", "7 Zamanlı", "5 Zamanlı"],
+    dogru: "9 Zamanlı"
+  },
+  {
+    soru: "'Dik Kürdi' perdesinin koma değeri ve işareti nedir?",
+    secenekler: ["4 koma diyez", "1 koma bemol", "4 koma bemol", "5 koma bemol"],
+    dogru: "4 koma bemol"
+  },
+  {
+    soru: "Nihavend makamının dizisi, Buselik makamının hangi perdeye şeddi (göçürülmesi) ile elde edilir?",
+    secenekler: ["Dügah Perdesine", "Rast Perdesine", "Yegâh Perdesine", "Hüseyni Aşiran Perdesine"],
+    dogru: "Rast Perdesine"
+  },
+  {
+    soru: "Aşağıdakilerden hangisi 5 zamanlı bir usuldür?",
+    secenekler: ["Sofyan", "Türk Aksağı", "Yürük Semai", "Devr-i Hindi"],
+    dogru: "Türk Aksağı"
+  },
+  {
+    soru: "Makamlarda 'Yeden' (Yedinci derece) ile 'Durak' arasındaki aralık genellikle ne olmalıdır ki tam bir bitiş hissi versin?",
+    secenekler: ["Tam Ses (Tanini)", "Yarım Ses (Bakiye veya Küçük Mücennep)", "Artık İkili", "Çeyrek Ses"],
+    dogru: "Yarım Ses (Bakiye veya Küçük Mücennep)"
+  },
+  {
+    soru: "Hüzzam makamının seyri nasıldır?",
+    secenekler: ["Çıkıcı", "İnici", "İnici - Çıkıcı", "Düz"],
+    dogru: "İnici - Çıkıcı"
+  },
+  {
+    soru: "Müstear makamının durağı hangi perdedir?",
+    secenekler: ["Irak", "Segâh", "Dügah", "Rast"],
+    dogru: "Segâh"
+  },
+  {
+    soru: "Peşrev formunun bölümlerine ne ad verilir?",
+    secenekler: ["Kıta", "Zemin - Zaman", "Hane - Teslim", "Meyan - Karar"],
+    dogru: "Hane - Teslim"
+  },
+  {
+    soru: "Hicazkar makamı hangi perde üzerinde kurulmuş bir şed makamdır?",
+    secenekler: ["Rast", "Dügah", "Segâh", "Acem Aşiran"],
+    dogru: "Rast"
+  },
+  {
+    soru: "Bir usulde 'Velvele' ne demektir?",
+    secenekler: ["Usulün ana vuruşlarının daha küçük birimlere bölünerek zenginleştirilmesi", "Usulün daha hızlı icra edilmesi", "Usulün sadece kudüm ile vurulması", "Usulün zaman sayısının değiştirilmesi"],
+    dogru: "Usulün ana vuruşlarının daha küçük birimlere bölünerek zenginleştirilmesi"
+  },
+  {
+    soru: "Kürdilihicazkar makamı, hangi makam ailesine mensuptur?",
+    secenekler: ["Hicaz Ailesi", "Kürdi Ailesi", "Buselik Ailesi", "Rast Ailesi"],
+    dogru: "Kürdi Ailesi"
+  },
+{
+    soru: "Karcığar makamının dizi yapısı aşağıdakilerden hangisidir?",
+    secenekler: ["Yerinde Uşşak dörtlüsüne Neva'da Hicaz beşlisinin eklenmesi", "Yerinde Uşşak dörtlüsüne Neva'da Buselik beşlisinin eklenmesi", "Yerinde Hicaz dörtlüsüne Neva'da Uşşak beşlisinin eklenmesi", "Yerinde Rast beşlisine Neva'da Hicaz dörtlüsünün eklenmesi"],
+    dogru: "Yerinde Uşşak dörtlüsüne Neva'da Hicaz beşlisinin eklenmesi"
+  },
+  {
+    soru: "Arel-Ezgi-Uzdilek sisteminde 'Küçük Mücennep' (S) aralığı kaç komadır?",
+    secenekler: ["4 Koma", "5 Koma", "8 Koma", "9 Koma"],
+    dogru: "5 Koma"
+  },
+  {
+    soru: "Klasik Şarkı formunda, eserin genellikle en tiz (ince) perdelerde dolaşan üçüncü mısrasına ne ad verilir?",
+    secenekler: ["Zemin", "Nakarat", "Miyan (Meyan)", "Karar"],
+    dogru: "Miyan (Meyan)"
+  },
+  {
+    soru: "Aksak Semai usulü kaç zamanlıdır?",
+    secenekler: ["10 Zamanlı", "9 Zamanlı", "6 Zamanlı", "32 Zamanlı"],
+    dogru: "10 Zamanlı"
+  },
+  {
+    soru: "Suzinak makamı, Rast makamı dizisine hangi çeşninin eklenmesiyle oluşur?",
+    secenekler: ["Neva perdesinde Hicaz", "Neva perdesinde Buselik", "Dügah perdesinde Kürdi", "Hüseyni perdesinde Uşşak"],
+    dogru: "Neva perdesinde Hicaz"
+  },
+  {
+    soru: "Portede 5. (en üst) çizginin hemen üzerindeki boşlukta yer alan 'Sol' sesinin Türk Müziğindeki adı nedir?",
+    secenekler: ["Neva", "Hüseyni", "Gerdaniye", "Muhayyer"],
+    dogru: "Gerdaniye"
+  },
+  {
+    soru: "Aşağıdakilerden hangisi 'Basit Makam' sınıfına girer?",
+    secenekler: ["Hüseyni", "Segâh", "Hüzzam", "Saba"],
+    dogru: "Hüseyni"
+  },
+  {
+    soru: "Türk Müziğinde en küçük usul olan 'Nim Sofyan' kaç zamanlıdır?",
+    secenekler: ["2 Zamanlı", "3 Zamanlı", "4 Zamanlı", "5 Zamanlı"],
+    dogru: "2 Zamanlı"
+  },
+  {
+    soru: "Rast makamının 'Yeden'i (karar sesinin bir altındaki ses) hangi perdedir?",
+    secenekler: ["Irak", "Kaba Rast", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Irak"
+  },
+  {
+    soru: "Nikriz makamının oluşumu nasıldır?",
+    secenekler: ["Rast perdesinde Nikriz beşlisi + Neva'da Rast dörtlüsü", "Rast perdesinde Nikriz beşlisi + Neva'da Hicaz dörtlüsü", "Dügah perdesinde Hicaz dörtlüsü + Neva'da Rast beşlisi", "Buselik perdesinde Nikriz beşlisi + Hüseyni'de Uşşak dörtlüsü"],
+    dogru: "Rast perdesinde Nikriz beşlisi + Neva'da Rast dörtlüsü"
+  },
+  {
+    soru: "Bugün kullandığımız nota yazı sisteminden önce kullanılan ve Ermeni harflerine dayanan nota sistemini kim geliştirmiştir?",
+    secenekler: ["Kantemiroğlu", "Abdülbaki Nasır Dede", "Ali Ufki Bey", "Hamparsum Limonciyan"],
+    dogru: "Hamparsum Limonciyan"
+  },
+  {
+    soru: "Curcuna usulü kaç zamanlıdır?",
+    secenekler: ["10 Zamanlı", "5 Zamanlı", "7 Zamanlı", "9 Zamanlı"],
+    dogru: "10 Zamanlı"
+  },
+  {
+    soru: "Acem Kürdi makamının güçlüsü hangi perdedir?",
+    secenekler: ["Dügah", "Acem", "Neva", "Çargâh"],
+    dogru: "Acem"
+  },
+  {
+    soru: "Türk Müziğinde 'Artık İkili' (A) aralığı (örneğin Hicaz dörtlüsünün ortasındaki aralık) teorik olarak kaç koma kabul edilir?",
+    secenekler: ["9 Koma", "12-13 Koma", "8 Koma", "5 Koma"],
+    dogru: "12-13 Koma"
+  },
+  {
+    soru: "Arel-Ezgi-Uzdilek sisteminde 'Büyük Mücennep' (K) aralığı kaç komadır?",
+    secenekler: ["4 Koma", "5 Koma", "8 Koma", "9 Koma"],
+    dogru: "8 Koma"
+  },
+  {
+    soru: "Türk Sanat Müziğinde 'Şarkı' formunun en büyük ustası ve mimarı kabul edilen bestekâr kimdir?",
+    secenekler: ["Hacı Arif Bey", "Dede Efendi", "Itrî", "Tanburi Cemil Bey"],
+    dogru: "Hacı Arif Bey"
+  },
+  {
+    soru: "Hem iniş hem çıkışta 'Buselik' çeşnisi kullanan ve kararı Dügah perdesi olan makam hangisidir?",
+    secenekler: ["Nihavend", "Buselik", "Kürdi", "Uşşak"],
+    dogru: "Buselik"
+  },
+  {
+    soru: "Aşağıdakilerden hangisi 'Mürekkep' (Birleşik) bir makamdır?",
+    secenekler: ["Rast", "Çargâh", "Isfahan", "Kürdi"],
+    dogru: "Isfahan"
+  },
+  {
+    soru: "Zirgüleli Hicaz makamında, Dügah perdesinin altındaki yeden sesi hangi perdedir?",
+    secenekler: ["Rast", "Irak", "Zirgüle (Kaba Dik Kürdi)", "Yegâh"],
+    dogru: "Zirgüle (Kaba Dik Kürdi)"
+  },
+  {
+    soru: "Yürük Semai usulü kaç zamanlıdır?",
+    secenekler: ["3 Zamanlı", "6 Zamanlı", "9 Zamanlı", "10 Zamanlı"],
+    dogru: "6 Zamanlı"
+  },
+  {
+    soru: "Bir eserin icrası sırasında, ana makamdan başka bir makama geçici olarak geçilmesine ne ad verilir?",
+    secenekler: ["Şed", "Geçki", "Çeşni", "Karar"],
+    dogru: "Geçki"
+  },
+  {
+    soru: "Aşağıdaki perdelerden hangisi daha 'Tiz' (ince) bir sestir?",
+    secenekler: ["Kaba Rast", "Rast", "Gerdaniye", "Tiz Segâh"],
+    dogru: "Tiz Segâh"
+  },
+  {
+    soru: "Hüseyni makamı ile Uşşak makamı arasındaki en belirgin fark nedir?",
+    secenekler: ["Hüseyni'nin inici-çıkıcı olması ve 6. derecenin (Eviç/Acem) kullanımı", "Hüseyni'nin karar sesinin farklı olması", "Uşşak makamının güçlüsünün Çargah olması", "Hüseyni makamının Buselik ailesinden olması"],
+    dogru: "Hüseyni'nin inici-çıkıcı olması ve 6. derecenin (Eviç/Acem) kullanımı"
+  },
+  {
+    soru: "Sultaniyegâh makamının durağı hangi perdedir?",
+    secenekler: ["Dügah", "Rast", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Yegâh"
+  },
+  {
+    soru: "Müzikte 'Asma Karar' ne demektir?",
+    secenekler: ["Eserin en sonunda yapılan bitiş", "Eserin ortasında, ana makamın durağı dışında bir perdede yapılan geçici duruş", "Usulün velveleli vurulması", "Taksimin giriş bölümü"],
+    dogru: "Eserin ortasında, ana makamın durağı dışında bir perdede yapılan geçici duruş"
+  },
+{
+    soru: "Türk Müziği notasyonunda, bir sesi 4 koma tizleştiren (inceleten) işaretin adı nedir?",
+    secenekler: ["Bakiye Diyezi", "Koma Diyezi", "Küçük Mücennep Diyezi", "Büyük Mücennep Diyezi"],
+    dogru: "Bakiye Diyezi"
+  },
+  {
+    soru: "Mevlevi Ayin-i Şerifleri, 'Selam' adı verilen kaç bölümden oluşur?",
+    secenekler: ["4 Selam", "3 Selam", "2 Selam", "5 Selam"],
+    dogru: "4 Selam"
+  },
+  {
+    soru: "Şedaraban makamı, hangi makamın 'Yegâh' perdesine şeddi (transpozesi) olarak kabul edilir?",
+    secenekler: ["Zirgüleli Hicaz", "Hicaz", "Hümayun", "Uzzal"],
+    dogru: "Zirgüleli Hicaz"
+  },
+  {
+    soru: "28 zamanlı büyük usullerden biri olan 'Devr-i Kebir' usulünün yapısı nasıldır?",
+    secenekler: ["3+4+4+3+4+4+3+3", "4+4+4+4+3+3+3+3", "2+4+4+2+4+4+2+6", "7+7+7+7"],
+    dogru: "3+4+4+3+4+4+3+3"
+  },
+  {
+    soru: "Hüseyni makamının donanımında (anahtar ağzında) hangi değiştirici işaretler bulunur?",
+    secenekler: ["Si Koma Bemol (Segâh) - Fa Bakiye Diyez (Eviç)", "Si Bakiye Bemol - Mi Bakiye Bemol", "Si Koma Bemol - Fa Naturel", "Si Beş Koma Bemol"],
+    dogru: "Si Koma Bemol (Segâh) - Fa Bakiye Diyez (Eviç)"
+  },
+  {
+    soru: "İçerisinde makamların isimlerinin de güfte (söz) olarak geçtiği, öğretici nitelikteki beste formuna ne ad verilir?",
+    secenekler: ["Kâr-ı Natık", "Kâr-ı Müşterek", "Medhal", "Münacat"],
+    dogru: "Kâr-ı Natık"
+  },
+  {
+    soru: "Bayati makamı ile Uşşak makamı aynı diziye sahiptir. Bayati'yi Uşşak'tan ayıran temel seyir özelliği nedir?",
+    secenekler: ["Bayati'nin Neva perdesinden (veya Neva etrafından) seyre başlaması", "Bayati'nin karar sesinin Rast olması", "Bayati'nin inici bir makam olması", "Bayati'nin donanımında Si bemol kullanması"],
+    dogru: "Bayati'nin Neva perdesinden (veya Neva etrafından) seyre başlaması"
+  },
+  {
+    soru: "Portede 3. çizgide yer alan 'Si' (B) notasının Türk Müziğindeki adı nedir (Naturel hali)?",
+    secenekler: ["Buselik", "Segâh", "Nişabur", "Dik Kürdi"],
+    dogru: "Buselik"
+  },
+  {
+    soru: "9 zamanlı usullerden 'Evfer' usulünün yapısı nasıldır?",
+    secenekler: ["5 + 4", "4 + 5", "2 + 3 + 2 + 2", "3 + 2 + 2 + 2"],
+    dogru: "5 + 4"
+  },
+  {
+    soru: "Aşağıdakilerden hangisi saz (enstrüman) müziği formu DEĞİLDİR?",
+    secenekler: ["Murabba", "Longa", "Syrto", "Medhal"],
+    dogru: "Murabba"
+  },
+  {
+    soru: "Ferahnüma makamı, hangi makamın 'Yegâh' perdesine şeddidir?",
+    secenekler: ["Tanburi Cemil Bey'in buluşudur, şed değildir", "Rast", "Hüseyni", "Hicaz"],
+    dogru: "Tanburi Cemil Bey'in buluşudur, şed değildir"
+  },
+  {
+    soru: "Türk Müziği nazariyatında 'Mücennep' kelimesi ne anlama gelir?",
+    secenekler: ["Yan, komşu, uzak olmayan (Aralık ismi)", "Yüksek sesli", "Hızlı tempolu", "Dini müzik formu"],
+    dogru: "Yan, komşu, uzak olmayan (Aralık ismi)"
+  },
+  {
+    soru: "Sadece sözlü (vokal) olarak, usulsüz (serbest ritimli) icra edilen doğaçlama forma ne ad verilir?",
+    secenekler: ["Gazel", "Taksim", "Mevlid", "Kasidin"],
+    dogru: "Gazel"
+  },
+  {
+    soru: "Ferahfeza makamının dizisi, hangi makamın 'Yegâh' perdesine göçürülmesiyle (şeddiyle) elde edilir?",
+    secenekler: ["Suzinak", "Rast", "Hicaz", "Uşşak"],
+    dogru: "Suzinak"
+  },
+  {
+    soru: "Arel-Ezgi-Uzdilek sistemine göre 'Holderian Koması' (bir oktavın 53'e bölünmesi) fikri aslen kime dayanır?",
+    secenekler: ["Nicholas Mercator", "Pisagor", "Farabi", "Abdülkadir Meragi"],
+    dogru: "Nicholas Mercator"
+  },
+  {
+    soru: "Aşağıdaki makamlardan hangisi 'Şed' makam DEĞİLDİR, 'Ana Makam'lardan biridir?",
+    secenekler: ["Hüzzam", "Mahur", "Acem Aşiran", "Evcara"],
+    dogru: "Hüzzam"
+  },
+  {
+    soru: "13. yüzyılda yazdığı 'Kitabü'l-Edvar' adlı eseriyle Türk/Doğu müziği teorisinin temellerini atan nazariyatçı kimdir?",
+    secenekler: ["Safiyüddin Urmevi", "Farabi", "İbn-i Sina", "Kindi"],
+    dogru: "Safiyüddin Urmevi"
+  },
+  {
+    soru: "Muhayyer Kürdi makamının dizisi nasıldır?",
+    secenekler: ["Yerinde Kürdi dörtlüsü + Neva'da Buselik beşlisi", "Yerinde Uşşak dörtlüsü + Neva'da Kürdi beşlisi", "Yerinde Rast beşlisi + Neva'da Hicaz dörtlüsü", "Yerinde Buselik beşlisi + Hüseyni'de Kürdi dörtlüsü"],
+    dogru: "Yerinde Kürdi dörtlüsü + Neva'da Buselik beşlisi"
+  },
+  {
+    soru: "Hacı Arif Bey'in icat ettiği ve genellikle 10 zamanlı olan makam/usul karışımı adı nedir (Genellikle Curcuna usulü ile karıştırılır)?",
+    secenekler: ["Aksak Semai", "Müsemmen", "Ağır Aksak", "Tek Vuruş"],
+    dogru: "Müsemmen"
+  },
+  {
+    soru: "Türk Müziğinde 'Koma' (Bakiye'den daha küçük aralık) bemolü işareti nasıldır?",
+    secenekler: ["Ters 'd' harfine benzer, tek çizgili", "Çift çizgili bemol", "Üçgen şeklinde", "Kare şeklinde"],
+    dogru: "Ters 'd' harfine benzer, tek çizgili"
+  },
+  {
+    soru: "Isfahan makamı hangi perde üzerinde karar verir?",
+    secenekler: ["Dügah", "Rast", "Segâh", "Irak"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "Klasik bir fasılda 'Ara Taksimi' nerede icra edilir?",
+    secenekler: ["Şarkıların arasında, makam geçkisi yapmak veya soluklanmak için", "Faslın en başında", "Saz semaisinden sonra", "Peşrevden hemen önce"],
+    dogru: "Şarkıların arasında, makam geçkisi yapmak veya soluklanmak için"
+  },
+  {
+    soru: "24 zamanlı 'Çenber' usulü genellikle hangi formdaki eserlerde kullanılır?",
+    secenekler: ["Peşrev", "Beste", "Kâr", "Saz Semaisi"],
+    dogru: "Peşrev"
+  },
+  {
+    soru: "Nişabur makamının 'Donanım'ında hangi değiştirici işaretler bulunur?",
+    secenekler: ["Si - Mi - La - Re (Küçük Mücennep Bemolleri)", "Si Bemol - Mi Bemol", "Sadece Si Koma Bemol", "Hiçbir işaret bulunmaz (Naturel)"],
+    dogru: "Si - Mi - La - Re (Küçük Mücennep Bemolleri)"
+  },
+  {
+    soru: "Türk Müziğinde 'Eviç' perdesi, Batı müziğindeki hangi sese denk gelir (Yaklaşık olarak, diyapazon La=440 kabul edilirse)?",
+    secenekler: ["Fa Diyez", "Sol Naturel", "Fa Naturel", "Mi Bemol"],
+    dogru: "Fa Diyez"
+  },
+{
+    soru: "Arel-Ezgi-Uzdilek sistemine göre 'Tam Beşli' aralığı toplam kaç komadan oluşur?",
+    secenekler: ["22 Koma", "23 Koma", "31 Koma", "53 Koma"],
+    dogru: "31 Koma"
+  },
+  {
+    soru: "Türk Müziğinde en çok zaman sayısına (88 zaman) sahip olan büyük usul hangisidir?",
+    secenekler: ["Darb-ı Fetih", "Hafif", "Zencir", "Çenber"],
+    dogru: "Darb-ı Fetih"
+  },
+  {
+    soru: "Şevkefza makamı, hangi makamın 'Acem Aşiran' perdesine şeddidir (transpozesidir)?",
+    secenekler: ["Zirgüleli Hicaz", "Hicaz", "Uzzal", "Hümayun"],
+    dogru: "Zirgüleli Hicaz"
+  },
+  {
+    soru: "Dini musikide, Hz. Muhammed'in (S.A.V.) doğumunu, hayatını ve mucizelerini anlatan, genellikle camilerde ve özel günlerde makamla okunan uzun formun adı nedir?",
+    secenekler: ["Mevlid", "Tevşih", "İlahi", "Şugl"],
+    dogru: "Mevlid"
+  },
+  {
+    soru: "Portede 1. aralıkta bulunan 'Fa' notasının Türk Müziğindeki adı nedir (Sol Anahtarı)?",
+    secenekler: ["Acem Aşiran", "Hüseyni Aşiran", "Irak", "Rast"],
+    dogru: "Acem Aşiran"
+  },
+  {
+    soru: "Mahur makamının dizisi, Rast makamının dizisi ile aynıdır. Aralarındaki temel fark nedir?",
+    secenekler: ["Mahur'un inici olması ve gerdaniye (tiz durak) civarından başlaması", "Mahur'un güçlüsünün Dügah olması", "Mahur'un donanımda Si bemol alması", "Mahur'un karar perdesinin Neva olması"],
+    dogru: "Mahur'un inici olması ve gerdaniye (tiz durak) civarından başlaması"
+  },
+  {
+    soru: "32 zamanlı olup, özellikle Mevlevi Ayin-i Şeriflerinin '3. Selam' bölümünde kullanılan usul hangisidir?",
+    secenekler: ["Hafif", "Muhammes", "Devr-i Kebir", "Berefşan"],
+    dogru: "Devr-i Kebir"
+  },
+  {
+    soru: "Bestenigar makamının oluşumu aşağıdakilerden hangisidir?",
+    secenekler: ["Irak perdesinde Segâh + Dügah'ta Saba", "Yerinde Saba + Irak perdesinde karar (Irak çeşnisi)", "Yerinde Uşşak + Neva'da Hicaz", "Yerinde Hüzzam + Neva'da Uşşak"],
+    dogru: "Yerinde Saba + Irak perdesinde karar (Irak çeşnisi)"
+  },
+  {
+    soru: "Türk Müziği notasyonunda, 'Büyük Mücennep Bemolü' (yaklaşık 8-9 koma) işareti nasıldır?",
+    secenekler: ["Tek çizgili 'd' (Koma bemolü)", "Çift çizgili bemol (Bakiye bemolü)", "Ters dönmüş ve içi dolu 'K' harfine benzer (veya tek çizgili kalın bemol)", "Standart Batı bemolü"],
+    dogru: "Ters dönmüş ve içi dolu 'K' harfine benzer (veya tek çizgili kalın bemol)"
+  },
+  {
+    soru: "Bir 'Oktav' (Sekizli) aralık, Arel-Ezgi-Uzdilek sisteminde toplam kaç koma kabul edilir?",
+    secenekler: ["53 Koma", "41 Koma", "24 Koma", "12 Koma"],
+    dogru: "53 Koma"
+  },
+  {
+    soru: "Rahatülervah makamı, hangi perdede karar kılar?",
+    secenekler: ["Irak", "Rast", "Segâh", "Hüseyni"],
+    dogru: "Irak"
+  },
+  {
+    soru: "Hem güftesi (sözleri) hem de bestesi aynı kişiye ait olan eserlere ne ad verilir (Genellikle Aşık geleneğinde veya modern dönemde)?",
+    secenekler: ["Derleme", "Anonim", "Mahlas", "Söz-Müzik (veya Şarkı - Teknik terim olarak özel bir adı yoktur ancak 'Güftekarı bestekarı aynı' denir, şıklarda 'Mülemma' vb. çeldiriciler olabilir ama doğru cevap genellikle tanımdır. Klasik formda 'Ferdî' denmez)", "Orijinal Eser"],
+    dogru: "Bu soru tipi yerine teknik bir soru: 'Müstezat' nedir? -> Gazelin her dizesine kısa bir dize eklenerek oluşturulan nazım/beste biçimi."
+  },
+  {
+    soru: "Şarkı formuna benzeyen ancak her dizesinin sonuna 'Ziyade' adı verilen kısa mısraların eklenmesiyle oluşan form hangisidir?",
+    secenekler: ["Müstezat", "Murabba", "Nakış", "Zeybek"],
+    dogru: "Müstezat"
+  },
+  {
+    soru: "Neveser makamının yapısı nasıldır?",
+    secenekler: ["Yerinde (Rast'ta) Nikriz beşlisi + Neva'da Hicaz dörtlüsü", "Yerinde Nikriz beşlisi + Neva'da Rast dörtlüsü", "Yerinde Hicaz + Neva'da Hicaz", "Yerinde Uşşak + Neva'da Nikriz"],
+    dogru: "Yerinde (Rast'ta) Nikriz beşlisi + Neva'da Hicaz dörtlüsü"
+  },
+  {
+    soru: "15 zamanlı 'Raks Aksağı' usulünün mertebesi (vuruş yapısı) nasıldır?",
+    secenekler: ["2+2+2+3+2+2+2", "4+4+4+3", "9+6", "5+10"],
+    dogru: "2+2+2+3+2+2+2"
+  },
+  {
+    soru: "Aşağıdaki makamlardan hangisi 'Ferahfeza', 'Sultan-ı Yegâh' gibi makamları terkip eden (oluşturan) büyük bestekârımızdır?",
+    secenekler: ["Hamamizade İsmail Dede Efendi", "Buhurizade Mustafa Itrî", "Hafız Post", "Zekai Dede"],
+    dogru: "Hamamizade İsmail Dede Efendi"
+  },
+  {
+    soru: "Portede 5. çizgide yer alan 'Fa' sesini yaklaşık 4-5 koma tizleştiren (diyez) işaretin adı ve perdenin TSM'deki adı nedir?",
+    secenekler: ["Bakiye Diyezi - Eviç", "Koma Diyezi - Acem", "Mücennep Diyezi - Mahur", "Naturel - Acem"],
+    dogru: "Bakiye Diyezi - Eviç"
+  },
+  {
+    soru: "Eviç makamının durağı (karar sesi) ve güçlüsü hangileridir?",
+    secenekler: ["Durak: Irak, Güçlü: Dügah", "Durak: Irak, Güçlü: Eviç (veya Neva)", "Durak: Segâh, Güçlü: Eviç", "Durak: Rast, Güçlü: Gerdaniye"],
+    dogru: "Durak: Irak, Güçlü: Eviç (veya Neva)"
+  },
+  {
+    soru: "5 farklı usulün (Düyek, Fahte, Çenber, Devr-i Kebir, Berefşan) birleşmesiyle oluşan büyük usul 'takımı'na ne ad verilir?",
+    secenekler: ["Zencir", "Darb-ı Fetih", "Kâr-ı Natık", "Fasıl"],
+    dogru: "Zencir"
+  },
+  {
+    soru: "Pençgâh makamının 'Dizi' yapısı nasıldır?",
+    secenekler: ["Neva perdesinde Rast dizisi + Yerinde (Rast'ta) Rast beşlisi", "Yerinde Uşşak + Neva'da Uşşak", "Yerinde Hicaz + Neva'da Rast", "Yerinde Rast + Neva'da Buselik"],
+    dogru: "Neva perdesinde Rast dizisi + Yerinde (Rast'ta) Rast beşlisi"
+  },
+  {
+    soru: "Türk Müziğinde 'Koma' (fazla) diyezi işareti nasıldır?",
+    secenekler: ["Tek çizgi üzerinde çarpı (veya tek çizgili diyez)", "Çift çizgili diyez", "Üç çizgili diyez", "Yan yatmış 8 rakamı"],
+    dogru: "Tek çizgi üzerinde çarpı (veya tek çizgili diyez)"
+  },
+  {
+    soru: "Aşağıdakilerden hangisi 'Dini Musiki' formlarından biri DEĞİLDİR?",
+    secenekler: ["Köçekçe", "Tevşih", "Salat", "Durak"],
+    dogru: "Köçekçe"
+  },
+  {
+    soru: "Segâh makamının 'Güçlü'sü (Dominant perdesi) hangisidir?",
+    secenekler: ["Neva", "Rast", "Gerdaniye", "Çargâh"],
+    dogru: "Neva"
+  },
+  {
+    soru: "Usullerde sağ el ile vurulan, 'Dum' sesine göre daha tiz ve keskin olan vuruşun adı nedir?",
+    secenekler: ["Tek", "Te", "Ka", "Düm"],
+    dogru: "Tek"
+  },
+  {
+    soru: "Hisar makamı, Hümayun dizisinde 'Neva' perdesi yerine hangi perdenin kullanılmasıyla karakterize olur?",
+    secenekler: ["Hisar perdesi (Mücennep diyezli Re / Bakiye bemollü Mi arası)", "Buselik perdesi", "Eviç perdesi", "Acem perdesi"],
+    dogru: "Hisar perdesi (Mücennep diyezli Re / Bakiye bemollü Mi arası)"
+  },
+{
+    soru: "Sol anahtarına göre portenin 'Ek Çizgisiz Altındaki Re' (Batı'da D) perdesinin Türk Müziğindeki adı nedir?",
+    secenekler: ["Yegâh", "Rast", "Dügah", "Hüseyni Aşiran"],
+    dogru: "Yegâh"
+  },
+  {
+    soru: "Türk Müziğinde 'La' (A) perdesinin (orta oktav) adı nedir?",
+    secenekler: ["Neva", "Dügah", "Hüseyni", "Muhayyer"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "Portede 3. çizgideki 'Si' (B) notasının '1 koma bemol' almış haline ne ad verilir?",
+    secenekler: ["Segâh", "Buselik", "Dik Kürdi", "Uşşak"],
+    dogru: "Segâh"
+  },
+  {
+    soru: "Portede 5. çizgideki 'Fa' (F) notasının 'Naturel' (doğal) haline ne ad verilir?",
+    secenekler: ["Eviç", "Acem", "Mahur", "Gerdaniye"],
+    dogru: "Acem"
+  },
+  {
+    soru: "'Şehnaz' perdesi aşağıdakilerden hangisidir?",
+    secenekler: ["Fa Bakiye Diyez (4 Koma)", "Fa Büyük Mücennep Diyez (8-9 Koma)", "Sol Naturel", "Fa Naturel"],
+    dogru: "Fa Büyük Mücennep Diyez (8-9 Koma)"
+  },
+  {
+    soru: "Portede 1. aralıkta bulunan 'Fa' (F) notasının (kalın ses) adı nedir?",
+    secenekler: ["Acem Aşiran", "Hüseyni Aşiran", "Irak", "Kaba Rast"],
+    dogru: "Acem Aşiran"
+  },
+  {
+    soru: "'Zirgüle' perdesi, hangi notanın yaklaşık 4 koma (Bakiye) diyez almış halidir?",
+    secenekler: ["Sol (Kaba Rast)", "La (Dügah)", "Fa (Acem Aşiran)", "Do (Kaba Çargâh)"],
+    dogru: "Sol (Kaba Rast)"
+  },
+  {
+    soru: "Tiz oktavda, portenin üzerindeki ilk ek çizgiye yazılan 'La' (A) perdesinin adı nedir?",
+    secenekler: ["Gerdaniye", "Muhayyer", "Tiz Dügah", "Sünbüle"],
+    dogru: "Muhayyer"
+  },
+  {
+    soru: "'Hüseyni' perdesi portede nerede yer alır?",
+    secenekler: ["4. Çizgi (Re)", "4. Aralık (Mi)", "3. Çizgi (Si)", "2. Aralık (La)"],
+    dogru: "4. Aralık (Mi)"
+  },
+  {
+    soru: "Aşağıdaki perdelerden hangisi 'Kaba' (kalın) oktavda yer alır?",
+    secenekler: ["Irak", "Segâh", "Buselik", "Çargâh"],
+    dogru: "Irak"
+  },
+  {
+    soru: "'Dik Kürdi' perdesi kaç koma bemol içerir?",
+    secenekler: ["1 Koma", "4-5 Koma", "8-9 Koma", "Hiç (Naturel)"],
+    dogru: "4-5 Koma"
+  },
+  {
+    soru: "'Hisar' perdesi hangi notanın türevidir ve hangi işareti alır?",
+    secenekler: ["Mi (Hüseyni) - Bakiye Bemolü (veya 5 koma)", "Re (Neva) - Bakiye Diyezi", "Fa (Acem) - Koma Diyezi", "Si (Buselik) - Koma Bemolü"],
+    dogru: "Mi (Hüseyni) - Bakiye Bemolü (veya 5 koma)"
+  },
+  {
+    soru: "Portenin 3. aralığındaki 'Do' (C) notasının adı nedir?",
+    secenekler: ["Çargâh", "Neva", "Buselik", "Tiz Çargâh"],
+    dogru: "Çargâh"
+  },
+  {
+    soru: "'Nim Hicaz' perdesi aşağıdakilerden hangisidir?",
+    secenekler: ["Do Bakiye Diyez", "Re Bakiye Bemol", "Si Naturel", "Do Naturel"],
+    dogru: "Do Bakiye Diyez"
+  },
+  {
+    soru: "Rast perdesinin (Sol) bir oktav tizi (incesi) olan perdenin adı nedir?",
+    secenekler: ["Gerdaniye", "Muhayyer", "Tiz Rast", "Yegâh"],
+    dogru: "Gerdaniye"
+  },
+  {
+    soru: "'Saba' perdesi (makamın özel perdesi olarak) genellikle hangi notaya denk gelir?",
+    secenekler: ["Re (Neva) üzerine Hicaz", "Re (Neva) üzerine Bakiye Bemol (Reb)", "Do (Çargâh) üzerine Koma Diyez", "Mi (Hüseyni) Naturel"],
+    dogru: "Re (Neva) üzerine Bakiye Bemol (Reb)"
+  },
+  {
+    soru: "Türk Müziğinde 'Kaba Dügah' perdesi nerede yazılır?",
+    secenekler: ["Portenin 2. aralığında", "Portenin altındaki 2. ek çizgide", "Portenin en üst çizgisinde", "Portenin altındaki 1. ek çizgide"],
+    dogru: "Portenin altındaki 2. ek çizgide"
+  },
+  {
+    soru: "'Tiz Segâh' perdesi portede nerede bulunur?",
+    secenekler: ["Portenin üstündeki 1. Ek çizginin üstünde (Si)", "Portenin 3. çizgisinde (Si)", "Portenin 4. aralığında (Mi)", "Portenin en alt çizgisinde (Mi)"],
+    dogru: "Portenin üstündeki 1. Ek çizginin üstünde (Si)"
+  },
+  {
+    soru: "Aşağıdaki perde eşleştirmelerinden hangisi YANLIŞTIR?",
+    secenekler: ["Sol = Rast", "La = Dügah", "Si (Naturel) = Buselik", "Do = Neva"],
+    dogru: "Do = Neva"
+  },
+  {
+    soru: "'Rehâvi' perdesi hangi notaya verilen diğer bir isimdir (Genellikle eski edvarlarda veya kaba oktavda)?",
+    secenekler: ["Kaba Rast (Sol)", "Yegâh (Re)", "Kaba Çargâh (Do)", "Hüseyni Aşiran (Mi)"],
+    dogru: "Kaba Rast (Sol)"
+  },
+  {
+    soru: "'Sünbüle' perdesi, hangi perdenin koma bemolü almasıyla oluşur?",
+    secenekler: ["Muhayyer (La) üzerine koma bemolü", "Gerdaniye (Sol) üzerine koma bemolü", "Tiz Çargâh (Do) üzerine koma bemolü", "Tiz Buselik (Si) üzerine koma bemolü"],
+    dogru: "Muhayyer (La) üzerine koma bemolü"
+  },
+  {
+    soru: "Portenin 2. çizgisindeki 'Sol' (G) notasının Türk Müziğindeki adı nedir?",
+    secenekler: ["Rast", "Gerdaniye", "Yegâh", "Zirgüle"],
+    dogru: "Rast"
+  },
+  {
+    soru: "'Eviç' perdesinin tam karşılığı nedir?",
+    secenekler: ["Fa Bakiye Diyez (4 Koma)", "Fa Naturel", "Fa Mücennep Diyez", "Fa Koma Diyez"],
+    dogru: "Fa Bakiye Diyez (4 Koma)"
+  },
+  {
+    soru: "Hüseyni Aşiran perdesi, portenin neresine yazılır?",
+    secenekler: ["Portenin altındaki 1. ek çizginin altına (Si)", "Portenin 1. çizgisine (Mi)", "Portenin 4. aralığına (Mi)", "Portenin altındaki 1. ek çizgiye (Do)"],
+    dogru: "Portenin altındaki 1. ek çizginin altına (Mi)"
+  },
+  {
+    soru: "'Tiz Neva' perdesi portede nereye denk gelir?",
+    secenekler: ["Portenin üstündeki 2. ek aralığa (Re)", "Portenin 4. çizgisine (Re)", "Portenin en altına (Re)", "Portenin 3. çizgisine"],
+    dogru: "Portenin üstündeki 2. ek aralığa (Re)"
+  },
+{
+    soru: "Rast perdesinin (Sol) 1 koma diyez almış haline ne ad verilir?",
+    secenekler: ["Nim Zirgüle", "Zirgüle", "Dik Rast", "Rehavi"],
+    dogru: "Nim Zirgüle"
+  },
+  {
+    soru: "Portede 3. çizgideki Si (B) notasının 'Bakiye Bemolü' (4-5 koma) almış hali hangisidir?",
+    secenekler: ["Kürdi", "Segâh", "Dik Kürdi", "Buselik"],
+    dogru: "Kürdi"
+  },
+  {
+    soru: "Çargâh perdesinin (Do), 'Büyük Mücennep Diyezi' (8-9 koma) almış haline ne ad verilir? (Nim Hicaz'dan daha dik)",
+    secenekler: ["Hicaz", "Nim Hicaz", "Dik Çargâh", "Hisar"],
+    dogru: "Hicaz"
+  },
+  {
+    soru: "Portenin en üst çizgisinin üzerindeki 'Sol' (G) perdesine (Gerdaniye'nin oktavı) ne ad verilir?",
+    secenekler: ["Tiz Rast", "Tiz Gerdaniye", "Sünbüle", "Tiz Neva"],
+    dogru: "Tiz Rast"
+  },
+  {
+    soru: "Acem perdesinin (Fa) 1 koma diyez almış hali nedir?",
+    secenekler: ["Dik Acem", "Eviç", "Mahur", "Nim Şehnaz"],
+    dogru: "Dik Acem"
+  },
+  {
+    soru: "Hüseyni perdesinin (Mi) 1 koma bemol almış haline ne ad verilir?",
+    secenekler: ["Dik Hisar", "Hisar", "Buselik", "Nim Hisar"],
+    dogru: "Dik Hisar"
+  },
+  {
+    soru: "Portenin altındaki 2. ek çizgiye yazılan Do (C) perdesinin (Kaba oktav) adı nedir?",
+    secenekler: ["Kaba Çargâh", "Yegâh", "Kaba Rast", "Hüseyni Aşiran"],
+    dogru: "Kaba Çargâh"
+  },
+  {
+    soru: "Muhayyer (La) perdesinin bir oktav tizine (ince La) ne ad verilir?",
+    secenekler: ["Tiz Dügah", "Tiz Muhayyer", "Tiz Buselik", "Gerdaniye"],
+    dogru: "Tiz Dügah"
+  },
+  {
+    soru: "Neva (Re) perdesinin bir oktav tizine (ince Re) ne ad verilir?",
+    secenekler: ["Tiz Neva", "Tiz Çargâh", "Sünbüle", "Tiz Hüseyni"],
+    dogru: "Tiz Neva"
+  },
+  {
+    soru: "Portenin altındaki 1. ek çizginin altında yer alan Si (B) perdesinin (Kaba oktav) adı nedir?",
+    secenekler: ["Kaba Buselik", "Kaba Segâh", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Kaba Buselik"
+  },
+  {
+    soru: "Tiz oktavda (portenin üstü), 4 koma diyezli Fa (F#) perdesinin adı nedir?",
+    secenekler: ["Tiz Eviç", "Tiz Acem", "Tiz Mahur", "Tiz Şehnaz"],
+    dogru: "Tiz Eviç"
+  },
+  {
+    soru: "Portenin üstündeki 2. ek çizgide yer alan Do (C) perdesinin adı nedir?",
+    secenekler: ["Tiz Çargâh", "Tiz Neva", "Tiz Buselik", "Muhayyer"],
+    dogru: "Tiz Çargâh"
+  },
+  {
+    soru: "Kaba oktavda (en kalın sesler), 4 koma bemollü Si (Bb) perdesinin adı nedir?",
+    secenekler: ["Kaba Kürdi (veya Kaba Dik Kürdi)", "Kaba Segâh", "Kaba Buselik", "Yegâh"],
+    dogru: "Kaba Kürdi (veya Kaba Dik Kürdi)"
+  },
+  {
+    soru: "Hüseyni perdesinin bir oktav tizi (İnce Mi) hangisidir?",
+    secenekler: ["Tiz Hüseyni", "Tiz Hisar", "Tiz Buselik", "Sünbüle"],
+    dogru: "Tiz Hüseyni"
+  },
+  {
+    soru: "Portenin üstündeki 'Si' (B) perdesinin (Tiz oktav) adı nedir?",
+    secenekler: ["Tiz Buselik", "Tiz Segâh", "Tiz Çargâh", "Tiz Kürdi"],
+    dogru: "Tiz Buselik"
+  },
+  {
+    soru: "Kaba oktavda, 1 koma bemollü Si perdesine ne ad verilir?",
+    secenekler: ["Kaba Segâh", "Kaba Buselik", "Kaba Kürdi", "Irak"],
+    dogru: "Kaba Segâh"
+  },
+  {
+    soru: "Tiz oktavda, 4 koma diyezli Do (C#) perdesinin adı nedir?",
+    secenekler: ["Tiz Nim Hicaz", "Tiz Hicaz", "Tiz Çargâh", "Tiz Neva"],
+    dogru: "Tiz Nim Hicaz"
+  },
+  {
+    soru: "Portenin altındaki 1. ek çizgideki Do (C) perdesinin 4 koma diyez almış hali (Kalın C#) nedir?",
+    secenekler: ["Kaba Nim Hicaz", "Kaba Hicaz", "Yegâh", "Kaba Çargâh"],
+    dogru: "Kaba Nim Hicaz"
+  },
+  {
+    soru: "Acem perdesinin bir oktav tizi (İnce Fa) hangisidir?",
+    secenekler: ["Tiz Acem", "Tiz Eviç", "Tiz Gerdaniye", "Tiz Mahur"],
+    dogru: "Tiz Acem"
+  },
+  {
+    soru: "Kaba oktavda, 5 koma bemollü Mi (Eb) perdesinin adı nedir?",
+    secenekler: ["Kaba Hisar", "Kaba Buselik", "Hüseyni Aşiran", "Kaba Dik Hisar"],
+    dogru: "Kaba Hisar"
+  },
+  {
+    soru: "Gerdaniye perdesinin (Sol) 4 koma diyez almış hali (Sol #) nedir?",
+    secenekler: ["Tiz Zirgüle", "Tiz Nim Zirgüle", "Sünbüle", "Şehnaz"],
+    dogru: "Tiz Zirgüle"
+  },
+  {
+    soru: "Tiz oktavda, 5 koma bemollü Si (Bb) perdesinin adı nedir?",
+    secenekler: ["Tiz Kürdi", "Tiz Segâh", "Tiz Buselik", "Sünbüle"],
+    dogru: "Tiz Kürdi"
+  },
+  {
+    soru: "Muhayyer (La) perdesinin 1 koma bemol almış haline ne ad verilir? (Sümbüle'den farklı olarak)",
+    secenekler: ["Dik Sümbüle", "Sümbüle", "Tiz Segâh", "Muhayyer Kürdi"],
+    dogru: "Dik Sümbüle"
+  },
+  {
+    soru: "Yegâh perdesinin (Re) 4 koma diyez almış haline ne ad verilir? (Kalın Re#)",
+    secenekler: ["Kaba Nim Şehnaz", "Kaba Şehnaz", "Yegâh Diyezi", "Kaba Hisar"],
+    dogru: "Kaba Nim Şehnaz"
+  },
+  {
+    soru: "Tiz oktavda, 8-9 koma (Mücennep) diyezli Fa (F#) perdesine ne ad verilir?",
+    secenekler: ["Tiz Şehnaz", "Tiz Eviç", "Tiz Acem", "Tiz Mahur"],
+    dogru: "Tiz Şehnaz"
+  },
+{
+    soru: "Türk Müziğinin 'Beethoven'ı' olarak da anılan, 'Yine bir gülnihal' ve 'Ey büt-i nev eda' gibi eserlerin sahibi, Batı müziği etkilerini (vals ritmi vb.) müziğimize taşıyan büyük bestekâr kimdir?",
+    secenekler: ["Hacı Arif Bey", "Dede Efendi (Hamamizade İsmail)", "Itrî", "Şevki Bey"],
+    dogru: "Dede Efendi (Hamamizade İsmail)"
+  },
+  {
+    soru: "17. yüzyılda yaşamış, Segâh Yürük Semai (Tuti-i Mucize Guyem) ve Neva Kâr gibi şaheserlerin bestecisi, 100 TL banknotlarının üzerinde resmi bulunan üstad kimdir?",
+    secenekler: ["Buhurizade Mustafa Itrî", "Hafız Post", "Zaharya", "Ebûbekir Ağa"],
+    dogru: "Buhurizade Mustafa Itrî"
+  },
+  {
+    soru: "Türk Müziğinde 'Şarkı' formunun en büyük ustası kabul edilen ve 1000'e yakın şarkı bestelediği bilinen 'Kürdilihicazkâr' makamının kurucusu kimdir?",
+    secenekler: ["Şevki Bey", "Hacı Arif Bey", "Rahmi Bey", "Nikonya"],
+    dogru: "Hacı Arif Bey"
+  },
+  {
+    soru: "13. yüzyılda yazdığı 'Kitabü'l-Edvar' adlı eserle Türk Müziği ses sistemini (ebced notası) ilk kez sistematik olarak bilimsel temellere oturtan nazariyatçı kimdir?",
+    secenekler: ["Farabi", "Safiyüddin Urmevi", "Abdülkadir Meragi", "Kindi"],
+    dogru: "Safiyüddin Urmevi"
+  },
+  {
+    soru: "Müziğimizde 'Yaylı Tanbur' sazını icat eden, taksim formunu zirveye taşıyan ve plak kayıtlarıyla müziğimizi ölümsüzleştiren dahi virtüöz kimdir?",
+    secenekler: ["Mesut Cemil", "Tanburi Cemil Bey", "Neyzen Tevfik", "Yorgo Bacanos"],
+    dogru: "Tanburi Cemil Bey"
+  },
+  {
+    soru: "Osmanlı Padişahı olan, 'İlhami' mahlasıyla şiirler yazan ve 'Suzidilara' makamını terkip eden bestekâr sultan kimdir?",
+    secenekler: ["III. Selim", "II. Mahmut", "IV. Murat", "Abdülaziz"],
+    dogru: "III. Selim"
+  },
+  {
+    soru: "'Hamparsum Notası' olarak bilinen ve kendi adıyla anılan nota sistemini geliştirerek binlerce eserin günümüze ulaşmasını sağlayan Ermeni asıllı müzik adamı kimdir?",
+    secenekler: ["Tatyos Efendi", "Hamparsum Limonciyan", "Bimen Şen", "Nikogos Ağa"],
+    dogru: "Hamparsum Limonciyan"
+  },
+  {
+    soru: "15. yüzyılda yaşamış, 'Hoca-i Evvel' (Birinci Hoca) Farabi'den sonra 'Hoca-i Sani' (İkinci Hoca) olarak anılan, 'Camiü'l-Elhan' kitabının yazarı büyük nazariyatçı kimdir?",
+    secenekler: ["Abdülkadir Meragi", "Ladikli Mehmet Çelebi", "Hızır Bin Abdullah", "Ali Ufki Bey"],
+    dogru: "Abdülkadir Meragi"
+  },
+  {
+    soru: "Cumhuriyet dönemi Türk Sanat Müziği'nin en önemli bestekârlarından olup, 'Film Müziği' kavramını müziğimize sokan, halk müziği motiflerini (Hoyrat, Maya) TSM formlarıyla harmanlayan bestekâr kimdir?",
+    secenekler: ["Sadettin Kaynak", "Selahattin Pınar", "Münir Nurettin Selçuk", "Avni Anıl"],
+    dogru: "Sadettin Kaynak"
+  },
+  {
+    soru: "Solo konser anlayışını (tek başına sahneye çıkma) Türk müziğine getiren, koro şefliği yapan ve 'Kalamış' gibi eserlerin bestecisi üstad kimdir?",
+    secenekler: ["Zeki Müren", "Münir Nurettin Selçuk", "Bekir Sıtkı Sezgin", "Alaeddin Yavaşça"],
+    dogru: "Münir Nurettin Selçuk"
+  },
+  {
+    soru: "17. yüzyılda 'Mecmua-i Saz ü Söz' adlı eseri yazan ve eserleri sağdan sola yazılan Batı notası benzeri bir sistemle kaydeden Polonya asıllı müzik adamı kimdir?",
+    secenekler: ["Kantemiroğlu", "Ali Ufki Bey (Wojciech Bobowski)", "Rauf Yekta Bey", "Artaki Candan"],
+    dogru: "Ali Ufki Bey (Wojciech Bobowski)"
+  },
+  {
+    soru: "Sadece Mevlevi ayinleri değil, yazdığı 'Miraciye' eseriyle de tanınan, 18. yüzyılın en önemli bestekârlarından ve neyzenlerinden olan kişi kimdir?",
+    secenekler: ["Kutbünnayi Osman Dede", "Dede Efendi", "Zekai Dede", "Nayi Aziz Dede"],
+    dogru: "Kutbünnayi Osman Dede"
+  },
+  {
+    soru: "Romantik dönemin en üretken bestekârlarından olan, neredeyse tamamı şarkı formunda ve çoğu Uşşak veya Hicaz makamında 1000'e yakın eser veren bestekâr kimdir?",
+    secenekler: ["Şevki Bey", "Lem'i Atlı", "Rahmi Bey", "Kaptanzade Ali Rıza"],
+    dogru: "Şevki Bey"
+  },
+  {
+    soru: "Türk musikisinde 'Eseri en çok günümüze ulaşan kadın bestekâr' olarak bilinen, 18. yüzyılda yaşamış ve Evcara makamındaki eserleriyle tanınan sanatçı kimdir?",
+    secenekler: ["Dilhayat Kalfa", "Leyla Saz", "Nazife Güran", "Neveser Kökdeş"],
+    dogru: "Dilhayat Kalfa"
+  },
+  {
+    soru: "19. yüzyılın sonu ile 20. yüzyılın başında yaşamış, 'Gamzedeyim Deva Bulmam' gibi çok sevilen eserlerin sahibi Ermeni asıllı kemani ve bestekâr kimdir?",
+    secenekler: ["Kemani Tatyos Efendi", "Kemani Serkis Efendi", "Aleko Bacanos", "Kemani Sebuh"],
+    dogru: "Kemani Tatyos Efendi"
+  },
+  {
+    soru: "Günümüzde konservatuvarlarda temel kaynak olarak okutulan 'Türk Musikisi Nazariyatı ve Usulleri' kitabının yazarı, Arel-Ezgi sistemini günümüze taşıyan merhum hoca kimdir?",
+    secenekler: ["İsmail Hakkı Özkan", "Cinuçen Tanrıkorur", "Nevzad Atlığ", "Alaeddin Yavaşça"],
+    dogru: "İsmail Hakkı Özkan"
+  },
+  {
+    soru: "Türk müziği ses sistemini Batı notasına uyarlayan (4'lü-5'li sistem), 'Türk Musikisi Nazariyatı Dersleri' kitabını yazan ve bugünkü teorik altyapıyı (Ezgi ve Uzdilek ile) kuran kişi kimdir?",
+    secenekler: ["Hüseyin Sadettin Arel", "Rauf Yekta Bey", "Suphi Ezgi", "Salih Murat Uzdilek"],
+    dogru: "Hüseyin Sadettin Arel"
+  },
+  {
+    soru: "Boğaziçi medeniyetinin son temsilcilerinden, 'Bir Bahar Akşamı Rastladım Size' şarkısının bestecisi ve aynı zamanda büyük bir tamburi olan bestekâr kimdir?",
+    secenekler: ["Selahattin Pınar", "Mesut Cemil", "Sadi Işılay", "Refik Fersan"],
+    dogru: "Selahattin Pınar"
+  },
+  {
+    soru: "15. yüzyıl Edvar yazarlarından olup, bugün 'Makam' kavramını ilk kez bugünkü anlamıyla kullanan ve sınıflandıran (Seyir kavramı vb.) nazariyatçı kimdir?",
+    secenekler: ["Hızır Bin Abdullah", "Ladikli Mehmet Çelebi", "Seydi", "Şükrullah"],
+    dogru: "Hızır Bin Abdullah"
+  },
+  {
+    soru: "Saz Eserleri (Peşrev ve Saz Semaisi) alanında bir ekol olan, 'Sultaniyegâh Sirto' gibi eserleriyle tanınan, Tanburi Cemil Bey'in oğlu kimdir?",
+    secenekler: ["Mesut Cemil", "Niyazi Sayın", "Necdet Yaşar", "Ercüment Batanay"],
+    dogru: "Mesut Cemil"
+  },
+  {
+    soru: "Türk Müziğinin bilinen ilk büyük nazariyatçısı sayılan, 'Musiki-ul Kebir' adlı eserin yazarı ve ses fiziği üzerine çalışan İslam filozofu kimdir?",
+    secenekler: ["Farabi", "İbn-i Sina", "Kindi", "Urmevi"],
+    dogru: "Farabi"
+  },
+  {
+    soru: "Klasik dönem bestekârlarından olup, özellikle 'Kâr' formundaki eserleriyle (Örn: Rast Kâr-ı Natık) tanınan, aynı zamanda III. Selim'in hocası olan bestekâr kimdir?",
+    secenekler: ["Tanburi İzak", "Zaharya", "Ebûbekir Ağa", "Hafız Post"],
+    dogru: "Tanburi İzak"
+  },
+  {
+    soru: "'Nev-eser' (Yeni eser) makamını terkip eden, neoklasik dönemin kurucularından sayılan ve eserlerinde zengin makam geçkileri kullanan (Örn: Çamlıca Yolunda) bestekâr kimdir?",
+    secenekler: ["Hacı Faik Bey", "Dede Efendi", "Mustafa Nafiz Irmak", "Lemi Atlı"],
+    dogru: "Dede Efendi"
+  },
+  {
+    soru: "İstanbul Radyosu'nun kurucularından, Türk müziğini çok seslendirme çalışmaları da yapmış, Tanburi Cemil Bey'in öğrencisi ve 'Nihavend Longa'nın (Kevser Hanım değil, diğeri) bestecisi kimdir?",
+    secenekler: ["Santuri Ethem Bey", "Refik Fersan", "Mesut Cemil", "Şerif Muhittin Targan"],
+    dogru: "Santuri Ethem Bey"
+  },
+  {
+    soru: "20. yüzyılın en büyük 'Ud' virtüözlerinden kabul edilen, kendine has mızrap tekniğiyle tanınan ve 'Kürdilihicazkâr Saz Semaisi' çok meşhur olan sanatçı kimdir?",
+    secenekler: ["Yorgo Bacanos", "Udi Hrant", "Şerif Muhittin Targan", "Nevres Bey"],
+    dogru: "Yorgo Bacanos"
+  },
+  {
+    soru: "Mevlevi müziğinin son büyük bestekârlarından, 'Suzidil Mevlevi Ayini'nin bestecisi ve Dede Efendi'nin öğrencisi kimdir?",
+    secenekler: ["Zekai Dede", "Hüseyin Fahreddin Dede", "Ahmet Avni Konuk", "Rauf Yekta Bey"],
+    dogru: "Zekai Dede"
+  },
+  {
+    soru: "Bağdatlı bir ud virtüözü olup, Endülüs'e giderek Avrupa müziğinin temellerini etkileyen, uda 5. teli taktığı söylenen efsanevi müzisyen kimdir?",
+    secenekler: ["Ziryab", "Ishaq al-Mawsili", "Farabi", "Amir Khusrow"],
+    dogru: "Ziryab"
+  },
+  {
+    soru: "Türk Müziği tarihini inceleyen ilk bilimsel çalışmalardan birini yapan ve 'Arel-Ezgi-Uzdilek' üçlüsünden önce makamları ve usulleri notaya döken (Darülelhan çalışmaları) müzikolog kimdir?",
+    secenekler: ["Rauf Yekta Bey", "Suphi Ezgi", "Mahmut Ragıp Gazimihal", "Vahit Lütfi Salcı"],
+    dogru: "Rauf Yekta Bey"
+  },
+  {
+    soru: "'Şedaraban' makamını icat eden veya canlandıran (genellikle ona atfedilir) ve 'Zeybek' formunda da eserler veren padişah-bestekâr kimdir?",
+    secenekler: ["Sultan Abdülaziz", "Sultan Vahdettin", "Sultan Reşat", "II. Abdülhamit"],
+    dogru: "Sultan Abdülaziz"
+  },
+  {
+    soru: "Hem Doğu hem Batı müziğine hakim, 'Peygamberin övdüğü' anlamına gelen 'Övülmüş' manasındaki isme sahip, 'Segâh Tekbir' ve 'Salat-ı Ümmiye'nin bestecisi kimdir?",
+    secenekler: ["Itrî", "Dede Efendi", "Zekai Dede", "Abdülkadir Meragi"],
+    dogru: "Itrî"
+  }
+
+            ],
+            en: [
+  {
+    soru: "According to the Arel-Ezgi-Uzdilek system, how many commas does the 'Tanini' (T) interval consist of?",
+    secenekler: ["4 Commas", "5 Commas", "8 Commas", "9 Commas"],
+    dogru: "9 Commas"
+  },
+  {
+    soru: "Which scale is accepted as the 'Main Scale' in Turkish Music and has the interval structure T-T-B-T-T-B-T?",
+    secenekler: ["Rast Scale", "Çargâh Scale", "Hüseyni Scale", "Buselik Scale"],
+    dogru: "Çargâh Scale"
+  },
+  {
+    soru: "What is the formation of 'Segâh' makam, which is a compound (mürekkep) makam?",
+    secenekler: ["Segâh pentachord in its place + Hicaz tetrachord on Neva", "Segâh pentachord in its place + Uşşak tetrachord on Neva", "Hüzzam pentachord in its place + Hicaz tetrachord on Neva", "Rast pentachord in its place + Segâh tetrachord on Neva"],
+    dogru: "Segâh pentachord in its place + Hicaz tetrachord on Neva"
+  },
+  {
+    soru: "In the family formed by Hicaz, Uzzal, Hümayun, and Zengüle makams, what is the theoretical feature that distinguishes 'Hümayun' from the others?",
+    secenekler: ["Its dominant being Neva", "Remaining with Buselik flavor on the high tonic", "Remaining with Uşşak flavor on the high tonic", "Making a Rast flavor on the final tone"],
+    dogru: "Remaining with Buselik flavor on the high tonic"
+  },
+  {
+    soru: "What is the time structure of the 'Lenk Fahte' usul, which is a 10-beat rhythm?",
+    secenekler: ["5 + 5", "2 + 3 + 2 + 3", "2 + 2 + 3 + 3", "3 + 2 + 2 + 3"],
+    dogru: "2 + 3 + 2 + 3"
+  },
+  {
+    soru: "Which of the following is the correct order of performance in a classical Fasıl?",
+    secenekler: ["Peşrev - Şarkı - Kâr - Ağır Semai - Yürük Semai", "Taksim - Peşrev - Kâr (or Beste) - Ağır Semai - Şarkı - Yürük Semai - Saz Semaisi", "Saz Semaisi - Peşrev - Beste - Ağır Semai - Şarkı", "Peşrev - Ağır Semai - Beste - Şarkı - Yürük Semai"],
+    dogru: "Taksim - Peşrev - Kâr (or Beste) - Ağır Semai - Şarkı - Yürük Semai - Saz Semaisi"
+  },
+  {
+    soru: "What is the interval structure of the Uşşak tetrachord (from low to high)? (K: Large Mücennep, S: Small Mücennep, T: Tanini)",
+    secenekler: ["K - S - T", "S - T - K", "T - S - K", "T - T - B"],
+    dogru: "K - S - T"
+  },
+  {
+    soru: "What is the dominant (ruling note) of the Acem Aşiran makam?",
+    secenekler: ["Acem Note", "Dügah Note", "Neva Note", "Çargâh Note"],
+    dogru: "Acem Note"
+  },
+  {
+    soru: "Which of the following makams is a 'Şed' (Transposed) makam?",
+    secenekler: ["Hüzzam", "Rast", "Hüseyni", "Ferahnak"],
+    dogru: "Ferahnak"
+  },
+  {
+    soru: "How many commas is the 'Bakiye' (B) interval?",
+    secenekler: ["1 Comma", "4 Commas", "5 Commas", "8 Commas"],
+    dogru: "4 Commas"
+  },
+  {
+    soru: "Which makam has a 'Descending' (starting high and descending to the final) progression?",
+    secenekler: ["Uşşak", "Rast", "Hicaz", "Muhayyer"],
+    dogru: "Muhayyer"
+  },
+  {
+    soru: "In the Beste form, what is each line of the piece called?",
+    secenekler: ["Hane", "Murabba", "Terennüm", "Miyan"],
+    dogru: "Hane"
+  },
+  {
+    soru: "Which note represents the 'Neva' pitch on the staff (in the G Clef system)?",
+    secenekler: ["Re (D) on the fourth line", "Si (B) on the third line", "La (A) in the second space", "Fa (F) on the fifth line"],
+    dogru: "Re (D) on the fourth line"
+  },
+  {
+    soru: "On which note does the Saba makam resolve (final tone)?",
+    secenekler: ["Rast", "Dügah", "Segâh", "Çargâh"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "How many beats is the Ağır Aksak usul?",
+    secenekler: ["9 Beats", "10 Beats", "7 Beats", "5 Beats"],
+    dogru: "9 Beats"
+  },
+  {
+    soru: "What is the comma value and sign of the 'Dik Kürdi' pitch?",
+    secenekler: ["4 commas sharp", "1 comma flat", "4 commas flat", "5 commas flat"],
+    dogru: "4 commas flat"
+  },
+  {
+    soru: "The Nihavend makam scale is obtained by transposing (şed) the Buselik makam to which pitch?",
+    secenekler: ["Dügah Pitch", "Rast Pitch", "Yegâh Pitch", "Hüseyni Aşiran Pitch"],
+    dogru: "Rast Pitch"
+  },
+  {
+    soru: "Which of the following is a 5-beat usul?",
+    secenekler: ["Sofyan", "Türk Aksağı", "Yürük Semai", "Devr-i Hindi"],
+    dogru: "Türk Aksağı"
+  },
+  {
+    soru: "What should be the interval between the 'Leading Tone' (Yeden) and the 'Tonic' (Durak) in makams to give a sense of complete resolution?",
+    secenekler: ["Whole Tone (Tanini)", "Half Tone (Bakiye or Small Mücennep)", "Augmented Second", "Quarter Tone"],
+    dogru: "Half Tone (Bakiye or Small Mücennep)"
+  },
+  {
+    soru: "What is the progression (seyir) of the Hüzzam makam?",
+    secenekler: ["Ascending", "Descending", "Descending - Ascending", "Flat"],
+    dogru: "Descending - Ascending"
+  },
+  {
+    soru: "What is the tonic (durak) of the Müstear makam?",
+    secenekler: ["Irak", "Segâh", "Dügah", "Rast"],
+    dogru: "Segâh"
+  },
+  {
+    soru: "What are the sections of the Peşrev form called?",
+    secenekler: ["Kıta", "Zemin - Zaman", "Hane - Teslim", "Meyan - Karar"],
+    dogru: "Hane - Teslim"
+  },
+  {
+    soru: "Hicazkar makam is a transposed makam formed on which pitch?",
+    secenekler: ["Rast", "Dügah", "Segâh", "Acem Aşiran"],
+    dogru: "Rast"
+  },
+  {
+    soru: "What does 'Velvele' mean in a usul?",
+    secenekler: ["Enriching the usul by subdividing the main beats into smaller units", "Performing the usul faster", "Playing the usul only with Kudüm", "Changing the time signature of the usul"],
+    dogru: "Enriching the usul by subdividing the main beats into smaller units"
+  },
+  {
+    soru: "To which makam family does Kürdilihicazkar makam belong?",
+    secenekler: ["Hicaz Family", "Kürdi Family", "Buselik Family", "Rast Family"],
+    dogru: "Kürdi Family"
+  },
+  {
+    soru: "Which of the following is the scale structure of Karcığar makam?",
+    secenekler: ["Uşşak tetrachord in its place + Hicaz pentachord on Neva", "Uşşak tetrachord in its place + Buselik pentachord on Neva", "Hicaz tetrachord in its place + Uşşak pentachord on Neva", "Rast pentachord in its place + Hicaz tetrachord on Neva"],
+    dogru: "Uşşak tetrachord in its place + Hicaz pentachord on Neva"
+  },
+  {
+    soru: "According to the Arel-Ezgi-Uzdilek system, how many commas is the 'Small Mücennep' (S) interval?",
+    secenekler: ["4 Commas", "5 Commas", "8 Commas", "9 Commas"],
+    dogru: "5 Commas"
+  },
+  {
+    soru: "In the Classical Şarkı form, what is the name of the third line, which usually roams in the highest (tiz) pitches?",
+    secenekler: ["Zemin", "Nakarat", "Miyan (Meyan)", "Karar"],
+    dogru: "Miyan (Meyan)"
+  },
+  {
+    soru: "How many beats is the Aksak Semai usul?",
+    secenekler: ["10 Beats", "9 Beats", "6 Beats", "32 Beats"],
+    dogru: "10 Beats"
+  },
+  {
+    soru: "Suzinak makam is formed by adding which flavor (çeşni) to the Rast makam scale?",
+    secenekler: ["Hicaz on Neva", "Buselik on Neva", "Kürdi on Dügah", "Uşşak on Hüseyni"],
+    dogru: "Hicaz on Neva"
+  },
+  {
+    soru: "What is the Turkish Music name for the note 'G' (Sol) located in the space just above the 5th (top) line of the staff?",
+    secenekler: ["Neva", "Hüseyni", "Gerdaniye", "Muhayyer"],
+    dogru: "Gerdaniye"
+  },
+  {
+    soru: "Which of the following falls into the 'Simple Makam' class?",
+    secenekler: ["Hüseyni", "Segâh", "Hüzzam", "Saba"],
+    dogru: "Hüseyni"
+  },
+  {
+    soru: "How many beats is 'Nim Sofyan', the smallest usul in Turkish Music?",
+    secenekler: ["2 Beats", "3 Beats", "4 Beats", "5 Beats"],
+    dogru: "2 Beats"
+  },
+  {
+    soru: "What is the 'Leading Tone' (Yeden) of the Rast makam?",
+    secenekler: ["Irak", "Kaba Rast", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Irak"
+  },
+  {
+    soru: "How is the Nikriz makam formed?",
+    secenekler: ["Nikriz pentachord on Rast + Rast tetrachord on Neva", "Nikriz pentachord on Rast + Hicaz tetrachord on Neva", "Hicaz tetrachord on Dügah + Rast pentachord on Neva", "Nikriz pentachord on Buselik + Uşşak tetrachord on Hüseyni"],
+    dogru: "Nikriz pentachord on Rast + Rast tetrachord on Neva"
+  },
+  {
+    soru: "Who developed the notation system based on Armenian letters, used before the current notation system?",
+    secenekler: ["Kantemiroğlu", "Abdülbaki Nasır Dede", "Ali Ufki Bey", "Hamparsum Limonciyan"],
+    dogru: "Hamparsum Limonciyan"
+  },
+  {
+    soru: "How many beats is the Curcuna usul?",
+    secenekler: ["10 Beats", "5 Beats", "7 Beats", "9 Beats"],
+    dogru: "10 Beats"
+  },
+  {
+    soru: "What is the dominant of the Acem Kürdi makam?",
+    secenekler: ["Dügah", "Acem", "Neva", "Çargâh"],
+    dogru: "Acem"
+  },
+  {
+    soru: "Theoretically, how many commas is the 'Augmented Second' (A) interval (e.g., the interval in the middle of the Hicaz tetrachord) considered in Turkish Music?",
+    secenekler: ["9 Commas", "12-13 Commas", "8 Commas", "5 Commas"],
+    dogru: "12-13 Commas"
+  },
+  {
+    soru: "How many commas is the 'Large Mücennep' (K) interval in the Arel-Ezgi-Uzdilek system?",
+    secenekler: ["4 Commas", "5 Commas", "8 Commas", "9 Commas"],
+    dogru: "8 Commas"
+  },
+  {
+    soru: "Who is the composer accepted as the greatest master and architect of the 'Şarkı' form in Turkish Art Music?",
+    secenekler: ["Hacı Arif Bey", "Dede Efendi", "Itrî", "Tanburi Cemil Bey"],
+    dogru: "Hacı Arif Bey"
+  },
+  {
+    soru: "Which makam uses 'Buselik' flavor in both ascent and descent and has Dügah as its tonic?",
+    secenekler: ["Nihavend", "Buselik", "Kürdi", "Uşşak"],
+    dogru: "Buselik"
+  },
+  {
+    soru: "Which of the following is a 'Compound' (Mürekkep) makam?",
+    secenekler: ["Rast", "Çargâh", "Isfahan", "Kürdi"],
+    dogru: "Isfahan"
+  },
+  {
+    soru: "In Zirgüleli Hicaz makam, what is the leading tone (yeden) below the Dügah note?",
+    secenekler: ["Rast", "Irak", "Zirgüle (Kaba Dik Kürdi)", "Yegâh"],
+    dogru: "Zirgüle (Kaba Dik Kürdi)"
+  },
+  {
+    soru: "How many beats is the Yürük Semai usul?",
+    secenekler: ["3 Beats", "6 Beats", "9 Beats", "10 Beats"],
+    dogru: "6 Beats"
+  },
+  {
+    soru: "What is the term for temporarily switching from the main makam to another makam during the performance of a piece?",
+    secenekler: ["Şed", "Geçki", "Çeşni", "Karar"],
+    dogru: "Geçki"
+  },
+  {
+    soru: "Which of the following pitches is a 'Higher' (Tiz) sound?",
+    secenekler: ["Kaba Rast", "Rast", "Gerdaniye", "Tiz Segâh"],
+    dogru: "Tiz Segâh"
+  },
+  {
+    soru: "What is the most distinct difference between Hüseyni makam and Uşşak makam?",
+    secenekler: ["Hüseyni is descending-ascending and uses the 6th degree (Eviç/Acem)", "Hüseyni has a different tonic", "The dominant of Uşşak makam is Çargah", "Hüseyni makam belongs to the Buselik family"],
+    dogru: "Hüseyni is descending-ascending and uses the 6th degree (Eviç/Acem)"
+  },
+  {
+    soru: "What is the tonic of the Sultaniyegâh makam?",
+    secenekler: ["Dügah", "Rast", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Yegâh"
+  },
+  {
+    soru: "What does 'Asma Karar' mean in music?",
+    secenekler: ["The final ending of the piece", "A temporary pause on a note other than the tonic during the piece", "Playing the usul with velvele", "The introductory section of a taksim"],
+    dogru: "A temporary pause on a note other than the tonic during the piece"
+  },
+  {
+    soru: "In Turkish Music notation, what is the name of the sign that raises (sharpens) a note by 4 commas?",
+    secenekler: ["Bakiye Sharp", "Comma Sharp", "Small Mücennep Sharp", "Large Mücennep Sharp"],
+    dogru: "Bakiye Sharp"
+  },
+  {
+    soru: "Mevlevi Ayin-i Şerifs consist of how many sections called 'Selam'?",
+    secenekler: ["4 Selams", "3 Selams", "2 Selams", "5 Selams"],
+    dogru: "4 Selams"
+  },
+  {
+    soru: "Şedaraban makam is accepted as the transposition (şed) of which makam to the 'Yegâh' pitch?",
+    secenekler: ["Zirgüleli Hicaz", "Hicaz", "Hümayun", "Uzzal"],
+    dogru: "Zirgüleli Hicaz"
+  },
+  {
+    soru: "What is the structure of 'Devr-i Kebir', one of the large usuls with 28 beats?",
+    secenekler: ["3+4+4+3+4+4+3+3", "4+4+4+4+3+3+3+3", "2+4+4+2+4+4+2+6", "7+7+7+7"],
+    dogru: "3+4+4+3+4+4+3+3"
+  },
+  {
+    soru: "Which accidentals are found in the key signature (donanım) of the Hüseyni makam?",
+    secenekler: ["Si Comma Flat (Segâh) - Fa Bakiye Sharp (Eviç)", "Si Bakiye Flat - Mi Bakiye Flat", "Si Comma Flat - Fa Natural", "Si Five Commas Flat"],
+    dogru: "Si Comma Flat (Segâh) - Fa Bakiye Sharp (Eviç)"
+  },
+  {
+    soru: "What is the name of the didactic composition form where the names of makams are mentioned in the lyrics?",
+    secenekler: ["Kâr-ı Natık", "Kâr-ı Müşterek", "Medhal", "Münacat"],
+    dogru: "Kâr-ı Natık"
+  },
+  {
+    soru: "Bayati makam and Uşşak makam have the same scale. What is the fundamental progression difference that distinguishes Bayati from Uşşak?",
+    secenekler: ["Bayati starts the progression from Neva (or around Neva)", "Bayati's tonic is Rast", "Bayati is a descending makam", "Bayati uses Si flat in the key signature"],
+    dogru: "Bayati starts the progression from Neva (or around Neva)"
+  },
+  {
+    soru: "What is the Turkish Music name for the note 'B' (Si) located on the 3rd line of the staff (Natural state)?",
+    secenekler: ["Buselik", "Segâh", "Nişabur", "Dik Kürdi"],
+    dogru: "Buselik"
+  },
+  {
+    soru: "What is the structure of 'Evfer' usul, which is a 9-beat rhythm?",
+    secenekler: ["5 + 4", "4 + 5", "2 + 3 + 2 + 2", "3 + 2 + 2 + 2"],
+    dogru: "5 + 4"
+  },
+  {
+    soru: "Which of the following is NOT an instrumental music form?",
+    secenekler: ["Murabba", "Longa", "Syrto", "Medhal"],
+    dogru: "Murabba"
+  },
+  {
+    soru: "Ferahnüma makam is the transposition of which makam to the 'Yegâh' pitch?",
+    secenekler: ["It is an invention of Tanburi Cemil Bey, not a transposition", "Rast", "Hüseyni", "Hicaz"],
+    dogru: "It is an invention of Tanburi Cemil Bey, not a transposition"
+  },
+  {
+    soru: "What does the word 'Mücennep' mean in Turkish Music theory?",
+    secenekler: ["Side, neighbor, not far (Interval name)", "Loud voice", "Fast tempo", "Religious music form"],
+    dogru: "Side, neighbor, not far (Interval name)"
+  },
+  {
+    soru: "What is the name of the vocal improvisation form performed without a fixed rhythm (usul)?",
+    secenekler: ["Gazel", "Taksim", "Mevlid", "Kasidin"],
+    dogru: "Gazel"
+  },
+  {
+    soru: "The scale of Ferahfeza makam is obtained by transposing which makam to the 'Yegâh' pitch?",
+    secenekler: ["Suzinak", "Rast", "Hicaz", "Uşşak"],
+    dogru: "Suzinak"
+  },
+  {
+    soru: "According to the Arel-Ezgi-Uzdilek system, who did the idea of 'Holderian Comma' (dividing an octave into 53) originally stem from?",
+    secenekler: ["Nicholas Mercator", "Pythagoras", "Farabi", "Abdülkadir Meragi"],
+    dogru: "Nicholas Mercator"
+  },
+  {
+    soru: "Which of the following makams is NOT a 'Transposed' (Şed) makam, but one of the 'Main Makams'?",
+    secenekler: ["Hüzzam", "Mahur", "Acem Aşiran", "Evcara"],
+    dogru: "Hüzzam"
+  },
+  {
+    soru: "Who is the theorist that laid the foundations of Turkish/Eastern music theory with his work 'Kitabü'l-Edvar' written in the 13th century?",
+    secenekler: ["Safiyüddin Urmevi", "Farabi", "Avicenna (İbn-i Sina)", "Al-Kindi"],
+    dogru: "Safiyüddin Urmevi"
+  },
+  {
+    soru: "What is the scale of Muhayyer Kürdi makam?",
+    secenekler: ["Kürdi tetrachord in its place + Buselik pentachord on Neva", "Uşşak tetrachord in its place + Kürdi pentachord on Neva", "Rast pentachord in its place + Hicaz tetrachord on Neva", "Buselik pentachord in its place + Kürdi tetrachord on Hüseyni"],
+    dogru: "Kürdi tetrachord in its place + Buselik pentachord on Neva"
+  },
+  {
+    soru: "What is the name of the makam/usul mixture invented by Hacı Arif Bey, usually having 10 beats (often confused with Curcuna)?",
+    secenekler: ["Aksak Semai", "Müsemmen", "Ağır Aksak", "Tek Vuruş"],
+    dogru: "Müsemmen"
+  },
+  {
+    soru: "What is the sign for 'Comma' flat in Turkish Music?",
+    secenekler: ["Similar to a reversed 'd', single line", "Double lined flat", "Triangular shape", "Square shape"],
+    dogru: "Similar to a reversed 'd', single line"
+  },
+  {
+    soru: "On which pitch does the Isfahan makam resolve?",
+    secenekler: ["Dügah", "Rast", "Segâh", "Irak"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "Where is the 'Ara Taksimi' (Interlude Improvisation) performed in a classical fasıl?",
+    secenekler: ["Between songs, to modulate or take a breath", "At the very beginning of the fasıl", "After the Saz Semaisi", "Just before the Peşrev"],
+    dogru: "Between songs, to modulate or take a breath"
+  },
+  {
+    soru: "In which form of works is the 24-beat 'Çenber' usul generally used?",
+    secenekler: ["Peşrev", "Beste", "Kâr", "Saz Semaisi"],
+    dogru: "Peşrev"
+  },
+  {
+    soru: "Which accidentals are found in the 'Key Signature' (Donanım) of Nişabur makam?",
+    secenekler: ["Si - Mi - La - Re (Small Mücennep Flats)", "Si Flat - Mi Flat", "Only Si Comma Flat", "No accidentals (Natural)"],
+    dogru: "Si - Mi - La - Re (Small Mücennep Flats)"
+  },
+  {
+    soru: "To which note in Western music does the 'Eviç' pitch correspond in Turkish Music (Approximately, if Diapason A=440)?",
+    secenekler: ["F Sharp (Fa Diyez)", "G Natural (Sol Naturel)", "F Natural (Fa Naturel)", "E Flat (Mi Bemol)"],
+    dogru: "F Sharp (Fa Diyez)"
+  },
+  {
+    soru: "According to the Arel-Ezgi-Uzdilek system, how many total commas does the 'Perfect Fifth' interval consist of?",
+    secenekler: ["22 Commas", "23 Commas", "31 Commas", "53 Commas"],
+    dogru: "31 Commas"
+  },
+  {
+    soru: "Which is the large usul with the highest number of beats (88 beats) in Turkish Music?",
+    secenekler: ["Darb-ı Fetih", "Hafif", "Zencir", "Çenber"],
+    dogru: "Darb-ı Fetih"
+  },
+  {
+    soru: "Şevkefza makam is the transposition of which makam to the 'Acem Aşiran' pitch?",
+    secenekler: ["Zirgüleli Hicaz", "Hicaz", "Uzzal", "Hümayun"],
+    dogru: "Zirgüleli Hicaz"
+  },
+  {
+    soru: "What is the name of the long form in religious music, describing the birth, life, and miracles of Prophet Muhammad (S.A.V.), usually recited with makam in mosques?",
+    secenekler: ["Mevlid", "Tevşih", "İlahi", "Şugl"],
+    dogru: "Mevlid"
+  },
+  {
+    soru: "What is the Turkish Music name for the 'F' note in the 1st space of the staff (G Clef)?",
+    secenekler: ["Acem Aşiran", "Hüseyni Aşiran", "Irak", "Rast"],
+    dogru: "Acem Aşiran"
+  },
+  {
+    soru: "The scale of Mahur makam is the same as Rast makam. What is the fundamental difference between them?",
+    secenekler: ["Mahur is descending and starts around Gerdaniye (high tonic)", "Mahur's dominant is Dügah", "Mahur takes Si flat in the key signature", "Mahur's final tone is Neva"],
+    dogru: "Mahur is descending and starts around Gerdaniye (high tonic)"
+  },
+  {
+    soru: "Which usul has 32 beats and is specifically used in the '3rd Selam' section of Mevlevi Ayin-i Şerifs?",
+    secenekler: ["Hafif", "Muhammes", "Devr-i Kebir", "Berefşan"],
+    dogru: "Devr-i Kebir"
+  },
+  {
+    soru: "What is the formation of Bestenigar makam?",
+    secenekler: ["Segâh on Irak pitch + Saba on Dügah", "Saba in its place + Resolution on Irak pitch (Irak flavor)", "Uşşak in its place + Hicaz on Neva", "Hüzzam in its place + Uşşak on Neva"],
+    dogru: "Saba in its place + Resolution on Irak pitch (Irak flavor)"
+  },
+  {
+    soru: "In Turkish Music notation, what does the 'Large Mücennep Flat' (approx. 8-9 commas) sign look like?",
+    secenekler: ["Single lined 'd' (Comma flat)", "Double lined flat (Bakiye flat)", "Similar to a reversed filled 'K' (or single lined thick flat)", "Standard Western flat"],
+    dogru: "Similar to a reversed filled 'K' (or single lined thick flat)"
+  },
+  {
+    soru: "How many total commas is an 'Octave' interval considered in the Arel-Ezgi-Uzdilek system?",
+    secenekler: ["53 Commas", "41 Commas", "24 Commas", "12 Commas"],
+    dogru: "53 Commas"
+  },
+  {
+    soru: "On which pitch does the Rahatülervah makam resolve?",
+    secenekler: ["Irak", "Rast", "Segâh", "Hüseyni"],
+    dogru: "Irak"
+  },
+  {
+    soru: "What is the form where short verses called 'Ziyade' are added to the end of each line of a Şarkı-like form?",
+    secenekler: ["Müstezat", "Murabba", "Nakış", "Zeybek"],
+    dogru: "Müstezat"
+  },
+  {
+    soru: "What is the structure of Neveser makam?",
+    secenekler: ["Nikriz pentachord in its place (Rast) + Hicaz tetrachord on Neva", "Nikriz pentachord in its place + Rast tetrachord on Neva", "Hicaz in its place + Hicaz on Neva", "Uşşak in its place + Nikriz on Neva"],
+    dogru: "Nikriz pentachord in its place (Rast) + Hicaz tetrachord on Neva"
+  },
+  {
+    soru: "What is the beat structure (mertebe) of the 15-beat 'Raks Aksağı' usul?",
+    secenekler: ["2+2+2+3+2+2+2", "4+4+4+3", "9+6", "5+10"],
+    dogru: "2+2+2+3+2+2+2"
+  },
+  {
+    soru: "Who is the great composer who composed makams like 'Ferahfeza' and 'Sultan-ı Yegâh'?",
+    secenekler: ["Hamamizade İsmail Dede Efendi", "Buhurizade Mustafa Itrî", "Hafız Post", "Zekai Dede"],
+    dogru: "Hamamizade İsmail Dede Efendi"
+  },
+  {
+    soru: "What is the name of the sign that sharpens the 'F' sound on the 5th line by about 4-5 commas, and what is the name of the pitch in TSM?",
+    secenekler: ["Bakiye Sharp - Eviç", "Comma Sharp - Acem", "Mücennep Sharp - Mahur", "Natural - Acem"],
+    dogru: "Bakiye Sharp - Eviç"
+  },
+  {
+    soru: "What are the Tonic (final tone) and Dominant of the Eviç makam?",
+    secenekler: ["Tonic: Irak, Dominant: Dügah", "Tonic: Irak, Dominant: Eviç (or Neva)", "Tonic: Segâh, Dominant: Eviç", "Tonic: Rast, Dominant: Gerdaniye"],
+    dogru: "Tonic: Irak, Dominant: Eviç (or Neva)"
+  },
+  {
+    soru: "What is the name of the large usul 'suite' formed by the combination of 5 different usuls (Düyek, Fahte, Çenber, Devr-i Kebir, Berefşan)?",
+    secenekler: ["Zencir", "Darb-ı Fetih", "Kâr-ı Natık", "Fasıl"],
+    dogru: "Zencir"
+  },
+  {
+    soru: "What is the 'Scale' structure of Pençgâh makam?",
+    secenekler: ["Rast scale on Neva + Rast pentachord in its place (Rast)", "Uşşak in its place + Uşşak on Neva", "Hicaz in its place + Rast on Neva", "Rast in its place + Buselik on Neva"],
+    dogru: "Rast scale on Neva + Rast pentachord in its place (Rast)"
+  },
+  {
+    soru: "What is the sign for 'Comma' (excess) sharp in Turkish Music?",
+    secenekler: ["Cross on a single line (or single lined sharp)", "Double lined sharp", "Triple lined sharp", "Sideways figure 8"],
+    dogru: "Cross on a single line (or single lined sharp)"
+  },
+  {
+    soru: "Which of the following is NOT a 'Religious Music' form?",
+    secenekler: ["Köçekçe", "Tevşih", "Salat", "Durak"],
+    dogru: "Köçekçe"
+  },
+  {
+    soru: "What is the 'Dominant' of the Segâh makam?",
+    secenekler: ["Neva", "Rast", "Gerdaniye", "Çargâh"],
+    dogru: "Neva"
+  },
+  {
+    soru: "What is the name of the stroke played with the right hand in usuls, which is higher pitched and sharper than 'Dum'?",
+    secenekler: ["Tek", "Te", "Ka", "Düm"],
+    dogru: "Tek"
+  },
+  {
+    soru: "Hisar makam is characterized by the use of which pitch instead of 'Neva' in the Hümayun scale?",
+    secenekler: ["Hisar pitch (between Mücennep sharp Re / Bakiye flat Mi)", "Buselik pitch", "Eviç pitch", "Acem pitch"],
+    dogru: "Hisar pitch (between Mücennep sharp Re / Bakiye flat Mi)"
+  },
+  {
+    soru: "What is the Turkish Music name of the 'D' note below the staff without a ledger line (Western D)?",
+    secenekler: ["Yegâh", "Rast", "Dügah", "Hüseyni Aşiran"],
+    dogru: "Yegâh"
+  },
+  {
+    soru: "What is the name of the 'A' (La) pitch (middle octave) in Turkish Music?",
+    secenekler: ["Neva", "Dügah", "Hüseyni", "Muhayyer"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "What is the name of the 'B' (Si) note on the 3rd line when it takes '1 comma flat'?",
+    secenekler: ["Segâh", "Buselik", "Dik Kürdi", "Uşşak"],
+    dogru: "Segâh"
+  },
+  {
+    soru: "What is the name of the 'Natural' state of the 'F' (Fa) note on the 5th line?",
+    secenekler: ["Eviç", "Acem", "Mahur", "Gerdaniye"],
+    dogru: "Acem"
+  },
+  {
+    soru: "Which of the following is the 'Şehnaz' pitch?",
+    secenekler: ["Fa Bakiye Sharp (4 Commas)", "Fa Large Mücennep Sharp (8-9 Commas)", "Sol Natural", "Fa Natural"],
+    dogru: "Fa Large Mücennep Sharp (8-9 Commas)"
+  },
+  {
+    soru: "What is the name of the 'F' (Fa) note in the 1st space (low sound)?",
+    secenekler: ["Acem Aşiran", "Hüseyni Aşiran", "Irak", "Kaba Rast"],
+    dogru: "Acem Aşiran"
+  },
+  {
+    soru: "'Zirgüle' pitch is the result of which note taking approximately 4 commas (Bakiye) sharp?",
+    secenekler: ["Sol (Kaba Rast)", "La (Dügah)", "Fa (Acem Aşiran)", "Do (Kaba Çargâh)"],
+    dogru: "Sol (Kaba Rast)"
+  },
+  {
+    soru: "What is the name of the 'A' (La) pitch written on the first ledger line above the staff in the high octave?",
+    secenekler: ["Gerdaniye", "Muhayyer", "Tiz Dügah", "Sünbüle"],
+    dogru: "Muhayyer"
+  },
+  {
+    soru: "Where is the 'Hüseyni' pitch located on the staff?",
+    secenekler: ["4th Line (Re)", "4th Space (Mi)", "3rd Line (Si)", "2nd Space (La)"],
+    dogru: "4th Space (Mi)"
+  },
+  {
+    soru: "Which of the following pitches is located in the 'Kaba' (low) octave?",
+    secenekler: ["Irak", "Segâh", "Buselik", "Çargâh"],
+    dogru: "Irak"
+  },
+  {
+    soru: "How many commas flat does the 'Dik Kürdi' pitch contain?",
+    secenekler: ["1 Comma", "4-5 Commas", "8-9 Commas", "None (Natural)"],
+    dogru: "4-5 Commas"
+  },
+  {
+    soru: "The 'Hisar' pitch is a derivative of which note and takes which accidental?",
+    secenekler: ["Mi (Hüseyni) - Bakiye Flat (or 5 commas)", "Re (Neva) - Bakiye Sharp", "Fa (Acem) - Comma Sharp", "Si (Buselik) - Comma Flat"],
+    dogru: "Mi (Hüseyni) - Bakiye Flat (or 5 commas)"
+  },
+  {
+    soru: "What is the name of the 'C' (Do) note in the 3rd space of the staff?",
+    secenekler: ["Çargâh", "Neva", "Buselik", "Tiz Çargâh"],
+    dogru: "Çargâh"
+  },
+  {
+    soru: "Which of the following is the 'Nim Hicaz' pitch?",
+    secenekler: ["Do Bakiye Sharp", "Re Bakiye Flat", "Si Natural", "Do Natural"],
+    dogru: "Do Bakiye Sharp"
+  },
+  {
+    soru: "What is the name of the pitch that is one octave higher (tiz) than the Rast pitch (Sol)?",
+    secenekler: ["Gerdaniye", "Muhayyer", "Tiz Rast", "Yegâh"],
+    dogru: "Gerdaniye"
+  },
+  {
+    soru: "The 'Saba' pitch (as a special pitch of the makam) generally corresponds to which note?",
+    secenekler: ["Hicaz on Re (Neva)", "Bakiye Flat on Re (Neva) (Reb)", "Comma Sharp on Do (Çargâh)", "Mi (Hüseyni) Natural"],
+    dogru: "Bakiye Flat on Re (Neva) (Reb)"
+  },
+  {
+    soru: "Where is the 'Kaba Dügah' pitch written in Turkish Music?",
+    secenekler: ["In the 2nd space of the staff", "On the 2nd ledger line below the staff", "On the top line of the staff", "On the 1st ledger line below the staff"],
+    dogru: "On the 2nd ledger line below the staff"
+  },
+  {
+    soru: "Where is the 'Tiz Segâh' pitch located on the staff?",
+    secenekler: ["Above the 1st ledger line above the staff (Si)", "On the 3rd line of the staff (Si)", "In the 4th space of the staff (Mi)", "On the bottom line of the staff (Mi)"],
+    dogru: "Above the 1st ledger line above the staff (Si)"
+  },
+  {
+    soru: "Which of the following pitch pairings is INCORRECT?",
+    secenekler: ["Sol = Rast", "La = Dügah", "Si (Natural) = Buselik", "Do = Neva"],
+    dogru: "Do = Neva"
+  },
+  {
+    soru: "'Rehâvi' pitch is another name given to which note (Usually in old treatises or in the kaba octave)?",
+    secenekler: ["Kaba Rast (Sol)", "Yegâh (Re)", "Kaba Çargâh (Do)", "Hüseyni Aşiran (Mi)"],
+    dogru: "Kaba Rast (Sol)"
+  },
+  {
+    soru: "'Sünbüle' pitch is formed by which pitch taking a comma flat?",
+    secenekler: ["Comma flat on Muhayyer (La)", "Comma flat on Gerdaniye (Sol)", "Comma flat on Tiz Çargâh (Do)", "Comma flat on Tiz Buselik (Si)"],
+    dogru: "Comma flat on Muhayyer (La)"
+  },
+  {
+    soru: "What is the Turkish Music name for the 'G' (Sol) note on the 2nd line of the staff?",
+    secenekler: ["Rast", "Gerdaniye", "Yegâh", "Zirgüle"],
+    dogru: "Rast"
+  },
+  {
+    soru: "What is the exact equivalent of the 'Eviç' pitch?",
+    secenekler: ["Fa Bakiye Sharp (4 Commas)", "Fa Natural", "Fa Mücennep Sharp", "Fa Comma Sharp"],
+    dogru: "Fa Bakiye Sharp (4 Commas)"
+  },
+  {
+    soru: "Where is the Hüseyni Aşiran pitch written on the staff?",
+    secenekler: ["Below the 1st ledger line below the staff (Si)", "On the 1st line of the staff (Mi)", "In the 4th space of the staff (Mi)", "On the 1st ledger line below the staff (Do)"],
+    dogru: "Below the 1st ledger line below the staff (Mi)"
+  },
+  {
+    soru: "Where does the 'Tiz Neva' pitch correspond on the staff?",
+    secenekler: ["In the 2nd ledger space above the staff (Re)", "On the 4th line of the staff (Re)", "At the very bottom of the staff (Re)", "On the 3rd line of the staff"],
+    dogru: "In the 2nd ledger space above the staff (Re)"
+  },
+  {
+    soru: "What is the name of the Rast pitch (Sol) when it takes 1 comma sharp?",
+    secenekler: ["Nim Zirgüle", "Zirgüle", "Dik Rast", "Rehavi"],
+    dogru: "Nim Zirgüle"
+  },
+  {
+    soru: "Which is the version of the Si (B) note on the 3rd line that has taken a 'Bakiye Flat' (4-5 commas)?",
+    secenekler: ["Kürdi", "Segâh", "Dik Kürdi", "Buselik"],
+    dogru: "Kürdi"
+  },
+  {
+    soru: "What is the name of the Çargâh pitch (Do) when it takes a 'Large Mücennep Sharp' (8-9 commas)? (Sharper than Nim Hicaz)",
+    secenekler: ["Hicaz", "Nim Hicaz", "Dik Çargâh", "Hisar"],
+    dogru: "Hicaz"
+  },
+  {
+    soru: "What is the name of the 'G' (Sol) pitch above the top line of the staff (Octave of Gerdaniye)?",
+    secenekler: ["Tiz Rast", "Tiz Gerdaniye", "Sünbüle", "Tiz Neva"],
+    dogru: "Tiz Rast"
+  },
+  {
+    soru: "What is the version of the Acem pitch (Fa) that has taken 1 comma sharp?",
+    secenekler: ["Dik Acem", "Eviç", "Mahur", "Nim Şehnaz"],
+    dogru: "Dik Acem"
+  },
+  {
+    soru: "What is the name of the Hüseyni pitch (Mi) when it takes 1 comma flat?",
+    secenekler: ["Dik Hisar", "Hisar", "Buselik", "Nim Hisar"],
+    dogru: "Dik Hisar"
+  },
+  {
+    soru: "What is the name of the Do (C) pitch written on the 2nd ledger line below the staff (Kaba octave)?",
+    secenekler: ["Kaba Çargâh", "Yegâh", "Kaba Rast", "Hüseyni Aşiran"],
+    dogru: "Kaba Çargâh"
+  },
+  {
+    soru: "What is the name of the pitch one octave higher (high La) than Muhayyer (La)?",
+    secenekler: ["Tiz Dügah", "Tiz Muhayyer", "Tiz Buselik", "Gerdaniye"],
+    dogru: "Tiz Dügah"
+  },
+  {
+    soru: "What is the name of the pitch one octave higher (high Re) than Neva (Re)?",
+    secenekler: ["Tiz Neva", "Tiz Çargâh", "Sünbüle", "Tiz Hüseyni"],
+    dogru: "Tiz Neva"
+  },
+  {
+    soru: "What is the name of the Si (B) pitch (Kaba octave) located below the 1st ledger line below the staff?",
+    secenekler: ["Kaba Buselik", "Kaba Segâh", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Kaba Buselik"
+  },
+  {
+    soru: "What is the name of the 4-comma sharp Fa (F#) pitch in the high octave (above the staff)?",
+    secenekler: ["Tiz Eviç", "Tiz Acem", "Tiz Mahur", "Tiz Şehnaz"],
+    dogru: "Tiz Eviç"
+  },
+  {
+    soru: "What is the name of the Do (C) pitch located on the 2nd ledger line above the staff?",
+    secenekler: ["Tiz Çargâh", "Tiz Neva", "Tiz Buselik", "Muhayyer"],
+    dogru: "Tiz Çargâh"
+  },
+  {
+    soru: "What is the name of the 4-comma flat Si (Bb) pitch in the kaba octave (lowest sounds)?",
+    secenekler: ["Kaba Kürdi (or Kaba Dik Kürdi)", "Kaba Segâh", "Kaba Buselik", "Yegâh"],
+    dogru: "Kaba Kürdi (or Kaba Dik Kürdi)"
+  },
+  {
+    soru: "Which is the pitch one octave higher (High Mi) than Hüseyni?",
+    secenekler: ["Tiz Hüseyni", "Tiz Hisar", "Tiz Buselik", "Sünbüle"],
+    dogru: "Tiz Hüseyni"
+  },
+  {
+    soru: "What is the name of the 'Si' (B) pitch (Tiz octave) above the staff?",
+    secenekler: ["Tiz Buselik", "Tiz Segâh", "Tiz Çargâh", "Tiz Kürdi"],
+    dogru: "Tiz Buselik"
+  },
+  {
+    soru: "In the Kaba octave, what is the Si pitch with 1 comma flat called?",
+    secenekler: ["Kaba Segâh", "Kaba Buselik", "Kaba Kürdi", "Irak"],
+    dogru: "Kaba Segâh"
+  },
+  {
+    soru: "What is the name of the 4-comma sharp Do (C#) pitch in the high octave?",
+    secenekler: ["Tiz Nim Hicaz", "Tiz Hicaz", "Tiz Çargâh", "Tiz Neva"],
+    dogru: "Tiz Nim Hicaz"
+  },
+  {
+    soru: "What is the version of the Do (C) pitch on the 1st ledger line below the staff that has taken 4 commas sharp (Low C#)?",
+    secenekler: ["Kaba Nim Hicaz", "Kaba Hicaz", "Yegâh", "Kaba Çargâh"],
+    dogru: "Kaba Nim Hicaz"
+  },
+  {
+    soru: "Which is the pitch one octave higher (High Fa) than Acem?",
+    secenekler: ["Tiz Acem", "Tiz Eviç", "Tiz Gerdaniye", "Tiz Mahur"],
+    dogru: "Tiz Acem"
+  },
+  {
+    soru: "What is the name of the 5-comma flat Mi (Eb) pitch in the kaba octave?",
+    secenekler: ["Kaba Hisar", "Kaba Buselik", "Hüseyni Aşiran", "Kaba Dik Hisar"],
+    dogru: "Kaba Hisar"
+  },
+  {
+    soru: "What is the version of the Gerdaniye pitch (Sol) that has taken 4 commas sharp (Sol #)?",
+    secenekler: ["Tiz Zirgüle", "Tiz Nim Zirgüle", "Sünbüle", "Şehnaz"],
+    dogru: "Tiz Zirgüle"
+  },
+  {
+    soru: "What is the name of the 5-comma flat Si (Bb) pitch in the high octave?",
+    secenekler: ["Tiz Kürdi", "Tiz Segâh", "Tiz Buselik", "Sünbüle"],
+    dogru: "Tiz Kürdi"
+  },
+  {
+    soru: "What is the name of the Muhayyer (La) pitch when it takes 1 comma flat? (Distinct from Sümbüle)",
+    secenekler: ["Dik Sümbüle", "Sümbüle", "Tiz Segâh", "Muhayyer Kürdi"],
+    dogru: "Dik Sümbüle"
+  },
+  {
+    soru: "What is the name of the Yegâh pitch (Re) when it takes 4 commas sharp? (Low Re#)",
+    secenekler: ["Kaba Nim Şehnaz", "Kaba Şehnaz", "Yegâh Sharp", "Kaba Hisar"],
+    dogru: "Kaba Nim Şehnaz"
+  },
+  {
+    soru: "What is the name of the 8-9 comma (Mücennep) sharp Fa (F#) pitch in the high octave?",
+    secenekler: ["Tiz Şehnaz", "Tiz Eviç", "Tiz Acem", "Tiz Mahur"],
+    dogru: "Tiz Şehnaz"
+  },
+  {
+    soru: "Who is the great composer also known as the 'Beethoven of Turkish Music', owner of works like 'Yine bir gülnihal' and 'Ey büt-i nev eda', who brought Western music influences (waltz rhythm, etc.) to our music?",
+    secenekler: ["Hacı Arif Bey", "Dede Efendi (Hamamizade İsmail)", "Itrî", "Şevki Bey"],
+    dogru: "Dede Efendi (Hamamizade İsmail)"
+  },
+  {
+    soru: "Who is the 17th-century master composer of masterpieces like Segâh Yürük Semai (Tuti-i Mucize Guyem) and Neva Kâr, whose portrait is on the 100 TL banknote?",
+    secenekler: ["Buhurizade Mustafa Itrî", "Hafız Post", "Zaharya", "Ebûbekir Ağa"],
+    dogru: "Buhurizade Mustafa Itrî"
+  },
+  {
+    soru: "Who is the founder of 'Kürdilihicazkâr' makam, known to have composed nearly 1000 songs and accepted as the greatest master of the 'Şarkı' form in Turkish Music?",
+    secenekler: ["Şevki Bey", "Hacı Arif Bey", "Rahmi Bey", "Nikonya"],
+    dogru: "Hacı Arif Bey"
+  },
+  {
+    soru: "Who is the theorist that placed the Turkish Music sound system (abjad notation) on scientific foundations systematically for the first time with his work 'Kitabü'l-Edvar' written in the 13th century?",
+    secenekler: ["Farabi", "Safiyüddin Urmevi", "Abdülkadir Meragi", "Al-Kindi"],
+    dogru: "Safiyüddin Urmevi"
+  },
+  {
+    soru: "Who is the genius virtuoso who invented the 'Yaylı Tanbur' instrument, carried the taksim form to the peak, and immortalized our music with phonograph recordings?",
+    secenekler: ["Mesut Cemil", "Tanburi Cemil Bey", "Neyzen Tevfik", "Yorgo Bacanos"],
+    dogru: "Tanburi Cemil Bey"
+  },
+  {
+    soru: "Who is the Sultan-composer who wrote poems with the pseudonym 'İlhami' and composed the 'Suzidilara' makam?",
+    secenekler: ["Selim III", "Mahmud II", "Murad IV", "Abdülaziz"],
+    dogru: "Selim III"
+  },
+  {
+    soru: "Who is the Armenian music man who developed the notation system known as 'Hamparsum Notation' named after him, enabling thousands of works to survive to the present day?",
+    secenekler: ["Tatyos Efendi", "Hamparsum Limonciyan", "Bimen Şen", "Nikogos Ağa"],
+    dogru: "Hamparsum Limonciyan"
+  },
+  {
+    soru: "Who is the great theorist living in the 15th century, known as 'Hoca-i Sani' (Second Teacher) after 'Hoca-i Evvel' (First Teacher) Farabi, and author of the book 'Camiü'l-Elhan'?",
+    secenekler: ["Abdülkadir Meragi", "Ladikli Mehmet Çelebi", "Hızır Bin Abdullah", "Ali Ufki Bey"],
+    dogru: "Abdülkadir Meragi"
+  },
+  {
+    soru: "Who is the composer, one of the most important of the Republican era Turkish Art Music, who introduced the concept of 'Film Music' to our music and blended folk music motifs (Hoyrat, Maya) with TSM forms?",
+    secenekler: ["Sadettin Kaynak", "Selahattin Pınar", "Münir Nurettin Selçuk", "Avni Anıl"],
+    dogru: "Sadettin Kaynak"
+  },
+  {
+    soru: "Who is the master who introduced the solo concert concept (appearing on stage alone) to Turkish music, served as a choir conductor, and is the composer of works like 'Kalamış'?",
+    secenekler: ["Zeki Müren", "Münir Nurettin Selçuk", "Bekir Sıtkı Sezgin", "Alaeddin Yavaşça"],
+    dogru: "Münir Nurettin Selçuk"
+  },
+  {
+    soru: "Who is the Polish music man who wrote the work 'Mecmua-i Saz ü Söz' in the 17th century and recorded works with a system similar to Western notation written from right to left?",
+    secenekler: ["Kantemiroğlu", "Ali Ufki Bey (Wojciech Bobowski)", "Rauf Yekta Bey", "Artaki Candan"],
+    dogru: "Ali Ufki Bey (Wojciech Bobowski)"
+  },
+  {
+    soru: "Who is one of the most important composers and ney players of the 18th century, known not only for Mevlevi rites but also for his work 'Miraciye'?",
+    secenekler: ["Kutbünnayi Osman Dede", "Dede Efendi", "Zekai Dede", "Nayi Aziz Dede"],
+    dogru: "Kutbünnayi Osman Dede"
+  },
+  {
+    soru: "Who is the composer, one of the most prolific of the Romantic period, who produced nearly 1000 works, almost all in song form and mostly in Uşşak or Hicaz makam?",
+    secenekler: ["Şevki Bey", "Lem'i Atlı", "Rahmi Bey", "Kaptanzade Ali Rıza"],
+    dogru: "Şevki Bey"
+  },
+  {
+    soru: "Who is the artist known as the 'female composer whose works have survived the most', lived in the 18th century, and is known for her works in Evcara makam?",
+    secenekler: ["Dilhayat Kalfa", "Leyla Saz", "Nazife Güran", "Neveser Kökdeş"],
+    dogru: "Dilhayat Kalfa"
+  },
+  {
+    soru: "Who is the Armenian violinist and composer who lived in the late 19th and early 20th centuries and is the owner of beloved works like 'Gamzedeyim Deva Bulmam'?",
+    secenekler: ["Kemani Tatyos Efendi", "Kemani Serkis Efendi", "Aleko Bacanos", "Kemani Sebuh"],
+    dogru: "Kemani Tatyos Efendi"
+  },
+  {
+    soru: "Who is the late teacher who wrote the book 'Türk Musikisi Nazariyatı ve Usulleri', taught as a basic resource in conservatories today, and carried the Arel-Ezgi system to the present day?",
+    secenekler: ["İsmail Hakkı Özkan", "Cinuçen Tanrıkorur", "Nevzad Atlığ", "Alaeddin Yavaşça"],
+    dogru: "İsmail Hakkı Özkan"
+  },
+  {
+    soru: "Who is the person who adapted the Turkish music sound system to Western notation (4th-5th system), wrote the book 'Türk Musikisi Nazariyatı Dersleri', and established today's theoretical infrastructure (with Ezgi and Uzdilek)?",
+    secenekler: ["Hüseyin Sadettin Arel", "Rauf Yekta Bey", "Suphi Ezgi", "Salih Murat Uzdilek"],
+    dogru: "Hüseyin Sadettin Arel"
+  },
+  {
+    soru: "Who is the composer, one of the last representatives of the Bosphorus civilization, composer of the song 'Bir Bahar Akşamı Rastladım Size', and also a great tamburi?",
+    secenekler: ["Selahattin Pınar", "Mesut Cemil", "Sadi Işılay", "Refik Fersan"],
+    dogru: "Selahattin Pınar"
+  },
+  {
+    soru: "Who is the 15th-century Edvar writer and theorist who first used and classified the concept of 'Makam' in today's sense (Concept of Seyir, etc.)?",
+    secenekler: ["Hızır Bin Abdullah", "Ladikli Mehmet Çelebi", "Seydi", "Şükrullah"],
+    dogru: "Hızır Bin Abdullah"
+  },
+  {
+    soru: "Who is the son of Tanburi Cemil Bey, an ecole in Instrumental Works (Peşrev and Saz Semaisi), and known for works like 'Sultaniyegâh Sirto'?",
+    secenekler: ["Mesut Cemil", "Niyazi Sayın", "Necdet Yaşar", "Ercüment Batanay"],
+    dogru: "Mesut Cemil"
+  },
+  {
+    soru: "Who is the Islamic philosopher considered the first great theorist of Turkish Music, author of the work 'Musiki-ul Kebir', and worked on sound physics?",
+    secenekler: ["Farabi", "Avicenna (İbn-i Sina)", "Al-Kindi", "Urmevi"],
+    dogru: "Farabi"
+  },
+  {
+    soru: "Who is the classical period composer known especially for works in the 'Kâr' form (e.g., Rast Kâr-ı Natık) and who was also the teacher of Selim III?",
+    secenekler: ["Tanburi İzak", "Zaharya", "Ebûbekir Ağa", "Hafız Post"],
+    dogru: "Tanburi İzak"
+  },
+  {
+    soru: "Who is the composer who composed the 'Nev-eser' (New work) makam, is considered one of the founders of the neoclassical period, and used rich makam modulations in his works (e.g., Çamlıca Yolunda)?",
+    secenekler: ["Hacı Faik Bey", "Dede Efendi", "Mustafa Nafiz Irmak", "Lemi Atlı"],
+    dogru: "Dede Efendi"
+  },
+  {
+    soru: "Who is one of the founders of Istanbul Radio, also worked on polyphonic Turkish music, was a student of Tanburi Cemil Bey, and is the composer of 'Nihavend Longa' (not Kevser Hanım, the other one)?",
+    secenekler: ["Santuri Ethem Bey", "Refik Fersan", "Mesut Cemil", "Şerif Muhittin Targan"],
+    dogru: "Santuri Ethem Bey"
+  },
+  {
+    soru: "Who is the artist accepted as one of the greatest 'Oud' virtuosos of the 20th century, known for his unique plectrum technique, and whose 'Kürdilihicazkâr Saz Semaisi' is very famous?",
+    secenekler: ["Yorgo Bacanos", "Udi Hrant", "Şerif Muhittin Targan", "Nevres Bey"],
+    dogru: "Yorgo Bacanos"
+  },
+  {
+    soru: "Who is one of the last great composers of Mevlevi music, composer of 'Suzidil Mevlevi Ayini', and a student of Dede Efendi?",
+    secenekler: ["Zekai Dede", "Hüseyin Fahreddin Dede", "Ahmet Avni Konuk", "Rauf Yekta Bey"],
+    dogru: "Zekai Dede"
+  },
+  {
+    soru: "Who is the legendary musician, an oud virtuoso from Baghdad, who went to Andalusia influencing the foundations of European music, and is said to have added the 5th string to the oud?",
+    secenekler: ["Ziryab", "Ishaq al-Mawsili", "Farabi", "Amir Khusrow"],
+    dogru: "Ziryab"
+  },
+  {
+    soru: "Who is the musicologist who conducted one of the first scientific studies examining the history of Turkish Music and notated makams and usuls before the 'Arel-Ezgi-Uzdilek' trio (Darülelhan studies)?",
+    secenekler: ["Rauf Yekta Bey", "Suphi Ezgi", "Mahmut Ragıp Gazimihal", "Vahit Lütfi Salcı"],
+    dogru: "Rauf Yekta Bey"
+  },
+  {
+    soru: "Who is the Sultan-composer who invented or revived the 'Şedaraban' makam (usually attributed to him) and also produced works in the 'Zeybek' form?",
+    secenekler: ["Sultan Abdülaziz", "Sultan Vahdettin", "Sultan Reşat", "Abdülhamid II"],
+    dogru: "Sultan Abdülaziz"
+  },
+  {
+    soru: "Who is the composer, mastering both Eastern and Western music, possessing the name meaning 'Praised' which is also a name of the Prophet, and composer of 'Segâh Tekbir' and 'Salat-ı Ümmiye'?",
+    secenekler: ["Itrî", "Dede Efendi", "Zekai Dede", "Abdülkadir Meragi"],
+    dogru: "Itrî"
+  }
+],
+            lt: [
+  {
+    soru: "Kiek komų sudaro „Tanini“ (T) intervalą pagal Arel-Ezgi-Uzdilek sistemą?",
+    secenekler: ["4 Komos", "5 Komos", "8 Komos", "9 Komos"],
+    dogru: "9 Komos"
+  },
+  {
+    soru: "Kuri gama turkų muzikoje laikoma „Pagrindine gama“, kurios intervalų seka yra T-T-B-T-T-B-T?",
+    secenekler: ["Rast gama", "Çargâh gama", "Hüseyni gama", "Buselik gama"],
+    dogru: "Çargâh gama"
+  },
+  {
+    soru: "Kaip sudaromas sudėtinis (mürekkep) „Segâh“ makamas?",
+    secenekler: ["Segâh penkiagarsis vietoje + Hicaz keturgarsis nuo Neva", "Segâh penkiagarsis vietoje + Uşşak keturgarsis nuo Neva", "Hüzzam penkiagarsis vietoje + Hicaz keturgarsis nuo Neva", "Rast penkiagarsis vietoje + Segâh keturgarsis nuo Neva"],
+    dogru: "Segâh penkiagarsis vietoje + Hicaz keturgarsis nuo Neva"
+  },
+  {
+    soru: "Kokia teorinė savybė išskiria „Hümayun“ makamą iš Hicaz, Uzzal ir Zengüle makamų šeimos?",
+    secenekler: ["Jo dominantė yra Neva", "Viršutinėje tonikoje išlieka Buselik atspalvis", "Viršutinėje tonikoje išlieka Uşşak atspalvis", "Pabaigoje sukuriamas Rast atspalvis"],
+    dogru: "Viršutinėje tonikoje išlieka Buselik atspalvis"
+  },
+  {
+    soru: "Kokia yra 10-ies dalių „Lenk Fahte“ ritmo laiko struktūra?",
+    secenekler: ["5 + 5", "2 + 3 + 2 + 3", "2 + 2 + 3 + 3", "3 + 2 + 2 + 3"],
+    dogru: "2 + 3 + 2 + 3"
+  },
+  {
+    soru: "Kokia yra teisinga kūrinių atlikimo tvarka klasikiniame Fasıl?",
+    secenekler: ["Peşrev - Şarkı - Kâr - Ağır Semai - Yürük Semai", "Taksim - Peşrev - Kâr (arba Beste) - Ağır Semai - Şarkı - Yürük Semai - Saz Semaisi", "Saz Semaisi - Peşrev - Beste - Ağır Semai - Şarkı", "Peşrev - Ağır Semai - Beste - Şarkı - Yürük Semai"],
+    dogru: "Taksim - Peşrev - Kâr (arba Beste) - Ağır Semai - Şarkı - Yürük Semai - Saz Semaisi"
+  },
+  {
+    soru: "Kokia yra Uşşak keturgarsio intervalų struktūra (nuo žemiausio iki aukščiausio)? (K: Didysis Mücennep, S: Mažasis Mücennep, T: Tanini)",
+    secenekler: ["K - S - T", "S - T - K", "T - S - K", "T - T - B"],
+    dogru: "K - S - T"
+  },
+  {
+    soru: "Kokia yra Acem Aşiran makamo dominantė (hakim perdesi)?",
+    secenekler: ["Acem nata", "Dügah nata", "Neva nata", "Çargâh nata"],
+    dogru: "Acem nata"
+  },
+  {
+    soru: "Kuris iš šių makamų yra transponuotas („Şed“)?",
+    secenekler: ["Hüzzam", "Rast", "Hüseyni", "Ferahnak"],
+    dogru: "Ferahnak"
+  },
+  {
+    soru: "Kiek komų sudaro „Bakiye“ (B) intervalą?",
+    secenekler: ["1 Koma", "4 Komos", "5 Komos", "8 Komos"],
+    dogru: "4 Komos"
+  },
+  {
+    soru: "Kuris makamas turi „besileidžiančią“ (inici) eigą (prasideda aukštai ir leidžiasi žemyn)?",
+    secenekler: ["Uşşak", "Rast", "Hicaz", "Muhayyer"],
+    dogru: "Muhayyer"
+  },
+  {
+    soru: "Kaip vadinama kiekviena kūrinio eilutė „Beste“ formoje?",
+    secenekler: ["Hane", "Murabba", "Terennüm", "Miyan"],
+    dogru: "Hane"
+  },
+  {
+    soru: "Kokia nata penklinėje žymimas „Neva“ laipsnis (G smuiko rakto sistemoje)?",
+    secenekler: ["Re ant ketvirtos linijos", "Si ant trečios linijos", "La antrajame tarpe", "Fa ant penktos linijos"],
+    dogru: "Re ant ketvirtos linijos"
+  },
+  {
+    soru: "Ties kuria nata nusileidžia (turi toniką) Saba makamas?",
+    secenekler: ["Rast", "Dügah", "Segâh", "Çargâh"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "Kelių dalių yra „Ağır Aksak“ ritmas?",
+    secenekler: ["9 dalių", "10 dalių", "7 dalių", "5 dalių"],
+    dogru: "9 dalių"
+  },
+  {
+    soru: "Kokia yra „Dik Kürdi“ natos komos vertė ir ženklas?",
+    secenekler: ["4 komų diezas", "1 komos bemolis", "4 komų bemolis", "5 komų bemolis"],
+    dogru: "4 komų bemolis"
+  },
+  {
+    soru: "Į kurią natą transponavus (şed) Buselik makamą gaunama Nihavend makamo gama?",
+    secenekler: ["Į Dügah natą", "Į Rast natą", "Į Yegâh natą", "Į Hüseyni Aşiran natą"],
+    dogru: "Į Rast natą"
+  },
+  {
+    soru: "Kuris iš šių ritmų yra 5 dalių?",
+    secenekler: ["Sofyan", "Türk Aksağı", "Yürük Semai", "Devr-i Hindi"],
+    dogru: "Türk Aksağı"
+  },
+  {
+    soru: "Koks paprastai turi būti intervalas tarp „vedamosios“ (Yeden) ir „tonikos“ (Durak), kad būtų jaučiamas pilnas užbaigimas?",
+    secenekler: ["Cielas tonas (Tanini)", "Pusė tono (Bakiye arba Mažasis Mücennep)", "Padidinta sekunda", "Ketvirtis tono"],
+    dogru: "Pusė tono (Bakiye arba Mažasis Mücennep)"
+  },
+  {
+    soru: "Kokia yra Hüzzam makamo eiga (seyir)?",
+    secenekler: ["Kylanti", "Besileidžianti", "Besileidžianti - Kylanti", "Tiesi"],
+    dogru: "Besileidžianti - Kylanti"
+  },
+  {
+    soru: "Kokia yra Müstear makamo pagrindinė nata (durak)?",
+    secenekler: ["Irak", "Segâh", "Dügah", "Rast"],
+    dogru: "Segâh"
+  },
+  {
+    soru: "Kaip vadinamos „Peşrev“ formos dalys?",
+    secenekler: ["Kıta", "Zemin - Zaman", "Hane - Teslim", "Meyan - Karar"],
+    dogru: "Hane - Teslim"
+  },
+  {
+    soru: "Ant kurios natos sudarytas Hicazkar (transponuotas) makamas?",
+    secenekler: ["Rast", "Dügah", "Segâh", "Acem Aşiran"],
+    dogru: "Rast"
+  },
+  {
+    soru: "Ką ritmikoje reiškia „Velvele“?",
+    secenekler: ["Ritmo pagrindinių smūgių smulkinimas į mažesnius vienetus, siekiant praturtinti skambesį", "Greitesnis ritmo atlikimas", "Ritmo grojimas tik Kudüm instrumentu", "Ritmo laiko skaičiaus keitimas"],
+    dogru: "Ritmo pagrindinių smūgių smulkinimas į mažesnius vienetus, siekiant praturtinti skambesį"
+  },
+  {
+    soru: "Kuriai makamų šeimai priklauso Kürdilihicazkar makamas?",
+    secenekler: ["Hicaz šeimai", "Kürdi šeimai", "Buselik šeimai", "Rast šeimai"],
+    dogru: "Kürdi šeimai"
+  },
+  {
+    soru: "Kokia yra Karcığar makamo struktūra?",
+    secenekler: ["Uşşak keturgarsis vietoje + Hicaz penkiagarsis nuo Neva", "Uşşak keturgarsis vietoje + Buselik penkiagarsis nuo Neva", "Hicaz keturgarsis vietoje + Uşşak penkiagarsis nuo Neva", "Rast penkiagarsis vietoje + Hicaz keturgarsis nuo Neva"],
+    dogru: "Uşşak keturgarsis vietoje + Hicaz penkiagarsis nuo Neva"
+  },
+  {
+    soru: "Kiek komų sudaro „Mažąjį Mücennep“ (S) intervalą Arel-Ezgi-Uzdilek sistemoje?",
+    secenekler: ["4 Komos", "5 Komos", "8 Komos", "9 Komos"],
+    dogru: "5 Komos"
+  },
+  {
+    soru: "Kaip klasikinėje dainos (Şarkı) formoje vadinama trečioji eilutė, kuri dažniausiai juda aukščiausiose natose?",
+    secenekler: ["Zemin", "Nakarat", "Miyan (Meyan)", "Karar"],
+    dogru: "Miyan (Meyan)"
+  },
+  {
+    soru: "Kelių dalių yra „Aksak Semai“ ritmas?",
+    secenekler: ["10 dalių", "9 dalių", "6 dalių", "32 dalių"],
+    dogru: "10 dalių"
+  },
+  {
+    soru: "Kokį atspalvį (çeşni) pridėjus prie Rast makamo gamos susidaro Suzinak makamas?",
+    secenekler: ["Hicaz ties Neva", "Buselik ties Neva", "Kürdi ties Dügah", "Uşşak ties Hüseyni"],
+    dogru: "Hicaz ties Neva"
+  },
+  {
+    soru: "Kaip turkų muzikoje vadinama „Sol“ nata, esanti tarpe virš penktosios (viršutinės) penklinės linijos?",
+    secenekler: ["Neva", "Hüseyni", "Gerdaniye", "Muhayyer"],
+    dogru: "Gerdaniye"
+  },
+  {
+    soru: "Kuris iš šių makamų priskiriamas „Paprastųjų makamų“ klasei?",
+    secenekler: ["Hüseyni", "Segâh", "Hüzzam", "Saba"],
+    dogru: "Hüseyni"
+  },
+  {
+    soru: "Kelių dalių yra mažiausias turkų muzikos ritmas „Nim Sofyan“?",
+    secenekler: ["2 dalių", "3 dalių", "4 dalių", "5 dalių"],
+    dogru: "2 dalių"
+  },
+  {
+    soru: "Kokia yra Rast makamo „vedamoji“ (Yeden) nata (viena nata žemiau tonikos)?",
+    secenekler: ["Irak", "Kaba Rast", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Irak"
+  },
+  {
+    soru: "Kaip sudaromas Nikriz makamas?",
+    secenekler: ["Nikriz penkiagarsis ties Rast + Rast keturgarsis ties Neva", "Nikriz penkiagarsis ties Rast + Hicaz keturgarsis ties Neva", "Hicaz keturgarsis ties Dügah + Rast penkiagarsis ties Neva", "Nikriz penkiagarsis ties Buselik + Uşşak keturgarsis ties Hüseyni"],
+    dogru: "Nikriz penkiagarsis ties Rast + Rast keturgarsis ties Neva"
+  },
+  {
+    soru: "Kas sukūrė natų sistemą, paremtą armėniškais rašmenimis, kuri buvo naudojama prieš dabartinę notaciją?",
+    secenekler: ["Kantemiroğlu", "Abdülbaki Nasır Dede", "Ali Ufki Bey", "Hamparsum Limonciyan"],
+    dogru: "Hamparsum Limonciyan"
+  },
+  {
+    soru: "Kelių dalių yra „Curcuna“ ritmas?",
+    secenekler: ["10 dalių", "5 dalių", "7 dalių", "9 dalių"],
+    dogru: "10 dalių"
+  },
+  {
+    soru: "Kokia yra Acem Kürdi makamo dominantė?",
+    secenekler: ["Dügah", "Acem", "Neva", "Çargâh"],
+    dogru: "Acem"
+  },
+  {
+    soru: "Kiek komų teoriškai sudaro „Padidintos sekundos“ (A) intervalą (pvz., Hicaz keturgarsio viduryje) turkų muzikoje?",
+    secenekler: ["9 Komos", "12-13 Komų", "8 Komos", "5 Komos"],
+    dogru: "12-13 Komų"
+  },
+  {
+    soru: "Kiek komų sudaro „Didįjį Mücennep“ (K) intervalą Arel-Ezgi-Uzdilek sistemoje?",
+    secenekler: ["4 Komos", "5 Komos", "8 Komos", "9 Komos"],
+    dogru: "8 Komos"
+  },
+  {
+    soru: "Kuris kompozitorius laikomas didžiausiu „Şarkı“ formos meistru ir architektu turkų meno muzikoje?",
+    secenekler: ["Hacı Arif Bey", "Dede Efendi", "Itrî", "Tanburi Cemil Bey"],
+    dogru: "Hacı Arif Bey"
+  },
+  {
+    soru: "Kuris makamas tiek kylant, tiek leidžiantis naudoja „Buselik“ atspalvį ir jo tonika yra Dügah nata?",
+    secenekler: ["Nihavend", "Buselik", "Kürdi", "Uşşak"],
+    dogru: "Buselik"
+  },
+  {
+    soru: "Kuris iš šių yra „Sudėtinis“ (Mürekkep) makamas?",
+    secenekler: ["Rast", "Çargâh", "Isfahan", "Kürdi"],
+    dogru: "Isfahan"
+  },
+  {
+    soru: "Kokia yra Zirgüleli Hicaz makamo vedamoji (yeden) nata žemiau Dügah?",
+    secenekler: ["Rast", "Irak", "Zirgüle (Kaba Dik Kürdi)", "Yegâh"],
+    dogru: "Zirgüle (Kaba Dik Kürdi)"
+  },
+  {
+    soru: "Kelių dalių yra „Yürük Semai“ ritmas?",
+    secenekler: ["3 dalių", "6 dalių", "9 dalių", "10 dalių"],
+    dogru: "6 dalių"
+  },
+  {
+    soru: "Kaip vadinamas laikinas perėjimas iš pagrindinio makamo į kitą kūrinio atlikimo metu?",
+    secenekler: ["Şed", "Geçki", "Çeşni", "Karar"],
+    dogru: "Geçki"
+  },
+  {
+    soru: "Kuri iš šių natų yra „aukščiausia“ (tiz)?",
+    secenekler: ["Kaba Rast", "Rast", "Gerdaniye", "Tiz Segâh"],
+    dogru: "Tiz Segâh"
+  },
+  {
+    soru: "Koks yra ryškiausias skirtumas tarp Hüseyni ir Uşşak makamų?",
+    secenekler: ["Hüseyni yra besileidžiantis-kylantis ir naudoja 6-ąjį laipsnį (Eviç/Acem)", "Hüseyni tonika yra kitokia", "Uşşak makamo dominantė yra Çargah", "Hüseyni makamas priklauso Buselik šeimai"],
+    dogru: "Hüseyni yra besileidžiantis-kylantis ir naudoja 6-ąjį laipsnį (Eviç/Acem)"
+  },
+  {
+    soru: "Kokia yra Sultaniyegâh makamo tonika?",
+    secenekler: ["Dügah", "Rast", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Yegâh"
+  },
+  {
+    soru: "Ką muzikoje reiškia „Asma Karar“?",
+    secenekler: ["Galutinis kūrinio užbaigimas", "Laikinas sustojimas ties kita nata nei pagrindinė tonika kūrinio viduryje", "Ritmo grojimas su „velvele“", "Taksimo įžanginė dalis"],
+    dogru: "Laikinas sustojimas ties kita nata nei pagrindinė tonika kūrinio viduryje"
+  },
+  {
+    soru: "Kaip turkų muzikos notacijoje vadinamas ženklas, aukštinantis (aštrinantis) natą 4 komomis?",
+    secenekler: ["Bakiye Diezas", "Koma Diezas", "Mažasis Mücennep Diezas", "Didysis Mücennep Diezas"],
+    dogru: "Bakiye Diezas"
+  },
+  {
+    soru: "Iš kelių dalių, vadinamų „Selam“, susideda Mevlevi apeigos (Ayin-i Şerif)?",
+    secenekler: ["4 Selam", "3 Selam", "2 Selam", "5 Selam"],
+    dogru: "4 Selam"
+  },
+  {
+    soru: "Kurio makamo transpozicija į „Yegâh“ natą laikomas Şedaraban makamas?",
+    secenekler: ["Zirgüleli Hicaz", "Hicaz", "Hümayun", "Uzzal"],
+    dogru: "Zirgüleli Hicaz"
+  },
+  {
+    soru: "Kokia yra 28 dalių didžiojo ritmo „Devr-i Kebir“ struktūra?",
+    secenekler: ["3+4+4+3+4+4+3+3", "4+4+4+4+3+3+3+3", "2+4+4+2+4+4+2+6", "7+7+7+7"],
+    dogru: "3+4+4+3+4+4+3+3"
+  },
+  {
+    soru: "Kokie alteracijos ženklai yra Hüseyni makamo prieraktinėje (donanım) srityje?",
+    secenekler: ["Si komos bemolis (Segâh) - Fa bakiye diezas (Eviç)", "Si bakiye bemolis - Mi bakiye bemolis", "Si komos bemolis - Fa natūrali", "Si penkių komų bemolis"],
+    dogru: "Si komos bemolis (Segâh) - Fa bakiye diezas (Eviç)"
+  },
+  {
+    soru: "Kaip vadinama mokomoji kompozicijos forma, kurios tekste minimi makamų pavadinimai?",
+    secenekler: ["Kâr-ı Natık", "Kâr-ı Müşterek", "Medhal", "Münacat"],
+    dogru: "Kâr-ı Natık"
+  },
+  {
+    soru: "Bayati ir Uşşak makamai turi tą pačią gamą. Kokia pagrindinė eigos savybė skiria Bayati nuo Uşşak?",
+    secenekler: ["Bayati eiga prasideda nuo Neva natos (arba aplink ją)", "Bayati tonika yra Rast", "Bayati yra besileidžiantis makamas", "Bayati prieraktinėje srityje naudoja Si bemolį"],
+    dogru: "Bayati eiga prasideda nuo Neva natos (arba aplink ją)"
+  },
+  {
+    soru: "Kaip turkų muzikoje vadinama „Si“ (B) nata, esanti ant 3-iosios linijos (Natūrali būsena)?",
+    secenekler: ["Buselik", "Segâh", "Nişabur", "Dik Kürdi"],
+    dogru: "Buselik"
+  },
+  {
+    soru: "Kokia yra 9 dalių „Evfer“ ritmo struktūra?",
+    secenekler: ["5 + 4", "4 + 5", "2 + 3 + 2 + 2", "3 + 2 + 2 + 2"],
+    dogru: "5 + 4"
+  },
+  {
+    soru: "Kuri iš šių formų NĖRA instrumentinė muzika?",
+    secenekler: ["Murabba", "Longa", "Syrto", "Medhal"],
+    dogru: "Murabba"
+  },
+  {
+    soru: "Kurio makamo transpozicija į „Yegâh“ natą yra Ferahnüma makamas?",
+    secenekler: ["Tai Tanburi Cemil Bey išradimas, o ne transpozicija", "Rast", "Hüseyni", "Hicaz"],
+    dogru: "Tai Tanburi Cemil Bey išradimas, o ne transpozicija"
+  },
+  {
+    soru: "Ką turkų muzikos teorijoje reiškia žodis „Mücennep“?",
+    secenekler: ["Šalutinis, kaimyninis, netolimas (Intervalo pavadinimas)", "Garsus balsas", "Greitas tempas", "Religinės muzikos forma"],
+    dogru: "Šalutinis, kaimyninis, netolimas (Intervalo pavadinimas)"
+  },
+  {
+    soru: "Kaip vadinama vokalinė improvizacinė forma be nustatyto ritmo (usul)?",
+    secenekler: ["Gazel", "Taksim", "Mevlid", "Kasidin"],
+    dogru: "Gazel"
+  },
+  {
+    soru: "Į „Yegâh“ natą transponavus kurį makamą gaunama Ferahfeza makamo gama?",
+    secenekler: ["Suzinak", "Rast", "Hicaz", "Uşşak"],
+    dogru: "Suzinak"
+  },
+  {
+    soru: "Kam priskiriama „Holderio komos“ (oktavos dalijimas į 53) idėja pagal Arel-Ezgi-Uzdilek sistemą?",
+    secenekler: ["Nicholas Mercator", "Pitagorui", "Farabiui", "Abdülkadir Meragi"],
+    dogru: "Nicholas Mercator"
+  },
+  {
+    soru: "Kuris iš šių makamų NĖRA „transponuotas“ (Şed), o yra vienas iš „pagrindinių“?",
+    secenekler: ["Hüzzam", "Mahur", "Acem Aşiran", "Evcara"],
+    dogru: "Hüzzam"
+  },
+  {
+    soru: "Kuris teoretikas XIII a. parašė veikalą „Kitabü'l-Edvar“ ir padėjo pagrindus turkų/rytų muzikos teorijai?",
+    secenekler: ["Safiyüddin Urmevi", "Farabi", "Ibn-i Sina", "Kindi"],
+    dogru: "Safiyüddin Urmevi"
+  },
+  {
+    soru: "Kokia yra Muhayyer Kürdi makamo gama?",
+    secenekler: ["Kürdi keturgarsis vietoje + Buselik penkiagarsis ties Neva", "Uşşak keturgarsis vietoje + Kürdi penkiagarsis ties Neva", "Rast penkiagarsis vietoje + Hicaz keturgarsis ties Neva", "Buselik penkiagarsis vietoje + Kürdi keturgarsis ties Hüseyni"],
+    dogru: "Kürdi keturgarsis vietoje + Buselik penkiagarsis ties Neva"
+  },
+  {
+    soru: "Kaip vadinamas Hacı Arif Bey sukurtas makamo/ritmo derinys, dažniausiai 10-ies dalių (dažnai painiojamas su Curcuna)?",
+    secenekler: ["Aksak Semai", "Müsemmen", "Ağır Aksak", "Tek Vuruş"],
+    dogru: "Müsemmen"
+  },
+  {
+    soru: "Kaip atrodo „Koma“ bemolio ženklas turkų muzikoje?",
+    secenekler: ["Panašus į apverstą „d“ raidę, su vienu brūkšniu", "Dvigubas bemolis", "Trikampio formos", "Kvadrato formos"],
+    dogru: "Panašus į apverstą „d“ raidę, su vienu brūkšniu"
+  },
+  {
+    soru: "Ties kuria nata nusileidžia Isfahan makamas?",
+    secenekler: ["Dügah", "Rast", "Segâh", "Irak"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "Kurioje klasikinio Fasıl vietoje atliekamas „Ara Taksimi“?",
+    secenekler: ["Tarp dainų, norint pereiti į kitą makamą ar atsikvėpti", "Pačioje Fasıl pradžioje", "Po Saz Semaisi", "Prieš pat Peşrev"],
+    dogru: "Tarp dainų, norint pereiti į kitą makamą ar atsikvėpti"
+  },
+  {
+    soru: "Kokiose formose dažniausiai naudojamas 24 dalių „Çenber“ ritmas?",
+    secenekler: ["Peşrev", "Beste", "Kâr", "Saz Semaisi"],
+    dogru: "Peşrev"
+  },
+  {
+    soru: "Kokie alteracijos ženklai yra Nişabur makamo prieraktinėje srityje?",
+    secenekler: ["Si - Mi - La - Re (Mažieji Mücennep bemoliai)", "Si Bemol - Mi Bemol", "Tik Si komos bemolis", "Jokių ženklų (Natūrali)"],
+    dogru: "Si - Mi - La - Re (Mažieji Mücennep bemoliai)"
+  },
+  {
+    soru: "Kurią Vakarų muzikos natą apytiksliai atitinka „Eviç“ nata (jei La=440)?",
+    secenekler: ["Fa Diezas", "Sol Natūrali", "Fa Natūrali", "Mi Bemolis"],
+    dogru: "Fa Diezas"
+  },
+  {
+    soru: "Kiek iš viso komų sudaro „Grynosios kvintos“ intervalą pagal Arel-Ezgi-Uzdilek sistemą?",
+    secenekler: ["22 Komos", "23 Komos", "31 Koma", "53 Komos"],
+    dogru: "31 Koma"
+  },
+  {
+    soru: "Kuris didysis ritmas turkų muzikoje turi daugiausiai dalių (88 dalis)?",
+    secenekler: ["Darb-ı Fetih", "Hafif", "Zencir", "Çenber"],
+    dogru: "Darb-ı Fetih"
+  },
+  {
+    soru: "Kurio makamo transpozicija į „Acem Aşiran“ natą yra Şevkefza makamas?",
+    secenekler: ["Zirgüleli Hicaz", "Hicaz", "Uzzal", "Hümayun"],
+    dogru: "Zirgüleli Hicaz"
+  },
+  {
+    soru: "Kaip vadinama ilga religinės muzikos forma, pasakojanti apie pranašo Mahometo gimimą, gyvenimą ir stebuklus, dažniausiai skaitoma mečetėse?",
+    secenekler: ["Mevlid", "Tevşih", "İlahi", "Şugl"],
+    dogru: "Mevlid"
+  },
+  {
+    soru: "Kaip turkų muzikoje vadinama „Fa“ nata, esanti pirmajame tarpe (Smuiko raktas)?",
+    secenekler: ["Acem Aşiran", "Hüseyni Aşiran", "Irak", "Rast"],
+    dogru: "Acem Aşiran"
+  },
+  {
+    soru: "Mahur ir Rast makamų gamos vienodos. Koks pagrindinis skirtumas tarp jų?",
+    secenekler: ["Mahur yra besileidžiantis ir prasideda aplink Gerdaniye (viršutinę toniką)", "Mahur dominantė yra Dügah", "Mahur naudoja Si bemolį", "Mahur tonika yra Neva"],
+    dogru: "Mahur yra besileidžiantis ir prasideda aplink Gerdaniye (viršutinę toniką)"
+  },
+  {
+    soru: "Kuris 32 dalių ritmas naudojamas būtent Mevlevi apeigų „3-iajame Selam“?",
+    secenekler: ["Hafif", "Muhammes", "Devr-i Kebir", "Berefşan"],
+    dogru: "Devr-i Kebir"
+  },
+  {
+    soru: "Kaip sudaromas Bestenigar makamas?",
+    secenekler: ["Segâh ties Irak + Saba ties Dügah", "Saba vietoje + Užbaigimas ties Irak (Irak atspalvis)", "Uşşak vietoje + Hicaz ties Neva", "Hüzzam vietoje + Uşşak ties Neva"],
+    dogru: "Saba vietoje + Užbaigimas ties Irak (Irak atspalvis)"
+  },
+  {
+    soru: "Kaip atrodo „Didžiojo Mücennep bemolio“ (apie 8-9 komas) ženklas turkų muzikos notacijoje?",
+    secenekler: ["Vienas brūkšnelis 'd' (Komos bemolis)", "Dvigubas bemolis (Bakiye bemolis)", "Panašus į apverstą pilnavidurę „K“ (arba riebus bemolis su brūkšniu)", "Standartinis Vakarų bemolis"],
+    dogru: "Panašus į apverstą pilnavidurę „K“ (arba riebus bemolis su brūkšniu)"
+  },
+  {
+    soru: "Kiek iš viso komų sudaro „Oktavos“ intervalą Arel-Ezgi-Uzdilek sistemoje?",
+    secenekler: ["53 Komos", "41 Koma", "24 Komos", "12 Komų"],
+    dogru: "53 Komos"
+  },
+  {
+    soru: "Ties kuria nata nusileidžia Rahatülervah makamas?",
+    secenekler: ["Irak", "Rast", "Segâh", "Hüseyni"],
+    dogru: "Irak"
+  },
+  {
+    soru: "Kaip vadinami kūriniai, kurių ir žodžius, ir muziką sukūrė tas pats asmuo?",
+    secenekler: ["Derleme", "Anonim", "Mahlas", "Vietoj šio klausimo tipo techninis klausimas: kas yra 'Müstezat'? -> Poemos/kompozicijos forma, sukurta pridedant trumpą eilutę prie kiekvienos Gazel eilutės."],
+    dogru: "Vietoj šio klausimo tipo techninis klausimas: kas yra 'Müstezat'? -> Poemos/kompozicijos forma, sukurta pridedant trumpą eilutę prie kiekvienos Gazel eilutės."
+  },
+  {
+    soru: "Kokia forma panaši į „Şarkı“, tačiau kiekvienos eilutės gale pridedamos trumpos „Ziyade“ eilutės?",
+    secenekler: ["Müstezat", "Murabba", "Nakış", "Zeybek"],
+    dogru: "Müstezat"
+  },
+  {
+    soru: "Kokia yra Neveser makamo struktūra?",
+    secenekler: ["Nikriz penkiagarsis vietoje (Rast) + Hicaz keturgarsis ties Neva", "Nikriz penkiagarsis vietoje + Rast keturgarsis ties Neva", "Hicaz vietoje + Hicaz ties Neva", "Uşşak vietoje + Nikriz ties Neva"],
+    dogru: "Nikriz penkiagarsis vietoje (Rast) + Hicaz keturgarsis ties Neva"
+  },
+  {
+    soru: "Kokia yra 15 dalių „Raks Aksağı“ ritmo struktūra?",
+    secenekler: ["2+2+2+3+2+2+2", "4+4+4+3", "9+6", "5+10"],
+    dogru: "2+2+2+3+2+2+2"
+  },
+  {
+    soru: "Kuris didis kompozitorius sukūrė tokius makamus kaip „Ferahfeza“ ir „Sultan-ı Yegâh“?",
+    secenekler: ["Hamamizade İsmail Dede Efendi", "Buhurizade Mustafa Itrî", "Hafız Post", "Zekai Dede"],
+    dogru: "Hamamizade İsmail Dede Efendi"
+  },
+  {
+    soru: "Kaip vadinamas ženklas, aukštinantis „Fa“ natą (5 linija) apie 4-5 komas, ir kaip ta nata vadinama TSM?",
+    secenekler: ["Bakiye Diezas - Eviç", "Komos Diezas - Acem", "Mücennep Diezas - Mahur", "Natūralus - Acem"],
+    dogru: "Bakiye Diezas - Eviç"
+  },
+  {
+    soru: "Kokia yra Eviç makamo tonika ir dominantė?",
+    secenekler: ["Tonika: Irak, Dominantė: Dügah", "Tonika: Irak, Dominantė: Eviç (arba Neva)", "Tonika: Segâh, Dominantė: Eviç", "Tonika: Rast, Dominantė: Gerdaniye"],
+    dogru: "Tonika: Irak, Dominantė: Eviç (arba Neva)"
+  },
+  {
+    soru: "Kaip vadinamas didelis ritmų „rinkinys“, sudarytas iš 5 skirtingų ritmų (Düyek, Fahte, Çenber, Devr-i Kebir, Berefşan)?",
+    secenekler: ["Zencir", "Darb-ı Fetih", "Kâr-ı Natık", "Fasıl"],
+    dogru: "Zencir"
+  },
+  {
+    soru: "Kokia yra Pençgâh makamo „Gamos“ struktūra?",
+    secenekler: ["Rast gama ties Neva + Rast penkiagarsis vietoje (Rast)", "Uşşak vietoje + Uşşak ties Neva", "Hicaz vietoje + Rast ties Neva", "Rast vietoje + Buselik ties Neva"],
+    dogru: "Rast gama ties Neva + Rast penkiagarsis vietoje (Rast)"
+  },
+  {
+    soru: "Kaip atrodo „Koma“ (perteklinis) diezo ženklas turkų muzikoje?",
+    secenekler: ["Kryželis ant vienos linijos (arba vieno brūkšnio diezas)", "Dvigubas diezas", "Trigubas diezas", "Gulintis skaičius 8"],
+    dogru: "Kryželis ant vienos linijos (arba vieno brūkšnio diezas)"
+  },
+  {
+    soru: "Kuri iš šių formų NĖRA „Religinė muzika“?",
+    secenekler: ["Köçekçe", "Tevşih", "Salat", "Durak"],
+    dogru: "Köçekçe"
+  },
+  {
+    soru: "Kokia yra Segâh makamo dominantė?",
+    secenekler: ["Neva", "Rast", "Gerdaniye", "Çargâh"],
+    dogru: "Neva"
+  },
+  {
+    soru: "Kaip vadinamas ritmų smūgis dešine ranka, kuris yra aukštesnis ir aštresnis už „Dum“?",
+    secenekler: ["Tek", "Te", "Ka", "Düm"],
+    dogru: "Tek"
+  },
+  {
+    soru: "Kurios natos naudojimas vietoje „Neva“ Hümayun gamoje apibūdina Hisar makamą?",
+    secenekler: ["Hisar nata (tarp Mücennep diezo Re / Bakiye bemolio Mi)", "Buselik nata", "Eviç nata", "Acem nata"],
+    dogru: "Hisar nata (tarp Mücennep diezo Re / Bakiye bemolio Mi)"
+  },
+  {
+    soru: "Kaip turkų muzikoje vadinama 'Re' (D) nata, esanti po penkline be pridėtinės linijos (pagal smuiko raktą)?",
+    secenekler: ["Yegâh", "Rast", "Dügah", "Hüseyni Aşiran"],
+    dogru: "Yegâh"
+  },
+  {
+    soru: "Kaip vadinama „La“ (A) nata (vidurinė oktava) turkų muzikoje?",
+    secenekler: ["Neva", "Dügah", "Hüseyni", "Muhayyer"],
+    dogru: "Dügah"
+  },
+  {
+    soru: "Kaip vadinama „Si“ (B) nata (3-ia linija), gavusi „1 komos bemolį“?",
+    secenekler: ["Segâh", "Buselik", "Dik Kürdi", "Uşşak"],
+    dogru: "Segâh"
+  },
+  {
+    soru: "Kaip vadinama „Fa“ (F) nata (5-a linija), esanti „Natūralioje“ būsenoje?",
+    secenekler: ["Eviç", "Acem", "Mahur", "Gerdaniye"],
+    dogru: "Acem"
+  },
+  {
+    soru: "Kuri iš šių yra „Şehnaz“ nata?",
+    secenekler: ["Fa Bakiye Diezas (4 Komos)", "Fa Didysis Mücennep Diezas (8-9 Komos)", "Sol Natūrali", "Fa Natūrali"],
+    dogru: "Fa Didysis Mücennep Diezas (8-9 Komos)"
+  },
+  {
+    soru: "Kaip vadinama „Fa“ (F) nata, esanti 1-ajame tarpe (žemas garsas)?",
+    secenekler: ["Acem Aşiran", "Hüseyni Aşiran", "Irak", "Kaba Rast"],
+    dogru: "Acem Aşiran"
+  },
+  {
+    soru: "Kuri nata, gavusi apie 4 komas (Bakiye) diezo, tampa „Zirgüle“ nata?",
+    secenekler: ["Sol (Kaba Rast)", "La (Dügah)", "Fa (Acem Aşiran)", "Do (Kaba Çargâh)"],
+    dogru: "Sol (Kaba Rast)"
+  },
+  {
+    soru: "Kaip vadinama „La“ (A) nata, rašoma ant pirmos pridėtinės linijos virš penklinės (aukšta oktava)?",
+    secenekler: ["Gerdaniye", "Muhayyer", "Tiz Dügah", "Sünbüle"],
+    dogru: "Muhayyer"
+  },
+  {
+    soru: "Kur penklinėje yra „Hüseyni“ nata?",
+    secenekler: ["4-a linija (Re)", "4-as tarpas (Mi)", "3-ia linija (Si)", "2-as tarpas (La)"],
+    dogru: "4-as tarpas (Mi)"
+  },
+  {
+    soru: "Kuri iš šių natų yra „Kaba“ (žemoje) oktavoje?",
+    secenekler: ["Irak", "Segâh", "Buselik", "Çargâh"],
+    dogru: "Irak"
+  },
+  {
+    soru: "Kiek komų bemolio turi „Dik Kürdi“ nata?",
+    secenekler: ["1 Koma", "4-5 Komos", "8-9 Komos", "Jokių (Natūrali)"],
+    dogru: "4-5 Komos"
+  },
+  {
+    soru: "Iš kurios natos kilusi „Hisar“ nata ir kokį ženklą ji gauna?",
+    secenekler: ["Mi (Hüseyni) - Bakiye Bemolis (arba 5 komos)", "Re (Neva) - Bakiye Diezas", "Fa (Acem) - Komos Diezas", "Si (Buselik) - Komos Bemolis"],
+    dogru: "Mi (Hüseyni) - Bakiye Bemolis (arba 5 komos)"
+  },
+  {
+    soru: "Kaip vadinama „Do“ (C) nata, esanti 3-ajame penklinės tarpe?",
+    secenekler: ["Çargâh", "Neva", "Buselik", "Tiz Çargâh"],
+    dogru: "Çargâh"
+  },
+  {
+    soru: "Kuri iš šių yra „Nim Hicaz“ nata?",
+    secenekler: ["Do Bakiye Diezas", "Re Bakiye Bemolis", "Si Natūrali", "Do Natūrali"],
+    dogru: "Do Bakiye Diezas"
+  },
+  {
+    soru: "Kaip vadinama nata, esanti viena oktava aukščiau už Rast natą (Sol)?",
+    secenekler: ["Gerdaniye", "Muhayyer", "Tiz Rast", "Yegâh"],
+    dogru: "Gerdaniye"
+  },
+  {
+    soru: "Kurią natą dažniausiai atitinka „Saba“ nata (kaip specifinė makamo nata)?",
+    secenekler: ["Hicaz ant Re (Neva)", "Bakiye Bemolis ant Re (Neva) (Reb)", "Komos Diezas ant Do (Çargâh)", "Mi (Hüseyni) Natūrali"],
+    dogru: "Bakiye Bemolis ant Re (Neva) (Reb)"
+  },
+  {
+    soru: "Kur turkų muzikoje rašoma „Kaba Dügah“ nata?",
+    secenekler: ["2-ajame penklinės tarpe", "Ant 2-os pridėtinės linijos po penkline", "Ant viršutinės penklinės linijos", "Ant 1-os pridėtinės linijos po penkline"],
+    dogru: "Ant 2-os pridėtinės linijos po penkline"
+  },
+  {
+    soru: "Kur penklinėje yra „Tiz Segâh“ nata?",
+    secenekler: ["Virš 1-os pridėtinės linijos virš penklinės (Si)", "Ant 3-ios penklinės linijos (Si)", "4-ajame penklinės tarpe (Mi)", "Ant apatinės penklinės linijos (Mi)"],
+    dogru: "Virš 1-os pridėtinės linijos virš penklinės (Si)"
+  },
+  {
+    soru: "Kuris iš šių natų atitikmenų yra NETEISINGAS?",
+    secenekler: ["Sol = Rast", "La = Dügah", "Si (Natūrali) = Buselik", "Do = Neva"],
+    dogru: "Do = Neva"
+  },
+  {
+    soru: "Kurios natos kitas pavadinimas yra „Rehâvi“ (dažniausiai senuosiuose šaltiniuose arba žemoje oktavoje)?",
+    secenekler: ["Kaba Rast (Sol)", "Yegâh (Re)", "Kaba Çargâh (Do)", "Hüseyni Aşiran (Mi)"],
+    dogru: "Kaba Rast (Sol)"
+  },
+  {
+    soru: "Iš kurios natos, gavusios komos bemolį, susidaro „Sünbüle“ nata?",
+    secenekler: ["Muhayyer (La) su komos bemoliu", "Gerdaniye (Sol) su komos bemoliu", "Tiz Çargâh (Do) su komos bemoliu", "Tiz Buselik (Si) su komos bemoliu"],
+    dogru: "Muhayyer (La) su komos bemoliu"
+  },
+  {
+    soru: "Kaip turkų muzikoje vadinama „Sol“ (G) nata, esanti ant 2-os penklinės linijos?",
+    secenekler: ["Rast", "Gerdaniye", "Yegâh", "Zirgüle"],
+    dogru: "Rast"
+  },
+  {
+    soru: "Koks yra tikslus „Eviç“ natos atitikmuo?",
+    secenekler: ["Fa Bakiye Diezas (4 Komos)", "Fa Natūrali", "Fa Mücennep Diezas", "Fa Komos Diezas"],
+    dogru: "Fa Bakiye Diezas (4 Komos)"
+  },
+  {
+    soru: "Kur penklinėje rašoma Hüseyni Aşiran nata?",
+    secenekler: ["Po 1-a pridėtine linija po penkline (Si)", "Ant 1-os penklinės linijos (Mi)", "4-ajame penklinės tarpe (Mi)", "Ant 1-os pridėtinės linijos po penkline (Do)"],
+    dogru: "Po 1-a pridėtine linija po penkline (Mi)"
+  },
+  {
+    soru: "Kur penklinėje yra „Tiz Neva“ nata?",
+    secenekler: ["2-ajame pridėtiniame tarpe virš penklinės (Re)", "Ant 4-os penklinės linijos (Re)", "Pačioje apačioje (Re)", "Ant 3-ios penklinės linijos"],
+    dogru: "2-ajame pridėtiniame tarpe virš penklinės (Re)"
+  },
+  {
+    soru: "Kaip vadinama Rast nata (Sol), gavusi 1 komos diezą?",
+    secenekler: ["Nim Zirgüle", "Zirgüle", "Dik Rast", "Rehavi"],
+    dogru: "Nim Zirgüle"
+  },
+  {
+    soru: "Kuri yra Si (B) nata (3-ia linija), gavusi „Bakiye Bemolį“ (4-5 komos)?",
+    secenekler: ["Kürdi", "Segâh", "Dik Kürdi", "Buselik"],
+    dogru: "Kürdi"
+  },
+  {
+    soru: "Kaip vadinama Çargâh nata (Do), gavusi „Didįjį Mücennep Diezą“ (8-9 komos)?",
+    secenekler: ["Hicaz", "Nim Hicaz", "Dik Çargâh", "Hisar"],
+    dogru: "Hicaz"
+  },
+  {
+    soru: "Kaip vadinama „Sol“ (G) nata virš viršutinės penklinės linijos (Gerdaniye oktava)?",
+    secenekler: ["Tiz Rast", "Tiz Gerdaniye", "Sünbüle", "Tiz Neva"],
+    dogru: "Tiz Rast"
+  },
+  {
+    soru: "Kaip vadinama Acem nata (Fa), gavusi 1 komos diezą?",
+    secenekler: ["Dik Acem", "Eviç", "Mahur", "Nim Şehnaz"],
+    dogru: "Dik Acem"
+  },
+  {
+    soru: "Kaip vadinama Hüseyni nata (Mi), gavusi 1 komos bemolį?",
+    secenekler: ["Dik Hisar", "Hisar", "Buselik", "Nim Hisar"],
+    dogru: "Dik Hisar"
+  },
+  {
+    soru: "Kaip vadinama Do (C) nata, rašoma ant 2-os pridėtinės linijos po penkline (Kaba oktava)?",
+    secenekler: ["Kaba Çargâh", "Yegâh", "Kaba Rast", "Hüseyni Aşiran"],
+    dogru: "Kaba Çargâh"
+  },
+  {
+    soru: "Kaip vadinama nata, esanti viena oktava aukščiau už Muhayyer (La)?",
+    secenekler: ["Tiz Dügah", "Tiz Muhayyer", "Tiz Buselik", "Gerdaniye"],
+    dogru: "Tiz Dügah"
+  },
+  {
+    soru: "Kaip vadinama nata, esanti viena oktava aukščiau už Neva (Re)?",
+    secenekler: ["Tiz Neva", "Tiz Çargâh", "Sünbüle", "Tiz Hüseyni"],
+    dogru: "Tiz Neva"
+  },
+  {
+    soru: "Kaip vadinama Si (B) nata (Kaba oktava), esanti po 1-a pridėtine linija po penkline?",
+    secenekler: ["Kaba Buselik", "Kaba Segâh", "Yegâh", "Hüseyni Aşiran"],
+    dogru: "Kaba Buselik"
+  },
+  {
+    soru: "Kaip vadinama 4 komų diezo Fa (F#) nata aukštoje oktavoje (virš penklinės)?",
+    secenekler: ["Tiz Eviç", "Tiz Acem", "Tiz Mahur", "Tiz Şehnaz"],
+    dogru: "Tiz Eviç"
+  },
+  {
+    soru: "Kaip vadinama Do (C) nata, esanti ant 2-os pridėtinės linijos virš penklinės?",
+    secenekler: ["Tiz Çargâh", "Tiz Neva", "Tiz Buselik", "Muhayyer"],
+    dogru: "Tiz Çargâh"
+  },
+  {
+    soru: "Kaip vadinama 4 komų bemolio Si (Bb) nata kaba oktavoje (žemiausi garsai)?",
+    secenekler: ["Kaba Kürdi (arba Kaba Dik Kürdi)", "Kaba Segâh", "Kaba Buselik", "Yegâh"],
+    dogru: "Kaba Kürdi (arba Kaba Dik Kürdi)"
+  },
+  {
+    soru: "Kuri nata yra viena oktava aukščiau už Hüseyni (Aukšta Mi)?",
+    secenekler: ["Tiz Hüseyni", "Tiz Hisar", "Tiz Buselik", "Sünbüle"],
+    dogru: "Tiz Hüseyni"
+  },
+  {
+    soru: "Kaip vadinama „Si“ (B) nata (Tiz oktava) virš penklinės?",
+    secenekler: ["Tiz Buselik", "Tiz Segâh", "Tiz Çargâh", "Tiz Kürdi"],
+    dogru: "Tiz Buselik"
+  },
+  {
+    soru: "Kaip Kaba oktavoje vadinama Si nata su 1 komos bemoliu?",
+    secenekler: ["Kaba Segâh", "Kaba Buselik", "Kaba Kürdi", "Irak"],
+    dogru: "Kaba Segâh"
+  },
+  {
+    soru: "Kaip vadinama 4 komų diezo Do (C#) nata aukštoje oktavoje?",
+    secenekler: ["Tiz Nim Hicaz", "Tiz Hicaz", "Tiz Çargâh", "Tiz Neva"],
+    dogru: "Tiz Nim Hicaz"
+  },
+  {
+    soru: "Kaip vadinama Do (C) nata ant 1-os pridėtinės linijos po penkline, gavusi 4 komų diezą (Žemas C#)?",
+    secenekler: ["Kaba Nim Hicaz", "Kaba Hicaz", "Yegâh", "Kaba Çargâh"],
+    dogru: "Kaba Nim Hicaz"
+  },
+  {
+    soru: "Kuri nata yra viena oktava aukščiau už Acem (Aukšta Fa)?",
+    secenekler: ["Tiz Acem", "Tiz Eviç", "Tiz Gerdaniye", "Tiz Mahur"],
+    dogru: "Tiz Acem"
+  },
+  {
+    soru: "Kaip vadinama 5 komų bemolio Mi (Eb) nata kaba oktavoje?",
+    secenekler: ["Kaba Hisar", "Kaba Buselik", "Hüseyni Aşiran", "Kaba Dik Hisar"],
+    dogru: "Kaba Hisar"
+  },
+  {
+    soru: "Kaip vadinama Gerdaniye nata (Sol), gavusi 4 komų diezą (Sol #)?",
+    secenekler: ["Tiz Zirgüle", "Tiz Nim Zirgüle", "Sünbüle", "Şehnaz"],
+    dogru: "Tiz Zirgüle"
+  },
+  {
+    soru: "Kaip vadinama 5 komų bemolio Si (Bb) nata aukštoje oktavoje?",
+    secenekler: ["Tiz Kürdi", "Tiz Segâh", "Tiz Buselik", "Sünbüle"],
+    dogru: "Tiz Kürdi"
+  },
+  {
+    soru: "Kaip vadinama Muhayyer (La) nata, gavusi 1 komos bemolį (Skirtingai nuo Sünbüle)?",
+    secenekler: ["Dik Sümbüle", "Sümbüle", "Tiz Segâh", "Muhayyer Kürdi"],
+    dogru: "Dik Sümbüle"
+  },
+  {
+    soru: "Kaip vadinama Yegâh nata (Re), gavusi 4 komų diezą? (Žemas Re#)",
+    secenekler: ["Kaba Nim Şehnaz", "Kaba Şehnaz", "Yegâh Diezas", "Kaba Hisar"],
+    dogru: "Kaba Nim Şehnaz"
+  },
+  {
+    soru: "Kaip vadinama 8-9 komų (Mücennep) diezo Fa (F#) nata aukštoje oktavoje?",
+    secenekler: ["Tiz Şehnaz", "Tiz Eviç", "Tiz Acem", "Tiz Mahur"],
+    dogru: "Tiz Şehnaz"
+  },
+  {
+    soru: "Kuris didis kompozitorius, dar vadinamas „Turkų muzikos Bethovenu“, sukūręs tokius kūrinius kaip „Yine bir gülnihal“ ir „Ey büt-i nev eda“, įnešė Vakarų muzikos įtaką (valso ritmą ir kt.) į mūsų muziką?",
+    secenekler: ["Hacı Arif Bey", "Dede Efendi (Hamamizade İsmail)", "Itrî", "Şevki Bey"],
+    dogru: "Dede Efendi (Hamamizade İsmail)"
+  },
+  {
+    soru: "Kuris XVII a. gyvenęs meistras sukūrė šedevrus Segâh Yürük Semai (Tuti-i Mucize Guyem) bei Neva Kâr, ir kurio portretas yra ant 100 TL banknoto?",
+    secenekler: ["Buhurizade Mustafa Itrî", "Hafız Post", "Zaharya", "Ebûbekir Ağa"],
+    dogru: "Buhurizade Mustafa Itrî"
+  },
+  {
+    soru: "Kuris kompozitorius laikomas didžiausiu „Şarkı“ formos meistru, sukūręs beveik 1000 dainų ir įkūręs „Kürdilihicazkâr“ makamą?",
+    secenekler: ["Şevki Bey", "Hacı Arif Bey", "Rahmi Bey", "Nikonya"],
+    dogru: "Hacı Arif Bey"
+  },
+  {
+    soru: "Kuris teoretikas XIII a. parašė veikalą „Kitabü'l-Edvar“ ir pirmą kartą moksliškai susistemino turkų muzikos garso sistemą (abjad notaciją)?",
+    secenekler: ["Farabi", "Safiyüddin Urmevi", "Abdülkadir Meragi", "Kindi"],
+    dogru: "Safiyüddin Urmevi"
+  },
+  {
+    soru: "Kuris genijus virtuozas išrado „Yaylı Tanbur“ instrumentą, iškėlė taksimo formą į viršūnę ir įamžino muziką plokštelių įrašuose?",
+    secenekler: ["Mesut Cemil", "Tanburi Cemil Bey", "Neyzen Tevfik", "Yorgo Bacanos"],
+    dogru: "Tanburi Cemil Bey"
+  },
+  {
+    soru: "Kuris Osmanų sultonas kūrė eilėraščius pasivadinęs „İlhami“ slapyvardžiu ir sukūrė „Suzidilara“ makamą?",
+    secenekler: ["III. Selim", "II. Mahmut", "IV. Murat", "Abdülaziz"],
+    dogru: "III. Selim"
+  },
+  {
+    soru: "Kuris armėnų kilmės muzikas sukūrė natų sistemą, žinomą kaip „Hamparsum Notası“, ir taip išsaugojo tūkstančius kūrinių?",
+    secenekler: ["Tatyos Efendi", "Hamparsum Limonciyan", "Bimen Şen", "Nikogos Ağa"],
+    dogru: "Hamparsum Limonciyan"
+  },
+  {
+    soru: "Kuris XV a. gyvenęs didis teoretikas, vadinamas „Hoca-i Sani“ (Antruoju mokytoju) po Farabijaus, parašė knygą „Camiü'l-Elhan“?",
+    secenekler: ["Abdülkadir Meragi", "Ladikli Mehmet Çelebi", "Hızır Bin Abdullah", "Ali Ufki Bey"],
+    dogru: "Abdülkadir Meragi"
+  },
+  {
+    soru: "Kuris Respublikos laikotarpio kompozitorius įvedė „Kino muzikos“ sąvoką ir sujungė liaudies muzikos motyvus (Hoyrat, Maya) su TSM formomis?",
+    secenekler: ["Sadettin Kaynak", "Selahattin Pınar", "Münir Nurettin Selçuk", "Avni Anıl"],
+    dogru: "Sadettin Kaynak"
+  },
+  {
+    soru: "Kuris meistras įvedė solo koncertų (pasirodymo scenoje vienam) sampratą į turkų muziką, buvo choro dirigentas ir sukūrė tokius kūrinius kaip „Kalamış“?",
+    secenekler: ["Zeki Müren", "Münir Nurettin Selçuk", "Bekir Sıtkı Sezgin", "Alaeddin Yavaşça"],
+    dogru: "Münir Nurettin Selçuk"
+  },
+  {
+    soru: "Kuris lenkų kilmės muzikas XVII a. parašė veikalą „Mecmua-i Saz ü Söz“ ir užrašė kūrinius sistema, panašia į Vakarų notaciją, bet rašoma iš dešinės į kairę?",
+    secenekler: ["Kantemiroğlu", "Ali Ufki Bey (Wojciech Bobowski)", "Rauf Yekta Bey", "Artaki Candan"],
+    dogru: "Ali Ufki Bey (Wojciech Bobowski)"
+  },
+  {
+    soru: "Kuris XVIII a. kompozitorius ir nejaus (nay) atlikėjas žinomas ne tik dėl Mevlevi apeigų muzikos, bet ir dėl kūrinio „Miraciye“?",
+    secenekler: ["Kutbünnayi Osman Dede", "Dede Efendi", "Zekai Dede", "Nayi Aziz Dede"],
+    dogru: "Kutbünnayi Osman Dede"
+  },
+  {
+    soru: "Kuris Romantizmo laikotarpio kompozitorius buvo itin produktyvus, sukūręs beveik 1000 kūrinių, daugiausia dainų formos Uşşak arba Hicaz makamuose?",
+    secenekler: ["Şevki Bey", "Lem'i Atlı", "Rahmi Bey", "Kaptanzade Ali Rıza"],
+    dogru: "Şevki Bey"
+  },
+  {
+    soru: "Kuri XVIII a. menininkė laikoma daugiausiai kūrinių iki šių dienų išsaugojusia moterimi kompozitore, žinoma dėl kūrinių Evcara makame?",
+    secenekler: ["Dilhayat Kalfa", "Leyla Saz", "Nazife Güran", "Neveser Kökdeş"],
+    dogru: "Dilhayat Kalfa"
+  },
+  {
+    soru: "Kuris armėnų kilmės smuikininkas ir kompozitorius, gyvenęs XIX a. pabaigoje – XX a. pradžioje, sukūrė populiarų kūrinį „Gamzedeyim Deva Bulmam“?",
+    secenekler: ["Kemani Tatyos Efendi", "Kemani Serkis Efendi", "Aleko Bacanos", "Kemani Sebuh"],
+    dogru: "Kemani Tatyos Efendi"
+  },
+  {
+    soru: "Kuris velionis mokytojas parašė knygą „Türk Musikisi Nazariyatı ve Usulleri“, kuri šiandien yra pagrindinis šaltinis konservatorijose, ir perdavė Arel-Ezgi sistemą ateičiai?",
+    secenekler: ["İsmail Hakkı Özkan", "Cinuçen Tanrıkorur", "Nevzad Atlığ", "Alaeddin Yavaşça"],
+    dogru: "İsmail Hakkı Özkan"
+  },
+  {
+    soru: "Kas pritaikė turkų muzikos garso sistemą Vakarų notacijai, parašė knygą „Türk Musikisi Nazariyatı Dersleri“ ir sukūrė dabartinę teorinę bazę?",
+    secenekler: ["Hüseyin Sadettin Arel", "Rauf Yekta Bey", "Suphi Ezgi", "Salih Murat Uzdilek"],
+    dogru: "Hüseyin Sadettin Arel"
+  },
+  {
+    soru: "Kuris kompozitorius, vienas paskutiniųjų Bosforo civilizacijos atstovų, sukūrė dainą „Bir Bahar Akşamı Rastladım Size“ ir buvo didis tanbūrininkas?",
+    secenekler: ["Selahattin Pınar", "Mesut Cemil", "Sadi Işılay", "Refik Fersan"],
+    dogru: "Selahattin Pınar"
+  },
+  {
+    soru: "Kuris XV a. Edvar autorius ir teoretikas pirmą kartą panaudojo ir klasifikavo „Makam“ sąvoką dabartine prasme (Eigos samprata ir kt.)?",
+    secenekler: ["Hızır Bin Abdullah", "Ladikli Mehmet Çelebi", "Seydi", "Şükrullah"],
+    dogru: "Hızır Bin Abdullah"
+  },
+  {
+    soru: "Kuris instrumentinių kūrinių (Peşrev ir Saz Semaisi) mokyklos atstovas yra Tanburi Cemil Bey sūnus ir žinomas dėl kūrinio „Sultaniyegâh Sirto“?",
+    secenekler: ["Mesut Cemil", "Niyazi Sayın", "Necdet Yaşar", "Ercüment Batanay"],
+    dogru: "Mesut Cemil"
+  },
+  {
+    soru: "Kuris islamo filosofas laikomas pirmuoju didžiuoju turkų muzikos teoretiku, parašęs veikalą „Musiki-ul Kebir“ ir tyrinėjęs garso fiziką?",
+    secenekler: ["Farabi", "İbn-i Sina", "Kindi", "Urmevi"],
+    dogru: "Farabi"
+  },
+  {
+    soru: "Kuris klasikinio laikotarpio kompozitorius, ypač žinomas dėl „Kâr“ formos kūrinių (pvz., Rast Kâr-ı Natık), buvo III. Selimo mokytojas?",
+    secenekler: ["Tanburi İzak", "Zaharya", "Ebûbekir Ağa", "Hafız Post"],
+    dogru: "Tanburi İzak"
+  },
+  {
+    soru: "Kuris kompozitorius sukūrė „Nev-eser“ (Naujo kūrinio) makamą, laikomas vienu neoklasicizmo pradininkų ir naudojo turtingus makamų perėjimus (pvz., Çamlıca Yolunda)?",
+    secenekler: ["Hacı Faik Bey", "Dede Efendi", "Mustafa Nafiz Irmak", "Lemi Atlı"],
+    dogru: "Dede Efendi"
+  },
+  {
+    soru: "Kuris Stambulo radijo įkūrėjas, dirbęs ir su polifonine turkų muzika, buvo Tanburi Cemil Bey mokinys ir sukūrė „Nihavend Longa“?",
+    secenekler: ["Santuri Ethem Bey", "Refik Fersan", "Mesut Cemil", "Şerif Muhittin Targan"],
+    dogru: "Santuri Ethem Bey"
+  },
+  {
+    soru: "Kuris menininkas laikomas vienu didžiausių XX a. ūdo virtuozų, žinomas dėl savitos mediatoriaus technikos ir kūrinio „Kürdilihicazkâr Saz Semaisi“?",
+    secenekler: ["Yorgo Bacanos", "Udi Hrant", "Şerif Muhittin Targan", "Nevres Bey"],
+    dogru: "Yorgo Bacanos"
+  },
+  {
+    soru: "Kuris Mevlevi muzikos kompozitorius sukūrė „Suzidil Mevlevi Ayini“ ir buvo Dede Efendi mokinys?",
+    secenekler: ["Zekai Dede", "Hüseyin Fahreddin Dede", "Ahmet Avni Konuk", "Rauf Yekta Bey"],
+    dogru: "Zekai Dede"
+  },
+  {
+    soru: "Kuris legendinis Bagdado ūdo virtuozas nukeliavo į Andalūziją, padarė įtaką Europos muzikai ir, manoma, pridėjo 5-ąją stygą ūdui?",
+    secenekler: ["Ziryab", "Ishaq al-Mawsili", "Farabi", "Amir Khusrow"],
+    dogru: "Ziryab"
+  },
+  {
+    soru: "Kuris muzikologas atliko vieną pirmųjų mokslinių turkų muzikos istorijos tyrimų ir užrašė makamus bei ritmus dar prieš „Arel-Ezgi-Uzdilek“ trijulę?",
+    secenekler: ["Rauf Yekta Bey", "Suphi Ezgi", "Mahmut Ragıp Gazimihal", "Vahit Lütfi Salcı"],
+    dogru: "Rauf Yekta Bey"
+  },
+  {
+    soru: "Kuris sultonas-kompozitorius išrado arba atgaivino „Şedaraban“ makamą ir kūrė „Zeybek“ formos kūrinius?",
+    secenekler: ["Sultanas Abdülaziz", "Sultanas Vahdettin", "Sultanas Reşat", "II. Abdülhamit"],
+    dogru: "Sultanas Abdülaziz"
+  },
+  {
+    soru: "Kuris kompozitorius, išmanęs ir Rytų, ir Vakarų muziką, kurio vardas reiškia „Pagyrtasis“ (kaip ir Pranašo), sukūrė „Segâh Tekbir“ ir „Salat-ı Ümmiye“?",
+    secenekler: ["Itrî", "Dede Efendi", "Zekai Dede", "Abdülkadir Meragi"],
+    dogru: "Itrî"
+  }
+],
+           ru: [
+  {
+    soru: "Из скольких ком состоит интервал 'Танини' (T) согласно системе Ареля-Эзги-Уздилека?",
+    secenekler: ["4 Комы", "5 Ком", "8 Ком", "9 Ком"],
+    dogru: "9 Ком"
+  },
+  {
+    soru: "Какой звукоряд принят за 'Основной звукоряд' в турецкой музыке и имеет интервальную структуру T-T-B-T-T-B-T?",
+    secenekler: ["Звукоряд Раст", "Звукоряд Чаргах (Çargâh)", "Звукоряд Хюсейни", "Звукоряд Буселик"],
+    dogru: "Звукоряд Чаргах (Çargâh)"
+  },
+  {
+    soru: "Какова структура составного (мюреккеп) макама 'Сегях' (Segâh)?",
+    secenekler: ["Пентахорд Сегях на месте + Тетрахорд Хиджаз на Неве", "Пентахорд Сегях на месте + Тетрахорд Ушшак на Неве", "Пентахорд Хюззам на месте + Тетрахорд Хиджаз на Неве", "Пентахорд Раст на месте + Тетрахорд Сегях на Неве"],
+    dogru: "Пентахорд Сегях на месте + Тетрахорд Хиджаз на Неве"
+  },
+  {
+    soru: "Какая теоретическая особенность отличает макам 'Хюмайюн' в семействе макамов Хиджаз, Уззаль и Зенгюле?",
+    secenekler: ["Его доминантой является Нева", "На верхней тонике остается колорит Буселик", "На верхней тонике остается колорит Ушшак", "В заключении (на тонике) создается колорит Раст"],
+    dogru: "На верхней тонике остается колорит Буселик"
+  },
+  {
+    soru: "Какова временная структура 10-дольного усуля 'Ленк Фахте'?",
+    secenekler: ["5 + 5", "2 + 3 + 2 + 3", "2 + 2 + 3 + 3", "3 + 2 + 2 + 3"],
+    dogru: "2 + 3 + 2 + 3"
+  },
+  {
+    soru: "Каков правильный порядок исполнения произведений в классическом Фасыле (Fasıl)?",
+    secenekler: ["Пешрев - Шаркы - Кяр - Агыр Семаи - Юрюк Семаи", "Таксим - Пешрев - Кяр (или Бесте) - Агыр Семаи - Шаркы - Юрюк Семаи - Саз Семаиси", "Саз Семаиси - Пешрев - Бесте - Агыр Семаи - Шаркы", "Пешрев - Агыр Семаи - Бесте - Шаркы - Юрюк Семаи"],
+    dogru: "Таксим - Пешрев - Кяр (или Бесте) - Агыр Семаи - Шаркы - Юрюк Семаи - Саз Семаиси"
+  },
+  {
+    soru: "Какова интервальная структура тетрахорда Ушшак (от низкого к высокому)? (K: Большой Мюдженнеп, S: Малый Мюдженнеп, T: Танини)",
+    secenekler: ["K - S - T", "S - T - K", "T - S - K", "T - T - B"],
+    dogru: "K - S - T"
+  },
+  {
+    soru: "Какая ступень является доминантой (господствующим тоном) макама Аджем Аширан?",
+    secenekler: ["Ступень Аджем", "Ступень Дюгях", "Ступень Нева", "Ступень Чаргах"],
+    dogru: "Ступень Аджем"
+  },
+  {
+    soru: "Какой из перечисленных макамов является транспонированным ('Шед')?",
+    secenekler: ["Хюззам", "Раст", "Хюсейни", "Ферахнак"],
+    dogru: "Ферахнак"
+  },
+  {
+    soru: "Сколько ком составляет интервал 'Бакийе' (B)?",
+    secenekler: ["1 Кома", "4 Комы", "5 Ком", "8 Ком"],
+    dogru: "4 Комы"
+  },
+  {
+    soru: "Какой макам имеет 'Нисходящее' (начинающееся с высоких нот и спускающееся к тонике) движение?",
+    secenekler: ["Ушшак", "Раст", "Хиджаз", "Мухайер"],
+    dogru: "Мухайер"
+  },
+  {
+    soru: "Как называется каждая строка произведения в форме Бесте?",
+    secenekler: ["Хане", "Мурабба", "Тереннюм", "Миян"],
+    dogru: "Хане"
+  },
+  {
+    soru: "Какой нотой обозначается ступень 'Нева' на нотном стане (в системе скрипичного ключа Соль)?",
+    secenekler: ["Ре на четвертой линейке", "Си на третьей линейке", "Ля во втором промежутке", "Фа на пятой линейке"],
+    dogru: "Ре на четвертой линейке"
+  },
+  {
+    soru: "На какой ступени (тонике) завершается макам Саба?",
+    secenekler: ["Раст", "Дюгях", "Сегях", "Чаргах"],
+    dogru: "Дюгях"
+  },
+  {
+    soru: "Сколько долей в усуле Агыр Аксак?",
+    secenekler: ["9 Долей", "10 Долей", "7 Долей", "5 Долей"],
+    dogru: "9 Долей"
+  },
+  {
+    soru: "Каково значение комы и знак ступени 'Дик Кюрди'?",
+    secenekler: ["Диез 4 комы", "Бемоль 1 кома", "Бемоль 4 комы", "Бемоль 5 ком"],
+    dogru: "Бемоль 4 комы"
+  },
+  {
+    soru: "Звукоряд макама Нихавенд получается путем транспонирования (шед) макама Буселик на какую ступень?",
+    secenekler: ["На ступень Дюгях", "На ступень Раст", "На ступень Йегях", "На ступень Хюсейни Аширан"],
+    dogru: "На ступень Раст"
+  },
+  {
+    soru: "Какой из нижеперечисленных усулей является 5-дольным?",
+    secenekler: ["Софьян", "Тюрк Аксагы", "Юрюк Семаи", "Девр-и Хинди"],
+    dogru: "Тюрк Аксагы"
+  },
+  {
+    soru: "Каким обычно должен быть интервал между 'Вводным тоном' (Йеден) и 'Тоникой' (Дурак) в макамах для создания ощущения полного завершения?",
+    secenekler: ["Целый тон (Танини)", "Полутон (Бакийе или Малый Мюдженнеп)", "Увеличенная секунда", "Четверть тона"],
+    dogru: "Полутон (Бакийе или Малый Мюдженнеп)"
+  },
+  {
+    soru: "Каково мелодическое движение (сейир) макама Хюззам?",
+    secenekler: ["Восходящее", "Нисходящее", "Нисходяще-восходящее", "Прямое"],
+    dogru: "Нисходяще-восходящее"
+  },
+  {
+    soru: "Какая ступень является тоникой макама Мюстеар?",
+    secenekler: ["Ирак", "Сегях", "Дюгях", "Раст"],
+    dogru: "Сегях"
+  },
+  {
+    soru: "Как называются разделы формы Пешрев?",
+    secenekler: ["Кыта", "Земин - Заман", "Хане - Теслим", "Мейан - Карар"],
+    dogru: "Хане - Теслим"
+  },
+  {
+    soru: "На какой ступени построен транспонированный макам Хиджазкяр?",
+    secenekler: ["Раст", "Дюгях", "Сегях", "Аджем Аширан"],
+    dogru: "Раст"
+  },
+  {
+    soru: "Что означает термин 'Вельвеле' в усуле?",
+    secenekler: ["Обогащение усуля путем дробления основных ударов на более мелкие длительности", "Более быстрое исполнение усуля", "Исполнение усуля только на кудюме", "Изменение количества долей усуля"],
+    dogru: "Обогащение усуля путем дробления основных ударов на более мелкие длительности"
+  },
+  {
+    soru: "К какому семейству макамов относится макам Кюрдилихиджазкяр?",
+    secenekler: ["Семейство Хиджаз", "Семейство Кюрди", "Семейство Буселик", "Семейство Раст"],
+    dogru: "Семейство Кюрди"
+  },
+  {
+    soru: "Какова структура звукоряда макама Карджыгар?",
+    secenekler: ["Тетрахорд Ушшак на месте + Пентахорд Хиджаз на Неве", "Тетрахорд Ушшак на месте + Пентахорд Буселик на Неве", "Тетрахорд Хиджаз на месте + Пентахорд Ушшак на Неве", "Пентахорд Раст на месте + Тетрахорд Хиджаз на Неве"],
+    dogru: "Тетрахорд Ушшак на месте + Пентахорд Хиджаз на Неве"
+  },
+  {
+    soru: "Сколько ком составляет интервал 'Малый Мюдженнеп' (S) в системе Ареля-Эзги-Уздилека?",
+    secenekler: ["4 Комы", "5 Ком", "8 Ком", "9 Ком"],
+    dogru: "5 Ком"
+  },
+  {
+    soru: "Как в классической форме Шаркы называется третья строка, которая обычно проходит в самом высоком регистре?",
+    secenekler: ["Земин", "Накарат", "Миян (Мейан)", "Карар"],
+    dogru: "Миян (Мейан)"
+  },
+  {
+    soru: "Сколько долей в усуле Аксак Семаи?",
+    secenekler: ["10 Долей", "9 Долей", "6 Долей", "32 Доли"],
+    dogru: "10 Долей"
+  },
+  {
+    soru: "Макам Сузинак образуется путем добавления какого колорита (чешни) к звукоряду макама Раст?",
+    secenekler: ["Хиджаз на ступени Нева", "Буселик на ступени Нева", "Кюрди на ступени Дюгях", "Ушшак на ступени Хюсейни"],
+    dogru: "Хиджаз на ступени Нева"
+  },
+  {
+    soru: "Как в турецкой музыке называется нота 'Соль' (G), расположенная над пятой (верхней) линейкой нотного стана?",
+    secenekler: ["Нева", "Хюсейни", "Гердание", "Мухайер"],
+    dogru: "Гердание"
+  },
+  {
+    soru: "Какой из перечисленных макамов относится к классу 'Простых макамов'?",
+    secenekler: ["Хюсейни", "Сегях", "Хюззам", "Саба"],
+    dogru: "Хюсейни"
+  },
+  {
+    soru: "Сколько долей в самом маленьком усуле турецкой музыки 'Ним Софьян'?",
+    secenekler: ["2 Доли", "3 Доли", "4 Доли", "5 Долей"],
+    dogru: "2 Доли"
+  },
+  {
+    soru: "Какая ступень является 'Вводным тоном' (Йеден) макама Раст?",
+    secenekler: ["Ирак", "Каба Раст", "Йегях", "Хюсейни Аширан"],
+    dogru: "Ирак"
+  },
+  {
+    soru: "Как образуется макам Никриз?",
+    secenekler: ["Пентахорд Никриз на Расте + Тетрахорд Раст на Неве", "Пентахорд Никриз на Расте + Тетрахорд Хиджаз на Неве", "Тетрахорд Хиджаз на Дюгяхе + Пентахорд Раст на Неве", "Пентахорд Никриз на Буселике + Тетрахорд Ушшак на Хюсейни"],
+    dogru: "Пентахорд Никриз на Расте + Тетрахорд Раст на Неве"
+  },
+  {
+    soru: "Кто разработал нотную систему, основанную на армянских буквах, которая использовалась до современной нотации?",
+    secenekler: ["Кантемироглу", "Абдулбаки Насыр Деде", "Али Уфки Бей", "Хампарсум Лимонджян"],
+    dogru: "Хампарсум Лимонджян"
+  },
+  {
+    soru: "Сколько долей в усуле Джурджуна?",
+    secenekler: ["10 Долей", "5 Долей", "7 Долей", "9 Долей"],
+    dogru: "10 Долей"
+  },
+  {
+    soru: "Какая ступень является доминантой макама Аджем Кюрди?",
+    secenekler: ["Дюгях", "Аджем", "Нева", "Чаргах"],
+    dogru: "Аджем"
+  },
+  {
+    soru: "Сколько ком теоретически составляет интервал 'Увеличенная секунда' (A) в турецкой музыке (например, в середине тетрахорда Хиджаз)?",
+    secenekler: ["9 Ком", "12-13 Ком", "8 Ком", "5 Ком"],
+    dogru: "12-13 Ком"
+  },
+  {
+    soru: "Сколько ком составляет интервал 'Большой Мюдженнеп' (K) в системе Ареля-Эзги-Уздилека?",
+    secenekler: ["4 Комы", "5 Ком", "8 Ком", "9 Ком"],
+    dogru: "8 Ком"
+  },
+  {
+    soru: "Кто считается величайшим мастером и архитектором формы 'Шаркы' в Турецкой Классической Музыке?",
+    secenekler: ["Хаджи Ариф Бей", "Деде Эфенди", "Итри", "Танбури Джемиль Бей"],
+    dogru: "Хаджи Ариф Бей"
+  },
+  {
+    soru: "Какой макам использует колорит 'Буселик' и при восхождении, и при нисхождении, и завершается на ступени Дюгях?",
+    secenekler: ["Нихавенд", "Буселик", "Кюрди", "Ушшак"],
+    dogru: "Буселик"
+  },
+  {
+    soru: "Какой из перечисленных макамов является 'Составным' (Мюреккеп)?",
+    secenekler: ["Раст", "Чаргах", "Исфахан", "Кюрди"],
+    dogru: "Исфахан"
+  },
+  {
+    soru: "Какая ступень является вводным тоном ниже ступени Дюгях в макаме Зиргюлели Хиджаз?",
+    secenekler: ["Раст", "Ирак", "Зиргюле (Каба Дик Кюрди)", "Йегях"],
+    dogru: "Зиргюле (Каба Дик Кюрди)"
+  },
+  {
+    soru: "Сколько долей в усуле Юрюк Семаи?",
+    secenekler: ["3 Доли", "6 Долей", "9 Долей", "10 Долей"],
+    dogru: "6 Долей"
+  },
+  {
+    soru: "Как называется временный переход из основного макама в другой во время исполнения произведения?",
+    secenekler: ["Шед", "Гечки (Geçki)", "Чешни", "Карар"],
+    dogru: "Гечки (Geçki)"
+  },
+  {
+    soru: "Какая из следующих ступеней является более высокой (Тиз)?",
+    secenekler: ["Каба Раст", "Раст", "Гердание", "Тиз Сегях"],
+    dogru: "Тиз Сегях"
+  },
+  {
+    soru: "В чем самое явное различие между макамами Хюсейни и Ушшак?",
+    secenekler: ["Хюсейни - нисходяще-восходящий и использует 6-ю ступень (Эвич/Аджем)", "У Хюсейни другая тоника", "Доминантой макама Ушшак является Чаргах", "Макам Хюсейни относится к семейству Буселик"],
+    dogru: "Хюсейни - нисходяще-восходящий и использует 6-ю ступень (Эвич/Аджем)"
+  },
+  {
+    soru: "Какая ступень является тоникой макама Султанийегях?",
+    secenekler: ["Дюгях", "Раст", "Йегях", "Хюсейни Аширан"],
+    dogru: "Йегях"
+  },
+  {
+    soru: "Что означает термин 'Асма Карар' в музыке?",
+    secenekler: ["Окончательное завершение произведения", "Временная остановка на ступени, отличной от тоники основного макама", "Исполнение усуля с вельвеле", "Вступительная часть таксима"],
+    dogru: "Временная остановка на ступени, отличной от тоники основного макама"
+  },
+  {
+    soru: "Как в турецкой нотации называется знак, повышающий ноту на 4 комы?",
+    secenekler: ["Диез Бакийе", "Диез Комы", "Диез Малого Мюдженнепа", "Диез Большого Мюдженнепа"],
+    dogru: "Диез Бакийе"
+  },
+  {
+    soru: "Из скольких разделов, называемых 'Селям', состоит церемония Мевлеви (Айин-и Шериф)?",
+    secenekler: ["4 Селяма", "3 Селяма", "2 Селяма", "5 Селямов"],
+    dogru: "4 Селяма"
+  },
+  {
+    soru: "Транспозицией (шед) какого макама на ступень 'Йегях' считается макам Шедарабан?",
+    secenekler: ["Зиргюлели Хиджаз", "Хиджаз", "Хюмайюн", "Уззаль"],
+    dogru: "Зиргюлели Хиджаз"
+  },
+  {
+    soru: "Какова структура большого 28-дольного усуля 'Девр-и Кебир'?",
+    secenekler: ["3+4+4+3+4+4+3+3", "4+4+4+4+3+3+3+3", "2+4+4+2+4+4+2+6", "7+7+7+7"],
+    dogru: "3+4+4+3+4+4+3+3"
+  },
+  {
+    soru: "Какие знаки альтерации находятся при ключе (в донаныме) макама Хюсейни?",
+    secenekler: ["Си бемоль комы (Сегях) - Фа диез бакийе (Эвич)", "Си бемоль бакийе - Ми бемоль бакийе", "Си бемоль комы - Фа бекар", "Си бемоль 5 ком"],
+    dogru: "Си бемоль комы (Сегях) - Фа диез бакийе (Эвич)"
+  },
+  {
+    soru: "Как называется дидактическая форма композиции, в тексте которой упоминаются названия макамов?",
+    secenekler: ["Кяр-ы Натык", "Кяр-ы Мюштерек", "Медхаль", "Мюнаджат"],
+    dogru: "Кяр-ы Натык"
+  },
+  {
+    soru: "Макамы Баяти и Ушшак имеют одинаковый звукоряд. Какая основная мелодическая особенность отличает Баяти от Ушшака?",
+    secenekler: ["Баяти начинает движение со ступени Нева (или вокруг нее)", "Тоника Баяти - Раст", "Баяти - нисходящий макам", "Баяти использует Си бемоль при ключе"],
+    dogru: "Баяти начинает движение со ступени Нева (или вокруг нее)"
+  },
+  {
+    soru: "Как в турецкой музыке называется нота 'Си' (B) на третьей линейке (в натуральном виде)?",
+    secenekler: ["Буселик", "Сегях", "Нишабур", "Дик Кюрди"],
+    dogru: "Буселик"
+  },
+  {
+    soru: "Какова структура 9-дольного усуля 'Эвфер'?",
+    secenekler: ["5 + 4", "4 + 5", "2 + 3 + 2 + 2", "3 + 2 + 2 + 2"],
+    dogru: "5 + 4"
+  },
+  {
+    soru: "Какая из следующих форм НЕ является инструментальной?",
+    secenekler: ["Мурабба", "Лонга", "Сирто", "Медхаль"],
+    dogru: "Мурабба"
+  },
+  {
+    soru: "Транспозицией какого макама на ступень 'Йегях' является макам Ферахнюма?",
+    secenekler: ["Это изобретение Танбури Джемиль Бея, а не транспозиция", "Раст", "Хюсейни", "Хиджаз"],
+    dogru: "Это изобретение Танбури Джемиль Бея, а не транспозиция"
+  },
+  {
+    soru: "Что означает слово 'Мюдженнеп' в теории турецкой музыки?",
+    secenekler: ["Сторона, сосед, недалекий (Название интервала)", "Громкий голос", "Быстрый темп", "Форма религиозной музыки"],
+    dogru: "Сторона, сосед, недалекий (Название интервала)"
+  },
+  {
+    soru: "Как называется вокальная импровизационная форма, исполняемая без ритма (свободный ритм)?",
+    secenekler: ["Газель", "Таксим", "Мевлид", "Касидин"],
+    dogru: "Газель"
+  },
+  {
+    soru: "Звукоряд макама Ферахфеза получается путем транспонирования какого макама на ступень 'Йегях'?",
+    secenekler: ["Сузинак", "Раст", "Хиджаз", "Ушшак"],
+    dogru: "Сузинак"
+  },
+  {
+    soru: "Кому изначально принадлежит идея 'Коммы Хольдера' (деление октавы на 53 части) согласно системе Ареля-Эзги-Уздилека?",
+    secenekler: ["Николас Меркатор", "Пифагор", "Фараби", "Абдулкадир Мераги"],
+    dogru: "Николас Меркатор"
+  },
+  {
+    soru: "Какой из следующих макамов НЕ является 'Транспонированным' (Шед), а является одним из 'Основных макамов'?",
+    secenekler: ["Хюззам", "Махур", "Аджем Аширан", "Эвджара"],
+    dogru: "Хюззам"
+  },
+  {
+    soru: "Кто является теоретиком, заложившим основы теории турецкой/восточной музыки своим трудом 'Китаб аль-Адвар', написанным в 13 веке?",
+    secenekler: ["Сафиаддин Урмави", "Фараби", "Ибн Сина", "Аль-Кинди"],
+    dogru: "Сафиаддин Урмави"
+  },
+  {
+    soru: "Каков звукоряд макама Мухайер Кюрди?",
+    secenekler: ["Тетрахорд Кюрди на месте + Пентахорд Буселик на Неве", "Тетрахорд Ушшак на месте + Пентахорд Кюрди на Неве", "Пентахорд Раст на месте + Тетрахорд Хиджаз на Неве", "Пентахорд Буселик на месте + Тетрахорд Кюрди на Хюсейни"],
+    dogru: "Тетрахорд Кюрди на месте + Пентахорд Буселик на Неве"
+  },
+  {
+    soru: "Как называется смесь макама и усуля, изобретенная Хаджи Ариф Беем, обычно имеющая 10 долей (часто путают с Джурджуной)?",
+    secenekler: ["Аксак Семаи", "Мюсеммен", "Агыр Аксак", "Тек Вуруш"],
+    dogru: "Мюсеммен"
+  },
+  {
+    soru: "Как выглядит знак бемоля 'Кома' в турецкой музыке?",
+    secenekler: ["Похож на перевернутую 'd', с одной чертой", "Двойной бемоль", "Треугольной формы", "Квадратной формы"],
+    dogru: "Похож на перевернутую 'd', с одной чертой"
+  },
+  {
+    soru: "На какой ступени завершается макам Исфахан?",
+    secenekler: ["Дюгях", "Раст", "Сегях", "Ирак"],
+    dogru: "Дюгях"
+  },
+  {
+    soru: "В какой части классического фасыла исполняется 'Ара Таксими' (Промежуточный таксим)?",
+    secenekler: ["Между песнями, для модуляции или передышки", "В самом начале фасыла", "После Саз Семаиси", "Непосредственно перед Пешревом"],
+    dogru: "Между песнями, для модуляции или передышки"
+  },
+  {
+    soru: "В произведениях какой формы обычно используется 24-дольный усуль 'Ченбер'?",
+    secenekler: ["Пешрев", "Бесте", "Кяр", "Саз Семаиси"],
+    dogru: "Пешрев"
+  },
+  {
+    soru: "Какие знаки альтерации находятся при ключе (в донаныме) макама Нишабур?",
+    secenekler: ["Си - Ми - Ля - Ре (Бемоли малого мюдженнепа)", "Си бемоль - Ми бемоль", "Только Си бемоль комы", "Никаких знаков (Натуральный)"],
+    dogru: "Си - Ми - Ля - Ре (Бемоли малого мюдженнепа)"
+  },
+  {
+    soru: "Какой ноте западной музыки соответствует ступень 'Эвич' в турецкой музыке (приблизительно, если Ля=440)?",
+    secenekler: ["Фа диез", "Соль бекар", "Фа бекар", "Ми бемоль"],
+    dogru: "Фа диез"
+  },
+  {
+    soru: "Сколько всего ком составляет интервал 'Чистая квинта' согласно системе Ареля-Эзги-Уздилека?",
+    secenekler: ["22 Комы", "23 Комы", "31 Кома", "53 Комы"],
+    dogru: "31 Кома"
+  },
+  {
+    soru: "Какой большой усуль имеет наибольшее количество долей (88 долей) в турецкой музыке?",
+    secenekler: ["Дарб-ы Фетих", "Хафиф", "Зенджир", "Ченбер"],
+    dogru: "Дарб-ы Фетих"
+  },
+  {
+    soru: "Транспозицией какого макама на ступень 'Аджем Аширан' является макам Шевкефза?",
+    secenekler: ["Зиргюлели Хиджаз", "Хиджаз", "Уззаль", "Хюмайюн"],
+    dogru: "Зиргюлели Хиджаз"
+  },
+  {
+    soru: "Как называется длинная форма в религиозной музыке, повествующая о рождении, жизни и чудесах Пророка Мухаммеда, обычно читаемая нараспев в мечетях?",
+    secenekler: ["Мевлид", "Тевших", "Иляхи", "Шугл"],
+    dogru: "Мевлид"
+  },
+  {
+    soru: "Как в турецкой музыке называется нота 'Фа' в первом промежутке (скрипичный ключ)?",
+    secenekler: ["Аджем Аширан", "Хюсейни Аширан", "Ирак", "Раст"],
+    dogru: "Аджем Аширан"
+  },
+  {
+    soru: "Звукоряд макама Махур такой же, как у Раста. Каково их основное отличие?",
+    secenekler: ["Махур - нисходящий и начинается вокруг Гердание (верхней тоники)", "Доминанта Махура - Дюгях", "Махур имеет Си бемоль при ключе", "Тоника Махура - Нева"],
+    dogru: "Махур - нисходящий и начинается вокруг Гердание (верхней тоники)"
+  },
+  {
+    soru: "Какой 32-дольный усуль используется специально в '3-м Селяме' церемонии Мевлеви?",
+    secenekler: ["Хафиф", "Мухаммес", "Девр-и Кебир", "Берефшан"],
+    dogru: "Девр-и Кебир"
+  },
+  {
+    soru: "Как образуется макам Бестенигяр?",
+    secenekler: ["Сегях на ступени Ирак + Саба на Дюгяхе", "Саба на месте + Остановка на ступени Ирак (Колорит Ирак)", "Ушшак на месте + Хиджаз на Неве", "Хюззам на месте + Ушшак на Неве"],
+    dogru: "Саба на месте + Остановка на ступени Ирак (Колорит Ирак)"
+  },
+  {
+    soru: "Как выглядит знак 'Бемоль Большого Мюдженнепа' (около 8-9 ком) в турецкой нотации?",
+    secenekler: ["Одинарная черта 'd' (Бемоль комы)", "Двойной бемоль (Бемоль Бакийе)", "Похож на перевернутую закрашенную 'K' (или жирный бемоль с чертой)", "Стандартный западный бемоль"],
+    dogru: "Похож на перевернутую закрашенную 'K' (или жирный бемоль с чертой)"
+  },
+  {
+    soru: "Сколько всего ком составляет интервал 'Октава' в системе Ареля-Эзги-Уздилека?",
+    secenekler: ["53 Комы", "41 Кома", "24 Комы", "12 Ком"],
+    dogru: "53 Комы"
+  },
+  {
+    soru: "На какой ступени завершается макам Рахатюлервах?",
+    secenekler: ["Ирак", "Раст", "Сегях", "Хюсейни"],
+    dogru: "Ирак"
+  },
+  {
+    soru: "Как называется форма, похожая на Шаркы, но с добавлением коротких строк 'Зияде' в конце каждой строки?",
+    secenekler: ["Мюстезат", "Мурабба", "Накыш", "Зейбек"],
+    dogru: "Мюстезат"
+  },
+  {
+    soru: "Какова структура макама Невесер?",
+    secenekler: ["Пентахорд Никриз на месте (на Расте) + Тетрахорд Хиджаз на Неве", "Пентахорд Никриз на месте + Тетрахорд Раст на Неве", "Хиджаз на месте + Хиджаз на Неве", "Ушшак на месте + Никриз на Неве"],
+    dogru: "Пентахорд Никриз на месте (на Расте) + Тетрахорд Хиджаз на Неве"
+  },
+  {
+    soru: "Какова группировка ударов (мертебе) 15-дольного усуля 'Ракс Аксагы'?",
+    secenekler: ["2+2+2+3+2+2+2", "4+4+4+3", "9+6", "5+10"],
+    dogru: "2+2+2+3+2+2+2"
+  },
+  {
+    soru: "Кто из великих композиторов составил такие макамы, как 'Ферахфеза' и 'Султан-ы Йегях'?",
+    secenekler: ["Хамамизаде Исмаил Деде Эфенди", "Бухуризаде Мустафа Итри", "Хафиз Пост", "Зекаи Деде"],
+    dogru: "Хамамизаде Исмаил Деде Эфенди"
+  },
+  {
+    soru: "Как называется знак, повышающий ноту 'Фа' на 5-й линейке примерно на 4-5 ком (диез), и как называется эта ступень в ТСМ?",
+    secenekler: ["Диез Бакийе - Эвич", "Диез Комы - Аджем", "Диез Мюдженнепа - Махур", "Натуральный - Аджем"],
+    dogru: "Диез Бакийе - Эвич"
+  },
+  {
+    soru: "Каковы Тоника и Доминанта макама Эвич?",
+    secenekler: ["Тоника: Ирак, Доминанта: Дюгях", "Тоника: Ирак, Доминанта: Эвич (или Нева)", "Тоника: Сегях, Доминанта: Эвич", "Тоника: Раст, Доминанта: Гердание"],
+    dogru: "Тоника: Ирак, Доминанта: Эвич (или Нева)"
+  },
+  {
+    soru: "Как называется большая 'сюита' усулей, состоящая из 5 разных усулей (Дюйек, Фахте, Ченбер, Девр-и Кебир, Берефшан)?",
+    secenekler: ["Зенджир", "Дарб-ы Фетих", "Кяр-ы Натык", "Фасыл"],
+    dogru: "Зенджир"
+  },
+  {
+    soru: "Какова структура звукоряда макама Пенчгях?",
+    secenekler: ["Звукоряд Раст на Неве + Пентахорд Раст на месте (Раст)", "Ушшак на месте + Ушшак на Неве", "Хиджаз на месте + Раст на Неве", "Раст на месте + Буселик на Неве"],
+    dogru: "Звукоряд Раст на Неве + Пентахорд Раст на месте (Раст)"
+  },
+  {
+    soru: "Как выглядит знак диеза 'Кома' (избыточный) в турецкой музыке?",
+    secenekler: ["Крестик на одной черте (или одночертный диез)", "Двойной диез", "Тройной диез", "Лежащая цифра 8"],
+    dogru: "Крестик на одной черте (или одночертный диез)"
+  },
+  {
+    soru: "Какая из следующих форм НЕ относится к 'Религиозной музыке'?",
+    secenekler: ["Кёчекче", "Тевших", "Салят", "Дурак"],
+    dogru: "Кёчекче"
+  },
+  {
+    soru: "Какая ступень является 'Доминантой' макама Сегях?",
+    secenekler: ["Нева", "Раст", "Гердание", "Чаргах"],
+    dogru: "Нева"
+  },
+  {
+    soru: "Как называется удар в усулях, исполняемый правой рукой, более высокий и резкий, чем 'Дум'?",
+    secenekler: ["Тек", "Те", "Ка", "Дюм"],
+    dogru: "Тек"
+  },
+  {
+    soru: "Использование какой ступени вместо 'Нева' в звукоряде Хюмайюн характеризует макам Хисар?",
+    secenekler: ["Ступень Хисар (между Ре диез мюдженнеп / Ми бемоль бакийе)", "Ступень Буселик", "Ступень Эвич", "Ступень Аджем"],
+    dogru: "Ступень Хисар (между Ре диез мюдженнеп / Ми бемоль бакийе)"
+  },
+  {
+    soru: "Как в турецкой музыке называется нота 'Ре' (D) под нотным станом без добавочной линейки (по скрипичному ключу)?",
+    secenekler: ["Йегях", "Раст", "Дюгях", "Хюсейни Аширан"],
+    dogru: "Йегях"
+  },
+  {
+    soru: "Как называется ступень 'Ля' (A) (средняя октава) в турецкой музыке?",
+    secenekler: ["Нева", "Дюгях", "Хюсейни", "Мухайер"],
+    dogru: "Дюгях"
+  },
+  {
+    soru: "Как называется нота 'Си' (B) на 3-й линейке, получившая 'бемоль 1 кома'?",
+    secenekler: ["Сегях", "Буселик", "Дик Кюрди", "Ушшак"],
+    dogru: "Сегях"
+  },
+  {
+    soru: "Как называется 'Натуральное' состояние ноты 'Фа' (F) на 5-й линейке?",
+    secenekler: ["Эвич", "Аджем", "Махур", "Гердание"],
+    dogru: "Аджем"
+  },
+  {
+    soru: "Какая из следующих является ступенью 'Шехназ'?",
+    secenekler: ["Фа диез бакийе (4 Комы)", "Фа диез большой мюдженнеп (8-9 Ком)", "Соль бекар", "Фа бекар"],
+    dogru: "Фа диез большой мюдженнеп (8-9 Ком)"
+  },
+  {
+    soru: "Как называется нота 'Фа' (F) в 1-м промежутке (низкий звук)?",
+    secenekler: ["Аджем Аширан", "Хюсейни Аширан", "Ирак", "Каба Раст"],
+    dogru: "Аджем Аширан"
+  },
+  {
+    soru: "Результатом повышения какой ноты примерно на 4 комы (Бакийе) является ступень 'Зиргюле'?",
+    secenekler: ["Соль (Каба Раст)", "Ля (Дюгях)", "Фа (Аджем Аширан)", "До (Каба Чаргах)"],
+    dogru: "Соль (Каба Раст)"
+  },
+  {
+    soru: "Как называется ступень 'Ля' (A), записанная на первой добавочной линейке над нотным станом в высокой октаве?",
+    secenekler: ["Гердание", "Мухайер", "Тиз Дюгях", "Сюнбюле"],
+    dogru: "Мухайер"
+  },
+  {
+    soru: "Где на нотном стане располагается ступень 'Хюсейни'?",
+    secenekler: ["4-я Линейка (Ре)", "4-й Промежуток (Ми)", "3-я Линейка (Си)", "2-й Промежуток (Ля)"],
+    dogru: "4-й Промежуток (Ми)"
+  },
+  {
+    soru: "Какая из следующих ступеней находится в октаве 'Каба' (низкая)?",
+    secenekler: ["Ирак", "Сегях", "Буселик", "Чаргах"],
+    dogru: "Ирак"
+  },
+  {
+    soru: "Сколько ком бемоля содержит ступень 'Дик Кюрди'?",
+    secenekler: ["1 Кома", "4-5 Ком", "8-9 Ком", "Нет (Натуральная)"],
+    dogru: "4-5 Ком"
+  },
+  {
+    soru: "Производной какой ноты является ступень 'Хисар' и какой знак она получает?",
+    secenekler: ["Ми (Хюсейни) - Бемоль Бакийе (или 5 ком)", "Ре (Нева) - Диез Бакийе", "Фа (Аджем) - Диез Комы", "Си (Буселик) - Бемоль Комы"],
+    dogru: "Ми (Хюсейни) - Бемоль Бакийе (или 5 ком)"
+  },
+  {
+    soru: "Как называется нота 'До' (C) в 3-м промежутке нотного стана?",
+    secenekler: ["Чаргах", "Нева", "Буселик", "Тиз Чаргах"],
+    dogru: "Чаргах"
+  },
+  {
+    soru: "Какая из следующих является ступенью 'Ним Хиджаз'?",
+    secenekler: ["До диез бакийе", "Ре бемоль бакийе", "Си бекар", "До бекар"],
+    dogru: "До диез бакийе"
+  },
+  {
+    soru: "Как называется ступень, которая на октаву выше ступени Раст (Соль)?",
+    secenekler: ["Гердание", "Мухайер", "Тиз Раст", "Йегях"],
+    dogru: "Гердание"
+  },
+  {
+    soru: "Какой ноте обычно соответствует ступень 'Саба' (как особая ступень макама)?",
+    secenekler: ["Хиджаз на Ре (Нева)", "Бемоль Бакийе на Ре (Нева) (Ре бемоль)", "Диез Комы на До (Чаргах)", "Ми (Хюсейни) Натуральная"],
+    dogru: "Бемоль Бакийе на Ре (Нева) (Ре бемоль)"
+  },
+  {
+    soru: "Где записывается ступень 'Каба Дюгях' в турецкой музыке?",
+    secenekler: ["Во 2-м промежутке", "На 2-й добавочной линейке снизу", "На самой верхней линейке", "На 1-й добавочной линейке снизу"],
+    dogru: "На 2-й добавочной линейке снизу"
+  },
+  {
+    soru: "Где на нотном стане находится ступень 'Тиз Сегях'?",
+    secenekler: ["Над 1-й добавочной линейкой сверху (Си)", "На 3-й линейке (Си)", "В 4-м промежутке (Ми)", "На самой нижней линейке (Ми)"],
+    dogru: "Над 1-й добавочной линейкой сверху (Си)"
+  },
+  {
+    soru: "Какое из следующих соответствий ступеней НЕВЕРНО?",
+    secenekler: ["Соль = Раст", "Ля = Дюгях", "Си (Натуральная) = Буселик", "До = Нева"],
+    dogru: "До = Нева"
+  },
+  {
+    soru: "Какая нота также называется 'Рехави' (обычно в старых трактатах или в низкой октаве)?",
+    secenekler: ["Каба Раст (Соль)", "Йегях (Ре)", "Каба Чаргах (До)", "Хюсейни Аширан (Ми)"],
+    dogru: "Каба Раст (Соль)"
+  },
+  {
+    soru: "Ступень 'Сюнбюле' образуется при получении какой ступенью бемоля комы?",
+    secenekler: ["Мухайер (Ля) с бемолем комы", "Гердание (Соль) с бемолем комы", "Тиз Чаргах (До) с бемолем комы", "Тиз Буселик (Си) с бемолем комы"],
+    dogru: "Мухайер (Ля) с бемолем комы"
+  },
+  {
+    soru: "Как в турецкой музыке называется нота 'Соль' (G) на 2-й линейке нотного стана?",
+    secenekler: ["Раст", "Гердание", "Йегях", "Зиргюле"],
+    dogru: "Раст"
+  },
+  {
+    soru: "Каков точный эквивалент ступени 'Эвич'?",
+    secenekler: ["Фа диез бакийе (4 Комы)", "Фа бекар", "Фа диез мюдженнеп", "Фа диез комы"],
+    dogru: "Фа диез бакийе (4 Комы)"
+  },
+  {
+    soru: "Где на нотном стане пишется ступень Хюсейни Аширан?",
+    secenekler: ["Под 1-й добавочной линейкой снизу (Си)", "На 1-й линейке (Ми)", "В 4-м промежутке (Ми)", "На 1-й добавочной линейке снизу (До)"],
+    dogru: "Под 1-й добавочной линейкой снизу (Ми)"
+  },
+  {
+    soru: "Где на нотном стане находится ступень 'Тиз Нева'?",
+    secenekler: ["Во 2-м добавочном промежутке сверху (Ре)", "На 4-й линейке (Ре)", "В самом низу (Ре)", "На 3-й линейке"],
+    dogru: "Во 2-м добавочном промежутке сверху (Ре)"
+  },
+  {
+    soru: "Как называется ступень Раст (Соль), получившая диез 1 кома?",
+    secenekler: ["Ним Зиргюле", "Зиргюле", "Дик Раст", "Рехави"],
+    dogru: "Ним Зиргюле"
+  },
+  {
+    soru: "Какая это нота Си (B) на 3-й линейке, получившая 'Бемоль Бакийе' (4-5 ком)?",
+    secenekler: ["Кюрди", "Сегях", "Дик Кюрди", "Буселик"],
+    dogru: "Кюрди"
+  },
+  {
+    soru: "Как называется ступень Чаргах (До), получившая 'Диез Большого Мюдженнепа' (8-9 ком)? (Выше, чем Ним Хиджаз)",
+    secenekler: ["Хиджаз", "Ним Хиджаз", "Дик Чаргах", "Хисар"],
+    dogru: "Хиджаз"
+  },
+  {
+    soru: "Как называется ступень 'Соль' (G) над верхней линейкой нотного стана (Октава Гердание)?",
+    secenekler: ["Тиз Раст", "Тиз Гердание", "Сюнбюле", "Тиз Нева"],
+    dogru: "Тиз Раст"
+  },
+  {
+    soru: "Как называется ступень Аджем (Фа), получившая диез 1 кома?",
+    secenekler: ["Дик Аджем", "Эвич", "Махур", "Ним Шехназ"],
+    dogru: "Дик Аджем"
+  },
+  {
+    soru: "Как называется ступень Хюсейни (Ми), получившая бемоль 1 кома?",
+    secenekler: ["Дик Хисар", "Хисар", "Буселик", "Ним Хисар"],
+    dogru: "Дик Хисар"
+  },
+  {
+    soru: "Как называется нота До (C), записанная на 2-й добавочной линейке снизу (Октава Каба)?",
+    secenekler: ["Каба Чаргах", "Йегях", "Каба Раст", "Хюсейни Аширан"],
+    dogru: "Каба Чаргах"
+  },
+  {
+    soru: "Как называется ступень на октаву выше Мухайера (Высокая Ля)?",
+    secenekler: ["Тиз Дюгях", "Тиз Мухайер", "Тиз Буселик", "Гердание"],
+    dogru: "Тиз Дюгях"
+  },
+  {
+    soru: "Как называется ступень на октаву выше Невы (Высокая Ре)?",
+    secenekler: ["Тиз Нева", "Тиз Чаргах", "Сюнбюле", "Тиз Хюсейни"],
+    dogru: "Тиз Нева"
+  },
+  {
+    soru: "Как называется ступень Си (B) (Октава Каба), расположенная под 1-й добавочной линейкой снизу?",
+    secenekler: ["Каба Буселик", "Каба Сегях", "Йегях", "Хюсейни Аширан"],
+    dogru: "Каба Буселик"
+  },
+  {
+    soru: "Как называется ступень Фа (F#) с диезом 4 комы в высокой октаве (над нотным станом)?",
+    secenekler: ["Тиз Эвич", "Тиз Аджем", "Тиз Махур", "Тиз Шехназ"],
+    dogru: "Тиз Эвич"
+  },
+  {
+    soru: "Как называется ступень До (C), расположенная на 2-й добавочной линейке сверху?",
+    secenekler: ["Тиз Чаргах", "Тиз Нева", "Тиз Буселик", "Мухайер"],
+    dogru: "Тиз Чаргах"
+  },
+  {
+    soru: "Как называется ступень Си (Bb) с бемолем 4 комы в октаве Каба (самые низкие звуки)?",
+    secenekler: ["Каба Кюрди (или Каба Дик Кюрди)", "Каба Сегях", "Каба Буселик", "Йегях"],
+    dogru: "Каба Кюрди (или Каба Дик Кюрди)"
+  },
+  {
+    soru: "Какая ступень на октаву выше Хюсейни (Высокая Ми)?",
+    secenekler: ["Тиз Хюсейни", "Тиз Хисар", "Тиз Буселик", "Сюнбюле"],
+    dogru: "Тиз Хюсейни"
+  },
+  {
+    soru: "Как называется ступень 'Си' (B) (Октава Тиз) над нотным станом?",
+    secenekler: ["Тиз Буселик", "Тиз Сегях", "Тиз Чаргах", "Тиз Кюрди"],
+    dogru: "Тиз Буселик"
+  },
+  {
+    soru: "Как в октаве Каба называется ступень Си с бемолем 1 кома?",
+    secenekler: ["Каба Сегях", "Каба Буселик", "Каба Кюрди", "Ирак"],
+    dogru: "Каба Сегях"
+  },
+  {
+    soru: "Как называется ступень До (C#) с диезом 4 комы в высокой октаве?",
+    secenekler: ["Тиз Ним Хиджаз", "Тиз Хиджаз", "Тиз Чаргах", "Тиз Нева"],
+    dogru: "Тиз Ним Хиджаз"
+  },
+  {
+    soru: "Как называется нота До (C) на 1-й добавочной линейке снизу, получившая диез 4 комы (Низкий C#)?",
+    secenekler: ["Каба Ним Хиджаз", "Каба Хиджаз", "Йегях", "Каба Чаргах"],
+    dogru: "Каба Ним Хиджаз"
+  },
+  {
+    soru: "Какая ступень на октаву выше Аджема (Высокая Фа)?",
+    secenekler: ["Тиз Аджем", "Тиз Эвич", "Тиз Гердание", "Тиз Махур"],
+    dogru: "Тиз Аджем"
+  },
+  {
+    soru: "Как называется ступень Ми (Eb) с бемолем 5 ком в октаве Каба?",
+    secenekler: ["Каба Хисар", "Каба Буселик", "Хюсейни Аширан", "Каба Дик Хисар"],
+    dogru: "Каба Хисар"
+  },
+  {
+    soru: "Как называется ступень Гердание (Соль), получившая диез 4 комы (Соль #)?",
+    secenekler: ["Тиз Зиргюле", "Тиз Ним Зиргюле", "Сюнбюле", "Шехназ"],
+    dogru: "Тиз Зиргюле"
+  },
+  {
+    soru: "Как называется ступень Си (Bb) с бемолем 5 ком в высокой октаве?",
+    secenekler: ["Тиз Кюрди", "Тиз Сегях", "Тиз Буселик", "Сюнбюле"],
+    dogru: "Тиз Кюрди"
+  },
+  {
+    soru: "Как называется ступень Мухайер (Ля), получившая бемоль 1 кома? (В отличие от Сюнбюле)",
+    secenekler: ["Дик Сюнбюле", "Сюнбюле", "Тиз Сегях", "Мухайер Кюрди"],
+    dogru: "Дик Сюнбюле"
+  },
+  {
+    soru: "Как называется ступень Йегях (Ре), получившая диез 4 комы? (Низкий Ре#)",
+    secenekler: ["Каба Ним Шехназ", "Каба Шехназ", "Йегях Диез", "Каба Хисар"],
+    dogru: "Каба Ним Шехназ"
+  },
+  {
+    soru: "Как называется ступень Фа (F#) с диезом 8-9 ком (Мюдженнеп) в высокой октаве?",
+    secenekler: ["Тиз Шехназ", "Тиз Эвич", "Тиз Аджем", "Тиз Махур"],
+    dogru: "Тиз Шехназ"
+  },
+  {
+    soru: "Кто этот великий композитор, называемый 'Бетховеном турецкой музыки', автор таких произведений, как 'Yine bir gülnihal' и 'Ey büt-i nev eda', привнесший западные музыкальные влияния (ритм вальса и т.д.) в нашу музыку?",
+    secenekler: ["Хаджи Ариф Бей", "Деде Эфенди (Хамамизаде Исмаил)", "Итри", "Шевки Бей"],
+    dogru: "Деде Эфенди (Хамамизаде Исмаил)"
+  },
+  {
+    soru: "Кто этот мастер 17-го века, композитор шедевров 'Сегях Юрюк Семаи' (Tuti-i Mucize Guyem) и 'Нева Кяр', чей портрет изображен на банкноте 100 турецких лир?",
+    secenekler: ["Бухуризаде Мустафа Итри", "Хафиз Пост", "Захарья", "Эбубекир Ага"],
+    dogru: "Бухуризаде Мустафа Итри"
+  },
+  {
+    soru: "Кто является основателем макама 'Кюрдилихиджазкяр', известным как величайший мастер формы 'Шаркы' и сочинивший около 1000 песен?",
+    secenekler: ["Шевки Бей", "Хаджи Ариф Бей", "Рахми Бей", "Никонья"],
+    dogru: "Хаджи Ариф Бей"
+  },
+  {
+    soru: "Кто этот теоретик, который впервые систематически и научно обосновал звуковую систему турецкой музыки (буквенная нотация) в своем труде 'Китаб аль-Адвар', написанном в 13 веке?",
+    secenekler: ["Фараби", "Сафиаддин Урмави", "Абдулкадир Мераги", "Аль-Кинди"],
+    dogru: "Сафиаддин Урмави"
+  },
+  {
+    soru: "Кто этот гениальный виртуоз, изобретший инструмент 'Яйлы Танбур', поднявший форму таксима на вершину и увековечивший нашу музыку на грампластинках?",
+    secenekler: ["Месут Джемиль", "Танбури Джемиль Бей", "Нейзен Тевфик", "Йорго Баджанос"],
+    dogru: "Танбури Джемиль Бей"
+  },
+  {
+    soru: "Кто этот Султан-композитор, писавший стихи под псевдонимом 'Ильхами' и составивший макам 'Сузидиляра'?",
+    secenekler: ["Селим III", "Махмуд II", "Мурад IV", "Абдулазиз"],
+    dogru: "Селим III"
+  },
+  {
+    soru: "Кто этот музыкальный деятель армянского происхождения, разработавший нотную систему, известную как 'Нотация Хампарсума', благодаря чему до наших дней дошли тысячи произведений?",
+    secenekler: ["Татьос Эфенди", "Хампарсум Лимонджян", "Бимен Шен", "Никогос Ага"],
+    dogru: "Хампарсум Лимонджян"
+  },
+  {
+    soru: "Кто этот великий теоретик 15-го века, прозванный 'Ходжа-и Сани' (Второй учитель) после 'Ходжа-и Эввель' (Первого учителя) Фараби, и автор книги 'Джами аль-Альхан'?",
+    secenekler: ["Абдулкадир Мераги", "Ладикли Мехмет Челеби", "Хызыр Бин Абдуллах", "Али Уфки Бей"],
+    dogru: "Абдулкадир Мераги"
+  },
+  {
+    soru: "Кто является одним из важнейших композиторов республиканского периода, ввел понятие 'Музыка к фильмам' и соединил мотивы народной музыки (Хойрат, Майя) с формами ТСМ?",
+    secenekler: ["Садеттин Кайнак", "Селахаттин Пынар", "Мюнир Нуреттин Сельчук", "Авни Аныл"],
+    dogru: "Садеттин Кайнак"
+  },
+  {
+    soru: "Кто этот мастер, принесший в турецкую музыку концепцию сольного концерта (выступление на сцене в одиночку), дирижер хора и композитор таких произведений, как 'Kalamış'?",
+    secenekler: ["Зеки Мюрен", "Мюнир Нуреттин Сельчук", "Бекир Сыткы Сезгин", "Алаэддин Явашджа"],
+    dogru: "Мюнир Нуреттин Сельчук"
+  },
+  {
+    soru: "Кто этот музыкальный деятель польского происхождения, написавший в 17 веке труд 'Меджмуа-и Саз у Сёз' и записавший произведения системой, похожей на западную нотацию, справа налево?",
+    secenekler: ["Кантемироглу", "Али Уфки Бей (Войцех Бобовский)", "Рауф Екта Бей", "Артаки Джандан"],
+    dogru: "Али Уфки Бей (Войцех Бобовский)"
+  },
+  {
+    soru: "Кто этот один из важнейших композиторов и нейзенов 18 века, известный не только музыкой для церемоний Мевлеви, но и произведением 'Мираджие'?",
+    secenekler: ["Кутбюннайи Осман Деде", "Деде Эфенди", "Зекаи Деде", "Найи Азиз Деде"],
+    dogru: "Кутбюннайи Осман Деде"
+  },
+  {
+    soru: "Кто этот плодовитый композитор эпохи романтизма, создавший около 1000 произведений, почти все в форме песни (шаркы) и в основном в макамах Ушшак или Хиджаз?",
+    secenekler: ["Шевки Бей", "Лем'и Атлы", "Рахми Бей", "Каптанзаде Али Рыза"],
+    dogru: "Шевки Бей"
+  },
+  {
+    soru: "Кто эта женщина-композитор 18 века, чьи произведения дошли до нас в наибольшем количестве, известная своими работами в макаме Эвджара?",
+    secenekler: ["Дильхаят Калфа", "Лейла Саз", "Назифе Гюран", "Невесер Кёкдеш"],
+    dogru: "Дильхаят Калфа"
+  },
+  {
+    soru: "Кто этот скрипач и композитор армянского происхождения, живший в конце 19 - начале 20 веков, автор любимых произведений, таких как 'Gamzedeyim Deva Bulmam'?",
+    secenekler: ["Кемани Татьос Эфенди", "Кемани Серкис Эфенди", "Алеко Баджанос", "Кемани Себух"],
+    dogru: "Кемани Татьос Эфенди"
+  },
+  {
+    soru: "Кто этот покойный учитель, автор книги 'Теория и Усули Турецкой Музыки', используемой сегодня как основной источник в консерваториях, и передавший систему Ареля-Эзги современности?",
+    secenekler: ["Исмаил Хаккы Озкан", "Джинучен Танрыкорур", "Невзад Атлыг", "Алаэддин Явашджа"],
+    dogru: "Исмаил Хаккы Озкан"
+  },
+  {
+    soru: "Кто адаптировал звуковую систему турецкой музыки к западной нотации, написал книгу 'Уроки теории турецкой музыки' и создал современную теоретическую базу (вместе с Эзги и Уздилеком)?",
+    secenekler: ["Хюсейн Садеттин Арель", "Рауф Екта Бей", "Супхи Эзги", "Салих Мурат Уздилек"],
+    dogru: "Хюсейн Садеттин Арель"
+  },
+  {
+    soru: "Кто этот композитор, один из последних представителей босфорской цивилизации, автор песни 'Bir Bahar Akşamı Rastladım Size', а также великий тамбурист?",
+    secenekler: ["Селахаттин Пынар", "Месут Джемиль", "Сади Ышылай", "Рефик Ферсан"],
+    dogru: "Селахаттин Пынар"
+  },
+  {
+    soru: "Кто этот автор трактатов (Эдвар) 15-го века, который впервые использовал и классифицировал понятие 'Макам' в современном смысле (понятие Сейир и т.д.)?",
+    secenekler: ["Хызыр Бин Абдуллах", "Ладикли Мехмет Челеби", "Сейди", "Шюкруллах"],
+    dogru: "Хызыр Бин Абдуллах"
+  },
+  {
+    soru: "Кто этот представитель школы инструментальных произведений (Пешрев и Саз Семаиси), сын Танбури Джемиль Бея, известный такими произведениями, как 'Sultaniyegâh Sirto'?",
+    secenekler: ["Месут Джемиль", "Ниязи Сайын", "Недждет Яшар", "Эрджюмент Батанай"],
+    dogru: "Месут Джемиль"
+  },
+  {
+    soru: "Кто этот исламский философ, считающийся первым великим теоретиком турецкой музыки, автор труда 'Музыка аль-Кабир', изучавший физику звука?",
+    secenekler: ["Фараби", "Ибн Сина", "Аль-Кинди", "Урмави"],
+    dogru: "Фараби"
+  },
+  {
+    soru: "Кто этот композитор классического периода, известный своими произведениями в форме 'Кяр' (например, Раст Кяр-ы Натык), который также был учителем Селима III?",
+    secenekler: ["Танбури Изак", "Захарья", "Эбубекир Ага", "Хафиз Пост"],
+    dogru: "Танбури Изак"
+  },
+  {
+    soru: "Кто этот композитор, составивший макам 'Нев-эсер' (Новое произведение), считающийся одним из основателей неоклассического периода, использовавший богатые модуляции в своих работах (например, Çamlıca Yolunda)?",
+    secenekler: ["Хаджи Фаик Бей", "Деде Эфенди", "Мустафа Нафиз Ирмак", "Леми Атлы"],
+    dogru: "Деде Эфенди"
+  },
+  {
+    soru: "Кто этот один из основателей Стамбульского Радио, работавший также над многоголосной турецкой музыкой, ученик Танбури Джемиль Бея и автор 'Нихавенд Лонга'?",
+    secenekler: ["Сантури Этхем Бей", "Рефик Ферсан", "Месут Джемиль", "Шериф Мухиттин Тарган"],
+    dogru: "Сантури Этхем Бей"
+  },
+  {
+    soru: "Кто этот артист, признанный одним из величайших виртуозов уда 20-го века, известный своей уникальной техникой игры медиатором и знаменитым 'Kürdilihicazkâr Saz Semaisi'?",
+    secenekler: ["Йорго Баджанос", "Уди Хрант", "Шериф Мухиттин Тарган", "Неврес Бей"],
+    dogru: "Йорго Баджанос"
+  },
+  {
+    soru: "Кто этот один из последних великих композиторов музыки Мевлеви, автор 'Сузидиль Мевлеви Айини' и ученик Деде Эфенди?",
+    secenekler: ["Зекаи Деде", "Хюсейн Фахреддин Деде", "Ахмет Авни Конук", "Рауф Екта Бей"],
+    dogru: "Зекаи Деде"
+  },
+  {
+    soru: "Кто этот легендарный музыкант, виртуоз уда из Багдада, отправившийся в Андалусию и повлиявший на основы европейской музыки, которому приписывают добавление 5-й струны к уду?",
+    secenekler: ["Зирьяб", "Исхак аль-Мавсили", "Фараби", "Амир Хосров"],
+    dogru: "Зирьяб"
+  },
+  {
+    soru: "Кто этот музыковед, проведший одно из первых научных исследований истории турецкой музыки и записавший макамы и усули до трио 'Арель-Эзги-Уздилек'?",
+    secenekler: ["Рауф Екта Бей", "Супхи Эзги", "Махмут Рагып Газимихаль", "Вахит Лютфи Салджы"],
+    dogru: "Рауф Екта Бей"
+  },
+  {
+    soru: "Кто этот Султан-композитор, который изобрел или возродил макам 'Шедарабан' и создавал произведения в форме 'Зейбек'?",
+    secenekler: ["Султан Абдулазиз", "Султан Вахдеттин", "Султан Решат", "Абдул-Хамид II"],
+    dogru: "Султан Абдулазиз"
+  },
+  {
+    soru: "Кто этот композитор, владевший и восточной, и западной музыкой, чье имя означает 'Восхваляемый' (как и имя Пророка), автор 'Сегях Текбир' и 'Салят-ы Уммийе'?",
+    secenekler: ["Итри", "Деде Эфенди", "Зекаи Деде", "Абдулкадир Мераги"],
+    dogru: "Итри"
+  }
+]
+        };
+
+        let currentLang = 'tr';
         let currentQ = 0;
         let score = 0;
         let gameQs = [];
-        const bg = document.getElementById('bg-music');
-        
-        // SAYAÇ DEĞİŞKENLERİ
         let timeLeft = 30;
         let timerInterval;
+        const bg = document.getElementById('bg-music');
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Buton aktiflik durumu
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Arayüz metinlerini güncelle
+            const t = translations[lang];
+            document.getElementById('lbl-title').innerHTML = t.title;
+            document.getElementById('lbl-desc').innerHTML = t.desc;
+            document.getElementById('btn-start').innerText = t.startBtn;
+            document.getElementById('lbl-q').innerText = t.qLabel;
+            document.getElementById('lbl-score').innerText = t.scoreLabel;
+            document.getElementById('lbl-result-title').innerText = t.resTitle;
+            document.getElementById('btn-restart').innerText = t.restartBtn;
+        }
 
         function toggleMusic() {
             if (bg.paused) { bg.play(); document.getElementById('volume-icon').className = "fas fa-volume-up"; }
@@ -193,31 +3863,25 @@
             bg.volume = 0.4;
             bg.play().catch(e => console.log("Otomatik oynatma engellendi."));
 
-            gameQs = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 10);
+            // Seçilen dilin sorularını al ve karıştır
+            gameQs = [...questionsDB[currentLang]].sort(() => 0.5 - Math.random()).slice(0, 10);
             showQuestion();
         }
 
         function showQuestion() {
-            // SAYAÇ SIFIRLAMA
             clearInterval(timerInterval);
             timeLeft = 30;
             const timerEl = document.getElementById('timer');
             timerEl.innerText = timeLeft;
             timerEl.classList.remove('timer-warning');
             
-            // SAYAÇ BAŞLATMA
             timerInterval = setInterval(() => {
                 timeLeft--;
                 timerEl.innerText = timeLeft;
-                
-                // Son 5 saniye uyarısı
-                if (timeLeft <= 5) {
-                    timerEl.classList.add('timer-warning');
-                }
-
+                if (timeLeft <= 5) timerEl.classList.add('timer-warning');
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    timeIsUp(); // Süre bitince çalışacak fonksiyon
+                    timeIsUp();
                 }
             }, 1000);
 
@@ -237,33 +3901,30 @@
             });
         }
 
-        // SÜRE BİTİNCE ÇAĞRILAN FONKSİYON
         function timeIsUp() {
             const btns = document.querySelectorAll('.option-btn');
-            btns.forEach(b => b.style.pointerEvents = 'none'); // Tıklamayı kapat
+            btns.forEach(b => b.style.pointerEvents = 'none');
             
-            // Doğru cevabı göster (Yanlış sesi çal)
             const q = gameQs[currentQ];
             btns.forEach(b => {
                 if(b.innerText === q.dogru) b.classList.add('correct');
-                else b.classList.add('wrong'); // Hepsini kırmızı yap ki süre bittiği anlaşılsın
+                else b.classList.add('wrong');
             });
             
             document.getElementById('snd-wrong').currentTime = 0;
             document.getElementById('snd-wrong').play().catch(()=>{});
             
-            document.getElementById('question-text').innerText = "SÜRE DOLDU!"; // Kullanıcıya bilgi ver
+            document.getElementById('question-text').innerText = translations[currentLang].timeUp;
 
             setTimeout(() => {
                 currentQ++;
                 if (currentQ < gameQs.length) showQuestion();
                 else end();
-            }, 2000); // Süre bitince biraz daha uzun bekle (2sn)
+            }, 2000);
         }
 
         function check(btn, sel, correct) {
-            clearInterval(timerInterval); // Cevap verilince sayacı durdur
-
+            clearInterval(timerInterval);
             const btns = document.querySelectorAll('.option-btn');
             btns.forEach(b => b.style.pointerEvents = 'none');
 
@@ -288,11 +3949,13 @@
         }
 
         function end() {
-            clearInterval(timerInterval); // Emin olmak için
+            clearInterval(timerInterval);
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('result-screen').style.display = 'block';
             document.getElementById('final-score').innerText = score;
-            document.getElementById('feedback-text').innerText = score >= 40 ? "Tebrikler üstat!" : "Süreyle yarışmak zordur, tekrar deneyin.";
+            
+            const t = translations[currentLang];
+            document.getElementById('feedback-text').innerText = score >= 40 ? t.goodJob : t.badJob;
         }
     </script>
 </body>
