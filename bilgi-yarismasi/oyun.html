@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bağlamagram Bilgi Yarışması</title>
+    <title>Bağlamagram</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #20B2AA; /* Light Sea Green - Turkuaz */
-            --primary-dark: #008080; /* Teal */
-            --accent: #FFD700; /* Altın Sarısı - Detaylar için */
+            --primary: #20B2AA;
+            --primary-dark: #008080;
+            --accent: #FFD700;
             --bg-gradient: linear-gradient(135deg, #40E0D0 0%, #20B2AA 100%);
             --white: #ffffff;
             --text: #2c3e50;
@@ -30,7 +30,6 @@
             padding: 20px;
         }
 
-        /* Ana Kart Tasarımı */
         .card {
             background: var(--white);
             width: 100%;
@@ -41,14 +40,33 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            min-height: 450px;
+            min-height: 480px; /* Dil seçeneği için biraz yer açtık */
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        /* Ekran Yönetimi */
-        .screen { display: none; animation: fadeIn 0.4s ease-in-out; }
+        /* Dil Seçici Stili */
+        .lang-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        select#language-select {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            outline: none;
+            background: white;
+        }
+
+        .screen { display: none; animation: fadeIn 0.4s ease-in-out; width: 100%; }
         .screen.active { display: block; }
 
         @keyframes fadeIn {
@@ -56,7 +74,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 1. Hoşgeldin Ekranı */
         .welcome-icon { font-size: 4rem; margin-bottom: 20px; color: var(--primary); }
         h1 { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 10px; }
         p.subtitle { color: #7f8c8d; margin-bottom: 40px; font-size: 1.1rem; }
@@ -75,7 +92,6 @@
         }
         .start-btn:hover { transform: translateY(-3px); background: var(--primary-dark); }
 
-        /* 2. Oyun Ekranı */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -85,7 +101,6 @@
             color: #95a5a6;
         }
 
-        /* Süre Çubuğu */
         .timer-container {
             width: 100%;
             height: 8px;
@@ -136,7 +151,6 @@
         .option-btn.correct { background: var(--success); color: white; border-color: var(--success); }
         .option-btn.wrong { background: var(--danger); color: white; border-color: var(--danger); }
 
-        /* 3. Sonuç Ekranı */
         .score-display {
             font-size: 5rem;
             font-weight: 700;
@@ -145,7 +159,6 @@
         }
         .result-msg { font-size: 1.2rem; color: #7f8c8d; margin-bottom: 30px; }
 
-        /* Mobil */
         @media (max-width: 600px) {
             .options-grid { grid-template-columns: 1fr; }
             h1 { font-size: 2rem; }
@@ -157,16 +170,25 @@
 
 <div class="card">
     
+    <div class="lang-container">
+        <select id="language-select" onchange="changeLanguage(this.value)">
+            <option value="tr">🇹🇷 Türkçe</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="lt">🇱🇹 Lietuvių</option>
+        </select>
+    </div>
+    
     <div id="welcome-screen" class="screen active">
         <div class="welcome-icon">🎵</div>
-        <h1>Bağlamagram</h1>
-        <p class="subtitle">Halk Müziği Bilgi Yarışması</p>
-        <button class="start-btn" onclick="oyunuBaslat()">Yarışmaya Başla</button>
+        <h1 id="txt-title">Bağlamagram</h1>
+        <p class="subtitle" id="txt-subtitle">Halk Müziği Bilgi Yarışması</p>
+        <button class="start-btn" id="btn-start" onclick="oyunuBaslat()">Yarışmaya Başla</button>
     </div>
 
     <div id="game-screen" class="screen">
         <div class="game-header">
-            <span>Soru</span>
+            <span id="txt-question-label">Soru</span>
             <span id="q-count">1 / 10</span>
         </div>
 
@@ -174,17 +196,17 @@
             <div id="timer-bar" class="timer-bar"></div>
         </div>
 
-        <div class="question-text" id="question">Soru yükleniyor...</div>
+        <div class="question-text" id="question">Loading...</div>
 
         <div class="options-grid" id="options">
             </div>
     </div>
 
     <div id="result-screen" class="screen">
-        <h2>Oyun Bitti!</h2>
+        <h2 id="txt-gameover">Oyun Bitti!</h2>
         <div class="score-display" id="final-score">0</div>
-        <p class="result-msg" id="feedback">Puanın hesaplandı.</p>
-        <button class="start-btn" onclick="oyunuSifirla()">Tekrar Oyna</button>
+        <p class="result-msg" id="feedback">...</p>
+        <button class="start-btn" id="btn-restart" onclick="oyunuSifirla()">Tekrar Oyna</button>
     </div>
 
 </div>
@@ -192,6 +214,72 @@
 <script src="sorular.js"></script>
 
 <script>
+    // --- ÇEVİRİ VERİTABANI ---
+    const translations = {
+        tr: {
+            title: "Bağlamagram",
+            subtitle: "Halk Müziği Bilgi Yarışması",
+            startBtn: "Yarışmaya Başla",
+            questionLabel: "Soru",
+            gameTitle: "Bağlamagram Bilgi Yarışması",
+            loading: "Soru yükleniyor...",
+            gameOver: "Oyun Bitti!",
+            playAgain: "Tekrar Oyna",
+            msgPerfect: "Tebrikler! Hiç hata yapmadın.",
+            msgComplete: "Tüm soruları tamamladın.",
+            msgTimeout: "Süre doldu!",
+            msgWrong: "Yanlış cevap verdin.",
+            msgError: "Hata: sorular.js bulunamadı!"
+        },
+        en: {
+            title: "Baglamagram",
+            subtitle: "Folk Music Quiz",
+            startBtn: "Start Quiz",
+            questionLabel: "Question",
+            gameTitle: "Baglamagram Quiz",
+            loading: "Loading question...",
+            gameOver: "Game Over!",
+            playAgain: "Play Again",
+            msgPerfect: "Congratulations! No mistakes.",
+            msgComplete: "You completed all questions.",
+            msgTimeout: "Time is up!",
+            msgWrong: "Wrong answer.",
+            msgError: "Error: questions.js not found!"
+        },
+        ru: {
+            title: "Багламаграм",
+            subtitle: "Викторина о народной музыке",
+            startBtn: "Начать тест",
+            questionLabel: "Вопрос",
+            gameTitle: "Викторина Багламаграм",
+            loading: "Вопрос загружается...",
+            gameOver: "Игра окончена!",
+            playAgain: "Играть снова",
+            msgPerfect: "Поздравляем! Ни одной ошибки.",
+            msgComplete: "Вы ответили на все вопросы.",
+            msgTimeout: "Время вышло!",
+            msgWrong: "Неправильный ответ.",
+            msgError: "Ошибка: questions.js не найден!"
+        },
+        lt: {
+            title: "Baglamagram",
+            subtitle: "Liaudies Muzikos Viktorina",
+            startBtn: "Pradėti testą",
+            questionLabel: "Klausimas",
+            gameTitle: "Baglamagram Viktorina",
+            loading: "Kraunamas klausimas...",
+            gameOver: "Žaidimas baigtas!",
+            playAgain: "Žaisti dar kartą",
+            msgPerfect: "Sveikiname! Jokių klaidų.",
+            msgComplete: "Atsakėte į visus klausimus.",
+            msgTimeout: "Laikas baigėsi!",
+            msgWrong: "Neteisingas atsakymas.",
+            msgError: "Klaida: nerastas questions.js failas!"
+        }
+    };
+
+    let currentLang = 'tr'; // Varsayılan dil
+
     // --- DEĞİŞKENLER ---
     let oyunHavuzu = [];
     let soruSirasi = 0;
@@ -200,24 +288,47 @@
     let timerInterval;
     const soruLimiti = 10;
 
-    // --- FONKSİYONLAR ---
+    // --- DİL FONKSİYONLARI ---
+    function changeLanguage(lang) {
+        currentLang = lang;
+        const t = translations[lang];
+
+        // Sabit metinleri güncelle
+        document.getElementById('txt-title').innerText = t.title;
+        document.getElementById('txt-subtitle').innerText = t.subtitle;
+        document.getElementById('btn-start').innerText = t.startBtn;
+        document.getElementById('txt-question-label').innerText = t.questionLabel;
+        document.getElementById('txt-gameover').innerText = t.gameOver;
+        document.getElementById('btn-restart').innerText = t.playAgain;
+        document.getElementById('question').innerText = t.loading; // Reset için
+        document.title = t.gameTitle;
+    }
+
+    // --- OYUN FONKSİYONLARI ---
 
     function ekranGoster(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        
+        // Dil seçiciyi sadece hoşgeldin ekranında göster
+        const langSelect = document.querySelector('.lang-container');
+        if(id === 'welcome-screen') langSelect.style.display = 'block';
+        else langSelect.style.display = 'none';
     }
 
     function oyunuBaslat() {
-        // Güvenlik Kontrolü: Sorular dosyası yüklendi mi?
+        const t = translations[currentLang];
+        
+        // Güvenlik Kontrolü
         if (typeof tumSorular === 'undefined') {
-            alert("Hata: sorular.js dosyası bulunamadı! Lütfen dosyanın oyun.html ile aynı klasörde olduğundan emin olun.");
+            alert(t.msgError);
             return;
         }
 
         puan = 0;
         soruSirasi = 0;
         
-        // Havuzu karıştır ve ilk 10 taneyi al (tumSorular dış dosyadan geliyor)
+        // Havuzu karıştır ve al
         oyunHavuzu = [...tumSorular].sort(() => 0.5 - Math.random());
         if(oyunHavuzu.length > soruLimiti) {
             oyunHavuzu = oyunHavuzu.slice(0, soruLimiti);
@@ -233,16 +344,14 @@
 
     function soruGetir() {
         if(soruSirasi >= oyunHavuzu.length) {
-            bitisEkrani(true); // Tüm soruları bildi
+            bitisEkrani(true); 
             return;
         }
 
-        // Arayüzü güncelle
         const veri = oyunHavuzu[soruSirasi];
         document.getElementById('q-count').innerText = `${soruSirasi + 1} / ${oyunHavuzu.length}`;
         document.getElementById('question').innerText = veri.soru;
 
-        // Şıkları oluştur
         const optDiv = document.getElementById('options');
         optDiv.innerHTML = '';
         
@@ -275,33 +384,29 @@
 
             if(sure <= 0) {
                 clearInterval(timerInterval);
-                bitisEkrani(false); // Süre bitti
+                bitisEkrani(false); 
             }
         }, 1000);
     }
 
     function cevapKontrol(btn, secilen, dogru) {
-        clearInterval(timerInterval); // Sayacı durdur
+        clearInterval(timerInterval);
         
-        // Tüm butonları kilitle
         const btns = document.querySelectorAll('.option-btn');
         btns.forEach(b => b.disabled = true);
 
         if(secilen === dogru) {
             btn.classList.add('correct');
             puan += 10;
-            // 1 saniye bekle sonra diğer soru
             setTimeout(() => {
                 soruSirasi++;
                 soruGetir();
             }, 1000);
         } else {
             btn.classList.add('wrong');
-            // Doğru olanı da göster
             btns.forEach(b => {
                 if(b.innerText === dogru) b.classList.add('correct');
             });
-            // Yanlışta oyun biter
             setTimeout(() => {
                 bitisEkrani(false);
             }, 1500);
@@ -311,16 +416,17 @@
     function bitisEkrani(basari) {
         clearInterval(timerInterval);
         ekranGoster('result-screen');
+        const t = translations[currentLang];
         
         document.getElementById('final-score').innerText = puan;
         const msg = document.getElementById('feedback');
 
         if(basari) {
-            if(puan === soruLimiti * 10) msg.innerText = "Tebrikler! Hiç hata yapmadın.";
-            else msg.innerText = "Tüm soruları tamamladın.";
+            if(puan === soruLimiti * 10) msg.innerText = t.msgPerfect;
+            else msg.innerText = t.msgComplete;
         } else {
-            if(sure <= 0) msg.innerText = "Süre doldu!";
-            else msg.innerText = "Yanlış cevap verdin.";
+            if(sure <= 0) msg.innerText = t.msgTimeout;
+            else msg.innerText = t.msgWrong;
         }
     }
 
