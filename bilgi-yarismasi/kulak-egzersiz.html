@@ -67,6 +67,55 @@
         }
         .btn-start:hover, .btn-restart:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
 
+        /* --- DİL BUTONU --- */
+        .lang-container {
+            margin-top: 25px;
+            position: relative;
+        }
+        
+        .btn-lang {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #aaa;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-lang:hover { background: rgba(255,255,255,0.2); color: white; }
+
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2a2a2a;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            z-index: 100;
+            min-width: 140px;
+        }
+        .lang-dropdown.show { display: block; animation: fadeIn 0.2s; }
+
+        .lang-opt {
+            padding: 10px 15px;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 0.9rem;
+            text-align: left;
+            transition: 0.2s;
+        }
+        .lang-opt:hover { background: var(--accent); color: #000; }
+        .lang-opt.selected { color: var(--accent); font-weight: bold; }
+        .lang-opt.selected:hover { color: #000; }
+
         /* Oyun Ekranı Detayları */
         .game-header {
             display: flex;
@@ -141,21 +190,34 @@
 
     <div id="start-screen" class="screen active">
         <i class="fas fa-ear-listen" style="font-size: 5rem; color: var(--accent); margin-bottom: 20px;"></i>
-        <h1>Mutlak Duyum Testi</h1>
-        <p>Kulağına ne kadar güveniyorsun?<br>Toplam <b>20 Soru</b> sorulacak.<br>Her soruda çalan notayı bilmeye çalış.<br>  <br>Baglamagram Games</p>
-        <button class="btn-start" onclick="initGame()">TESTİ BAŞLAT</button>
+        <h1 data-key="mainTitle">Mutlak Duyum Testi</h1>
+        <p data-key="mainDesc">Kulağına ne kadar güveniyorsun?<br>Toplam <b>20 Soru</b> sorulacak.<br>Her soruda çalan notayı bilmeye çalış.</p>
+        <p style="margin-top:-20px; font-size:0.9rem; opacity:0.6;">Baglamagram Games</p>
+        
+        <button class="btn-start" onclick="initGame()" data-key="startBtn">TESTİ BAŞLAT</button>
+        
+        <div class="lang-container">
+            <button class="btn-lang" onclick="toggleLangMenu()">
+                <i class="fas fa-globe"></i> <span id="current-lang-text">Türkçe</span>
+            </button>
+            <div id="lang-menu" class="lang-dropdown">
+                <div class="lang-opt selected" onclick="setLanguage('tr')">Türkçe</div>
+                <div class="lang-opt" onclick="setLanguage('en')">English</div>
+                <div class="lang-opt" onclick="setLanguage('de')">Deutsch</div>
+                <div class="lang-opt" onclick="setLanguage('ru')">Русский</div> <div class="lang-opt" onclick="setLanguage('lt')">Lietuvių</div> </div>
+        </div>
     </div>
 
     <div id="game-screen" class="screen">
         <div class="game-header">
             <span id="question-indicator">Soru: 1 / 20</span>
-            <span class="score-box">Doğru: <span id="current-score">0</span></span>
+            <span class="score-box"><span data-key="score">Doğru</span>: <span id="current-score">0</span></span>
         </div>
         
         <button class="listen-btn" onclick="playCurrentNote()" id="playBtn">
             <i class="fas fa-volume-high"></i>
         </button>
-        <p style="font-size: 0.9rem; color: #888; margin-bottom:30px;">Tekrar dinlemek için butona bas</p>
+        <p style="font-size: 0.9rem; color: #888; margin-bottom:30px;" data-key="replayInfo">Tekrar dinlemek için butona bas</p>
 
         <div class="options-grid" id="options-container">
             </div>
@@ -163,20 +225,171 @@
 
     <div id="result-screen" class="screen">
         <i class="fas fa-chart-pie" style="font-size: 3rem; color: #fff; opacity:0.5; margin-bottom:10px;"></i>
-        <h1>Test Sonucu</h1>
+        <h1 data-key="resultTitle">Test Sonucu</h1>
         
         <div class="result-percent" id="final-percent">%0</div>
-        <div class="result-title" id="final-title">Seviye Hesaplanıyor...</div>
+        <div class="result-title" id="final-title">...</div>
         
         <div class="result-comment">
             <i class="fas fa-quote-left" style="color:var(--accent); margin-right:10px;"></i>
-            <span id="final-comment">Yorum yükleniyor...</span>
+            <span id="final-comment">...</span>
         </div>
 
-        <button class="btn-restart" onclick="location.reload()">TEKRAR DENE</button>
+        <button class="btn-restart" onclick="location.reload()" data-key="restartBtn">TEKRAR DENE</button>
     </div>
 
     <script>
+        // --- ÇOKLU DİL YAPISI ---
+        const translations = {
+            tr: {
+                mainTitle: "Mutlak Duyum Testi",
+                mainDesc: "Kulağına ne kadar güveniyorsun?<br>Toplam <b>20 Soru</b> sorulacak.<br>Her soruda çalan notayı bilmeye çalış.",
+                startBtn: "TESTİ BAŞLAT",
+                question: "Soru",
+                score: "Doğru",
+                replayInfo: "Tekrar dinlemek için butona bas",
+                resultTitle: "Test Sonucu",
+                restartBtn: "TEKRAR DENE",
+                calc: "Seviye Hesaplanıyor...",
+                highDo: "Do (İnce)"
+            },
+            en: {
+                mainTitle: "Absolute Pitch Test",
+                mainDesc: "How much do you trust your ears?<br>Total <b>20 Questions</b>.<br>Try to identify the note played in each question.",
+                startBtn: "START TEST",
+                question: "Question",
+                score: "Correct",
+                replayInfo: "Tap button to listen again",
+                resultTitle: "Test Result",
+                restartBtn: "TRY AGAIN",
+                calc: "Calculating Level...",
+                highDo: "High Do (C5)"
+            },
+            de: {
+                mainTitle: "Absolutes Gehör Test",
+                mainDesc: "Wie sehr vertraust du deinen Ohren?<br>Insgesamt <b>20 Fragen</b>.<br>Versuche, die gespielte Note zu erkennen.",
+                startBtn: "TEST STARTEN",
+                question: "Frage",
+                score: "Richtig",
+                replayInfo: "Zum erneuten Anhören drücken",
+                resultTitle: "Testergebnis",
+                restartBtn: "NEUSTART",
+                calc: "Niveau wird berechnet...",
+                highDo: "Hohes Do (C5)"
+            },
+            // Rusça (Fransızca yerine)
+            ru: {
+                mainTitle: "Тест на абсолютный слух",
+                mainDesc: "Насколько ты доверяешь своему слуху?<br>Всего <b>20 вопросов</b>.<br>Постарайся угадать ноту.",
+                startBtn: "НАЧАТЬ ТЕСТ",
+                question: "Вопрос",
+                score: "Верно",
+                replayInfo: "Нажми, чтобы прослушать снова",
+                resultTitle: "Результат",
+                restartBtn: "ПОПРОБОВАТЬ СНОВА",
+                calc: "Вычисление уровня...",
+                highDo: "До (Верхнее)"
+            },
+            // Litvanyaca (İspanyolca yerine)
+            lt: {
+                mainTitle: "Absoliučios klausos testas",
+                mainDesc: "Kiek pasitiki savo klausa?<br>Iš viso <b>20 klausimų</b>.<br>Pabandyk atspėti grojamą natą.",
+                startBtn: "PRADĖTI TESTĄ",
+                question: "Klausimas",
+                score: "Teisingai",
+                replayInfo: "Paspauskite, jei norite klausytis dar kartą",
+                resultTitle: "Rezultatas",
+                restartBtn: "BANDYTI DAR KARTĄ",
+                calc: "Skaičiuojamas lygis...",
+                highDo: "Do (Aukšta)"
+            }
+        };
+
+        // Sonuç Yorumları
+        const resultComments = {
+            tr: [
+                { min: 90, title: "Mutlak Kulak (Absolut)", comment: "Senin Allah'ına Kurban!🥳🎉🎊 Sen frekansları resmen görüyorsun! Kesinlikle müzik ile ilgilenmelisin, çünkü senin bir süper gücün var." },
+                { min: 80, title: "Üst Düzey Kulak", comment: "Mükemmel.👏🏻 Sahne tozunu yutmaya hazırsın, doğuştan gelen o yeteneğe çok yakınsın." },
+                { min: 60, title: "İyi Seviyede Kulak", comment: "Ortalamanın üzerindesin.👍 Biraz daha pratikle notalarla dostluğunu pekiştirebilirsin." },
+                { min: 40, title: "Ortalama Seviye", comment: "Sesleri ayırt ediyorsun ama aralarındaki o ince farklarda kafan karışıyor. Çalışmaya devam!" },
+                { min: 0, title: "Geliştirilmeli", comment: "Ses dünyasına biraz yabancısın. Üzülme, kulak eğitimiyle her şey gelişir." }
+            ],
+            en: [
+                { min: 90, title: "Absolute Pitch (Virtuoso)", comment: "Unbelievable!🥳🎉 You can literally 'see' the frequencies! You have a superpower, definitely pursue music." },
+                { min: 80, title: "Superior Ear", comment: "Excellent.👏🏻 You are very close to perfect pitch. You are ready for the stage." },
+                { min: 60, title: "Good Ear", comment: "Above average.👍 With a bit more practice, you can master the notes." },
+                { min: 40, title: "Average Level", comment: "You can distinguish sounds but get confused by subtle differences. Keep practicing!" },
+                { min: 0, title: "Needs Improvement", comment: "The world of sounds is a bit foreign to you. Don't worry, ear training helps everyone." }
+            ],
+            de: [
+                { min: 90, title: "Absolutes Gehör", comment: "Unglaublich!🥳🎉 Du hast eine Superkraft. Du solltest unbedingt Musik machen!" },
+                { min: 80, title: "Hervorragendes Gehör", comment: "Exzellent.👏🏻 Du bist sehr nah am perfekten Gehör." },
+                { min: 60, title: "Gutes Gehör", comment: "Überdurchschnittlich.👍 Mit etwas mehr Übung wirst du Meister." },
+                { min: 40, title: "Durchschnitt", comment: "Du erkennst Töne, aber feine Unterschiede sind schwer. Übung macht den Meister!" },
+                { min: 0, title: "Ausbaufähig", comment: "Keine Sorge, Gehörbildung kann man lernen." }
+            ],
+            // Rusça Yorumlar
+            ru: [
+                { min: 90, title: "Абсолютный слух", comment: "Невероятно!🥳🎉 Вы буквально «видите» частоты! У вас есть суперсила, обязательно занимайтесь музыкой." },
+                { min: 80, title: "Превосходный слух", comment: "Отлично.👏🏻 Вы очень близки к абсолютному слуху. Вы готовы к сцене." },
+                { min: 60, title: "Хороший слух", comment: "Выше среднего.👍 Еще немного практики, и вы освоите ноты." },
+                { min: 40, title: "Средний уровень", comment: "Вы различаете звуки, но путаетесь в тонкостях. Продолжайте практиковаться!" },
+                { min: 0, title: "Нужна тренировка", comment: "Мир звуков для вас немного чужой. Не волнуйтесь, тренировка слуха помогает всем." }
+            ],
+            // Litvanyaca Yorumlar
+            lt: [
+                { min: 90, title: "Absoliuti klausa", comment: "Neįtikėtina!🥳🎉 Jūs turite supergalių. Būtinai turėtumėte užsiimti muzika!" },
+                { min: 80, title: "Puiki klausa", comment: "Puiku.👏🏻 Jūs esate labai arti absoliučios klausos." },
+                { min: 60, title: "Gera klausa", comment: "Aukščiau vidurkio.👍 Dar šiek tiek praktikos ir natos jums paklus." },
+                { min: 40, title: "Vidutinis lygis", comment: "Skiriate garsus, bet smulkios detalės painiojasi. Praktikuokitės toliau!" },
+                { min: 0, title: "Reikia tobulėti", comment: "Garso pasaulis jums šiek tiek svetimas? Nesijaudinkite, klausos lavinimas padeda visiems." }
+            ]
+        };
+
+        let currentLang = 'tr';
+
+        function toggleLangMenu() {
+            document.getElementById('lang-menu').classList.toggle('show');
+        }
+
+        // Menü dışına tıklanırsa kapat
+        window.onclick = function(event) {
+            if (!event.target.matches('.btn-lang') && !event.target.matches('.btn-lang *')) {
+                var dropdowns = document.getElementsByClassName("lang-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Text güncelleme
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if(translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Buton metni güncelle
+            const langNames = {tr: "Türkçe", en: "English", de: "Deutsch", ru: "Русский", lt: "Lietuvių"};
+            document.getElementById('current-lang-text').innerText = langNames[lang];
+
+            // Aktif class güncelleme
+            document.querySelectorAll('.lang-opt').forEach(opt => opt.classList.remove('selected'));
+            
+            // Soru sayacını güncelle (oyun başladıysa)
+            if(document.getElementById('game-screen').classList.contains('active')) {
+                updateQuestionIndicator();
+            }
+        }
+
+
         // --- NOTA VERİ TABANI ---
         const notesData = [
             // Naturel Notalar
@@ -187,7 +400,7 @@
             { name: "Sol", freq: 392.00, type: "naturel" }, 
             { name: "La", freq: 440.00, type: "naturel" }, 
             { name: "Si", freq: 493.88, type: "naturel" },
-            { name: "Do (İnce)", freq: 523.25, type: "naturel" },
+            { name: "Do (İnce)", key: "highDo", freq: 523.25, type: "naturel" }, // Key eklendi
             
             // Arızalı Notalar
             { name: "Do# / Re♭", freq: 277.18, type: "arizali" }, 
@@ -197,33 +410,22 @@
             { name: "La# / Si♭", freq: 466.16, type: "arizali" }
         ];
 
-        // --- SONUÇ YORUMLARI ---
-        const resultLevels = [
-            { min: 90, title: "Mutlak Kulak (Absolut)", comment: "Senin Allah'ına Kurban!🥳🎉🎊👏🏻👏🏻 Sen frekansları resmen görüyorsun! Kesinlikle müzik ile ilgilenmelisin, çünkü senin bir süper gücün var. Ve bu çok az insanda var, mutlaka ama mutlaka bir uzmana danış." },
-            { min: 80, title: "Üst Düzey Kulak", comment: "Mükemmel.👏🏻👏🏻👏🏻 Sahne tozunu yutmaya hazırsın, bir insanın doğuştan kazandığı Mutlak Duyum - Absolute kulak seviyesine çok yakınsın. Bir uzmana danışabilirsin." },
-            { min: 70, title: "Eğitimli Kulak", comment: "Gayet iyi.👏🏻👏🏻 Teknik altyapın sağlam, kulakların notaları seçmekte zorlanmıyor. Hatalarına biraz daha dikkat edersen çok iyi olur." },
-            { min: 60, title: "İyi Seviyede Kulak", comment: "Ortalamanın üzerindesin.👍 Biraz daha pratikle notalarla dostluğunu pekiştirebilirsin. Bir çok insana göre öndesin." },
-            { min: 50, title: "Müzik Sever (Baraj)", comment: "Tam sınırdasın. Müziği duyuyorsun ama notaların dilini henüz tam sökememişsin." },
-            { min: 40, title: "Ortalama Seviye", comment: "Sesleri ayırt ediyorsun ama aralarındaki o ince farklarda kafan karışıyor. Çalışmaya devam!" },
-            { min: 30, title: "Nota Avcısı", comment: "Biraz şans, biraz kulak... Notaları yakalamaya çalışıyorsun ama çoğu elinden kaçıyor. Sallamayı azaltmalısın ciğerim" },
-            { min: 20, title: "Rastgele Tuturan", comment: "Sesler kulağına geliyor ama beyne gidene kadar yolda kayboluyorlar ciğerim. Ama bir çok insana göre fena değilsin, çalışmaya devam et." },
-            { min: 10, title: "Kulak Zor Duyuyor", comment: "Daha çok fırın ekmek yemen lazım. Çalışmaya devam!" },
-            { min: 0,  title: "Müzik Kulağın Yok Gibi...", comment: "Ses dünyasına yabancısın. Sen en iyisi bir uzmana danış, bu konuda sıfırsın. Galiba daha önce müzik geçmişin yok ama üzülme, çalışarak düzelir." }
-        ];
-
         let audioCtx;
         let currentQuestion = 0;
         let correctAnswers = 0;
         let totalQuestions = 20;
         let currentNoteObj = null;
         let isProcessing = false;
-        
-        // SON SORULARI TAKİP ETMEK İÇİN DİZİ
         let recentQuestions = [];
 
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+        }
+
+        function updateQuestionIndicator() {
+             document.getElementById('question-indicator').innerText = 
+                `${translations[currentLang].question}: ${currentQuestion} / ${totalQuestions}`;
         }
 
         function initGame() {
@@ -232,7 +434,7 @@
             
             currentQuestion = 0;
             correctAnswers = 0;
-            recentQuestions = []; // Hafızayı sıfırla
+            recentQuestions = [];
             showScreen('game-screen');
             nextRound();
         }
@@ -245,11 +447,19 @@
                 return;
             }
 
-            document.getElementById('question-indicator').innerText = `Soru: ${currentQuestion} / ${totalQuestions}`;
+            updateQuestionIndicator();
             document.getElementById('current-score').innerText = correctAnswers;
             
             isProcessing = false;
             generateQuestion();
+        }
+
+        function getNoteDisplayName(noteObj) {
+            // Eğer özel bir çeviri anahtarı varsa (örn: highDo) onu kullan
+            if (noteObj.key && translations[currentLang][noteObj.key]) {
+                return translations[currentLang][noteObj.key];
+            }
+            return noteObj.name;
         }
 
         function generateQuestion() {
@@ -257,36 +467,23 @@
             let candidateNote;
             let attempts = 0;
 
-            // --- TEKRAR ENGELLEME ALGORİTMASI ---
             do {
                 randomIndex = Math.floor(Math.random() * notesData.length);
                 candidateNote = notesData[randomIndex];
                 attempts++;
-                // Sonsuz döngü koruması (100 deneme limiti)
                 if (attempts > 100) break;
-                
-            } while (recentQuestions.includes(candidateNote.name)); // Son 3 soruda var mı kontrol et
+            } while (recentQuestions.includes(candidateNote.name));
 
-            // Seçilen notayı mevcut soru yap
             currentNoteObj = candidateNote;
-
-            // Son sorulanlar listesine ekle
             recentQuestions.push(currentNoteObj.name);
-            // Eğer liste 3'ten büyükse en eskisini çıkar (Kaydırma penceresi)
-            if (recentQuestions.length > 3) {
-                recentQuestions.shift();
-            }
-            // ------------------------------------
+            if (recentQuestions.length > 3) recentQuestions.shift();
 
-            // Şıkları Oluştur (2 Naturel + 2 Arızalı KURALI)
             let options = [];
             const naturals = notesData.filter(n => n.type === 'naturel');
             const accidentals = notesData.filter(n => n.type === 'arizali');
 
-            // Doğru cevabı ekle
             options.push(currentNoteObj);
 
-            // Kalan 3 şıkkı dengele
             let neededNaturals = (currentNoteObj.type === 'naturel') ? 1 : 2;
             let neededAccidentals = (currentNoteObj.type === 'arizali') ? 1 : 2;
 
@@ -306,27 +503,27 @@
                 }
             }
 
-            // Şıkları Karıştır
             options.sort(() => Math.random() - 0.5);
 
-            // HTML'e Bas
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             options.forEach(note => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.innerText = note.name;
+                // İsmi dile göre al
+                btn.innerText = getNoteDisplayName(note);
                 btn.onclick = () => checkAnswer(btn, note);
                 container.appendChild(btn);
             });
 
-            // Sesi Çal
             setTimeout(() => playTone(currentNoteObj.freq), 500);
         }
 
         function checkAnswer(btn, selectedNote) {
             if (isProcessing) return;
             isProcessing = true;
+
+            const correctName = getNoteDisplayName(currentNoteObj);
 
             if (selectedNote.name === currentNoteObj.name) {
                 btn.classList.add('correct');
@@ -336,7 +533,7 @@
                 btn.classList.add('wrong');
                 const allBtns = document.querySelectorAll('.option-btn');
                 allBtns.forEach(b => {
-                    if (b.innerText === currentNoteObj.name) b.classList.add('correct');
+                    if (b.innerText === correctName) b.classList.add('correct');
                 });
                 playErrorSound();
             }
@@ -350,9 +547,12 @@
             
             const percentage = Math.round((correctAnswers / totalQuestions) * 100);
             document.getElementById('final-percent').innerText = `%${percentage}`;
+            document.getElementById('final-title').innerText = translations[currentLang].calc;
 
-            let result = resultLevels.find(r => percentage >= r.min);
-            if (!result) result = resultLevels[resultLevels.length - 1];
+            // Dile göre sonuç dizisini al
+            const currentLevelData = resultComments[currentLang];
+            let result = currentLevelData.find(r => percentage >= r.min);
+            if (!result) result = currentLevelData[currentLevelData.length - 1];
 
             document.getElementById('final-title').innerText = result.title;
             document.getElementById('final-comment').innerText = result.comment;
