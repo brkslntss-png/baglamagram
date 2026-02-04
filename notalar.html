@@ -35,6 +35,72 @@
             min-height: 100vh;
         }
 
+        /* --- DİL SEÇİCİ STİLLERİ (SOL ÜST KÖŞE) --- */
+        .language-wrapper {
+            position: fixed;
+            top: 25px;
+            left: 30px; 
+            z-index: 1100;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .lang-btn {
+            background: rgba(0, 0, 0, 0.6); 
+            border: 1px solid var(--accent);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .lang-btn:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
+        }
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 120%;
+            left: 0;
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 140px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .lang-dropdown a {
+            display: block;
+            padding: 12px 15px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lang-dropdown a:last-child { border-bottom: none; }
+        .lang-dropdown a:hover {
+            background: var(--accent);
+            color: #000;
+        }
+        .lang-dropdown.active {
+            display: block;
+            animation: fadeInDrop 0.3s ease;
+        }
+        @keyframes fadeInDrop {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* --- NAVİGASYON --- */
         nav {
             background: #000; padding: 20px 0; position: sticky; top: 0; z-index: 1000;
@@ -147,6 +213,7 @@
 
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
+            .language-wrapper { top: 20px; left: 20px; }
             nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
             nav ul.aktif { display: flex; }
             .page-header h1 { font-size: 2.5rem; }
@@ -156,30 +223,44 @@
 </head>
 <body>
 
+    <div class="language-wrapper">
+        <button class="lang-btn" onclick="toggleLanguageMenu()">
+            <i class="fas fa-globe"></i> <span id="lang-label">LANGUAGE</span>
+        </button>
+        
+        <div class="lang-dropdown" id="langDropdown">
+            <a href="javascript:void(0)" onclick="changeLanguage('tr')">🇹🇷 Türkçe</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('en')">🇬🇧 English</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('lt')">🇱🇹 Lietuvių</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('de')">🇩🇪 Deutsch</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('ru')">🇷🇺 Русский</a>
+        </div>
+    </div>
+
     <nav>
         <div class="nav-container">
             <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
             <ul id="anaMenu">
-                <li><a href="index.html">ANA SAYFA</a></li>
-                <li><a href="hakkinda.html">HAKKINDA</a></li>
-                <li><a href="online-egitim.html">ONLINE EĞİTİM</a></li>
-                <li><a href="notalar.html" class="active">NOTALAR</a></li>
-                <li><a href="siirler.html">ŞİİRLER</a></li>
-                <li><a href="konserler.html">KONSERLER</a></li>
+                <li><a href="index.html" data-lang="menu_home">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html" data-lang="menu_about">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" data-lang="menu_edu">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html" class="active" data-lang="menu_notes">NOTALAR</a></li>
+                <li><a href="siirler.html" data-lang="menu_poems">ŞİİRLER</a></li>
+                <li><a href="konserler.html" data-lang="menu_concerts">KONSERLER</a></li>
             </ul>
         </div>
     </nav>
 
     <header class="page-header">
-        <h1>NOTALAR</h1>
-        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;">Bağlama repertuvarı ve döküman arşivi...</p>
+        <h1 data-lang="page_title">NOTALAR</h1>
+        <p style="color: var(--text-secondary); font-family: 'Playfair Display', serif; font-style: italic; margin-top: 10px;" data-lang="page_subtitle">Bağlama repertuvarı ve döküman arşivi...</p>
     </header>
 
     <div class="main-container">
         <div class="search-wrapper">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="notaAra" onkeyup="filtrele()" placeholder="Eser adı veya besteci ara...">
+                <input type="text" id="notaAra" onkeyup="filtrele()" data-translate-placeholder="search_ph" placeholder="Eser adı veya besteci ara...">
             </div>
         </div>
 
@@ -187,53 +268,31 @@
             <table id="notaTablosu">
                 <thead>
                     <tr>
-                        <th style="width: 50%;">ESER ADI</th>
-                        <th style="width: 30%;">BESTECİ / KAYNAK KİŞİ</th>
-                        <th style="width: 20%; text-align: center;">İNDİR</th>
+                        <th style="width: 50%;" data-lang="th_title">ESER ADI</th>
+                        <th style="width: 30%;" data-lang="th_composer">BESTECİ / KAYNAK KİŞİ</th>
+                        <th style="width: 20%; text-align: center;" data-lang="th_download">İNDİR</th>
                     </tr>
                 </thead>
                 <tbody>
-                    
                     <tr>
-                        <td>
-                            <a href="nota-yoruldum.html" class="note-link">Yoruldum</a>
-                        </td>
+                        <td><a href="nota-yoruldum.html" class="note-link">Yoruldum</a></td>
                         <td>Mahmut Burak ASLANTAŞ</td>
-                        <td style="text-align: center;">
-                            <a href="notalar/yoruldum.pdf" download class="download-btn" title="İndir">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </td>
+                        <td style="text-align: center;"><a href="notalar/yoruldum.pdf" download class="download-btn" title="İndir"><i class="fas fa-download"></i></a></td>
                     </tr>
-
                     <tr>
-                        <td>
-                            <a href="nota-cehennem-nari.html" class="note-link">Cehennem Narı</a>
-                        </td>
+                        <td><a href="nota-cehennem-nari.html" class="note-link">Cehennem Narı</a></td>
                         <td>Mahmut Burak ASLANTAŞ</td>
-                        <td style="text-align: center;">
-                            <a href="notalar/cehennem-nari.pdf" download class="download-btn" title="İndir">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </td>
+                        <td style="text-align: center;"><a href="notalar/cehennem-nari.pdf" download class="download-btn" title="İndir"><i class="fas fa-download"></i></a></td>
                     </tr>
-
                     <tr>
-                        <td>
-                            <a href="nota-ardic-sazim.html" class="note-link">Ardıç Sazım</a>
-                        </td>
+                        <td><a href="nota-ardic-sazim.html" class="note-link">Ardıç Sazım</a></td>
                         <td>Mahmut Burak ASLANTAŞ</td>
-                        <td style="text-align: center;">
-                            <a href="notalar/ardic-sazim.pdf" download class="download-btn" title="İndir">
-                                <i class="fas fa-download"></i>
-                            </a>
-                        </td>
+                        <td style="text-align: center;"><a href="notalar/ardic-sazim.pdf" download class="download-btn" title="İndir"><i class="fas fa-download"></i></a></td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
-        <div id="no-result" style="display:none; text-align:center; margin-top:20px; color:#888;">Aradığınız eser bulunamadı.</div>
+        <div id="no-result" style="display:none; text-align:center; margin-top:20px; color:#888;" data-lang="no_result">Aradığınız eser bulunamadı.</div>
     </div>
 
     <footer>
@@ -242,12 +301,126 @@
             <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item"><div class="social-icon-box"><i class="fab fa-youtube"></i></div><span>YouTube</span></a>
         </div>
         <br>
-        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+        <p data-lang="footer_rights">© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
     </footer>
 
     <script>
         function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
-        
+
+        function toggleLanguageMenu() { document.getElementById("langDropdown").classList.toggle("active"); }
+
+        // --- ÇEVİRİ VERİLERİ ---
+        const translations = {
+            tr: {
+                lang_label: "LANGUAGE",
+                menu_home: "ANA SAYFA",
+                menu_about: "HAKKINDA",
+                menu_edu: "ONLINE EĞİTİM",
+                menu_notes: "NOTALAR",
+                menu_poems: "ŞİİRLER",
+                menu_concerts: "KONSERLER",
+                page_title: "NOTALAR",
+                page_subtitle: "Bağlama repertuvarı ve döküman arşivi...",
+                search_ph: "Eser adı veya besteci ara...",
+                th_title: "ESER ADI",
+                th_composer: "BESTECİ / KAYNAK KİŞİ",
+                th_download: "İNDİR",
+                no_result: "Aradığınız eser bulunamadı.",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır."
+            },
+            en: {
+                lang_label: "LANGUAGE",
+                menu_home: "HOME",
+                menu_about: "ABOUT ME",
+                menu_edu: "ONLINE LESSONS",
+                menu_notes: "SHEET MUSIC",
+                menu_poems: "POEMS",
+                menu_concerts: "CONCERTS",
+                page_title: "SHEET MUSIC",
+                page_subtitle: "Baglama repertoire and document archive...",
+                search_ph: "Search song title or composer...",
+                th_title: "SONG TITLE",
+                th_composer: "COMPOSER / SOURCE",
+                th_download: "DOWNLOAD",
+                no_result: "The song you are looking for was not found.",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved."
+            },
+            lt: {
+                lang_label: "KALBA",
+                menu_home: "PAGRINDINIS",
+                menu_about: "APIE MANE",
+                menu_edu: "INTERNETINĖS PAMOKOS",
+                menu_notes: "NATOS",
+                menu_poems: "EILĖRAŠČIAI",
+                menu_concerts: "KONCERTAI",
+                page_title: "NATOS",
+                page_subtitle: "Baglamos repertuaras ir dokumentų archyvas...",
+                search_ph: "Ieškoti kūrinio pavadinimo ar kompozitoriaus...",
+                th_title: "KŪRINIO PAVADINIMAS",
+                th_composer: "KOMPOZITORIUS / ŠALTINIS",
+                th_download: "ATSISIŲSTI",
+                no_result: "Ieškomas kūrinys nerastas.",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos."
+            },
+            de: {
+                lang_label: "SPRACHE",
+                menu_home: "STARTSEITE",
+                menu_about: "ÜBER MICH",
+                menu_edu: "ONLINE-UNTERRICHT",
+                menu_notes: "NOTEN",
+                menu_poems: "GEDICHTE",
+                menu_concerts: "KONZERTE",
+                page_title: "NOTEN",
+                page_subtitle: "Baglama-Repertoire und Dokumentenarchiv...",
+                search_ph: "Nach Titel oder Komponist suchen...",
+                th_title: "TITEL",
+                th_composer: "KOMPONIST / QUELLE",
+                th_download: "DOWNLOAD",
+                no_result: "Das gesuchte Stück wurde nicht gefunden.",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten."
+            },
+            ru: {
+                lang_label: "ЯЗЫК",
+                menu_home: "ГЛАВНАЯ",
+                menu_about: "ОБО МНЕ",
+                menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ",
+                menu_notes: "НОТЫ",
+                menu_poems: "СТИХИ",
+                menu_concerts: "КОНЦЕРТЫ",
+                page_title: "НОТЫ",
+                page_subtitle: "Репертуар для багламы и архив документов...",
+                search_ph: "Поиск по названию или композитору...",
+                th_title: "НАЗВАНИЕ ПРОИЗВЕДЕНИЯ",
+                th_composer: "КОМПОЗИТОР / ИСТОЧНИК",
+                th_download: "СКАЧАТЬ",
+                no_result: "Искомое произведение не найдено.",
+                footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены."
+            }
+        };
+
+        function changeLanguage(lang) {
+            const data = translations[lang] || translations['tr'];
+            document.getElementById('lang-label').innerText = data.lang_label;
+
+            document.querySelectorAll("[data-lang]").forEach(element => {
+                const key = element.getAttribute("data-lang");
+                if (data[key]) element.innerHTML = data[key];
+            });
+
+            document.querySelectorAll("[data-translate-placeholder]").forEach(input => {
+                const key = input.getAttribute("data-translate-placeholder");
+                if (data[key]) input.placeholder = data[key];
+            });
+
+            document.getElementById("langDropdown").classList.remove("active");
+            localStorage.setItem("selectedLang", lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem("selectedLang") || "tr";
+            changeLanguage(savedLang);
+        };
+
         function filtrele() {
             var input = document.getElementById("notaAra").value.toUpperCase();
             var table = document.getElementById("notaTablosu");
