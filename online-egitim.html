@@ -886,9 +886,9 @@
                             <p style="color:#888; margin-bottom:15px;">🎧 <span data-translate="listen_dict">Dikte Kaydını Dinle:</span></p>
                             <iframe id="exam-audio-player" src="" width="100%" height="150" style="border:none; border-radius: 10px;" allow="autoplay"></iframe>
                             
-                            <div class="answer-key-btn" onclick="cevapGoster()">
-                                <i class="fas fa-eye"></i> <span data-translate="view_answer">CEVAP ANAHTARINI GÖRÜNTÜLE</span>
-                            </div>
+                            <div id="cevap-butonu" class="answer-key-btn" onclick="cevapGoster()">
+                             <i class="fas fa-eye"></i> <span id="cevap-yazisi" data-translate="view_answer">CEVAP ANAHTARINI GÖRÜNTÜLE</span>
+                                </div>
                             <input type="hidden" id="current-answer-img" value="">
                         </div>
                     </div>
@@ -1067,6 +1067,26 @@
             22: "1pdHx7gHYkg1sEfu01AfVTxbpHQJ3GCOS"
         };
 
+        
+        // --- ÇİFT SES SES DOSYALARI ---
+        const ciftSesVerileri = {
+            1: { id: "1R9WMRWsdw14t9WtdWNUns1PFccbVkyly", ad: "Küçük İkili Çift Ses Çalışması" },
+            2: { id: "1fasYFApKN7lIUZ5dKPNZVl5WzZ5SnRIF", ad: "Büyük İkili Çift Ses Çalışması" },
+            3: { id: "1J82f2HIw372sLgeY21c6lVuO5sLkDrdz", ad: "Küçük Üçlü Çift Ses Çalışması" },
+            4: { id: "1BvpREeR_6fop3SZ_LvJhD8QLz3KcRo9S", ad: "Büyük Üçlü Çift Ses Çalışması" },
+            5:  { id: "1-XFX9O9zUkbHEoaWFkXqAKWhpjkhATgT", ad: "Tam Dörtlü Çift Ses Çalışması" },
+6:  { id: "1x6HOjLXH9vtTu3r3f6xRewO42FfZZs3l", ad: "Tam Beşli Çift Ses Çalışması" },
+7:  { id: "1NZoa-04I4W2LtBuIIuHJ-D7AuqhxSYj6", ad: "Artık Dörtlü Çift Ses Çalışması" },
+8:  { id: "18DIYcMfOag5qkHCfpevXnl0WRws3YZhZ", ad: "Küçük Altılı Çift Ses Çalışması" },
+9:  { id: "1rprXHcf4O7o5UEm7CmHOkNDnyMZXN03X", ad: "Büyük Altılı Çift Ses Çalışması" },
+10: { id: "1jB8eZiE01YmEaCeumkX3WfzJ384p3-E6", ad: "Küçük Yedili Çift Ses Çalışması" },
+11: { id: "1Bfn8Zmy2OgerXNdHMjvBxBXlvMra5D6Z", ad: "Büyük Yedi Çift Ses Çalışması" }
+
+            
+    
+            // Yeni eklerken: 4: { id: "...", ad: "..." },
+        };
+
         // --- 2. DERS NOTLARI LİSTESİ ---
         const dersNotlariDosyalari = [
             { ad: "Temel Müzik Bilgileri 1", dosya: "1.png" },
@@ -1101,7 +1121,7 @@
             { ad: "Değmen Benim Gamlı Yaslı Gönlüme", dosya: "o.jpg" },
             { ad: "Denizin Dibinde Hatçam", dosya: "p.jpg" },
             { ad: "Kütahyanın Pınarları", dosya: "r.jpg" },
-            { ad: "Dostum Dostum", dosya: "s.png?v=1" }, 
+            { ad: "Dostum Dostum", dosya: "s.png?v=1" },
             { ad: "Han Sarhoş Hancı Sarhoş", dosya: "t.jpg" },
             { ad: "Altın Yüzüğüm Kırıldı", dosya: "u.jpg" }
         ];
@@ -1171,11 +1191,30 @@
             document.getElementById("exam-list-title").innerText = kategoriAdi;
             const listeContainer = document.getElementById("exam-list-container");
             listeContainer.innerHTML = "";
+            
             if (kategoriAdi === "Dikte Soruları") {
                 for (let i = 1; i <= 22; i++) {
                     if (i === 18) continue;
                     let driveId = dikteVerileri[i] || ""; 
                     listeContainer.innerHTML += `<div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', 'Çalışma ${i}')"><span style="color:#fff; font-weight:500;">Çalışma ${i}</span><i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i></div>`;
+                }
+            } else if (kategoriAdi === "Çift Ses Tekrarı Soruları") {
+                const toplamSoru = Object.keys(ciftSesVerileri).length;
+                
+                if (toplamSoru === 0) {
+                    listeContainer.innerHTML = "<p style='color:#888;'>Bu kategoride henüz içerik yok.</p>";
+                } else {
+                    for (let i = 1; i <= toplamSoru; i++) {
+                        // Veriyi artık obje olarak çekiyoruz
+                        let veri = ciftSesVerileri[i] || { id: "", ad: "Bilinmeyen Çalışma" };
+                        
+                        // Hem ID'yi hem de ADI buradan alıp fonksiyona gönderiyoruz
+                        listeContainer.innerHTML += `
+                        <div class="exam-row" onclick="ciftSesDetayAc(${i}, '${veri.id}', '${veri.ad}')">
+                            <span style="color:#fff; font-weight:500;">${veri.ad}</span>
+                            <i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i>
+                        </div>`;
+                    }
                 }
             } else {
                 listeContainer.innerHTML = "<p style='color:#888;'>Bu kategoride henüz içerik yok.</p>";
@@ -1185,9 +1224,43 @@
 
         function dikteDetayAc(no, audioId, baslik) {
             document.getElementById("exam-detail-title").innerText = baslik;
+            
+            // Dikte için buton ayarları (Normale döndür)
+            const btn = document.getElementById("cevap-butonu");
+            const txt = document.getElementById("cevap-yazisi");
+            
+            btn.style.display = "block"; // Butonu göster
+            btn.style.borderColor = "var(--yellow-portal)"; // Rengi düzelt
+            btn.style.cursor = "pointer"; // Tıklanabilir yap
+            btn.setAttribute("onclick", "cevapGoster()"); // Tıklama fonksiyonunu ekle
+            txt.innerText = "CEVAP ANAHTARINI GÖRÜNTÜLE"; // Yazıyı düzelt
+
             let embedUrl = audioId ? "https://drive.google.com/file/d/" + audioId + "/preview" : "";
             document.getElementById("exam-audio-player").src = embedUrl;
             document.getElementById("current-answer-img").value = "./dikte-cevaplar/calisma-" + no + ".png"; 
+            
+            sayfaGoster("exam-detail-view");
+        }
+
+        function ciftSesDetayAc(no, audioId, baslik) {
+            document.getElementById("exam-detail-title").innerText = baslik;
+
+            // Çift Ses için buton ayarları (Yazıyı değiştir ve tıklamayı kapat)
+            const btn = document.getElementById("cevap-butonu");
+            const txt = document.getElementById("cevap-yazisi");
+
+            btn.style.display = "block"; // Buton görünsün
+            btn.style.borderColor = "#666"; // Rengi biraz soldur (pasif gibi)
+            btn.style.cursor = "default"; // Tıklama işaretini kaldır
+            btn.removeAttribute("onclick"); // Tıklama özelliğini kapat
+            txt.innerText = "SORU KAYDI 5. SANİYEDEN SONRA BAŞLAYACAKTIR."; // İSTEDİĞİN YAZI BURAYA
+
+            let embedUrl = audioId ? "https://drive.google.com/file/d/" + audioId + "/preview" : "";
+            document.getElementById("exam-audio-player").src = embedUrl;
+            
+            // Burada resim yoluna gerek yok çünkü buton çalışmayacak
+            document.getElementById("current-answer-img").value = ""; 
+            
             sayfaGoster("exam-detail-view");
         }
 
@@ -2540,3 +2613,4 @@
     
 </body>
 </html>
+
