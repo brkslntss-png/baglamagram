@@ -309,8 +309,7 @@
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 1000px; margin: 0 auto;
         }
         .insta-item {
-            position: relative; aspect-ratio: 1/1; overflow: hidden; display: block; group;
-        }
+position: relative; aspect-ratio: 1/1; overflow: hidden; display: block;        }
         .insta-item img {
             width: 100%; height: 100%; object-fit: cover; transition: 0.3s;
         }
@@ -332,8 +331,7 @@
             background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a;
         }
         .social-wrapper { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
-        .social-item { display: flex; flexDirection: column; align-items: center; gap: 8px; textDecoration: none; color: #888; fontSize: 0.8rem; transition: 0.3s; }
-        
+.social-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: #888; font-size: 0.8rem; transition: 0.3s; }        
         .social-icon-box {
             font-size: 1.2rem;
             width: 50px;
@@ -347,7 +345,7 @@
             color: #fff;
         }
 
-        .social-item:hover .social-icon-box { borderColor: var(--accent); transform: translateY(-5px); }
+        .social-item:hover .social-icon-box { border-color: var(--accent); transform: translateY(-5px); }
         .social-item:hover { color: var(--text); }
         
         .fa-instagram { color: #fff; } 
@@ -516,10 +514,10 @@
             menu.classList.toggle("aktif");
         }
 
-        // --- ÇEVİRİ VERİTABANI ---
+        // --- ÇEVİRİ VERİTABANI (DÜZELTİLMİŞ HALİ) ---
         const translations = {
             tr: {
-                lang_label: "LANGUAGE", // İstek üzerine TR'de de LANGUAGE
+                lang_label: "LANGUAGE",
                 menu_home: "ANA SAYFA",
                 menu_about: "HAKKINDA",
                 menu_edu: "ONLINE EĞİTİM",
@@ -529,7 +527,7 @@
                 hero_quote: "“Sanatsız kalan bir milletin, hayat damarlarından biri kopmuş demektir.”",
                 hero_quote_author: "Mustafa Kemal ATATÜRK",
                 btn_concerts: "KONSERLERİ KEŞFET",
-                btn_poems: "ŞİİRLERİ OKU",
+                btn_online_edu: "ONLINE EĞİTİM",  // <-- BU SATIR EKLENDİ
                 stat_lessons: "SAAT ONLINE DERS",
                 stat_works: "ÖZGÜN ESER & ŞİİR",
                 stat_stage: "SAHNE PERFORMANSI",
@@ -548,7 +546,7 @@
                 hero_quote: "“A nation without art has lost one of its life-sustaining vessels.”",
                 hero_quote_author: "Mustafa Kemal ATATÜRK",
                 btn_concerts: "DISCOVER CONCERTS",
-                btn_poems: "READ POEMS",
+                btn_online_edu: "ONLINE LESSONS", // <-- BU SATIR EKLENDİ
                 stat_lessons: "HOURS OF ONLINE LESSONS",
                 stat_works: "ORIGINAL WORKS & POEMS",
                 stat_stage: "STAGE PERFORMANCES",
@@ -567,7 +565,7 @@
                 hero_quote: "„Tauta be meno neteko vienos iš savo gyvybinių arterijų.“",
                 hero_quote_author: "Mustafa Kemal ATATÜRK",
                 btn_concerts: "ATRASKITE KONCERTUS",
-                btn_poems: "SKAITYTI EILĖRAŠČIUS",
+                btn_online_edu: "INTERNETINĖS PAMOKOS", // <-- BU SATIR EKLENDİ
                 stat_lessons: "VALANDŲ INTERNETINIŲ PAMOKŲ",
                 stat_works: "ORIGINALŪS KŪRINIAI IR EILĖRAŠČIAI",
                 stat_stage: "SCENINIAI PASIRODYMAI",
@@ -586,7 +584,7 @@
                 hero_quote: "„Eine Nation ohne Kunst hat eine ihrer lebenswichtigen Adern verloren.“",
                 hero_quote_author: "Mustafa Kemal ATATÜRK",
                 btn_concerts: "KONZERTE ENTDECKEN",
-                btn_poems: "GEDICHTE LESEN",
+                btn_online_edu: "ONLINE-UNTERRICHT", // <-- BU SATIR EKLENDİ
                 stat_lessons: "STUNDEN ONLINE-UNTERRICHT",
                 stat_works: "ORIGINALWERKE & GEDICHTE",
                 stat_stage: "BÜHNENAUFTRITTE",
@@ -605,7 +603,7 @@
                 hero_quote: "«Нация без искусства лишилась одной из своих жизненно важных артерий».",
                 hero_quote_author: "Мустафа Кемаль АТАТЮРК",
                 btn_concerts: "ОТКРЫТЬ КОНЦЕРТЫ",
-                btn_poems: "ЧИТАТЬ СТИХИ",
+                btn_online_edu: "ОНЛАЙН-ОБУЧЕНИЕ", // <-- BU SATIR EKLENDİ
                 stat_lessons: "ЧАСОВ ОНЛАЙН-ЗАНЯТИЙ",
                 stat_works: "ОРИГИНАЛЬНЫЕ РАБОТЫ И СТИХИ",
                 stat_stage: "СЦЕНИЧЕСКИЕ ВЫСТУПЛЕНИЯ",
