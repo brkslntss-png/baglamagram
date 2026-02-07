@@ -40,19 +40,37 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            min-height: 480px; /* Dil seçeneği için biraz yer açtık */
+            min-height: 500px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        /* Dil Seçici Stili */
-        .lang-container {
+        /* Üst Kontrol Butonları */
+        .top-controls {
             position: absolute;
             top: 20px;
+            left: 20px;
             right: 20px;
+            display: flex;
+            justify-content: space-between;
             z-index: 10;
         }
+
+        .music-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .music-btn:hover { transform: scale(1.1); }
 
         select#language-select {
             padding: 8px 12px;
@@ -170,7 +188,9 @@
 
 <div class="card">
     
-    <div class="lang-container">
+    <div class="top-controls">
+        <button id="music-toggle" class="music-btn" onclick="toggleMusic()">🔇</button>
+        
         <select id="language-select" onchange="changeLanguage(this.value)">
             <option value="tr">🇹🇷 Türkçe</option>
             <option value="en">🇬🇧 English</option>
@@ -196,10 +216,9 @@
             <div id="timer-bar" class="timer-bar"></div>
         </div>
 
-        <div class="question-text" id="question">Loading...</div>
+        <div class="question-text" id="question">Yükleniyor...</div>
 
-        <div class="options-grid" id="options">
-            </div>
+        <div class="options-grid" id="options"></div>
     </div>
 
     <div id="result-screen" class="screen">
@@ -214,71 +233,46 @@
 <script src="sorular.js"></script>
 
 <script>
-    // --- ÇEVİRİ VERİTABANI ---
+    // --- SES AYARLARI ---
+    // 'arka-plan.mp3' dosyasını bu html ile aynı klasöre koymalısın
+    const bgMusic = new Audio('arka-plan.mp3');
+    bgMusic.loop = true; 
+    bgMusic.volume = 0.3; 
+    let isMusicPlaying = false;
+
+    function toggleMusic() {
+        const btn = document.getElementById('music-toggle');
+        if (isMusicPlaying) {
+            bgMusic.pause();
+            btn.innerText = "🔇";
+            isMusicPlaying = false;
+        } else {
+            bgMusic.play().then(() => {
+                btn.innerText = "🔊";
+                isMusicPlaying = true;
+            }).catch(e => console.log("Ses hatası: Önce sayfaya tıklayın."));
+        }
+    }
+
+    // --- ÇEVİRİLER ---
     const translations = {
         tr: {
-            title: "Bağlamagram",
-            subtitle: "Halk Müziği Bilgi Yarışması",
-            startBtn: "Yarışmaya Başla",
-            questionLabel: "Soru",
-            gameTitle: "Bağlamagram Bilgi Yarışması",
-            loading: "Soru yükleniyor...",
-            gameOver: "Oyun Bitti!",
-            playAgain: "Tekrar Oyna",
-            msgPerfect: "Tebrikler! Hiç hata yapmadın.",
-            msgComplete: "Tüm soruları tamamladın.",
-            msgTimeout: "Süre doldu!",
-            msgWrong: "Yanlış cevap verdin.",
-            msgError: "Hata: sorular.js bulunamadı!"
+            title: "Bağlamagram", subtitle: "Halk Müziği Bilgi Yarışması", startBtn: "Yarışmaya Başla",
+            questionLabel: "Soru", gameTitle: "Bağlamagram Bilgi Yarışması", loading: "Soru yükleniyor...",
+            gameOver: "Oyun Bitti!", playAgain: "Tekrar Oyna", msgComplete: "Tebrikler! Soruları tamamladın.",
+            msgTimeout: "Süre doldu!", msgWrong: "Yanlış cevap verdin.", msgError: "Hata: sorular.js dosyası eksik!"
         },
         en: {
-            title: "Baglamagram",
-            subtitle: "Folk Music Quiz",
-            startBtn: "Start Quiz",
-            questionLabel: "Question",
-            gameTitle: "Baglamagram Quiz",
-            loading: "Loading question...",
-            gameOver: "Game Over!",
-            playAgain: "Play Again",
-            msgPerfect: "Congratulations! No mistakes.",
-            msgComplete: "You completed all questions.",
-            msgTimeout: "Time is up!",
-            msgWrong: "Wrong answer.",
-            msgError: "Error: questions.js not found!"
+            title: "Baglamagram", subtitle: "Folk Music Quiz", startBtn: "Start Quiz",
+            questionLabel: "Question", gameTitle: "Baglamagram Quiz", loading: "Loading...",
+            gameOver: "Game Over!", playAgain: "Play Again", msgComplete: "Congratulations! Completed.",
+            msgTimeout: "Time's up!", msgWrong: "Wrong answer.", msgError: "Error: questions.js missing!"
         },
-        ru: {
-            title: "Багламаграм",
-            subtitle: "Викторина о народной музыке",
-            startBtn: "Начать тест",
-            questionLabel: "Вопрос",
-            gameTitle: "Викторина Багламаграм",
-            loading: "Вопрос загружается...",
-            gameOver: "Игра окончена!",
-            playAgain: "Играть снова",
-            msgPerfect: "Поздравляем! Ни одной ошибки.",
-            msgComplete: "Вы ответили на все вопросы.",
-            msgTimeout: "Время вышло!",
-            msgWrong: "Неправильный ответ.",
-            msgError: "Ошибка: questions.js не найден!"
-        },
-        lt: {
-            title: "Baglamagram",
-            subtitle: "Liaudies Muzikos Viktorina",
-            startBtn: "Pradėti testą",
-            questionLabel: "Klausimas",
-            gameTitle: "Baglamagram Viktorina",
-            loading: "Kraunamas klausimas...",
-            gameOver: "Žaidimas baigtas!",
-            playAgain: "Žaisti dar kartą",
-            msgPerfect: "Sveikiname! Jokių klaidų.",
-            msgComplete: "Atsakėte į visus klausimus.",
-            msgTimeout: "Laikas baigėsi!",
-            msgWrong: "Neteisingas atsakymas.",
-            msgError: "Klaida: nerastas questions.js failas!"
-        }
+        ru: { title: "Багламаграм", subtitle: "Викторина", startBtn: "Начать", questionLabel: "Вопрос", gameTitle: "Викторина", loading: "Загрузка...", gameOver: "Конец!", playAgain: "Заново", msgComplete: "Готово.", msgTimeout: "Время!", msgWrong: "Ошибка.", msgError: "Ошибка JS!" },
+        lt: { title: "Baglamagram", subtitle: "Viktorina", startBtn: "Pradėti", questionLabel: "Klausimas", gameTitle: "Viktorina", loading: "Kraunama...", gameOver: "Baigta!", playAgain: "Dar kartą", msgComplete: "Baigta.", msgTimeout: "Laikas!", msgWrong: "Klaida.", msgError: "Klaida JS!" }
     };
 
-    let currentLang = 'tr'; // Varsayılan dil
+    let currentLang = 'tr';
 
     // --- DEĞİŞKENLER ---
     let oyunHavuzu = [];
@@ -286,49 +280,48 @@
     let puan = 0;
     let sure = 20;
     let timerInterval;
-    const soruLimiti = 10;
+    const soruLimiti = 10; 
 
-    // --- DİL FONKSİYONLARI ---
+    // --- FONKSİYONLAR ---
     function changeLanguage(lang) {
         currentLang = lang;
         const t = translations[lang];
-
-        // Sabit metinleri güncelle
         document.getElementById('txt-title').innerText = t.title;
         document.getElementById('txt-subtitle').innerText = t.subtitle;
         document.getElementById('btn-start').innerText = t.startBtn;
         document.getElementById('txt-question-label').innerText = t.questionLabel;
         document.getElementById('txt-gameover').innerText = t.gameOver;
         document.getElementById('btn-restart').innerText = t.playAgain;
-        document.getElementById('question').innerText = t.loading; // Reset için
+        document.getElementById('question').innerText = t.loading;
         document.title = t.gameTitle;
     }
-
-    // --- OYUN FONKSİYONLARI ---
 
     function ekranGoster(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        
-        // Dil seçiciyi sadece hoşgeldin ekranında göster
-        const langSelect = document.querySelector('.lang-container');
-        if(id === 'welcome-screen') langSelect.style.display = 'block';
-        else langSelect.style.display = 'none';
     }
 
     function oyunuBaslat() {
         const t = translations[currentLang];
         
-        // Güvenlik Kontrolü
         if (typeof tumSorular === 'undefined') {
             alert(t.msgError);
             return;
         }
 
+        // Müzik başlat (Eğer kapalıysa)
+        if (!isMusicPlaying) {
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                document.getElementById('music-toggle').innerText = "🔊";
+            }).catch(e => console.log("Ses çalınamadı."));
+        }
+        bgMusic.volume = 0.3; 
+
         puan = 0;
         soruSirasi = 0;
         
-        // Havuzu karıştır ve al
+        // Soruları karıştır ve al
         oyunHavuzu = [...tumSorular].sort(() => 0.5 - Math.random());
         if(oyunHavuzu.length > soruLimiti) {
             oyunHavuzu = oyunHavuzu.slice(0, soruLimiti);
@@ -391,7 +384,6 @@
 
     function cevapKontrol(btn, secilen, dogru) {
         clearInterval(timerInterval);
-        
         const btns = document.querySelectorAll('.option-btn');
         btns.forEach(b => b.disabled = true);
 
@@ -408,13 +400,17 @@
                 if(b.innerText === dogru) b.classList.add('correct');
             });
             setTimeout(() => {
-                bitisEkrani(false);
+                bitisEkrani(false); 
             }, 1500);
         }
     }
 
     function bitisEkrani(basari) {
         clearInterval(timerInterval);
+        
+        // Müzik sesini kıs (Efekt)
+        if(isMusicPlaying) bgMusic.volume = 0.1;
+
         ekranGoster('result-screen');
         const t = translations[currentLang];
         
@@ -422,14 +418,13 @@
         const msg = document.getElementById('feedback');
 
         if(basari) {
-            if(puan === soruLimiti * 10) msg.innerText = t.msgPerfect;
+            if(puan === soruLimiti * 10) msg.innerText = t.msgPerfect || t.msgComplete;
             else msg.innerText = t.msgComplete;
         } else {
             if(sure <= 0) msg.innerText = t.msgTimeout;
             else msg.innerText = t.msgWrong;
         }
     }
-
 </script>
 
 </body>
