@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="shortcut icon" href="ikonn.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Mahmut Burak ASLANTAŞ</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ANA TASARIM DEĞİŞKENLERİ (INDEX İLE AYNI) --- */
+        :root {
+            --primary: #000000;
+            --accent: #c5a059; /* Altın Rengi */
+            --accent-hover: #d4b06a;
+            --bg-dark: #0f0f0f;
+            --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
+            --box-bg: rgba(255, 255, 255, 0.03);
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+            --card-bg: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 300;
+            background: var(--bg-dark);
+            background-image: var(--bg-gradient);
+            color: var(--text); 
+            line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVİGASYON VE DİL --- */
+        .language-wrapper {
+            position: fixed; top: 25px; left: 30px; z-index: 1002;
+        }
+        .lang-btn {
+            background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent); color: #fff;
+            padding: 8px 18px; border-radius: 30px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+            font-size: 12px; backdrop-filter: blur(5px); transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+        }
+        .lang-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px rgba(197, 160, 89, 0.4); }
+        
+        nav {
+            background: rgba(0, 0, 0, 0.95); padding: 20px 0; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        }
+        .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
+        nav ul { display: flex; justify-content: center; list-style: none; gap: 30px; padding: 0 20px; } /* Gap biraz küçültüldü sığması için */
+        nav a { 
+            color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; 
+            font-weight: 500; text-transform: uppercase; letter-spacing: 2px; 
+            transition: all 0.3s ease; position: relative;
+        }
+        nav a:hover, nav a.active { color: var(--accent); }
+        
+        .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
+
+        /* --- BLOG BAŞLIK ALANI --- */
+        .blog-header {
+            text-align: center; padding: 100px 20px 60px;
+        }
+        .blog-header h1 {
+            font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--accent); letter-spacing: 3px; margin-bottom: 15px;
+        }
+        .blog-header p {
+            color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;
+        }
+
+        /* --- BLOG GRID YAPISI --- */
+        .blog-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px 80px;
+        }
+        .blog-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px;
+        }
+
+        /* BLOG KARTLARI */
+        .blog-card {
+            background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex; flex-direction: column;
+        }
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-color: var(--accent);
+        }
+        
+        .card-image {
+            width: 100%; height: 250px; overflow: hidden; position: relative;
+        }
+        .card-image img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
+        }
+        .blog-card:hover .card-image img { transform: scale(1.05); }
+
+        .card-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        
+        .card-meta {
+            font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 600;
+        }
+        
+        .card-title {
+            font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #fff; margin-bottom: 15px; line-height: 1.3;
+        }
+        
+        .card-excerpt {
+            font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 25px; flex-grow: 1;
+        }
+
+        .read-more-btn {
+            align-self: flex-start;
+            color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase;
+            letter-spacing: 2px; border-bottom: 1px solid var(--accent); padding-bottom: 5px;
+            transition: 0.3s;
+        }
+        .read-more-btn:hover { color: var(--accent); }
+
+        /* --- FOOTER (INDEX İLE AYNI) --- */
+        footer {
+            background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto;
+        }
+        .social-wrapper { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .social-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: #888; font-size: 0.8rem; transition: 0.3s; }        
+        .social-icon-box {
+            font-size: 1.2rem; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid #333; border-radius: 50%; transition: all 0.3s ease; color: #fff;
+        }
+        .social-item:hover .social-icon-box { border-color: var(--accent); transform: translateY(-5px); }
+        .social-item:hover { color: var(--text); }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            nav ul { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #000; padding: 20px 0; border-bottom: 1px solid var(--accent); }
+            nav ul.aktif { display: flex; }
+            .blog-header h1 { font-size: 2rem; }
+            .language-wrapper { top: 20px; left: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="language-wrapper">
+        <button class="lang-btn">
+            <i class="fas fa-globe"></i> TR
+        </button>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
+            <ul id="anaMenu">
+                <li><a href="index.html">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html">HAKKINDA</a></li>
+                <li><a href="online-egitim.html">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html">NOTALAR</a></li>
+                <li><a href="siirler.html">ŞİİRLER</a></li>
+                <li><a href="konserler.html">KONSERLER</a></li>
+                <li><a href="blog.html" class="active">BLOG</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="blog-header">
+        <h1>Müzik ve Teknoloji Güncesi</h1>
+        <p>Bağlama eğitimi, teknik notlar ve sanat üzerine düşünceler.</p>
+    </header>
+
+    <main class="blog-container">
+        <div class="blog-grid">
+
+            
+            <article class="blog-card">
+                <div class="card-image">
+                    <img src="https://i.hizliresim.com/ah5qv20.png" alt="Müzik Kayıt">
+                </div>
+                <div class="card-content">
+                    <span class="card-meta">TEKNİK BİLGİ • 7 ŞUBAT 2026</span>
+                    <h3 class="card-title">Bağlama Alırken Nelere Dikkat Edilmeli?</h3>
+                    <p class="card-excerpt">Bağlama dediğin, Anadolu’nun tozuna toprağına karışmış, bin yıllık dertlerin süzgecinden geçmiş bir deryadır...</p>
+                    <a href="blog-baglama-secimi.html" class="read-more-btn">DEVAMINI OKU</a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="card-image">
+                    <img src="https://i.hizliresim.com/8227p40.png" alt="Sazbüş">
+                </div>
+                <div class="card-content">
+                    <span class="card-meta">TEKNOLOJİ • 5 ŞUBAT 2026</span>
+                    <h3 class="card-title">Müzik Eğitiminde Yapay Zeka</h3>
+                    <p class="card-excerpt">Müzik eğitimi, tarih boyunca hep bir "aktarım" meselesi olmuştur. Eskiden bir ustanın dizinin dibine çöker, mızrabı...</p>
+                    <a href="#" class="read-more-btn">DEVAMINI OKU</a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Web ve Müzik">
+                </div>
+                <div class="card-content">
+                    <span class="card-meta">TEKNOLOJİ • 1 ŞUBAT 2026</span>
+                    <h3 class="card-title">Müzisyenler İçin Dijital Varlık Yönetimi</h3>
+                    <p class="card-excerpt">Bir müzisyen neden kodlama öğrenmeli? Kendi web sitenizi yönetmenin ve dijital notasyon araçlarının önemi.</p>
+                    <a href="#" class="read-more-btn">DEVAMINI OKU</a>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="social-wrapper">
+            <a href="https://www.instagram.com/baglamagram" target="_blank" class="social-item">
+                <div class="social-icon-box"><i class="fab fa-instagram"></i></div>
+                <span>Instagram</span>
+            </a>
+            <a href="#" class="social-item">
+                <div class="social-icon-box"><i class="fab fa-spotify"></i></div>
+                <span>Spotify</span>
+            </a>
+            <a href="https://www.youtube.com/@baglamagram" target="_blank" class="social-item">
+                <div class="social-icon-box"><i class="fab fa-youtube"></i></div>
+                <span>YouTube</span>
+            </a>
+        </div>
+        <br>
+        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script>
+        function menuyuAcKapa() {
+            var menu = document.getElementById("anaMenu");
+            menu.classList.toggle("aktif");
+        }
+    </script>
+
+</body>
+</html>
