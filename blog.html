@@ -12,10 +12,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- ANA TASARIM DEĞİŞKENLERİ (INDEX İLE AYNI) --- */
+        /* --- ANA TASARIM DEĞİŞKENLERİ --- */
         :root {
             --primary: #000000;
-            --accent: #c5a059; /* Altın Rengi */
+            --accent: #c5a059;
             --accent-hover: #d4b06a;
             --bg-dark: #0f0f0f;
             --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
@@ -40,9 +40,10 @@
             overflow-x: hidden;
         }
 
-        /* --- NAVİGASYON VE DİL --- */
+        /* --- DİL SEÇİCİ STİLLERİ (YENİ EKLENDİ) --- */
         .language-wrapper {
             position: fixed; top: 25px; left: 30px; z-index: 1002;
+            font-family: 'Montserrat', sans-serif;
         }
         .lang-btn {
             background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent); color: #fff;
@@ -51,12 +52,31 @@
         }
         .lang-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px rgba(197, 160, 89, 0.4); }
         
+        /* Dropdown Stilleri */
+        .lang-dropdown {
+            display: none; position: absolute; top: 120%; left: 0;
+            background: rgba(15, 15, 15, 0.95); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px; overflow: hidden; min-width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .lang-dropdown a {
+            display: block; padding: 12px 15px; color: #ccc; text-decoration: none;
+            font-size: 13px; transition: 0.2s; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lang-dropdown a:last-child { border-bottom: none; }
+        .lang-dropdown a:hover { background: var(--accent); color: #000; }
+        .lang-dropdown.active { display: block; animation: fadeInDrop 0.3s ease; }
+
+        @keyframes fadeInDrop {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         nav {
             background: rgba(0, 0, 0, 0.95); padding: 20px 0; position: sticky; top: 0; z-index: 1000;
             border-bottom: 1px solid rgba(197, 160, 89, 0.2);
         }
         .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; }
-        nav ul { display: flex; justify-content: center; list-style: none; gap: 30px; padding: 0 20px; } /* Gap biraz küçültüldü sığması için */
+        nav ul { display: flex; justify-content: center; list-style: none; gap: 30px; padding: 0 20px; }
         nav a { 
             color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; 
             font-weight: 500; text-transform: uppercase; letter-spacing: 2px; 
@@ -67,23 +87,13 @@
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; position: absolute; right: 20px; }
 
         /* --- BLOG BAŞLIK ALANI --- */
-        .blog-header {
-            text-align: center; padding: 100px 20px 60px;
-        }
-        .blog-header h1 {
-            font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--accent); letter-spacing: 3px; margin-bottom: 15px;
-        }
-        .blog-header p {
-            color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;
-        }
+        .blog-header { text-align: center; padding: 100px 20px 60px; }
+        .blog-header h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--accent); letter-spacing: 3px; margin-bottom: 15px; }
+        .blog-header p { color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
 
         /* --- BLOG GRID YAPISI --- */
-        .blog-container {
-            max-width: 1200px; margin: 0 auto; padding: 0 20px 80px;
-        }
-        .blog-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px;
-        }
+        .blog-container { max-width: 1200px; margin: 0 auto; padding: 0 20px 80px; }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
 
         /* BLOG KARTLARI */
         .blog-card {
@@ -91,46 +101,25 @@
             border-radius: 8px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex; flex-direction: column;
         }
-        .blog-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-color: var(--accent);
-        }
+        .blog-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-color: var(--accent); }
         
-        .card-image {
-            width: 100%; height: 250px; overflow: hidden; position: relative;
-        }
-        .card-image img {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
-        }
+        .card-image { width: 100%; height: 250px; overflow: hidden; position: relative; display: block; }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         .blog-card:hover .card-image img { transform: scale(1.05); }
 
         .card-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
-        
-        .card-meta {
-            font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 600;
-        }
-        
-        .card-title {
-            font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #fff; margin-bottom: 15px; line-height: 1.3;
-        }
-        
-        .card-excerpt {
-            font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 25px; flex-grow: 1;
-        }
+        .card-meta { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 600; }
+        .card-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #fff; margin-bottom: 15px; line-height: 1.3; }
+        .card-excerpt { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 25px; flex-grow: 1; }
 
         .read-more-btn {
-            align-self: flex-start;
-            color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase;
-            letter-spacing: 2px; border-bottom: 1px solid var(--accent); padding-bottom: 5px;
-            transition: 0.3s;
+            align-self: flex-start; color: var(--text); text-decoration: none; font-size: 0.8rem; text-transform: uppercase;
+            letter-spacing: 2px; border-bottom: 1px solid var(--accent); padding-bottom: 5px; transition: 0.3s;
         }
         .read-more-btn:hover { color: var(--accent); }
 
-        /* --- FOOTER (INDEX İLE AYNI) --- */
-        footer {
-            background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto;
-        }
+        /* --- FOOTER --- */
+        footer { background: #050505; padding: 50px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: auto; }
         .social-wrapper { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
         .social-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: #888; font-size: 0.8rem; transition: 0.3s; }        
         .social-icon-box {
@@ -153,80 +142,87 @@
 <body>
 
     <div class="language-wrapper">
-        <button class="lang-btn">
-            <i class="fas fa-globe"></i> TR
+        <button class="lang-btn" onclick="toggleLanguageMenu()">
+            <i class="fas fa-globe"></i> <span id="lang-label">LANGUAGE</span>
         </button>
+        
+        <div class="lang-dropdown" id="langDropdown">
+            <a href="javascript:void(0)" onclick="changeLanguage('tr')">🇹🇷 Türkçe</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('en')">🇬🇧 English</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('lt')">🇱🇹 Lietuvių</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('de')">🇩🇪 Deutsch</a>
+            <a href="javascript:void(0)" onclick="changeLanguage('ru')">🇷🇺 Русский</a>
+        </div>
     </div>
 
     <nav>
         <div class="nav-container">
             <div class="menu-toggle" onclick="menuyuAcKapa()"><i class="fas fa-bars"></i></div>
             <ul id="anaMenu">
-                <li><a href="index.html">ANA SAYFA</a></li>
-                <li><a href="hakkinda.html">HAKKINDA</a></li>
-                <li><a href="online-egitim.html">ONLINE EĞİTİM</a></li>
-                <li><a href="notalar.html">NOTALAR</a></li>
-                <li><a href="siirler.html">ŞİİRLER</a></li>
-                <li><a href="konserler.html">KONSERLER</a></li>
-                <li><a href="blog.html" class="active">BLOG</a></li>
+                <li><a href="index.html" data-lang="menu_home">ANA SAYFA</a></li>
+                <li><a href="hakkinda.html" data-lang="menu_about">HAKKINDA</a></li>
+                <li><a href="online-egitim.html" data-lang="menu_edu">ONLINE EĞİTİM</a></li>
+                <li><a href="notalar.html" data-lang="menu_notes">NOTALAR</a></li>
+                <li><a href="siirler.html" data-lang="menu_poems">ŞİİRLER</a></li>
+                <li><a href="konserler.html" data-lang="menu_concerts">KONSERLER</a></li>
+                <li><a href="blog.html" class="active" data-lang="menu_blog">BLOG</a></li>
             </ul>
         </div>
     </nav>
 
     <header class="blog-header">
-        <h1>Müzik ve Teknoloji Güncesi</h1>
-        <p>Bağlama eğitimi, teknik notlar ve sanat üzerine düşünceler.</p>
+        <h1 data-lang="blog_title">Müzik ve Teknoloji Güncesi</h1>
+        <p data-lang="blog_desc">Bağlama eğitimi, teknik notlar ve sanat üzerine düşünceler.</p>
     </header>
 
     <main class="blog-container">
         <div class="blog-grid">
 
-
-             <article class="blog-card">
-                <div class="card-image">
+            <article class="blog-card">
+                <a href="blog-online.html" class="card-image">
                     <img src="https://i.hizliresim.com/rx7smwt.png" alt="Müzik Kayıt">
-                </div>
+                </a>
                 <div class="card-content">
                     <span class="card-meta">EĞİTİM • 11 ŞUBAT 2026</span>
                     <h3 class="card-title">Çevrimiçi (Online) Bağlama Eğitiminin Avantajları</h3>
                     <p class="card-excerpt">Geleneksel müzik eğitiminin en köklü enstrümanlarından biri olan bağlama, günümüzde dijital dünyanın sunduğu imkanl...</p>
-                    <a href="blog-online.html" class="read-more-btn">DEVAMINI OKU</a>
+                    <a href="blog-online.html" class="read-more-btn" data-lang="read_more">DEVAMINI OKU</a>
                 </div>
             </article>
             
             <article class="blog-card">
-                <div class="card-image">
+                <a href="blog-baglama-secimi.html" class="card-image">
                     <img src="https://i.hizliresim.com/dr6dqd3.png" alt="Müzik Kayıt">
-                </div>
+                </a>
                 <div class="card-content">
                     <span class="card-meta">TEKNİK BİLGİ • 7 ŞUBAT 2026</span>
                     <h3 class="card-title">Bağlama Alırken Nelere Dikkat Edilmeli?</h3>
                     <p class="card-excerpt">Bağlama dediğin, Anadolu’nun tozuna toprağına karışmış, bin yıllık dertlerin süzgecinden geçmiş bir deryadır...</p>
-                    <a href="blog-baglama-secimi.html" class="read-more-btn">DEVAMINI OKU</a>
+                    <a href="blog-baglama-secimi.html" class="read-more-btn" data-lang="read_more">DEVAMINI OKU</a>
                 </div>
             </article>
 
             <article class="blog-card">
-                <div class="card-image">
+                <a href="yapay-zeka.html" class="card-image">
                     <img src="https://i.hizliresim.com/8227p40.png" alt="Sazbüş">
-                </div>
+                </a>
                 <div class="card-content">
                     <span class="card-meta">TEKNOLOJİ • 5 ŞUBAT 2026</span>
                     <h3 class="card-title">Müzik Eğitiminde Yapay Zeka</h3>
                     <p class="card-excerpt">Müzik eğitimi, tarih boyunca hep bir "aktarım" meselesi olmuştur. Eskiden bir ustanın dizinin dibine çöker, mızrabı...</p>
-                    <a href="yapay-zeka.html" class="read-more-btn">DEVAMINI OKU</a>
+                    <a href="yapay-zeka.html" class="read-more-btn" data-lang="read_more">DEVAMINI OKU</a>
                 </div>
             </article>
 
             <article class="blog-card">
-                <div class="card-image">
+                <a href="#" class="card-image">
                     <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Web ve Müzik">
-                </div>
+                </a>
                 <div class="card-content">
                     <span class="card-meta">TEKNOLOJİ • 1 ŞUBAT 2026</span>
                     <h3 class="card-title">Müzisyenler İçin Dijital Varlık Yönetimi</h3>
                     <p class="card-excerpt">Bir müzisyen neden kodlama öğrenmeli? Kendi web sitenizi yönetmenin ve dijital notasyon araçlarının önemi.</p>
-                    <a href="#" class="read-more-btn">DEVAMINI OKU</a>
+                    <a href="#" class="read-more-btn" data-lang="read_more">DEVAMINI OKU</a>
                 </div>
             </article>
 
@@ -249,7 +245,7 @@
             </a>
         </div>
         <br>
-        <p>© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
+        <p data-lang="footer_rights">© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır.</p>
     </footer>
 
     <script>
@@ -257,6 +253,110 @@
             var menu = document.getElementById("anaMenu");
             menu.classList.toggle("aktif");
         }
+
+        // --- ÇEVİRİ VERİTABANI ---
+        const translations = {
+            tr: {
+                lang_label: "LANGUAGE",
+                menu_home: "ANA SAYFA",
+                menu_about: "HAKKINDA",
+                menu_edu: "ONLINE EĞİTİM",
+                menu_notes: "NOTALAR",
+                menu_poems: "ŞİİRLER",
+                menu_concerts: "KONSERLER",
+                menu_blog: "BLOG",
+                blog_title: "Müzik ve Teknoloji Güncesi",
+                blog_desc: "Bağlama eğitimi, teknik notlar ve sanat üzerine düşünceler.",
+                read_more: "DEVAMINI OKU",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Tüm Hakları Saklıdır."
+            },
+            en: {
+                lang_label: "LANGUAGE",
+                menu_home: "HOME",
+                menu_about: "ABOUT ME",
+                menu_edu: "ONLINE LESSONS",
+                menu_notes: "SHEET MUSIC",
+                menu_poems: "POEMS",
+                menu_concerts: "CONCERTS",
+                menu_blog: "BLOG",
+                blog_title: "Music & Technology Journal",
+                blog_desc: "Thoughts on Baglama education, technical notes, and art.",
+                read_more: "READ MORE",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. All Rights Reserved."
+            },
+            lt: {
+                lang_label: "KALBA",
+                menu_home: "PAGRINDINIS",
+                menu_about: "APIE MANE",
+                menu_edu: "INTERNETINĖS PAMOKOS",
+                menu_notes: "NATOS",
+                menu_poems: "EILĖRAŠČIAI",
+                menu_concerts: "KONCERTAI",
+                menu_blog: "TINKLARAŠTIS",
+                blog_title: "Muzikos ir Technologijų Žurnalas",
+                blog_desc: "Mintys apie Baglama mokymą, technines pastabas ir meną.",
+                read_more: "SKAITYTI DAUGIAU",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Visos teisės saugomos."
+            },
+            de: {
+                lang_label: "SPRACHE",
+                menu_home: "STARTSEITE",
+                menu_about: "ÜBER MICH",
+                menu_edu: "ONLINE-UNTERRICHT",
+                menu_notes: "NOTEN",
+                menu_poems: "GEDICHTE",
+                menu_concerts: "KONZERTE",
+                menu_blog: "BLOG",
+                blog_title: "Musik & Technologie Tagebuch",
+                blog_desc: "Gedanken zu Baglama-Unterricht, technischen Notizen und Kunst.",
+                read_more: "WEITERLESEN",
+                footer_rights: "© 2026 Mahmut Burak ASLANTAŞ. Alle Rechte vorbehalten."
+            },
+            ru: {
+                lang_label: "ЯЗЫК",
+                menu_home: "ГЛАВНАЯ",
+                menu_about: "ОБО МНЕ",
+                menu_edu: "ОНЛАЙН-ОБУЧЕНИЕ",
+                menu_notes: "НОТЫ",
+                menu_poems: "СТИХИ",
+                menu_concerts: "КОНЦЕРТЫ",
+                menu_blog: "БЛОГ",
+                blog_title: "Дневник Музыки и Технологий",
+                blog_desc: "Мысли об обучении игре на багламе, технические заметки и искусство.",
+                read_more: "ЧИТАТЬ ДАЛЕЕ",
+                footer_rights: "© 2026 Махмут Бурак АСЛАНТАШ. Все права защищены."
+            }
+        };
+
+        // --- DİL FONKSİYONLARI ---
+        function toggleLanguageMenu() {
+            document.getElementById("langDropdown").classList.toggle("active");
+        }
+
+        function changeLanguage(lang) {
+            const data = translations[lang] || translations['tr'];
+            
+            // Buton metni
+            document.getElementById('lang-label').innerText = data['lang_label'];
+
+            // Tüm data-lang etiketli alanları bul ve değiştir
+            document.querySelectorAll("[data-lang]").forEach(element => {
+                const key = element.getAttribute("data-lang");
+                if (data[key]) {
+                    element.innerText = data[key];
+                }
+            });
+
+            document.getElementById("langDropdown").classList.remove("active");
+            localStorage.setItem("selectedLang", lang);
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem("selectedLang");
+            if(savedLang && translations[savedLang]) {
+                changeLanguage(savedLang);
+            }
+        };
     </script>
 
 </body>
