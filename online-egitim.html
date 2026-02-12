@@ -1071,26 +1071,25 @@
                     </div>
 
                 <div id="musical-memory-view" class="view-section">
-                        <div class="dashboard-header" style="display: flex; justify-content: space-between;">
-                            <h2 data-translate="musical_memory_title">Duyduğunu Yakala</h2>
-                            <div>
-                                <button onclick="tamEkranYap('fa-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
-                                    <i class="fas fa-expand"></i> Tam Ekran
-                                </button>
-                                <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Çıkış</span></button>
-                            </div>
-                        </div>
-                        
-                        <iframe 
-                            id="musical-memory-frame"
-                            src="musical-memory.html" 
-                            width="100%" 
-                            height="750" 
-                            style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
-                            title="Duyduğunu Yakala)">
-                        </iframe>
-                    </div>
-
+    <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+        <h2 data-translate="musical_memory_title">Duyduğunu Yakala</h2>
+        <div>
+            <button onclick="tamEkranYap('musical-memory-frame')" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem; margin-right: 15px; transition:0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">
+                <i class="fas fa-expand"></i> Tam Ekran
+            </button>
+            <button onclick="window.history.back()" style="background:none; border:none; color:#888; cursor:pointer; font-size: 1rem;">← <span data-translate="back_btn">Çıkış</span></button>
+        </div>
+    </div>
+    
+    <iframe 
+        id="musical-memory-frame"
+        src="musical-memory.html" 
+        width="100%" 
+        height="750" 
+        style="border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-top: 10px;"
+        title="Duyduğunu Yakala">
+    </iframe>
+</div>
                     <div id="makam-ustadi-view" class="view-section">
                         <div class="dashboard-header" style="display: flex; justify-content: space-between;">
                             <h2 data-translate="makam_game_title">Makam Üstadı</h2>
