@@ -159,11 +159,11 @@
         // Not: Gerçek bir deneyim için 'audioSrc' kısımlarına kendi mp3 linklerinizi koymalısınız.
         const allQuestions = [
             { id: 1, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/bayati-oyun.mp3", dogru: "Bayati", secenekler: ["Uşşak", "Hüseyni", "Bayati", "Rast"] },
-            { id: 2, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/bueslik-oyun.mp3", dogru: "Buselik", secenekler: ["Buselik", "Nihavend", "Saba", "Hüzzam"] },
+            { id: 2, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/bueslik-oyun.mp3", dogru: "Buselik", secenekler: ["Buselik", "Nihavent", "Saba", "Hüzzam"] },
             { id: 3, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/cargah-oyun.mp3", dogru: "Çargâh", secenekler: ["Çargâh", "Hüzzam", "Müstear", "Irak"] },
             { id: 4, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/neva-oyun.mp3", dogru: "Neva", secenekler: ["Mahur", "Rast", "Acemşiran", "Neva"] },
             { id: 5, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/muhayyer-oyun.mp3", dogru: "Muhayyer", secenekler: ["Segâh", "Hüzzam", "Karcığar", "Muhayyer"] },
-            { id: 6, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/muhayyer-kurdi-oyun.mp3", dogru: "Muhayyer Kürdi", secenekler: ["Muhayyer Kürdi", "Hicazkar", "Nihavend", "Sultaniyegâh"] },
+            { id: 6, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/muhayyer-kurdi-oyun.mp3", dogru: "Muhayyer Kürdi", secenekler: ["Muhayyer Kürdi", "Hicazkar", "Nihavent", "Sultaniyegâh"] },
             { id: 7, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/huzzam-oyun.mp3", dogru: "Hüzzam", secenekler: ["Hicaz", "Uşşak", "Hüzzam", "Segah"] },
             { id: 8, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/huseyni-oyun.mp3", dogru: "Hüseyni", secenekler: ["Hüseyni", "Hicaz", "Saba", "Tahir"] },
             { id: 9, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/hicaz-oyun.mp3", dogru: "Hicaz", secenekler: ["Uzzal", "Hicaz", "Suzinak", "Bestenigar"] },
@@ -174,6 +174,36 @@
             { id: 14, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/kurdili-hicazkar-oyun.mp3", dogru: "Kürdili Hicazkar", secenekler: ["Kürdi", "Neveser", "Hicazkar", "Kürdili Hicazkar"] },
             { id: 15, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/kargigar-oyun.mp3", dogru: "Karcığar", secenekler: ["Karcığar", "Hüseyni", "Acem Aşiran", "Büzürk"] },
             { id: 16, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-makam/saba-oyun.mp3", dogru: "Saba", secenekler: ["Uşşak", "Hicaz", "Saba", "Canfezâ"] },
+            { id: 17, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/bayati1.mp3", dogru: "Bayati", secenekler: ["Rast", "Bayati", "Hüseyni", "Uşşak"] },
+            { id: 18, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/bayati2.mp3", dogru: "Bayati", secenekler: ["Uşşak", "Hüseyni", "Bayati", "Rast"] },
+            { id: 19, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/cargah.mp3", dogru: "Çargâh", secenekler: ["Çargâh", "Buselik", "Müstear", "Do Minör"] },
+            { id: 20, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/cargah1.mp3", dogru: "Çargâh", secenekler: ["Çargâh", "Dügah", "Müstear", "Kürdi"] },
+            { id: 21, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/cargah2.mp3", dogru: "Çargâh", secenekler: ["Çargâh", "Segah", "Tahir", "Irak"] },
+            { id: 22, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/hicaz.mp3", dogru: "Hicaz", secenekler: ["Hicazkar", "Hicaz", "Suzinak", "Bestenigar"] },
+            { id: 23, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/hicaz1.mp3", dogru: "Hicaz", secenekler: ["Kürdi", "Tahir", "Suzinak", "Hicaz"] },
+            { id: 24, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/hicaz2.mp3", dogru: "Hicaz", secenekler: ["Uzzal", "Hicaz", "Suzinak", "Bestenigar"] },
+            { id: 25, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/hicaz4.mp3", dogru: "Hicaz", secenekler: ["Hicaz", "Hicazkar", "Suzinak", "Muhayyer kürdi"] },
+            { id: 26, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/hicaz5.mp3", dogru: "Hicaz", secenekler: ["Mahur", "Hicaz", "Suzinak", "Bestenigar"] },
+            { id: 27, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/hicazkar.mp3", dogru: "Hicazkar", secenekler: ["Hicaz", "Hicazkar", "Kürdili Hicazkar", "Bestenigar"] },
+            { id: 28, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/hicazkar1.mp3", dogru: "Hicazkar", secenekler: ["Kürdili Hicazkar", "Hicaz", "Suzinak", "Hicazkar"] },
+            { id: 29, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/hicazkar2.mp3", dogru: "Hicazkar", secenekler: ["Hicazkar", "Hicaz", "Suzinak", "Karcığar"] },
+            { id: 30, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/huseyni1.mp3", dogru: "Hüseyni", secenekler: ["Uşşak", "Hicaz", "Hüseyni", "Tahir"] },
+            { id: 31, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/huseyni2.mp3", dogru: "Hüseyni", secenekler: ["Hüseyni", "Karcığar", "Saba", "Muhayyer"] },
+            { id: 32, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/huseyni3.mp3", dogru: "Hüseyni", secenekler: ["Uşşak", "Hüseyni", "Saba", "Tahir"] },
+            { id: 33, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/huseyni4.mp3", dogru: "Hüseyni", secenekler: ["Saba", "Hicaz", "Uşşak", "Hüseyni"] },
+            { id: 34, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/huseyni4.mp3", dogru: "Hüseyni", secenekler: ["Hüseyni", "Uşşak", "Karcığar", "Tahir"] },
+            { id: 35, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/huzzam.mp3", dogru: "Hüzzam", secenekler: ["Ferahfeza", "Hüzzam", "Segah", "Ferahnak"] },
+            { id: 36, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/huzzam1.mp3", dogru: "Hüzzam", secenekler: ["Segah", "Hisar", "Hicaz", "Hüzzam"] },
+            { id: 37, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/huzzam3.mp3", dogru: "Hüzzam", secenekler: ["Segah-ı Hüzzam", "Hüzzam", "Segah", "Mahur"] },
+            { id: 38, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/kurdilihicazkar.mp3", dogru: "Kürdili Hicazkar", secenekler: ["Kürdi", "Kürdili Hicazkar", "Hicazkar", "Muhayyer Kürdi"] },
+            { id: 39, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/kurdilihicazkar1.mp3", dogru: "Kürdili Hicazkar", secenekler: ["Kürdili Hicazkar", "Muhayyer Kürdi", "Hicazkar", "Kürdi"] },
+            { id: 40, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/kurdilihicazkar3.mp3", dogru: "Kürdili Hicazkar", secenekler: ["Kürdi", "Hicaz", "Hicazkar", "Kürdili Hicazkar"] },
+            { id: 41, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/kurdilihicazkar4.mp3", dogru: "Kürdili Hicazkar", secenekler: ["Kürdi", "Muhayyer Kürdi", "Hicazkar", "Kürdili Hicazkar"] },
+            { id: 42, audioSrc: "https://raw.githubusercontent.com/brkslntss-png/baglamagram/main/oyun-muzigi-22/muhayyerkurdi.mp3", dogru: "Muhayyer Kürdi", secenekler: ["Muhayyer Kürdi", "Hicazkar", "Nihavent", "Kürdili Hicazkar"] },
+            
+            
+            
+            
             // Havuzda daha fazla soru olabilir, ama oyun 7 tanesini seçecek.
         ];
 
