@@ -242,9 +242,36 @@
             document.getElementById(screenId).classList.add('active');
         }
 
-        function startGame() {
-            // Soruları karıştır ve ilk 7 tanesini al
-            gameQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, totalQuestions);
+       function startGame() {
+            // 1. Tarayıcı hafızasından daha önce sorulmuş şarkıların ID'lerini getir
+            // "playedSongsIds" adında bir kutuda saklıyoruz.
+            let playedIDs = JSON.parse(localStorage.getItem('playedSongsIds')) || [];
+
+            // 2. Tüm şarkılardan oynanmışları çıkar (Geriye kalan temiz havuz)
+            let availableQuestions = allQuestions.filter(q => !playedIDs.includes(q.id));
+
+            console.log("Kalan Şarkı Sayısı:", availableQuestions.length); // Konsoldan takip edebilirsiniz
+
+            // 3. Eğer kalan şarkı sayısı 7'den azsa (Yani yeni bir oyun kuracak kadar şarkı kalmadıysa)
+            if (availableQuestions.length < 7) {
+                alert("Tebrikler! Repertuvarın tamamını (61 şarkı) bitirdiniz. Liste sıfırlanıyor ve baştan başlıyor!");
+                playedIDs = []; // Hafızayı sıfırla
+                localStorage.removeItem('playedSongsIds'); // Tarayıcıdan sil
+                availableQuestions = [...allQuestions]; // Hepsini geri yükle
+            }
+
+            // 4. Kalanlar arasından rastgele 7 tane seç
+            gameQuestions = availableQuestions.sort(() => 0.5 - Math.random()).slice(0, 7);
+            
+            // 5. Bu seçilen 7 şarkıyı "oynanmış" olarak hafızaya kaydet
+            // (Böylece sayfa yenilense veya 'Tekrar Dene' butonuna basılsa bile bunlar elenmiş olur)
+            const newIDs = gameQuestions.map(q => q.id);
+            // Eski listeye yenileri ekle
+            playedIDs = [...playedIDs, ...newIDs];
+            // Güncel listeyi kaydet
+            localStorage.setItem('playedSongsIds', JSON.stringify(playedIDs));
+
+            // Oyunu başlat
             currentQIndex = 0;
             switchScreen('game-screen');
             loadQuestion();
