@@ -11,6 +11,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&family=Lato&display=swap" rel="stylesheet">
 
     <style>
+        /* --- iOS İÇİN SAHTE TAM EKRAN STİLLERİ --- */
+.ios-fake-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 99998 !important; /* Her şeyin üstünde */
+    background: #000 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
+
+/* iOS Tam Ekran Kapatma Butonu */
+#ios-close-btn {
+    display: none; /* JS ile açacağız */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 99999; /* Iframe'in de üstünde */
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: 2px solid white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 36px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
         /* ============================================================
            TEMEL AYARLAR
            ============================================================ */
@@ -411,6 +443,7 @@
 </head>
 <body>
 
+    <div id="ios-close-btn" onclick="iosTamEkranKapat()">×</div>
     <div class="language-wrapper">
         <button class="lang-btn" onclick="toggleLanguageMenu()">
             <i class="fas fa-globe"></i> <span id="lang-label">LANGUAGE</span>
@@ -1130,16 +1163,52 @@
 
    <script>
         // --- TAM EKRAN FONKSİYONU ---
-        function tamEkranYap(iframeId) {
-            var elem = document.getElementById(iframeId);
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE11 */
-                elem.msRequestFullscreen();
-            }
+        // --- GÜNCELLENMİŞ TAM EKRAN FONKSİYONU ---
+let aktifIframeId = null; // Hangi iframe'in büyüdüğünü tutmak için
+
+function tamEkranYap(iframeId) {
+    var elem = document.getElementById(iframeId);
+    aktifIframeId = iframeId; // Şu anki iframe'i kaydet
+
+    // iOS Tespiti (iPhone, iPad, iPod)
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    // Eğer iOS ise veya Tarayıcı Fullscreen API desteklemiyorsa:
+    if (isIOS || (!elem.requestFullscreen && !elem.webkitRequestFullscreen)) {
+        // CSS ile Sahte Tam Ekran Yap
+        elem.classList.add('ios-fake-fullscreen');
+        document.getElementById('ios-close-btn').style.display = 'block'; // Çarpı butonunu göster
+        document.body.style.overflow = 'hidden'; // Arka planı kaydırmayı engelle
+    } 
+    // Android ve PC için Standart Yöntem
+    else {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari (macOS) / Chrome */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
         }
+    }
+}
+
+// iOS Tam Ekranı Kapatma Fonksiyonu
+function iosTamEkranKapat() {
+    if (aktifIframeId) {
+        var elem = document.getElementById(aktifIframeId);
+        elem.classList.remove('ios-fake-fullscreen'); // Sınıfı kaldır
+        document.getElementById('ios-close-btn').style.display = 'none'; // Butonu gizle
+        document.body.style.overflow = ''; // Sayfa kaydırmayı geri aç
+        aktifIframeId = null;
+    }
+}
+
+// Standart Tam Ekrandan çıkıldığında (Android/PC) tetiklenen olayları dinle
+document.addEventListener('fullscreenchange', (event) => {
+    if (!document.fullscreenElement) {
+        // Tam ekrandan çıkıldıysa yapılacaklar (gerekirse)
+    }
+});
 
         // --- 1. DİKTE SES DOSYALARI ---
         const dikteVerileri = {
