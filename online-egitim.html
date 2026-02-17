@@ -2182,7 +2182,7 @@ gununBilgisiniGetir();
             if (error.code === "auth/user-not-found") {
                 status.innerText = "Bu e-posta adresi kayıtlı değil.";
             } else if (error.code === "auth/invalid-email") {
-                status.innerText = "Geçersiz e-posta formatı.";
+                status.innerText = "Lütfen yukarıdaki kutucuğa e-posta adresinizi girin.";
             } else {
                 status.innerText = "Hata: " + error.code;
             }
