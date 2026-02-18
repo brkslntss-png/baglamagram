@@ -366,7 +366,6 @@
             
             let ledgerLine = noteData.ledger ? `<line x1="30" y1="150" x2="90" y2="150" stroke="black" stroke-width="3" />` : '';
             
-            // Renkli notalar için sınır rengi değişebilir mi? Şimdilik siyah kalsın net okunsun.
             noteEl.innerHTML = `
                 <svg width="120" height="180" viewBox="0 0 120 180">
                     <line x1="10" y1="50" x2="110" y2="50" stroke="black" stroke-width="2" />
@@ -385,13 +384,36 @@
             const maxX = window.innerWidth - 140; 
             let randomX;
             let attempts = 0;
+            let isSafe = false;
 
+            // --- YENİ ÇAKIŞMA ENGELLEME MANTIĞI ---
+            // Rastgele bir konum seç, ama diğer notalarla çarpışıyor mu kontrol et
             do {
                 randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+                isSafe = true;
+
+                // Aktif olan tüm notaları kontrol et
+                for (let note of activeNotes) {
+                    let otherX = parseFloat(note.style.left);
+                    let otherY = parseFloat(note.dataset.yPos);
+
+                    // Eğer yatayda çok yakınsa (130px) VE dikeyde de henüz yeterince aşağı inmemişse (200px)
+                    // Bu yeni konum güvenli değil demektir.
+                    if (Math.abs(randomX - otherX) < 130 && otherY < 180) {
+                        isSafe = false;
+                        break;
+                    }
+                }
                 attempts++;
-            } while (Math.abs(randomX - lastSpawnX) < 130 && attempts < 10);
-            
-            lastSpawnX = randomX; 
+            } while (!isSafe && attempts < 20); // Güvenli yer bulana kadar veya 20 deneme yapana kadar döner
+
+            // Eğer 20 denemede yer bulamazsa, bu tur nota üretme (ekran çok dolu demektir)
+            if (!isSafe && attempts >= 20) {
+                 // Bir sonrakini biraz daha erken dene
+                 spawnTimeout = setTimeout(spawnNote, 500);
+                 return; 
+            }
+            // ----------------------------------------
             
             noteEl.style.left = randomX + 'px';
             noteEl.dataset.noteName = noteData.name;
