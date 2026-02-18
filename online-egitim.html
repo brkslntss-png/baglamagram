@@ -11,6 +11,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&family=Lato&display=swap" rel="stylesheet">
 
     <style>
+/* --- CANLI DERS KUTUSU ÖZEL AYARLARI --- */
+
+/* 1. İkonu Kırmızı Yap ve Parlat */
+.live-class-card i {
+    color: #ff3b3b !important; /* Canlı Youtube Kırmızısı */
+    text-shadow: 0 0 25px rgba(255, 59, 59, 0.6); /* Neon parlama efekti */
+    animation: canliNefes 2s infinite ease-in-out; /* Nefes alıp verme efekti */
+}
+
+/* 2. Mouse ile üzerine gelince de Kırmızı kalsın (Sarı olmasın) */
+.live-class-card:hover i {
+    color: #ff0000 !important;
+    text-shadow: 0 0 35px rgba(255, 0, 0, 0.9);
+}
+
+/* 3. Kutunun Kenarlığı da Kırmızı yansın */
+.live-class-card:hover {
+    border-color: #ff3b3b !important;
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.15) !important;
+}
+
+/* 4. Başlık rengini de hafif kırmızımsı yapalım (Opsiyonel) */
+.live-class-card:hover h3 {
+    color: #ff3b3b !important;
+}
+
+/* --- CANLI İKON ANİMASYONU (Nefes Alma) --- */
+@keyframes canliNefes {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+/* --- DASHBOARD KUTULARI MODERNİZASYON --- */
+
+/* 1. Başlıkları (H3) Sol Menüyle Aynı Yap */
+.dash-card h3, .wide-card h3 {
+    font-family: 'Montserrat', sans-serif !important; /* Modern Font */
+    color: #FFD700 !important; /* Varsayılan renk BEYAZ */
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+/* 2. Açıklama Yazılarını (P) Düzenle */
+.dash-card p, .wide-card p {
+    font-family: 'Montserrat', sans-serif !important;
+    color: #aaaaaa !important; /* Göz yormayan gri */
+    font-size: 0.85rem !important;
+    font-weight: 300;
+}
+
+/* 3. Mouse ile üzerine gelince Başlık SARI olsun (Etkileşim) */
+.dash-card:hover h3, .wide-card:hover h3 {
+    color: var(--yellow-portal) !important;
+}
+
+/* 4. İkonların Rengini ve Boyutunu Dengeli Yap */
+.dash-card i {
+    color: var(--yellow-portal) !important; /* İkonlar SARI kalsın (Marka rengi) */
+    font-size: 3rem !important; /* Çok devasa olmasın */
+    margin-bottom: 15px !important;
+}
+
+/* 5. Kutuların Kenarlıklarını Yumuşat */
+.dash-card {
+    border: 1px solid rgba(255, 255, 255, 0.05) !important; /* Çok hafif kenarlık */
+    background: rgba(20, 20, 20, 0.6) !important; /* Daha transparan zemin */
+}
+
+/* Üzerine gelince kenarlık parlasın */
+.dash-card:hover {
+    border-color: var(--yellow-portal) !important;
+}
+        /* --- TAM GENİŞLİK KART STİLİ --- */
+.full-width-card {
+    grid-column: 1 / -1; /* Baştan sona kadar uzan */
+    display: flex;       /* İçeriği yatay diz */
+    align-items: center; /* Ortala */
+    justify-content: space-between; /* Yazı solda, ok sağda olsun */
+    text-align: left;    /* Yazıları sola yasla */
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, rgba(20, 20, 20, 0.8) 100%); /* Hafif sarı geçişli şık bir arka plan */
+    border: 1px solid var(--yellow-portal); /* Çerçeveyi sarı yapıp dikkat çekelim */
+}
+
+/* Mobilde (küçük ekranda) zaten tek sütun olduğu için bozulmasın */
+@media (max-width: 900px) {
+    .full-width-card {
+        grid-column: auto; /* Mobilde normale dönsün */
+        flex-direction: column; /* Mobilde dikey olsun */
+        text-align: center;
+    }
+}
+}
         /* --- iOS İÇİN SAHTE TAM EKRAN STİLLERİ --- */
 .ios-fake-fullscreen {
     position: fixed !important;
@@ -578,6 +672,9 @@
                         <a onclick="sayfaGoster('fun-learning-view')" class="menu-link">
                             <i class="fas fa-gamepad"></i> <span data-translate="portal_menu_fun">Eğlenerek Öğren</span>
                         </a>
+                        <a onclick="dersKayitlariniGetir()" class="menu-link">
+    <i class="fas fa-video"></i> <span data-translate="portal_menu_recordings">Canlı Ders Tekrarları</span>
+</a>
                         
                         <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title" data-translate="portal_menu_tools_title">ARAÇLAR</div>
                         <a onclick="sayfaGoster('metronome-view')" class="menu-link">
@@ -601,6 +698,15 @@
                 </div>
 
                 <div class="portal-content">
+
+                   <div id="ders-kayitlari-view" class="view-section">
+    <div class="dashboard-header" style="display: flex; justify-content: space-between;">
+        <h2 style="color:var(--accent);">CANLI DERS TEKRARLARI</h2>
+        <button onclick="sayfaGoster('dashboard-view')" style="background:none; border:none; color:#888; cursor:pointer;">← Geri</button>
+    </div>
+    <div id="ders-listesi-container" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+        </div>
+</div>
                     
                     <div id="dashboard-view" class="view-section active">
                         <div class="dashboard-header">
@@ -650,6 +756,20 @@
                                 <h3 data-translate="portal_menu_tools_title">ARAÇLAR</h3>
                                 <p data-translate="tools_card_desc">Metronom, Akort Cihazı.</p>
                             </div>
+                            <div class="dash-card full-width-card" onclick="dersKayitlariniGetir()">
+    <div class="wide-content">
+        <div class="icon-circle">
+            <i class="fas fa-video"></i>
+        </div>
+        <div class="text-group">
+            <h3 data-translate="portal_menu_recordings">CANLI DERS TEKRAR KAYITLARI</h3>
+            <p style="font-size: 0.85rem; color: #aaa; margin:0;">Premium öğrenci portalında birebir ders videolarını tekrar izleyebilirsiniz.</p>
+        </div>
+    </div>
+    <div class="arrow-icon">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+</div>
                         </div>
                     </div>
 
@@ -2142,11 +2262,12 @@ gununBilgisiniGetir();
    
     </script>
 <script type="module">
+  // 1. GEREKLİ KÜTÜPHANELERİ ÇAĞIRIYORUZ
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-  // Firestore (Veritabanı) kütüphaneleri
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
+  // 2. AYARLAR
   const firebaseConfig = {
     apiKey: "AIzaSyBIx9TujKPX82NaWXGh2QTxyG6TEQ-abi8",
     authDomain: "baglamagram-portal.firebaseapp.com",
@@ -2157,11 +2278,14 @@ gununBilgisiniGetir();
     measurementId: "G-RD5H01SSTH"
   };
 
+  // 3. BAŞLATMA
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
+  const db = getFirestore(app); // Veritabanını başlattık
 
-  // Şifre Çözücü Fonksiyon
+  // --- YARDIMCI FONKSİYONLAR ---
+  
+  // Şifre Çözücü
   function sifreCo(sifreliMetin) {
       try {
           return decodeURIComponent(escape(window.atob(sifreliMetin)));
@@ -2171,10 +2295,10 @@ gununBilgisiniGetir();
       }
   }
 
-  // YENİ ÖĞRENCİLERİN AD-SOYADINI İLK BAŞTA BURAYA GİRECEKSİN. yeni kayıt
+  // Öğrenci Listesi
   const ogrenciListesi = {
       "Z29rYm95MDlAZ21haWwuY29t": { ad: "R29rMg==", soyad: "UEFJTlRFUg==" },
-        "elifin-epostası-gelecek@xyz.com": { ad: "RWxpZg==", soyad: "S0FSTUFO" },
+      "elifin-epostası-gelecek@xyz.com": { ad: "RWxpZg==", soyad: "S0FSTUFO" },
       "ZmVyaGF0Y2l2YW4wMjA1QG91dGxvb2suY29t": { ad: "RmVyaGF0ZQ==", soyad: "Q2l2YW5lIEJha2FuZQ==" },
       "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },
       "NDJ0ZXJvYmF5dDYzQGdtYWlsLmNvbQ==": { ad: "ZGVuZW1l", soyad: "aGVzYWLEsW7EsQ==" },
@@ -2183,7 +2307,7 @@ gununBilgisiniGetir();
       "ZXZpbmVyZGVuQGFkdS5lZHUudHI=": { ad: "RXZpbiBFUkRFTg==", soyad: "VE9QT0dMVQ==" }
   };
 
-  // --- ŞİFRE SIFIRLAMA FONKSİYONU EKLENDİ ---
+  // Şifre Sıfırlama
   window.sifreSifirla = function() {
       const email = document.getElementById('emailInput').value;
       const status = document.getElementById('loginStatus');
@@ -2199,24 +2323,23 @@ gununBilgisiniGetir();
 
       sendPasswordResetEmail(auth, email)
         .then(() => {
-            status.style.color = "#4CAF50"; // Yeşil
+            status.style.color = "#4CAF50"; 
             status.innerText = "E-postanı kontrol et! Sıfırlama linki gönderildi.";
         })
         .catch((error) => {
-            status.style.color = "#ff4d4d"; // Kırmızı
+            status.style.color = "#ff4d4d"; 
             console.error(error);
             if (error.code === "auth/user-not-found") {
                 status.innerText = "Bu e-posta adresi kayıtlı değil.";
             } else if (error.code === "auth/invalid-email") {
-                status.innerText = "Lütfen yukarıdaki kutucuğa e-posta adresinizi girin.";
+                status.innerText = "Lütfen geçerli bir e-posta girin.";
             } else {
                 status.innerText = "Hata: " + error.code;
             }
         });
   }
 
-  // --- FOTOĞRAF KAYDETME (VERİTABANINA) ---
-  // Bu fonksiyonu window'a atıyoruz ki HTML'den çağrılabilsin
+  // Fotoğraf Kaydetme
   window.saveProfilePhoto = function(input) {
     if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -2225,7 +2348,6 @@ gununBilgisiniGetir();
         reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
-                // 1. Resmi Küçült (Veritabanına sığması için)
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 
@@ -2241,19 +2363,16 @@ gununBilgisiniGetir();
                 canvas.width = width;
                 canvas.height = height;
                 ctx.drawImage(img, 0, 0, width, height);
-                // Kaliteyi biraz daha düşürdük (0.6) ki hızlı olsun
                 const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
 
-                // 2. Ekrana bas (Kullanıcı anında görsün)
                 document.getElementById('userAvatar').src = dataUrl;
 
-                // 3. VERİTABANINA KAYDET
                 const user = auth.currentUser;
                 if (user) {
                     const userRef = doc(db, "kullanicilar", user.email);
                     setDoc(userRef, { profil_fotosu: dataUrl }, { merge: true })
-                        .then(() => { console.log("Fotoğraf buluta kaydedildi!"); })
-                        .catch((error) => { console.error("Yazma hatası:", error); });
+                        .then(() => { console.log("Fotoğraf kaydedildi!"); })
+                        .catch((error) => { console.error("Hata:", error); });
                 }
             };
             img.src = e.target.result;
@@ -2262,6 +2381,7 @@ gununBilgisiniGetir();
     }
   }
 
+  // --- GİRİŞ İŞLEMLERİ (Login) ---
   const loginBtn = document.getElementById('firebaseLoginBtn');
   const emailInput = document.getElementById('emailInput');
   const passInput = document.getElementById('passwordInput');
@@ -2284,12 +2404,10 @@ gununBilgisiniGetir();
           signInWithEmailAndPassword(auth, email, pass)
             .then((userCredential) => {
                 status.style.color = "#4CAF50"; 
-                status.innerText = "Premium Öğrenme Ayrıcalığına Hoş Geldin...";
+                status.innerText = "Premium Eğitim Ayrıcalığına Hoş Geldiniz.";
 
                 const girisYapanMail = userCredential.user.email;
                 const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
-                
-                // Maili yine de hafızada tutalım (yedek olsun)
                 localStorage.setItem('aktifKullaniciMail', girisYapanMail);
 
                 setTimeout(() => {
@@ -2299,31 +2417,22 @@ gununBilgisiniGetir();
                     document.getElementById("student-portal").style.display = "block";
                     document.body.classList.add("portal-active");
 
-                    // İSİM AYARLAMA
                     let ogrenci = ogrenciListesi[sifreliMail];
                     if (ogrenci) {
-                        const gercekAd = sifreCo(ogrenci.ad);
-                        const gercekSoyad = sifreCo(ogrenci.soyad);
-                        document.getElementById("displayAd").innerText = gercekAd;
-                        document.getElementById("displaySoyad").innerText = gercekSoyad;
-                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + gercekAd + "!";
+                        document.getElementById("displayAd").innerText = sifreCo(ogrenci.ad);
+                        document.getElementById("displaySoyad").innerText = sifreCo(ogrenci.soyad);
+                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + sifreCo(ogrenci.ad) + "!";
                     } else {
-                        const varsayilanAd = girisYapanMail.split('@')[0];
-                        document.getElementById("displayAd").innerText = varsayilanAd;
+                        document.getElementById("displayAd").innerText = girisYapanMail.split('@')[0];
                         document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
                         document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
                     }
 
-                    // FOTOĞRAFI VERİTABANINDAN ÇEK
-                    document.getElementById('userAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-                    
                     const userRef = doc(db, "kullanicilar", girisYapanMail);
                     getDoc(userRef).then((docSnap) => {
                         if (docSnap.exists() && docSnap.data().profil_fotosu) {
                             document.getElementById('userAvatar').src = docSnap.data().profil_fotosu;
                         }
-                    }).catch((error) => {
-                        console.log("Fotoğraf çekilemedi (Henüz yüklenmemiş olabilir).");
                     });
                     
                     history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
@@ -2333,12 +2442,64 @@ gununBilgisiniGetir();
                 status.style.color = "#ff4d4d";
                 console.error(error);
                 if (error.code === "auth/invalid-credential") {
-                    status.innerText = "E-postanız veya şifreniz hatalı! Bilgilerinizi tekrar gözden geçirin";
+                    status.innerText = "E-posta veya şifre hatalı!";
                 } else {
                     status.innerText = "Hata oluştu.";
                 }
             });
       });
+  }
+
+  // --- DERS KAYITLARI SİSTEMİ (Yeni Eklenen Kısım) ---
+  
+  // 1. DERS VİDEOSU AÇAN FONKSİYON (Görüntü Boyutunu Ayarlar)
+  window.dersVideoAc = function(videoId, baslik) {
+    const player = document.getElementById("exam-audio-player");
+    document.getElementById("exam-detail-title").innerText = baslik;
+    
+    // Video görünürlüğü için yüksekliği 550px yapıyoruz
+    player.style.height = "550px"; 
+    player.src = "https://drive.google.com/file/d/" + videoId + "/preview";
+    
+    // Cevap butonu derste gerekmez
+    document.getElementById("cevap-butonu").style.display = "none";
+    
+    sayfaGoster("exam-detail-view");
+  }
+
+  // 2. DERS LİSTESİNİ GETİREN ANA FONKSİYON
+  window.dersKayitlariniGetir = async function() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    sayfaGoster('ders-kayitlari-view');
+    const container = document.getElementById("ders-listesi-container");
+    container.innerHTML = "<p style='color:#888; padding:20px;'>Dersleriniz yükleniyor...</p>";
+
+    try {
+        const q = query(collection(db, "ders_kayitlari"), where("ogrenci_mail", "==", user.email));
+        const querySnapshot = await getDocs(q);
+        container.innerHTML = "";
+
+        if (querySnapshot.empty) {
+            container.innerHTML = "<p style='color:#888; padding:20px;'>Henüz size özel tanımlanmış bir ders kaydı bulunamadı.</p>";
+            return;
+        }
+
+        querySnapshot.forEach((doc) => {
+            const veri = doc.data();
+            container.innerHTML += `
+                <div class="exam-row" onclick="dersVideoAc('${veri.video_id}', '${veri.baslik}')">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <span style="color:var(--yellow-portal); font-size: 0.7rem;">${veri.tarih}</span>
+                        <span style="color:#fff; font-weight:500;">${veri.baslik}</span>
+                    </div>
+                    <i class="fas fa-play-circle" style="color:var(--yellow-portal); font-size: 1.4rem;"></i>
+                </div>`;
+        });
+    } catch (error) {
+        container.innerHTML = "<p style='color:red;'>Hata: " + error.message + "</p>";
+    }
   }
 </script>
 
