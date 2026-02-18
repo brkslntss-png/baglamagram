@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baglamagram Akustik Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --panel-bg: rgba(20, 20, 20, 0.95);
+            --accent-color: #00e5ff; /* Neon Mavi */
+            --secondary-accent: #ff007f; /* Neon Pembe */
+            --text-color: #e0e0e0;
+            --danger-color: #ff3d00;
+            --grid-color: rgba(0, 229, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+            background-color: #050505;
+
+            /* --- ARKA PLAN TASARIMI --- */
+            background-image:
+                /* 1. Merkezden yayılan geniş mavi ışık */
+                radial-gradient(circle at center, rgba(0, 229, 255, 0.15) 0%, transparent 60%),
+                /* 2. Izgara Çizgileri */
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: auto, 40px 40px, 40px 40px;
+            
+            /* Kenar Karartması (Vignette) */
+            box-shadow: inset 0 0 120px rgba(0,0,0,0.9);
+        }
+
+        /* --- ANA KONTROL PANELİ --- */
+        .generator-panel {
+            background: var(--panel-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            /* Dış Parlama Efekti */
+            box-shadow: 0 0 60px rgba(0, 229, 255, 0.1), 
+                        inset 0 0 20px rgba(255, 255, 255, 0.05);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 10;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+            opacity: 0.9;
+        }
+
+        /* Dijital Ekran */
+        .screen-container {
+            background: #000;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+            position: relative;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+        .freq-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            color: var(--accent-color);
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+            display: block;
+            line-height: 1;
+        }
+        .unit {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        /* ON AIR Işığı */
+        .on-air {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            height: 10px;
+            width: 10px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        .on-air.active {
+            background-color: var(--danger-color);
+            box-shadow: 0 0 15px var(--danger-color);
+        }
+
+        /* Buton Grupları */
+        .control-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .control-group {
+            background: #1a1a1a;
+            padding: 20px 10px 10px 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            border: 1px solid #333;
+        }
+        .control-label {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--panel-bg);
+            padding: 0 5px;
+            font-size: 0.7rem;
+            color: #aaa;
+            font-weight: bold;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        /* Küçük (+/-) Butonlar */
+        .adj-btn {
+            background: #2a2a2a;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 6px;
+            width: 40px;
+            height: 35px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .adj-btn:active { transform: scale(0.95); }
+        .coarse .adj-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: #333; }
+        .fine .adj-btn:hover { border-color: var(--secondary-accent); color: var(--secondary-accent); background: #333; }
+        .mid-text { font-size: 0.8rem; color: #888; }
+
+        /* Slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: #333;
+            outline: none;
+            margin: 1.5rem 0;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.8);
+            border: 2px solid #fff;
+            transition: transform 0.1s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+
+        /* Ana Başlat Butonu */
+        .main-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-start {
+            background: linear-gradient(135deg, #008ba3, #00e5ff);
+            color: #000;
+        }
+        .btn-start:hover {
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-stop {
+            background: linear-gradient(135deg, #b71c1c, #ff3d00);
+            color: #fff;
+            display: none;
+        }
+        .btn-stop:hover {
+            box-shadow: 0 0 30px rgba(255, 61, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* --- FREKANS CETVELİ BUTONU --- */
+        .ref-btn {
+            background: rgba(30, 30, 30, 0.8);
+            color: #aaa;
+            border: 1px solid #444;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+        }
+        .ref-btn:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            background: rgba(0, 229, 255, 0.05);
+        }
+
+        /* --- MODAL (POP-UP) --- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.85); 
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #151515;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid var(--accent-color);
+            width: 90%;
+            max-width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.2);
+            text-align: center;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #666;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .close:hover { color: var(--danger-color); }
+
+        .modal h3 { color: #fff; margin-top: 0; font-weight: 300; letter-spacing: 2px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+
+        /* TABLO STİLİ */
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; white-space: nowrap; }
+        th, td { padding: 12px; border-bottom: 1px solid #333; text-align: center; }
+        th { color: var(--accent-color); font-size: 0.8rem; letter-spacing: 1px; border-bottom: 2px solid var(--accent-color); }
+        
+        td:first-child { 
+            font-weight: bold; 
+            color: #fff; 
+            background: #202020; 
+            text-align: left; 
+            padding-left: 20px;
+            position: sticky;
+            left: 0;
+        }
+        
+        .freq-link { 
+            color: #888; 
+            cursor: pointer; 
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .freq-link:hover { 
+            color: #000; 
+            background-color: var(--accent-color); 
+            border-color: var(--accent-color);
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+        tr:hover td { background-color: rgba(255,255,255,0.02); }
+
+    </style>
+</head>
+<body>
+
+<div class="generator-panel">
+    <h2>Baglamagram Frekans Jeneratörü</h2>
+    
+    <div class="screen-container">
+        <div class="on-air" id="onAirLight"></div>
+        <span class="freq-display" id="freqVal">440.00</span>
+        <span class="unit">HERTZ</span>
+    </div>
+
+    <div class="control-grid">
+        <div class="control-group coarse">
+            <span class="control-label" style="color:var(--accent-color)">KABA (±1)</span>
+            <button class="adj-btn" onclick="adjustFreq(-1)">−</button>
+            <span class="mid-text">1 Hz</span>
+            <button class="adj-btn" onclick="adjustFreq(1)">+</button>
+        </div>
+        <div class="control-group fine">
+            <span class="control-label" style="color:var(--secondary-accent)">HASSAS (±0.1)</span>
+            <button class="adj-btn" onclick="adjustFreq(-0.1)">−</button>
+            <span class="mid-text">0.1 Hz</span>
+            <button class="adj-btn" onclick="adjustFreq(0.1)">+</button>
+        </div>
+    </div>
+    
+    <input type="range" id="freqSlider" min="20" max="20000" step="0.1" value="440">
+    
+    <button id="startBtn" class="main-btn btn-start">Jeneratörü AÇ</button>
+    <button id="stopBtn" class="main-btn btn-stop">JENERATÖRÜ KAPAT</button>
+</div>
+
+<button id="openTableBtn" class="ref-btn">Notaların Frekansları</button>
+
+<div id="freqModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Nota Frekans Referansı</h3>
+        <p style="font-size:0.8rem; color:#666; margin-bottom: 20px;">Bir değere tıklayarak jeneratörü otomatik ayarlayabilirsiniz.</p>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nota</th>
+                        <th>2. Oktav</th>
+                        <th>3. Oktav</th>
+                        <th>4. Oktav</th>
+                        <th>5. Oktav</th>
+                    </tr>
+                </thead>
+                <tbody id="freqTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- DEĞİŞKENLER ---
+    let audioCtx;
+    let oscillator;
+    let gainNode;
+    let isPlaying = false;
+    let currentFreq = 440.00;
+
+    const freqSlider = document.getElementById('freqSlider');
+    const freqVal = document.getElementById('freqVal');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const onAirLight = document.getElementById('onAirLight');
+    
+    // Modal Elemanları
+    const modal = document.getElementById("freqModal");
+    const openBtn = document.getElementById("openTableBtn");
+    const closeBtn = document.getElementsByClassName("close")[0];
+
+    // --- SES MOTORU ---
+    function initAudio() { 
+        if (!audioCtx) { 
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
+        } 
+    }
+
+    function updateFrequency(val) {
+        let safeVal = parseFloat(val);
+        if (safeVal < 20) safeVal = 20;
+        if (safeVal > 20000) safeVal = 20000;
+        
+        currentFreq = safeVal;
+        
+        // Görsel Güncelleme
+        freqVal.textContent = currentFreq.toFixed(2);
+        freqSlider.value = currentFreq;
+        
+        // Ses Güncelleme (Anlık)
+        if (isPlaying && oscillator) {
+            oscillator.frequency.setTargetAtTime(currentFreq, audioCtx.currentTime, 0.05);
+        }
+    }
+
+    function adjustFreq(amount) {
+        updateFrequency(currentFreq + amount);
+    }
+
+    // Slider Hareketi
+    freqSlider.addEventListener('input', (e) => {
+        updateFrequency(e.target.value);
+    });
+
+    // Başlat Fonksiyonu
+    function startSound() {
+        initAudio();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        if (isPlaying) return;
+
+        oscillator = audioCtx.createOscillator();
+        gainNode = audioCtx.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(currentFreq, audioCtx.currentTime);
+        
+        // Click sesini önlemek için yumuşak giriş (fade-in)
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.1);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        isPlaying = true;
+        
+        // UI Değişimi
+        startBtn.style.display = 'none';
+        stopBtn.style.display = 'block';
+        onAirLight.classList.add('active');
+    }
+
+    // Durdur Fonksiyonu
+    function stopSound() {
+        if (!isPlaying || !oscillator) return;
+
+        // Yumuşak çıkış (fade-out)
+        gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+        
+        setTimeout(() => {
+            if (oscillator) {
+                oscillator.stop();
+                oscillator.disconnect();
+            }
+            isPlaying = false;
+            
+            // UI Değişimi
+            startBtn.style.display = 'block';
+            stopBtn.style.display = 'none';
+            onAirLight.classList.remove('active');
+        }, 100);
+    }
+
+    startBtn.addEventListener('click', startSound);
+    stopBtn.addEventListener('click', stopSound);
+
+
+    // --- TABLO VE MODAL İŞLEMLERİ ---
+
+    // Tablodan seçim yapılınca
+    window.selectNote = function(freq) {
+        updateFrequency(freq);
+        modal.style.display = "none";
+        // İstersen seçim yapınca otomatik çalsın diye: if(!isPlaying) startSound();
+    }
+
+    // Modal Aç/Kapa
+    openBtn.onclick = function() { modal.style.display = "flex"; }
+    closeBtn.onclick = function() { modal.style.display = "none"; }
+    window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
+
+    // Tabloyu Oluşturma Mantığı
+    const notes = ["Do (C)", "Do# (C#)", "Re (D)", "Re# (D#)", "Mi (E)", "Fa (F)", "Fa# (F#)", "Sol (G)", "Sol# (G#)", "La (A)", "La# (A#)", "Si (B)"];
+    const baseC2 = 65.406; // C2 Frekansı
+
+    function generateTable() {
+        const tbody = document.getElementById('freqTableBody');
+        let html = "";
+
+        for (let i = 0; i < 12; i++) {
+            html += `<tr><td>${notes[i]}</td>`;
+            
+            for (let oct = 0; oct < 4; oct++) {
+                // Formül: f = base * 2^(i/12) * 2^oktav
+                let freq = baseC2 * Math.pow(2, i/12);
+                freq = freq * Math.pow(2, oct);
+                
+                html += `<td><span class="freq-link" onclick="selectNote(${freq.toFixed(2)})">${freq.toFixed(2)}</span></td>`;
+            }
+            html += "</tr>";
+        }
+        tbody.innerHTML = html;
+    }
+
+    // Başlangıçta Tabloyu Doldur
+    generateTable();
+
+</script>
+
+</body>
+</html>
