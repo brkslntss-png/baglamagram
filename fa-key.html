@@ -365,7 +365,7 @@
             const noteEl = document.createElement('div');
             noteEl.className = 'falling-note';
             
-            // Ek çizgi (Ledger line) pozisyonunu da sağa kaydırdım (55-115 arası)
+            // Ek çizgi (Ledger line) 
             let ledgerLine = noteData.ledger ? `<line x1="55" y1="150" x2="115" y2="150" stroke="black" stroke-width="3" />` : '';
             
             noteEl.innerHTML = `
@@ -390,16 +390,39 @@
             `;
 
             const minX = 20;
-            const maxX = window.innerWidth - 140; 
+            // Bu oyunda kart genişliği 140px olduğu için sağ taraftan payı artırdım
+            const maxX = window.innerWidth - 160; 
             let randomX;
             let attempts = 0;
+            let isSafe = false;
 
+            // --- GELİŞMİŞ ÇAKIŞMA KONTROLÜ ---
             do {
                 randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+                isSafe = true;
+
+                // Ekrandaki tüm aktif notaları tara
+                for (let note of activeNotes) {
+                    let otherX = parseFloat(note.style.left);
+                    let otherY = parseFloat(note.dataset.yPos);
+
+                    // Fa anahtarı kartları daha geniş (140px). 
+                    // Bu yüzden 150px mesafe kuralı koyduk.
+                    // Ayrıca sadece ekranın üst kısmındaki (y < 200) kartları kontrol ediyoruz.
+                    if (Math.abs(randomX - otherX) < 150 && otherY < 200) {
+                        isSafe = false;
+                        break;
+                    }
+                }
                 attempts++;
-            } while (Math.abs(randomX - lastSpawnX) < 130 && attempts < 10);
-            
-            lastSpawnX = randomX; 
+            } while (!isSafe && attempts < 20); // 20 deneme hakkı
+
+            // Eğer güvenli yer bulunamazsa (ekran doluysa) bu turu pas geç
+            if (!isSafe && attempts >= 20) {
+                spawnTimeout = setTimeout(spawnNote, 500);
+                return;
+            }
+            // ----------------------------------
             
             noteEl.style.left = randomX + 'px';
             noteEl.dataset.noteName = noteData.name;
@@ -411,7 +434,6 @@
             let nextSpawn = Math.max(1000, 2500 - (score * 2)); 
             spawnTimeout = setTimeout(spawnNote, nextSpawn);
         }
-
         function gameLoop() {
             if (!isGameRunning) return;
 
