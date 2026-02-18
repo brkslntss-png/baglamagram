@@ -675,6 +675,9 @@
                         <a onclick="dersKayitlariniGetir()" class="menu-link">
     <i class="fas fa-video"></i> <span data-translate="portal_menu_recordings">Canlı Ders Tekrarları</span>
 </a>
+                        <a id="admin-btn" onclick="sayfaGoster('admin-view')" class="menu-link" style="display:none; color: #ff3b3b;">
+    <i class="fas fa-user-shield"></i> <span>Hoca Paneli</span>
+</a>
                         
                         <div style="color: #666; font-size: 0.8rem; margin: 15px 0 5px 0; padding-left: 12px;" class="menu-title" data-translate="portal_menu_tools_title">ARAÇLAR</div>
                         <a onclick="sayfaGoster('metronome-view')" class="menu-link">
@@ -682,6 +685,9 @@
                         </a>
                         <a onclick="sayfaGoster('tuner-view')" class="menu-link">
                             <i class="fas fa-microphone-lines"></i> <span data-translate="portal_menu_tuner">Akort Cihazı</span>
+                        </a>
+                        <a onclick="sayfaGoster('jenerator-view')" class="menu-link">
+                            <i class="fas fa-microphone-lines"></i> <span data-translate="portal_menu_tuner">Akustik Lab</span>
                         </a>
 
                         <a onclick="startLiveClass()" class="menu-link">
@@ -1292,6 +1298,49 @@
                         </iframe>
                     </div>
 
+                <div id="admin-view" class="view-section">
+    <div class="dashboard-header">
+        <h2 style="color:var(--accent);">YENİ DERS TANIMLA</h2>
+        <p style="color:#aaa;">Öğrenciye özel video atama paneli.</p>
+    </div>
+
+    <div class="dash-card full-width-card" style="display:block; cursor:default; background:rgba(0,0,0,0.8);">
+        <div style="display:flex; flex-direction:column; gap:15px;">
+            
+            <div>
+                <label style="color:#fff; display:block; margin-bottom:5px;">Öğrenci E-Posta:</label>
+                <input type="text" id="admin-ogrenci-mail" placeholder="ornek@gmail.com" 
+                       style="width:100%; padding:10px; border-radius:5px; border:1px solid #333; background:#222; color:#fff;">
+            </div>
+
+            <div>
+                <label style="color:#fff; display:block; margin-bottom:5px;">Ders Başlığı:</label>
+                <input type="text" id="admin-ders-baslik" placeholder="Örn: 3. Ders - Şelpe Tekniği" 
+                       style="width:100%; padding:10px; border-radius:5px; border:1px solid #333; background:#222; color:#fff;">
+            </div>
+
+            <div>
+                <label style="color:#fff; display:block; margin-bottom:5px;">Google Drive Linki:</label>
+                <input type="text" id="admin-video-url" placeholder="Linkin tamamını buraya yapıştır..." 
+                       style="width:100%; padding:10px; border-radius:5px; border:1px solid #333; background:#222; color:#fff;">
+                <small style="color:#777;">Sistem ID'yi otomatik ayıklayacaktır.</small>
+            </div>
+
+            <div>
+                <label style="color:#fff; display:block; margin-bottom:5px;">Tarih:</label>
+                <input type="text" id="admin-tarih" value="" 
+                       style="width:100%; padding:10px; border-radius:5px; border:1px solid #333; background:#222; color:#fff;">
+            </div>
+
+            <button onclick="dersiKaydet()" style="margin-top:10px; padding:12px; background:var(--yellow-portal); color:#000; font-weight:bold; border:none; border-radius:5px; cursor:pointer; width:100%;">
+                DERSİ TANIMLA VE GÖNDER
+            </button>
+            
+            <p id="admin-mesaj" style="text-align:center; margin-top:10px; font-weight:bold;"></p>
+        </div>
+    </div>
+</div>
+                
                 </div> </div> </div> </div> 
 
 <div id="imgModal" class="image-modal" onclick="if(event.target.id === 'imgModal') modalKapat()">
@@ -2265,7 +2314,7 @@ gununBilgisiniGetir();
   // 1. GEREKLİ KÜTÜPHANELERİ ÇAĞIRIYORUZ
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
   // 2. AYARLAR
   const firebaseConfig = {
@@ -2385,7 +2434,7 @@ gununBilgisiniGetir();
   const loginBtn = document.getElementById('firebaseLoginBtn');
   const emailInput = document.getElementById('emailInput');
   const passInput = document.getElementById('passwordInput');
-  
+   
   function enterKontrol(e) {
       if (e.key === "Enter") loginBtn.click();
   }
@@ -2407,6 +2456,13 @@ gununBilgisiniGetir();
                 status.innerText = "Premium Eğitim Ayrıcalığına Hoş Geldiniz.";
 
                 const girisYapanMail = userCredential.user.email;
+
+                // --- BURAYA YAPIŞTIRIYORSUN ---
+                if (typeof window.adminButonuKontrol === "function") {
+                    window.adminButonuKontrol(girisYapanMail);
+                }
+                // -----------------------------
+
                 const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
                 localStorage.setItem('aktifKullaniciMail', girisYapanMail);
 
@@ -2447,7 +2503,7 @@ gununBilgisiniGetir();
                     status.innerText = "Hata oluştu.";
                 }
             });
-      });
+      }); // <-- İŞTE UNUTULAN KAPATMA PARANTEZLERİ BURADA
   }
 
   // --- DERS KAYITLARI SİSTEMİ (Yeni Eklenen Kısım) ---
@@ -2501,6 +2557,76 @@ gununBilgisiniGetir();
         container.innerHTML = "<p style='color:red;'>Hata: " + error.message + "</p>";
     }
   }
+    // --- HOCA PANELİ FONKSİYONLARI ---
+
+// 1. Dersi Veritabanına Kaydet
+window.dersiKaydet = async function() {
+    const mail = document.getElementById("admin-ogrenci-mail").value.trim();
+    const baslik = document.getElementById("admin-ders-baslik").value.trim();
+    const url = document.getElementById("admin-video-url").value.trim();
+    const tarih = document.getElementById("admin-tarih").value;
+    const mesajKutusu = document.getElementById("admin-mesaj");
+
+    if (!mail || !baslik || !url) {
+        mesajKutusu.innerText = "Lütfen tüm alanları doldur üstadım!";
+        mesajKutusu.style.color = "red";
+        return;
+    }
+
+    mesajKutusu.innerText = "İşleniyor...";
+    mesajKutusu.style.color = "yellow";
+
+    // Drive Linkinden ID Ayıklama (Regex)
+    let videoId = "";
+    const idEslestirme = url.match(/\/d\/(.+?)\//);
+    if (idEslestirme && idEslestirme[1]) {
+        videoId = idEslestirme[1];
+    } else {
+        // Belki link değil direkt ID yapıştırmışsındır
+        videoId = url; 
+    }
+
+    try {
+        // Firestore'a Ekleme Yapıyoruz
+        await addDoc(collection(db, "ders_kayitlari"), {
+            ogrenci_mail: mail,
+            baslik: baslik,
+            video_id: videoId,
+            tarih: tarih,
+            eklenme_zamani: new Date() // Sıralama için gizli tarih
+        });
+
+        mesajKutusu.innerText = "✅ Ders başarıyla tanımlandı!";
+        mesajKutusu.style.color = "#4CAF50";
+        
+        // Formu Temizle
+        document.getElementById("admin-ders-baslik").value = "";
+        document.getElementById("admin-video-url").value = "";
+    } catch (error) {
+        console.error("Hata:", error);
+        mesajKutusu.innerText = "Hata oluştu: " + error.message;
+        mesajKutusu.style.color = "red";
+    }
+}
+
+// 2. Admin Kontrolü (Giriş yapıldığında çalışacak)
+// Mevcut giriş yapma kodunun (signInWithEmailAndPassword .then bloğunun) içine,
+// "Hoş Geldin" mesajından hemen sonrasına şu ufak kontrolü ekle:
+
+/* EĞER BU KISMI NEREYE KOYACAĞINI BULAMAZSAN, 
+   AŞAĞIDAKİ "adminButonuAc" FONKSİYONUNU EN ALTA EKLE VE
+   SAYFA YÜKLENDİĞİNDE TETİKLE.
+*/
+window.adminButonuKontrol = function(girisYapanMail) {
+    // Sadece senin mailin ise butonu göster
+    if (girisYapanMail === "brkslntss@gmail.com") {
+        document.getElementById("admin-btn").style.display = "flex";
+        // Tarih kutusuna bugünün tarihini atayalım
+        const bugun = new Date();
+        const tarihFormat = bugun.getDate() + " " + bugun.toLocaleString('default', { month: 'long' }) + " " + bugun.getFullYear();
+        document.getElementById("admin-tarih").value = tarihFormat;
+    }
+}
 </script>
 
 <script>
