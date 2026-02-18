@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
-            /* Nota Renkleri (Boomwhackers Standartlarına Yakın) */
+            /* Nota Renkleri */
             --c-do: #ff4757;  /* Kırmızı */
             --c-re: #ffa502;  /* Turuncu */
             --c-mi: #ffe100;  /* Sarı */
@@ -21,7 +21,6 @@
 
         body {
             font-family: 'Comic Neue', cursive;
-            /* HAREKETLİ GÖKKUŞAĞI ARKA PLANI */
             background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1, #fbc2eb, #8fd3f4, #84fab0);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -46,8 +45,8 @@
         /* --- MERKEZİ EKRANLAR --- */
         #start-screen, #game-over-screen {
             text-align: center;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.85);
+            padding: 50px 40px 40px 40px; /* Üstten biraz daha boşluk bıraktım */
+            background: rgba(255, 255, 255, 0.90);
             border-radius: 30px;
             backdrop-filter: blur(10px);
             border: 5px solid white;
@@ -56,13 +55,36 @@
             max-width: 500px;
             width: 90%;
             z-index: 1000;
-            position: absolute;
+            position: absolute; /* Pozisyon referansı burası */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
         }
 
         #game-over-screen { display: none; }
+
+        /* GÜNCELLENEN DİL SEÇİCİ STİLİ */
+        .lang-selector {
+            position: absolute; /* Kutunun içinde serbest pozisyon */
+            top: 15px;          /* Üstten 15px aşağı */
+            right: 15px;        /* Sağdan 15px içeri */
+            padding: 5px 10px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background: #f9f9f9;
+            color: #555;
+            outline: none;
+            transition: 0.2s;
+        }
+        .lang-selector:hover {
+            background: #fff;
+            color: #333;
+            border-color: #bbb;
+        }
 
         h1 { 
             background: linear-gradient(to right, #ff4757, #ffa502, #2ed573, #1e90ff, #a55eea, #ffffff, #00cc30);
@@ -103,7 +125,6 @@
             display: none;
         }
 
-        /* Düşen Nota Kartı */
         .falling-note {
             position: absolute;
             top: -160px;
@@ -116,10 +137,9 @@
             justify-content: center;
             align-items: center;
             z-index: 10;
-            border: 5px solid #333; /* Varsayılan sınır */
+            border: 5px solid #333;
         }
 
-        /* BUTONLAR (ALT PANEL) */
         .controls-bar {
             position: absolute;
             bottom: 30px;
@@ -152,11 +172,10 @@
             transition: 0.2s;
             font-family: 'Comic Neue', cursive;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            box-shadow: 0 8px 0 rgba(0,0,0,0.1); /* 3D Efekti */
+            box-shadow: 0 8px 0 rgba(0,0,0,0.1);
             transform: translateY(0);
         }
         
-        /* HER NOTA İÇİN ÖZEL RENK */
         .note-btn:nth-child(1) { background-color: var(--c-do); }
         .note-btn:nth-child(2) { background-color: var(--c-re); }
         .note-btn:nth-child(3) { background-color: var(--c-mi); color: #333; text-shadow: none; }
@@ -166,13 +185,9 @@
         .note-btn:nth-child(7) { background-color: var(--c-si); }
         .note-btn:nth-child(8) { background-color: var(--c-do2); }
 
-        .note-btn:active { 
-            transform: translateY(6px); 
-            box-shadow: 0 2px 0 rgba(0,0,0,0.1); 
-        }
+        .note-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 rgba(0,0,0,0.1); }
         .note-btn:hover { filter: brightness(1.1); }
 
-        /* Skor ve Can */
         .hud {
             position: absolute;
             top: 20px;
@@ -195,7 +210,6 @@
             z-index: 20;
         }
 
-        /* Müzik Butonu */
         .music-toggle {
             position: absolute;
             top: 20px;
@@ -217,7 +231,6 @@
         }
         .music-toggle:hover { transform: scale(1.1) rotate(15deg); background: var(--c-mi); }
 
-        /* Lazer Efekti - Renk JS ile gelecek */
         .laser-beam {
             position: absolute;
             bottom: 90px;
@@ -250,25 +263,32 @@
 
     <audio id="bgMusic" loop preload="auto">
         <source src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Carefree.mp3" type="audio/mpeg">
-        Tarayıcınız ses elementini desteklemiyor.
     </audio>
 
     <div id="start-screen">
+        <select class="lang-selector" onchange="changeLanguage(this.value)">
+            <option value="tr">🇹🇷 Türkçe</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="lt">🇱🇹 Lietuvių</option>
+            <option value="ru">🇷🇺 Русский</option>
+        </select>
+
         <i class="fas fa-music" style="font-size: 5rem; color: #ff4757; margin-bottom: 20px; animation: bounceIn 2s infinite;"></i>
-        <h1>Nota Yağmuru</h1>
-        <p>Yukarıdan düşen notaları renkli butonlarla yakala!<br><br><span style="color:#1e90ff; font-size:1.1rem;">Baglamagram Games</span></p>
-        <button class="btn-start" onclick="startGame()">BAŞLA</button>
+        <h1 id="txt-title">Nota Yağmuru</h1>
+        <p><span id="txt-desc">Yukarıdan düşen notaları renkli butonlarla yakala!</span><br><br><span style="color:#1e90ff; font-size:1.1rem;">Baglamagram Games</span></p>
+        <button id="btn-start" class="btn-start" onclick="startGame()">BAŞLA</button>
     </div>
 
     <div id="game-over-screen">
         <i class="fa-solid fa-star" style="font-size: 5rem; color: #f1c40f; margin-bottom: 20px;"></i>
-        <h1>Oyun Bitti!</h1>
-        <p style="font-size: 1.8rem;">Skorun: <span id="final-score-text" style="color:#e17055; font-weight:900;">0</span></p>
-        <button class="btn-start" onclick="location.reload()">TEKRAR DENE</button>
+        <h1 id="txt-over">Oyun Bitti!</h1>
+        <p style="font-size: 1.8rem;"><span id="txt-score-label">Skorun:</span> <span id="final-score-text" style="color:#e17055; font-weight:900;">0</span></p>
+        <button id="btn-retry" class="btn-start" onclick="location.reload()">TEKRAR DENE</button>
     </div>
 
     <div id="game-area">
-        <div class="hud">PUAN: <span id="score">0</span></div>
+        <div class="hud"><span id="hud-score-label">PUAN</span>: <span id="score">0</span></div>
         <div class="lives" id="lives">❤️❤️❤️</div>
         
         <button class="music-toggle" onclick="toggleMusic()">
@@ -288,6 +308,75 @@
     </div>
 
     <script>
+        // --- ÇEVİRİ VERİTABANI ---
+        const translations = {
+            tr: {
+                title: "Nota Yağmuru",
+                desc: "Yukarıdan düşen notaları renkli butonlarla yakala!",
+                start: "BAŞLA",
+                over: "Oyun Bitti!",
+                scoreLabel: "Skorun:",
+                retry: "TEKRAR DENE",
+                hudScore: "PUAN"
+            },
+            en: {
+                title: "Note Rain",
+                desc: "Catch the falling notes with colored buttons!",
+                start: "START",
+                over: "Game Over!",
+                scoreLabel: "Your Score:",
+                retry: "TRY AGAIN",
+                hudScore: "SCORE"
+            },
+            de: {
+                title: "Notenregen",
+                desc: "Fange die fallenden Noten mit den Tasten!",
+                start: "START",
+                over: "Spiel Vorbei!",
+                scoreLabel: "Dein Punktestand:",
+                retry: "NOCHMAL",
+                hudScore: "PUNKTE"
+            },
+            lt: {
+                title: "Natų Lietus",
+                desc: "Gaudyk krentančias natas spalvotais mygtukais!",
+                start: "PRADĖTI",
+                over: "Žaidimas Baigtas!",
+                scoreLabel: "Jūsų Rezultatas:",
+                retry: "BANDYTI VĖL",
+                hudScore: "TAŠKAI"
+            },
+            ru: {
+                title: "Дождь из Нот",
+                desc: "Лови падающие ноты цветными кнопками!",
+                start: "НАЧАТЬ",
+                over: "Игра Окончена!",
+                scoreLabel: "Твой Счет:",
+                retry: "ПОВТОРИТЬ",
+                hudScore: "СЧЕТ"
+            }
+        };
+
+        let currentLang = 'tr'; 
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            // Başlangıç Ekranı
+            document.getElementById('txt-title').innerText = t.title;
+            document.getElementById('txt-desc').innerText = t.desc;
+            document.getElementById('btn-start').innerText = t.start;
+            
+            // Oyun Bitti Ekranı
+            document.getElementById('txt-over').innerText = t.over;
+            document.getElementById('txt-score-label').innerText = t.scoreLabel;
+            document.getElementById('btn-retry').innerText = t.retry;
+
+            // Oyun İçi
+            updateHUD(); 
+        }
+
         const notesDB = [
             { name: "Do", y: 150, ledger: true }, 
             { name: "Re", y: 140, ledger: false },
@@ -309,7 +398,6 @@
         let activeNotes = [];
         let isGameRunning = false;
         let spawnTimeout;
-        let lastSpawnX = -200; 
 
         // Müzik Kontrolü
         const bgMusic = document.getElementById('bgMusic');
@@ -386,34 +474,24 @@
             let attempts = 0;
             let isSafe = false;
 
-            // --- YENİ ÇAKIŞMA ENGELLEME MANTIĞI ---
-            // Rastgele bir konum seç, ama diğer notalarla çarpışıyor mu kontrol et
             do {
                 randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
                 isSafe = true;
-
-                // Aktif olan tüm notaları kontrol et
                 for (let note of activeNotes) {
                     let otherX = parseFloat(note.style.left);
                     let otherY = parseFloat(note.dataset.yPos);
-
-                    // Eğer yatayda çok yakınsa (130px) VE dikeyde de henüz yeterince aşağı inmemişse (200px)
-                    // Bu yeni konum güvenli değil demektir.
                     if (Math.abs(randomX - otherX) < 130 && otherY < 180) {
                         isSafe = false;
                         break;
                     }
                 }
                 attempts++;
-            } while (!isSafe && attempts < 20); // Güvenli yer bulana kadar veya 20 deneme yapana kadar döner
+            } while (!isSafe && attempts < 20);
 
-            // Eğer 20 denemede yer bulamazsa, bu tur nota üretme (ekran çok dolu demektir)
             if (!isSafe && attempts >= 20) {
-                 // Bir sonrakini biraz daha erken dene
                  spawnTimeout = setTimeout(spawnNote, 500);
                  return; 
             }
-            // ----------------------------------------
             
             noteEl.style.left = randomX + 'px';
             noteEl.dataset.noteName = noteData.name;
@@ -445,7 +523,6 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // --- GÜNCELLENDİ: ARTIK RENK DE ALIYOR ---
         function checkInput(noteName, color) {
             if (!isGameRunning) return;
 
@@ -464,7 +541,7 @@
                 const targetNote = activeNotes[targetIndex];
                 
                 if (targetNote.dataset.noteName === noteName) {
-                    createLaser(targetNote, color); // Renk gönderiliyor
+                    createLaser(targetNote, color);
                     removeNote(targetIndex, true);
                 } else {
                     document.body.style.animation = "shake 0.3s";
@@ -482,12 +559,12 @@
             if (isHit) {
                 score += 10;
                 noteEl.style.transition = "0.2s";
-                noteEl.style.transform = "scale(1.5) rotate(10deg)"; // Vurulunca hafif dönsün
+                noteEl.style.transform = "scale(1.5) rotate(10deg)"; 
                 noteEl.style.opacity = "0";
             } else {
                 lives--;
-                noteEl.style.borderColor = "#ff4757"; // Kırmızı sınır
-                noteEl.style.backgroundColor = "#ff7675"; // Açık kırmızı arka plan
+                noteEl.style.borderColor = "#ff4757"; 
+                noteEl.style.backgroundColor = "#ff7675"; 
                 
                 if (lives <= 0) gameOver();
             }
@@ -507,14 +584,12 @@
             const left = rect.left + rect.width / 2;
             const bottom = 80; 
 
-            laser.style.left = (left - 5) + 'px'; // Lazer kalınlaştı, merkezi ayarla
+            laser.style.left = (left - 5) + 'px';
             laser.style.height = (window.innerHeight - rect.bottom - bottom + 100) + 'px'; 
             laser.style.bottom = bottom + 'px';
             
-            // --- LAZER RENGİ BUTON RENGİYLE AYNI OLSUN ---
             laser.style.backgroundColor = color;
             laser.style.boxShadow = `0 0 20px ${color}`;
-            // ----------------------------------------------
 
             document.getElementById('game-area').appendChild(laser);
 
@@ -524,7 +599,10 @@
         }
 
         function updateHUD() {
+            const label = translations[currentLang].hudScore;
+            document.getElementById('hud-score-label').innerText = label;
             document.getElementById('score').innerText = score;
+            
             let heartString = "";
             for(let i=0; i<lives; i++) heartString += "❤️";
             document.getElementById('lives').innerText = heartString;
