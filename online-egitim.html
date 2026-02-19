@@ -2499,8 +2499,8 @@ gununBilgisiniGetir();
           const rememberMe = document.getElementById('rememberMe').checked;
           const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
 
-          status.style.color = "yellow";
-          status.innerText = "Giriş yapılıyor...";
+          status.style.color = "green";
+          status.innerText = "Premium Eğitim Ayrıcalığına Hoş Geldiniz.";
 
           // Önce Kalıcılık Ayarını Yap, Sonra Giriş Yap
           setPersistence(auth, persistenceType)
