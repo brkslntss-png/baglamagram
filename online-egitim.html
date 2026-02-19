@@ -703,6 +703,10 @@
                         </a>
                     </div>
 
+<a onclick="cikisYap()" class="menu-link" style="color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); margin-top: 15px;">
+    <i class="fas fa-sign-out-alt"></i> <span>GÜVENLİ ÇIKIŞ</span>
+</a>
+                    
                     <a href="https://wa.me/905335060921" target="_blank" class="whatsapp-sidebar-btn">
                         <i class="fab fa-whatsapp"></i> <span data-translate="portal_menu_whatsapp">Danışma</span>
                     </a>
@@ -2318,7 +2322,7 @@ gununBilgisiniGetir();
 <script type="module">
   // 1. GEREKLİ KÜTÜPHANELERİ ÇAĞIRIYORUZ
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence, browserSessionPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence, browserSessionPersistence, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
   // 2. AYARLAR
@@ -2681,6 +2685,17 @@ window.adminButonuKontrol = function(girisYapanMail) {
         const bugun = new Date();
         const tarihFormat = bugun.getDate() + " " + bugun.toLocaleString('default', { month: 'long' }) + " " + bugun.getFullYear();
         document.getElementById("admin-tarih").value = tarihFormat;
+    }
+}
+    // --- ÇIKIŞ YAPMA FONKSİYONU ---
+window.cikisYap = function() {
+    if(confirm("Güvenli çıkışı onaylıyor musunuz?")) {
+        signOut(auth).then(() => {
+            // Çıkış başarılı, sayfayı yenile (Login ekranı otomatik gelir)
+            location.reload();
+        }).catch((error) => {
+            console.error("Çıkış hatası:", error);
+        });
     }
 }
 </script>
