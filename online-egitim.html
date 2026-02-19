@@ -1845,80 +1845,95 @@ const solfejNotalariListesi = [
         });
 
         async function sendMessage() {
-            const input = document.getElementById("aiUserInput");
-            const box = document.getElementById("aiChatBox");
-            const msgText = input.value.trim();
-            
-            if(msgText === "" && !selectedImageBase64) return;
+    const input = document.getElementById("aiUserInput");
+    const box = document.getElementById("aiChatBox");
+    const msgText = input.value.trim();
+    
+    // Mesaj veya resim yoksa gönderme
+    if(msgText === "" && !selectedImageBase64) return;
 
-            const userMsg = document.createElement("div");
-            userMsg.className = "chat-message user";
-            
-            let userContent = "";
-            if (selectedImageBase64) {
-                userContent += `<img src="${selectedImageBase64}" style="max-width:200px; display:block; margin-bottom:5px;">`;
-            }
-            if (msgText) {
-                userContent += `<strong>Sen:</strong><br>${msgText}`;
-            }
-            userMsg.innerHTML = userContent;
-            box.appendChild(userMsg);
-            
-            input.value = "";
-            const imageToSend = selectedImageBase64;
-            
-            selectedImageBase64 = null;
-            document.getElementById('fileInput').value = "";
-            document.getElementById('imagePreviewContainer').style.display = 'none';
-            
-            box.scrollTop = box.scrollHeight;
+    // 1. Kullanıcı Mesajını Ekrana Ekle
+    const userMsg = document.createElement("div");
+    userMsg.className = "chat-message user";
+    
+    let userContent = "";
+    if (selectedImageBase64) {
+        userContent += `<img src="${selectedImageBase64}" style="max-width:200px; display:block; margin-bottom:5px; border-radius:10px;">`;
+    }
+    if (msgText) {
+        userContent += `<strong>Sen:</strong><br>${msgText}`;
+    }
+    userMsg.innerHTML = userContent;
+    box.appendChild(userMsg);
+    
+    // Değişkenleri ve Önizlemeyi Sıfırla
+    const imageToSend = selectedImageBase64;
+    input.value = "";
+    selectedImageBase64 = null;
+    document.getElementById('fileInput').value = "";
+    document.getElementById('imagePreviewContainer').style.display = 'none';
+    
+    box.scrollTop = box.scrollHeight;
 
-            const loadingBubble = document.createElement("div");
-            loadingBubble.className = "chat-message ai";
-            loadingBubble.id = "loadingBubble";
-            loadingBubble.innerHTML = "<em>Burak Hoca düşünüyor...</em>";
-            box.appendChild(loadingBubble);
-            box.scrollTop = box.scrollHeight;
+    // 2. "Düşünüyor" Baloncuğunu Ekle
+    const loadingBubble = document.createElement("div");
+    loadingBubble.className = "chat-message ai";
+    loadingBubble.id = "loadingBubble";
+    loadingBubble.innerHTML = "<em>Burak Hoca düşünüyor...</em>";
+    box.appendChild(loadingBubble);
+    box.scrollTop = box.scrollHeight;
 
-            try {
-                const response = await fetch('https://baglamagram.vercel.app/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        message: msgText || "Şu gönderdiğim görsele bir bak hocam.", 
-                        image: imageToSend 
-                    })
-                });
+    try {
+        // 3. API'ye Gönder
+        const response = await fetch('https://baglamagram.vercel.app/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                message: msgText || "Şu gönderdiğim görsele bir bak hocam.", 
+                image: imageToSend 
+            })
+        });
 
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.reply || errorData.error || `Sunucu Hatası: ${response.status}`);
-                }
-
-                const data = await response.json();
-                document.getElementById("loadingBubble").remove();
-                
-                const aiMsg = document.createElement("div");
-                aiMsg.className = "chat-message ai";
-                
-                if (data.reply && (data.reply.includes("HATA") || data.reply.includes("Hatası"))) {
-                        aiMsg.style.color = "red";
-                }
-                
-                lastAiResponse = data.reply;
-
-                aiMsg.innerHTML = "<strong style='color: var(--accent); font-family: \"Playfair Display\", serif;'>BurakAI Hoca:</strong><br>" + (data.reply ? data.reply.replace(/\n/g, "<br>") : "Cevap boş geldi.");
-                box.appendChild(aiMsg);
-
-            } catch (err) {
-                const bubble = document.getElementById("loadingBubble");
-                if(bubble) bubble.innerHTML = "Ağ Hatası (İnternetini kontrol et): " + err.message;
-                console.error(err);
-            }
-            
-            box.scrollTop = box.scrollHeight;
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.reply || errorData.error || `Sunucu Hatası: ${response.status}`);
         }
 
+        const data = await response.json();
+        
+        // Yükleme balonunu kaldır
+        document.getElementById("loadingBubble").remove();
+        
+        // 4. CEVABI SESLİ OKU (Otomatik Konuşma)
+        if (data.reply) {
+            metniSeslendir(data.reply);
+        }
+
+        // 5. AI Mesajını Ekrana Yazdır
+        lastAiResponse = data.reply;
+        const aiMsg = document.createElement("div");
+        aiMsg.className = "chat-message ai";
+        
+        // Hata kontrolü (Kırmızı yazı için)
+        if (data.reply && (data.reply.includes("HATA") || data.reply.includes("Hatası"))) {
+            aiMsg.style.color = "#ff4d4d";
+        }
+        
+        aiMsg.innerHTML = "<strong style='color: var(--accent); font-family: \"Playfair Display\", serif;'>BurakAI Hoca:</strong><br>" + 
+                         (data.reply ? data.reply.replace(/\n/g, "<br>") : "Cevap boş geldi.");
+        box.appendChild(aiMsg);
+
+    } catch (err) {
+        const bubble = document.getElementById("loadingBubble");
+        if(bubble) {
+            bubble.style.color = "#ff4d4d";
+            bubble.innerHTML = "<strong>Sistem Hatası:</strong> " + err.message;
+        }
+        console.error("Chat Hatası:", err);
+    }
+    
+    box.scrollTop = box.scrollHeight;
+}
         // --- METRONOM MANTIĞI (BUG FİXLENDİ) ---
         let audioCtx = null;
         let isPlaying = false;
