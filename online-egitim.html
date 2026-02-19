@@ -1456,7 +1456,6 @@ document.addEventListener('fullscreenchange', (event) => {
 
             
     
-            // Yeni eklerken: 4: { id: "...", ad: "..." },
         };
 
         // --- 2. DERS NOTLARI LİSTESİ ---
@@ -1505,6 +1504,33 @@ document.addEventListener('fullscreenchange', (event) => {
             { ad: "4 Parmak Etüdü 1", dosya: "4-parmak-etutdu1.png" },
             { ad: "4 Parmak Etüdü 2", dosya: "4-parmak-etudu2.png" }
         ];
+
+       // --- SOLFEJ NOTALARI LİSTESİ ---
+const solfejNotalariListesi = [
+    // DİĞER MAKAMLAR (BAŞLANGIÇ)
+    { ad: "Solfej 1 - Hicaz Solfej", link: "https://i.hizliresim.com/nhe54a9.png" },
+    { ad: "Solfej 2 - Hüseyni Solfej", link: "https://i.hizliresim.com/fa7b8y6.png" },
+    { ad: "Solfej 3 - Rast Solfej", link: "https://i.hizliresim.com/95vwuid.png" },
+    
+    // SABA MAKAMI
+    { ad: "Solfej 4 - Saba Seyir", link: "https://i.hizliresim.com/sqgxln6.png" },
+    { ad: "Solfej 5 - Saba Seyir 2", link: "https://i.hizliresim.com/12h17q7.png" },
+    { ad: "Solfej 6 - Saba Peşrev", link: "https://i.hizliresim.com/dkgvnuh.png" },
+    { ad: "Solfej 7 - Saba Peşrev 2", link: "https://i.hizliresim.com/6ovw7tc.png" },
+    
+    // SEGAH MAKAMI
+    { ad: "Solfej 8 - Segah Peşrev", link: "https://i.hizliresim.com/f1vlh03.png" },
+    { ad: "Solfej 9 - Segah Şarkı", link: "https://i.hizliresim.com/ttiobux.png" },
+    { ad: "Solfej 10 - Segah Şarkı 2", link: "https://i.hizliresim.com/mrjqkhq.png" },
+    { ad: "Solfej 11 - Segah Türkü", link: "https://i.hizliresim.com/n5ni2mb.png" },
+    
+    // KÜRDİLİHİCAZKAR MAKAMI
+    { ad: "Solfej 12 - Kürdilihicazkar Peşrev", link: "https://i.hizliresim.com/n0j46q6.png" },
+    { ad: "Solfej 13 - Kürdilihicazkar Şarkı 1", link: "https://i.hizliresim.com/d6t9xe8.png" },
+    { ad: "Solfej 14 - Kürdilihicazkar Şarkı 2", link: "https://i.hizliresim.com/lnqm7s2.png" },
+    { ad: "Solfej 15 - Kürdilihicazkar Şarkı 3", link: "https://i.hizliresim.com/eqjg88n.png" },
+    { ad: "Solfej 16 - Kürdilihicazkar Şarkı 4", link: "https://i.hizliresim.com/mek2er3.png" }
+];
 
         function menuyuAcKapa() { document.getElementById("anaMenu").classList.toggle("aktif"); }
         function toggleSidebar() { document.getElementById("sidebar").classList.toggle("collapsed"); }
@@ -1560,40 +1586,50 @@ document.addEventListener('fullscreenchange', (event) => {
         }
 
         function yetenekKategoriAc(kategoriAdi) {
-            document.getElementById("exam-list-title").innerText = kategoriAdi;
-            const listeContainer = document.getElementById("exam-list-container");
-            listeContainer.innerHTML = "";
-            
-            if (kategoriAdi === "Dikte Soruları") {
-                for (let i = 1; i <= 22; i++) {
-                    if (i === 18) continue;
-                    let driveId = dikteVerileri[i] || ""; 
-                    listeContainer.innerHTML += `<div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', 'Çalışma ${i}')"><span style="color:#fff; font-weight:500;">Çalışma ${i}</span><i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i></div>`;
-                }
-            } else if (kategoriAdi === "Çift Ses Tekrarı Soruları") {
-                const toplamSoru = Object.keys(ciftSesVerileri).length;
-                
-                if (toplamSoru === 0) {
-                    listeContainer.innerHTML = "<p style='color:#888;'>Bu kategoride henüz içerik yok.</p>";
-                } else {
-                    for (let i = 1; i <= toplamSoru; i++) {
-                        // Veriyi artık obje olarak çekiyoruz
-                        let veri = ciftSesVerileri[i] || { id: "", ad: "Bilinmeyen Çalışma" };
-                        
-                        // Hem ID'yi hem de ADI buradan alıp fonksiyona gönderiyoruz
-                        listeContainer.innerHTML += `
-                        <div class="exam-row" onclick="ciftSesDetayAc(${i}, '${veri.id}', '${veri.ad}')">
-                            <span style="color:#fff; font-weight:500;">${veri.ad}</span>
-                            <i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i>
-                        </div>`;
-                    }
-                }
-            } else {
-                listeContainer.innerHTML = "<p style='color:#888;'>Bu kategoride henüz içerik yok.</p>";
-            }
-            sayfaGoster("exam-list-view");
+    document.getElementById("exam-list-title").innerText = kategoriAdi;
+    const listeContainer = document.getElementById("exam-list-container");
+    listeContainer.innerHTML = "";
+    
+    if (kategoriAdi === "Dikte Soruları") {
+        for (let i = 1; i <= 22; i++) {
+            if (i === 18) continue;
+            let driveId = dikteVerileri[i] || ""; 
+            listeContainer.innerHTML += `<div class="exam-row" onclick="dikteDetayAc(${i}, '${driveId}', 'Çalışma ${i}')"><span style="color:#fff; font-weight:500;">Çalışma ${i}</span><i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i></div>`;
         }
-
+    } 
+    // --- SOLFEJ NOTALARI KONTROLÜ BAŞLANGIÇ ---
+    else if (kategoriAdi === "Solfej Notaları") {
+        if (solfejNotalariListesi.length === 0) {
+            listeContainer.innerHTML = "<p style='color:#888; padding:20px;'>Henüz nota yüklenmedi.</p>";
+        } else {
+            solfejNotalariListesi.forEach(item => {
+                listeContainer.innerHTML += `
+                    <div class="exam-row" onclick="resimGosterModal('${item.link}')">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-file-invoice" style="color:var(--yellow-portal);"></i>
+                            <span style="color:#fff; font-weight:500;">${item.ad}</span>
+                        </div>
+                        <i class="fas fa-search-plus" style="color:var(--accent);"></i>
+                    </div>`;
+            });
+        }
+    }
+    // --- SOLFEJ NOTALARI KONTROLÜ BİTİŞ ---
+    else if (kategoriAdi === "Çift Ses Tekrarı Soruları") {
+        const toplamSoru = Object.keys(ciftSesVerileri).length;
+        for (let i = 1; i <= toplamSoru; i++) {
+            let veri = ciftSesVerileri[i] || { id: "", ad: "Bilinmeyen Çalışma" };
+            listeContainer.innerHTML += `
+                <div class="exam-row" onclick="ciftSesDetayAc(${i}, '${veri.id}', '${veri.ad}')">
+                    <span style="color:#fff; font-weight:500;">${veri.ad}</span>
+                    <i class="fas fa-chevron-right" style="color:var(--yellow-portal);"></i>
+                </div>`;
+        }
+    } else {
+        listeContainer.innerHTML = "<p style='color:#888;'>Bu kategoride henüz içerik yok.</p>";
+    }
+    sayfaGoster("exam-list-view");
+}
         function dikteDetayAc(no, audioId, baslik) {
             document.getElementById("exam-detail-title").innerText = baslik;
             
