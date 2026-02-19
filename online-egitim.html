@@ -579,10 +579,15 @@
     
     <input type="password" id="passwordInput" data-translate-placeholder="login_pass_placeholder" placeholder="Şifreniz" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
     
-    <div style="text-align: right; margin-bottom: 20px;">
+    <div style="text-align: right; margin-bottom: 15px;">
         <span onclick="sifreSifirla()" style="color: #bbb; cursor: pointer; font-size: 0.85rem; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#bbb'" data-translate="login_forgot_pass">
             Şifremi Unuttum
         </span>
+    </div>
+
+    <div style="text-align: left; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; padding-left: 5px;">
+        <input type="checkbox" id="rememberMe" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer; accent-color: var(--accent);">
+        <label for="rememberMe" style="color: #ccc; font-size: 0.9rem; cursor: pointer; user-select: none;">Beni Hatırla</label>
     </div>
 
     <button id="firebaseLoginBtn" class="btn" style="width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 12px;" data-translate="login_btn">GİRİŞ YAP</button>
@@ -2313,7 +2318,7 @@ gununBilgisiniGetir();
 <script type="module">
   // 1. GEREKLİ KÜTÜPHANELERİ ÇAĞIRIYORUZ
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, setPersistence, browserLocalPersistence, browserSessionPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
   // 2. AYARLAR
@@ -2441,32 +2446,84 @@ gununBilgisiniGetir();
   if(emailInput) emailInput.addEventListener("keyup", enterKontrol);
   if(passInput) passInput.addEventListener("keyup", enterKontrol);
 
+  // 1. SAYFA YÜKLENDİĞİNDE OTOMATİK KONTROL (BENİ HATIRLA İÇİN)
+  onAuthStateChanged(auth, (user) => {
+      if (user) {
+          // Eğer kullanıcı zaten giriş yapmışsa, login ekranını gösterme, direkt portala al
+          console.log("Kullanıcı zaten giriş yapmış:", user.email);
+          
+          // Hoca Paneli Butonu Kontrolü
+          if (typeof window.adminButonuKontrol === "function") {
+              window.adminButonuKontrol(user.email);
+          }
+
+          // Arayüzü Ayarla
+          document.getElementById("login-overlay").style.display = "none";
+          document.getElementById("portal-entry-btn-section").style.display = "none";
+          document.getElementById("public-content").style.display = "none";
+          document.getElementById("student-portal").style.display = "block";
+          document.body.classList.add("portal-active");
+
+          // İsim Soyisim Doldurma
+          const sifreliMail = window.btoa(unescape(encodeURIComponent(user.email)));
+          let ogrenci = ogrenciListesi[sifreliMail];
+          
+          if (ogrenci) {
+                document.getElementById("displayAd").innerText = sifreCo(ogrenci.ad);
+                document.getElementById("displaySoyad").innerText = sifreCo(ogrenci.soyad);
+                document.getElementById("welcomeTitle").innerText = "Tekrar Hoş Geldin, " + sifreCo(ogrenci.ad) + "!";
+            } else {
+                document.getElementById("displayAd").innerText = user.email.split('@')[0];
+                document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
+                document.getElementById("welcomeTitle").innerText = "Tekrar Hoş Geldin!";
+            }
+
+            // Profil Fotosunu Çek
+            const userRef = doc(db, "kullanicilar", user.email);
+            getDoc(userRef).then((docSnap) => {
+                if (docSnap.exists() && docSnap.data().profil_fotosu) {
+                    document.getElementById('userAvatar').src = docSnap.data().profil_fotosu;
+                }
+            });
+      }
+  });
+
+  // 2. GİRİŞ BUTONUNA TIKLANINCA
   if(loginBtn) {
       loginBtn.addEventListener('click', () => {
           const email = emailInput.value;
           const pass = passInput.value;
           const status = document.getElementById('loginStatus');
+          
+          // Beni Hatırla Kutucuğu Kontrolü
+          const rememberMe = document.getElementById('rememberMe').checked;
+          const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
 
           status.style.color = "yellow";
-          status.innerText = "Bilgiler kontrol ediliyor...";
+          status.innerText = "Giriş yapılıyor...";
 
-          signInWithEmailAndPassword(auth, email, pass)
+          // Önce Kalıcılık Ayarını Yap, Sonra Giriş Yap
+          setPersistence(auth, persistenceType)
+            .then(() => {
+                return signInWithEmailAndPassword(auth, email, pass);
+            })
             .then((userCredential) => {
                 status.style.color = "#4CAF50"; 
-                status.innerText = "Premium Eğitim Ayrıcalığına Hoş Geldiniz.";
+                status.innerText = "Başarılı! Yönlendiriliyorsunuz...";
 
                 const girisYapanMail = userCredential.user.email;
 
-                // --- BURAYA YAPIŞTIRIYORSUN ---
+                // Admin kontrolü
                 if (typeof window.adminButonuKontrol === "function") {
                     window.adminButonuKontrol(girisYapanMail);
                 }
-                // -----------------------------
 
                 const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
                 localStorage.setItem('aktifKullaniciMail', girisYapanMail);
 
                 setTimeout(() => {
+                    // Sayfa yönlendirmeleri onAuthStateChanged tarafından da yapılabilir ama
+                    // ilk giriş anında burası daha hızlı tepki verir.
                     document.getElementById("login-overlay").style.display = "none";
                     document.getElementById("portal-entry-btn-section").style.display = "none";
                     document.getElementById("public-content").style.display = "none";
@@ -2492,7 +2549,7 @@ gununBilgisiniGetir();
                     });
                     
                     history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
-                }, 1500);
+                }, 1000);
             })
             .catch((error) => {
                 status.style.color = "#ff4d4d";
@@ -2500,12 +2557,11 @@ gununBilgisiniGetir();
                 if (error.code === "auth/invalid-credential") {
                     status.innerText = "E-posta veya şifre hatalı!";
                 } else {
-                    status.innerText = "Hata oluştu.";
+                    status.innerText = "Hata oluştu: " + error.code;
                 }
             });
-      }); // <-- İŞTE UNUTULAN KAPATMA PARANTEZLERİ BURADA
+      });
   }
-
   // --- DERS KAYITLARI SİSTEMİ (Yeni Eklenen Kısım) ---
   
   // 1. DERS VİDEOSU AÇAN FONKSİYON (Görüntü Boyutunu Ayarlar)
