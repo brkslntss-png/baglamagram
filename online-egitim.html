@@ -410,7 +410,19 @@
         .ai-badge { position: absolute; top: 15px; right: 15px; background: var(--ai-purple); color: white; font-size: 0.65rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; z-index: 2; box-shadow: 0 0 10px rgba(157, 78, 221, 0.5); }
 
         .chat-container { display: flex; flex-direction: column; height: 65vh; border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(10px); }
-        .chat-box { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+        .chat-box {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* --- ARKA PLAN AYARLARI --- */
+    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://i.hizliresim.com/8227p40.png'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: local; /* Mesajlarla birlikte kaymaması için */
+}
         .chat-message { max-width: 75%; padding: 15px 20px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .chat-message.ai { align-self: flex-start; background: rgba(40, 40, 40, 0.9); border-bottom-left-radius: 2px; color: #eee; border: 1px solid rgba(255,255,255,0.05); }
         .chat-message.ai strong { color: var(--yellow-portal); }
