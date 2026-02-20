@@ -812,8 +812,8 @@ const tumSorular = [
     },
     {
         "soru": "Elektronik gitarda sesi yükseltmeye yarayan cihaza ne denir?",
-        "secenekler": ["Amfi (Amplifikatör)", "Ekolayzer", "Pedal", "Mikser"],
-        "dogru": "Amfi (Amplifikatör)"
+        "secenekler": ["Amfi", "Ekolayzer", "Pedal", "Mikser"],
+        "dogru": "Amfi"
     },
     {
         "soru": "\"Çardaş\" (Czardas) hangi ülkenin geleneksel dans müziğidir?",
