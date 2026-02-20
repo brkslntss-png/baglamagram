@@ -2365,14 +2365,33 @@ const solfejNotalariListesi = [
     ];
 
     function gununBilgisiniGetir() {
-        const bilgiKutusu = document.getElementById("gunun-bilgisi");
-        if(bilgiKutusu) {
-            // Rastgele bir sayı seç
-            const rastgeleSayi = Math.floor(Math.random() * muzikBilgileri.length);
-            // O sayıya denk gelen bilgiyi yazdır
-            bilgiKutusu.innerText = '"' + muzikBilgileri[rastgeleSayi] + '"';
+    const bilgiKutusu = document.getElementById("gunun-bilgisi");
+    if(bilgiKutusu) {
+        // 1. LocalStorage'dan daha önce kaydedilmiş sırayı al
+        let gosterilecekDizi = JSON.parse(localStorage.getItem('muzikBilgileriSira'));
+
+        // 2. Eğer daha önce kaydedilmiş bir sıra yoksa veya dizideki tüm bilgiler bittiyse yeni bir sıra oluştur
+        if (!gosterilecekDizi || gosterilecekDizi.length === 0) {
+            // 0'dan muzikBilgileri uzunluğuna kadar bir sayı dizisi oluştur
+            gosterilecekDizi = Array.from({length: muzikBilgileri.length}, (_, i) => i);
+            
+            // Diziyi rastgele karıştır (Fisher-Yates Shuffle algoritması)
+            for (let i = gosterilecekDizi.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [gosterilecekDizi[i], gosterilecekDizi[j]] = [gosterilecekDizi[j], gosterilecekDizi[i]];
+            }
         }
+
+        // 3. Karıştırılmış dizinin en sonundaki sayıyı al (ve listeden çıkar)
+        const secilenIndex = gosterilecekDizi.pop();
+
+        // 4. Eksilmiş yeni listeyi tekrar LocalStorage'a kaydet ki bir sonraki girişte kaldığı yerden devam etsin
+        localStorage.setItem('muzikBilgileriSira', JSON.stringify(gosterilecekDizi));
+
+        // 5. Seçilen bilgiyi ekrana yazdır
+        bilgiKutusu.innerText = '"' + muzikBilgileri[secilenIndex] + '"';
     }
+}
 
         document.addEventListener('DOMContentLoaded', () => {
             createDots(); 
