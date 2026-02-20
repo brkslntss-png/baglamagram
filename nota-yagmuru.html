@@ -470,29 +470,28 @@
 
             const minX = 20;
             const maxX = window.innerWidth - 140; 
-            let randomX;
-            let attempts = 0;
-            let isSafe = false;
 
-            do {
-                randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
-                isSafe = true;
-                for (let note of activeNotes) {
-                    let otherX = parseFloat(note.style.left);
-                    let otherY = parseFloat(note.dataset.yPos);
-                    if (Math.abs(randomX - otherX) < 130 && otherY < 180) {
-                        isSafe = false;
-                        break;
-                    }
+            // YENİ MANTIK: Dikey mesafe kontrolü
+            let isVerticallySafe = true;
+            for (let note of activeNotes) {
+                let otherY = parseFloat(note.dataset.yPos);
+                // Notalar -160'dan düşmeye başlıyor. 
+                // Eğer bir nota henüz Y = 80 hizasını geçmediyse yeni nota çıkarma.
+                // Notaların arasını daha da açmak isterseniz bu '80' sayısını büyütebilirsiniz (Örn: 150).
+                if (otherY < 80) { 
+                    isVerticallySafe = false;
+                    break;
                 }
-                attempts++;
-            } while (!isSafe && attempts < 20);
-
-            if (!isSafe && attempts >= 20) {
-                 spawnTimeout = setTimeout(spawnNote, 500);
-                 return; 
             }
-            
+
+            if (!isVerticallySafe) {
+                // Yeterli dikey boşluk oluşana kadar bekle ve döngüyü tekrarla
+                spawnTimeout = setTimeout(spawnNote, 300);
+                return; 
+            }
+
+            // Dikey boşluk uygunsa, yatayda tamamen rastgele bir X koordinatı belirle
+            let randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
             noteEl.style.left = randomX + 'px';
             noteEl.dataset.noteName = noteData.name;
             noteEl.dataset.yPos = -160; 
