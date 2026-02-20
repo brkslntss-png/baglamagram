@@ -2539,11 +2539,11 @@ gununBilgisiniGetir();
           if (ogrenci) {
                 document.getElementById("displayAd").innerText = sifreCo(ogrenci.ad);
                 document.getElementById("displaySoyad").innerText = sifreCo(ogrenci.soyad);
-                document.getElementById("welcomeTitle").innerText = "Tekrar Hoş Geldin, " + sifreCo(ogrenci.ad) + "!";
+                document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + sifreCo(ogrenci.ad) + "!";
             } else {
                 document.getElementById("displayAd").innerText = user.email.split('@')[0];
                 document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
-                document.getElementById("welcomeTitle").innerText = "Tekrar Hoş Geldin!";
+                document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
             }
 
             // Profil Fotosunu Çek
