@@ -1700,18 +1700,19 @@ const solfejNotalariListesi = [
         function modalKapat() { document.getElementById("imgModal").style.display = "none"; }
 
         function startLiveClass() {
-            // Whereby Oda Linki
-            const myRoomUrl = "https://whereby.com/baglamagram"; 
-            const frame = document.getElementById('whereby-frame');
-            
-            // Linki sadece boşsa yükle (Sayfa yenilenmesini önler)
-            if(frame.src === "" || !frame.src.includes("whereby.com")) {
-                frame.src = myRoomUrl + "?embed&minimal&background=off&chat=on"; 
-            }
-            
-            sayfaGoster('live-class-view');
-        }
-
+    // Whereby Oda Linki
+    const myRoomUrl = "https://whereby.com/baglamagram"; 
+    const frame = document.getElementById('whereby-frame');
+    
+    // Linki sadece boşsa yükle (Sayfa yenilenmesini önler)
+    if(frame.src === "" || !frame.src.includes("whereby.com")) {
+        // background=off parametresi kaldırıldı
+        frame.src = myRoomUrl + "?embed&minimal&chat=on"; 
+    }
+    
+    sayfaGoster('live-class-view');
+}
+       
         // --- PROFİL FOTOĞRAFI YÜKLEME (GÜNCELLENMİŞ SIKIŞTIRMALI VERSİYON) ---
         // Bu versiyon sadece ÖNİZLEME yapar. Veritabanına kaydetme işini Module Script halleder.
         // Hata vermemesi için auth/db kodları buradan çıkarılmıştır.
