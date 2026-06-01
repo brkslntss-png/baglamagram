@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nota Yağmuru - Rengarenk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --c-do: #ff4757;
+            --c-re: #ffa502;
+            --c-mi: #ffe100;
+            --c-fa: #2ed573;
+            --c-sol: #1e90ff;
+            --c-la: #3742fa;
+            --c-si: #a55eea;
+            --c-do2: #ff4757;
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            /* Mobilde portrait açılsa bile landscape gibi davran */
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1, #fbc2eb, #8fd3f4, #84fab0);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            overflow: hidden;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- MERKEZİ EKRANLAR --- */
+        #start-screen, #game-over-screen {
+            text-align: center;
+            padding: 30px 30px 30px 30px;
+            background: rgba(255, 255, 255, 0.90);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            border: 4px solid white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            animation: bounceIn 0.8s;
+            max-width: 420px;
+            width: 85%;
+            z-index: 1000;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #game-over-screen { display: none; }
+
+        .lang-selector {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-family: 'Comic Neue', cursive;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: #f9f9f9;
+            color: #555;
+            outline: none;
+            transition: 0.2s;
+        }
+        .lang-selector:hover { background: #fff; color: #333; border-color: #bbb; }
+
+        h1 {
+            background: linear-gradient(to right, #ff4757, #ffa502, #2ed573, #1e90ff, #a55eea, #ffffff, #00cc30);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 8px 0 10px;
+            font-size: 2.6rem;
+            letter-spacing: 2px;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
+        }
+        p { color: #555; margin-bottom: 20px; font-size: 1.1rem; font-weight: bold; }
+
+        .btn-start {
+            background: #333;
+            color: white;
+            border: 3px solid white;
+            padding: 12px 40px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 900;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+            font-family: 'Comic Neue', cursive;
+        }
+        .btn-start:hover { transform: scale(1.1) rotate(-2deg); background: #ff4757; }
+
+        /* --- OYUN ALANI --- */
+        #game-area {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: none;
+        }
+
+        .falling-note {
+            position: absolute;
+            top: -160px;
+            width: 100px;
+            height: 125px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border: 4px solid #333;
+        }
+
+        .controls-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255,255,255,0.6);
+            padding: 14px 22px;
+            border-radius: 50px;
+            backdrop-filter: blur(15px);
+            border: 3px solid white;
+            width: auto;
+            max-width: 98%;
+            justify-content: center;
+            flex-wrap: nowrap;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .note-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 3px solid white;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: 'Comic Neue', cursive;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.1);
+            transform: translateY(0);
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .note-btn:nth-child(1) { background-color: var(--c-do); }
+        .note-btn:nth-child(2) { background-color: var(--c-re); }
+        .note-btn:nth-child(3) { background-color: var(--c-mi); color: #333; text-shadow: none; }
+        .note-btn:nth-child(4) { background-color: var(--c-fa); }
+        .note-btn:nth-child(5) { background-color: var(--c-sol); }
+        .note-btn:nth-child(6) { background-color: var(--c-la); }
+        .note-btn:nth-child(7) { background-color: var(--c-si); }
+
+        .note-btn:active { transform: translateY(5px); box-shadow: 0 1px 0 rgba(0,0,0,0.1); }
+
+        .hud {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-size: 1.3rem;
+            color: #333;
+            z-index: 20;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 24px;
+            border: 2px solid #eee;
+            font-weight: 900;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .lives {
+            position: absolute;
+            top: 16px;
+            right: 76px;
+            font-size: 1.6rem;
+            z-index: 20;
+        }
+
+        .music-toggle {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #eee;
+            color: #333;
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .music-toggle:active { transform: scale(0.9); background: var(--c-mi); }
+
+        .laser-beam {
+            position: absolute;
+            bottom: 90px;
+            width: 8px;
+            background: white;
+            height: 0;
+            z-index: 5;
+            transition: height 0.1s;
+            border-radius: 8px;
+            opacity: 0.8;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+            70% { transform: translate(-50%, -50%) scale(0.9); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Carefree.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="start-screen">
+        <select class="lang-selector" onchange="changeLanguage(this.value)">
+            <option value="tr">🇹🇷 Türkçe</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="lt">🇱🇹 Lietuvių</option>
+            <option value="ru">🇷🇺 Русский</option>
+        </select>
+
+        <i class="fas fa-music" style="font-size: 4rem; color: #ff4757; margin-bottom: 10px; display:block;"></i>
+        <h1 id="txt-title">Nota Yağmuru</h1>
+        <p><span id="txt-desc">Yukarıdan düşen notaları renkli butonlarla yakala!</span><br><br><span style="color:#1e90ff; font-size:1rem;">Baglamagram Games</span></p>
+        <button id="btn-start" class="btn-start" onclick="startGame()">BAŞLA</button>
+    </div>
+
+    <div id="game-over-screen">
+        <i class="fa-solid fa-star" style="font-size: 4rem; color: #f1c40f; margin-bottom: 10px; display:block;"></i>
+        <h1 id="txt-over">Oyun Bitti!</h1>
+        <p style="font-size: 1.5rem;"><span id="txt-score-label">Skorun:</span> <span id="final-score-text" style="color:#e17055; font-weight:900;">0</span></p>
+        <button id="btn-retry" class="btn-start" onclick="location.reload()">TEKRAR DENE</button>
+    </div>
+
+    <div id="game-area">
+        <div class="hud"><span id="hud-score-label">PUAN</span>: <span id="score">0</span></div>
+        <div class="lives" id="lives">❤️❤️❤️</div>
+
+        <button class="music-toggle" onclick="toggleMusic()">
+            <i class="fas fa-volume-up" id="musicIcon"></i>
+        </button>
+
+        <div class="controls-bar">
+            <button class="note-btn" ontouchstart="handleInput(event,'Do','#ff4757')" onmousedown="handleInput(event,'Do','#ff4757')">DO</button>
+            <button class="note-btn" ontouchstart="handleInput(event,'Re','#ffa502')" onmousedown="handleInput(event,'Re','#ffa502')">RE</button>
+            <button class="note-btn" ontouchstart="handleInput(event,'Mi','#ffe100')" onmousedown="handleInput(event,'Mi','#ffe100')">Mİ</button>
+            <button class="note-btn" ontouchstart="handleInput(event,'Fa','#2ed573')" onmousedown="handleInput(event,'Fa','#2ed573')">FA</button>
+            <button class="note-btn" ontouchstart="handleInput(event,'Sol','#1e90ff')" onmousedown="handleInput(event,'Sol','#1e90ff')">SOL</button>
+            <button class="note-btn" ontouchstart="handleInput(event,'La','#3742fa')" onmousedown="handleInput(event,'La','#3742fa')">LA</button>
+            <button class="note-btn" ontouchstart="handleInput(event,'Si','#a55eea')" onmousedown="handleInput(event,'Si','#a55eea')">Sİ</button>
+        </div>
+    </div>
+
+    <script>
+        // Touch olaylarında çift tetiklenmeyi önle
+        function handleInput(e, noteName, color) {
+            e.preventDefault();
+            checkInput(noteName, color);
+        }
+
+        const translations = {
+            tr: { title:"Nota Yağmuru", desc:"Yukarıdan düşen notaları renkli butonlarla yakala!", start:"BAŞLA", over:"Oyun Bitti!", scoreLabel:"Skorun:", retry:"TEKRAR DENE", hudScore:"PUAN" },
+            en: { title:"Note Rain", desc:"Catch the falling notes with colored buttons!", start:"START", over:"Game Over!", scoreLabel:"Your Score:", retry:"TRY AGAIN", hudScore:"SCORE" },
+            de: { title:"Notenregen", desc:"Fange die fallenden Noten mit den Tasten!", start:"START", over:"Spiel Vorbei!", scoreLabel:"Dein Punktestand:", retry:"NOCHMAL", hudScore:"PUNKTE" },
+            lt: { title:"Natų Lietus", desc:"Gaudyk krentančias natas spalvotais mygtukais!", start:"PRADĖTI", over:"Žaidimas Baigtas!", scoreLabel:"Jūsų Rezultatas:", retry:"BANDYTI VĖL", hudScore:"TAŠKAI" },
+            ru: { title:"Дождь из Нот", desc:"Лови падающие ноты цветными кнопками!", start:"НАЧАТЬ", over:"Игра Окончена!", scoreLabel:"Твой Счет:", retry:"ПОВТОРИТЬ", hudScore:"СЧЕТ" }
+        };
+
+        let currentLang = 'tr';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('txt-title').innerText = t.title;
+            document.getElementById('txt-desc').innerText = t.desc;
+            document.getElementById('btn-start').innerText = t.start;
+            document.getElementById('txt-over').innerText = t.over;
+            document.getElementById('txt-score-label').innerText = t.scoreLabel;
+            document.getElementById('btn-retry').innerText = t.retry;
+            updateHUD();
+        }
+
+        const notesDB = [
+            { name:"Do",  y:150, ledger:true  },
+            { name:"Re",  y:140, ledger:false },
+            { name:"Mi",  y:130, ledger:false },
+            { name:"Fa",  y:120, ledger:false },
+            { name:"Sol", y:110, ledger:false },
+            { name:"La",  y:100, ledger:false },
+            { name:"Si",  y:90,  ledger:false },
+            { name:"Do",  y:80,  ledger:false },
+            { name:"Re",  y:70,  ledger:false },
+            { name:"Mi",  y:60,  ledger:false },
+            { name:"Fa",  y:50,  ledger:false }
+        ];
+
+        let score = 0;
+        let lives = 3;
+        let fallSpeed = 0.6;
+        let activeNotes = [];
+        let isGameRunning = false;
+        let spawnTimeout;
+
+        const bgMusic = document.getElementById('bgMusic');
+        let isMusicPlaying = false;
+        bgMusic.volume = 0.3;
+
+        function toggleMusic() {
+            const icon = document.getElementById('musicIcon');
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                icon.className = "fas fa-volume-mute";
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    icon.className = "fas fa-volume-up";
+                    isMusicPlaying = true;
+                }).catch(e => console.log("Müzik hatası:", e));
+            }
+        }
+
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-area').style.display = 'block';
+            isGameRunning = true;
+            score = 0; lives = 3; fallSpeed = 0.6;
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                document.getElementById('musicIcon').className = "fas fa-volume-up";
+            }).catch(e => console.log("Ses engellendi:", e));
+            activeNotes.forEach(el => el.remove());
+            activeNotes = [];
+            updateHUD();
+            gameLoop();
+            spawnNote();
+        }
+
+        function getScreenW() { return window.innerWidth || document.documentElement.clientWidth; }
+        function getScreenH() { return window.innerHeight || document.documentElement.clientHeight; }
+
+        function spawnNote() {
+            if (!isGameRunning) return;
+            const noteData = notesDB[Math.floor(Math.random() * notesDB.length)];
+            const noteEl = document.createElement('div');
+            noteEl.className = 'falling-note';
+
+            const ledgerLine = noteData.ledger
+                ? `<line x1="25" y1="125" x2="75" y2="125" stroke="black" stroke-width="2.5" />`
+                : '';
+
+            noteEl.innerHTML = `
+                <svg width="100" height="150" viewBox="0 0 100 150">
+                    <line x1="8" y1="42" x2="92" y2="42" stroke="black" stroke-width="1.8"/>
+                    <line x1="8" y1="58" x2="92" y2="58" stroke="black" stroke-width="1.8"/>
+                    <line x1="8" y1="75" x2="92" y2="75" stroke="black" stroke-width="1.8"/>
+                    <line x1="8" y1="91" x2="92" y2="91" stroke="black" stroke-width="1.8"/>
+                    <line x1="8" y1="108" x2="92" y2="108" stroke="black" stroke-width="1.8"/>
+                    <path d="M 33 100 Q 46 58 33 33 Q 20 25 33 83 Q 50 125 25 108" stroke="black" fill="none" stroke-width="2.5"/>
+                    ${ledgerLine}
+                    <ellipse cx="50" cy="${noteData.y * 0.83}" rx="10" ry="8" fill="black"/>
+                    <line x1="60" y1="${noteData.y * 0.83}" x2="60" y2="${noteData.y * 0.83 - 37}" stroke="black" stroke-width="2.5"/>
+                </svg>
+            `;
+
+            // Dikey güvenlik kontrolü
+            let isVerticallySafe = true;
+            for (let note of activeNotes) {
+                if (parseFloat(note.dataset.yPos) < 80) {
+                    isVerticallySafe = false;
+                    break;
+                }
+            }
+            if (!isVerticallySafe) {
+                spawnTimeout = setTimeout(spawnNote, 300);
+                return;
+            }
+
+            const maxX = getScreenW() - 120;
+            const randomX = Math.floor(Math.random() * (maxX - 20)) + 20;
+            noteEl.style.left = randomX + 'px';
+            noteEl.dataset.noteName = noteData.name;
+            noteEl.dataset.yPos = -160;
+
+            document.getElementById('game-area').appendChild(noteEl);
+            activeNotes.push(noteEl);
+
+            const nextSpawn = Math.max(900, 2500 - (score * 2));
+            spawnTimeout = setTimeout(spawnNote, nextSpawn);
+        }
+
+        function gameLoop() {
+            if (!isGameRunning) return;
+            activeNotes.forEach((noteEl, index) => {
+                let y = parseFloat(noteEl.dataset.yPos);
+                const speed = fallSpeed + (score * 0.003);
+                y += speed;
+                noteEl.style.top = y + 'px';
+                noteEl.dataset.yPos = y;
+                if (y > getScreenH() - 90) removeNote(index, false);
+            });
+            requestAnimationFrame(gameLoop);
+        }
+
+        function checkInput(noteName, color) {
+            if (!isGameRunning) return;
+            let targetIndex = -1, maxY = -1000;
+            activeNotes.forEach((note, index) => {
+                const y = parseFloat(note.dataset.yPos);
+                if (y > maxY) { maxY = y; targetIndex = index; }
+            });
+            if (targetIndex !== -1) {
+                const target = activeNotes[targetIndex];
+                if (target.dataset.noteName === noteName) {
+                    createLaser(target, color);
+                    removeNote(targetIndex, true);
+                } else {
+                    document.body.style.animation = "shake 0.3s";
+                    setTimeout(() => document.body.style.animation = "", 300);
+                }
+            }
+        }
+
+        function removeNote(index, isHit) {
+            const noteEl = activeNotes[index];
+            if (!noteEl) return;
+            activeNotes.splice(index, 1);
+            if (isHit) {
+                score += 10;
+                noteEl.style.transition = "0.2s";
+                noteEl.style.transform = "scale(1.5) rotate(10deg)";
+                noteEl.style.opacity = "0";
+            } else {
+                lives--;
+                noteEl.style.borderColor = "#ff4757";
+                noteEl.style.backgroundColor = "#ff7675";
+                if (lives <= 0) gameOver();
+            }
+            updateHUD();
+            setTimeout(() => { if (noteEl.parentNode) noteEl.parentNode.removeChild(noteEl); }, 200);
+        }
+
+        function createLaser(targetEl, color) {
+            const laser = document.createElement('div');
+            laser.className = 'laser-beam';
+            const rect = targetEl.getBoundingClientRect();
+            laser.style.left = (rect.left + rect.width / 2 - 4) + 'px';
+            laser.style.height = (getScreenH() - rect.bottom - 70) + 'px';
+            laser.style.bottom = '70px';
+            laser.style.backgroundColor = color;
+            laser.style.boxShadow = `0 0 18px ${color}`;
+            document.getElementById('game-area').appendChild(laser);
+            setTimeout(() => laser.remove(), 150);
+        }
+
+        function updateHUD() {
+            document.getElementById('hud-score-label').innerText = translations[currentLang].hudScore;
+            document.getElementById('score').innerText = score;
+            let hearts = "";
+            for (let i = 0; i < lives; i++) hearts += "❤️";
+            document.getElementById('lives').innerText = hearts;
+        }
+
+        function gameOver() {
+            isGameRunning = false;
+            clearTimeout(spawnTimeout);
+            bgMusic.pause(); bgMusic.currentTime = 0;
+            isMusicPlaying = false;
+            document.getElementById('musicIcon').className = "fas fa-volume-mute";
+            document.getElementById('game-area').style.display = 'none';
+            document.getElementById('game-over-screen').style.display = 'block';
+            document.getElementById('final-score-text').innerText = score;
+            activeNotes.forEach(el => { if (el.parentNode) el.parentNode.removeChild(el); });
+            activeNotes = [];
+        }
+    </script>
+</body>
+</html>
