@@ -26,7 +26,7 @@ export const ABOUT: Record<Lang, About> = {
     careerTitle: 'Kariyer özeti',
     career: [
       ['TRT Gençlik Korosu (2024)', 'Bağlama icracısı olarak koro bünyesinde aktif görev.'],
-      ['Katıldığı programlar', 'TRT Türkü “Genç Nesilden Türküler”: 17 Mayıs 2025 (orkestra) ve 14 Kasım 2025 (konuk sanatçı); “Türkülerin Genç Yıldızları” (8 Mart 2026).'],
+      ['Katıldığı programlar', 'TRT Türkü “Genç Nesilden Türküler”: 17 Mayıs 2025 (orkestra) ve 14 Kasım 2025 (konuk sanatçı); “Türkülerin Genç Yıldızları” (8 Mart 2026 ve 8 Ağustos 2026); TRT Genç “THM Konseri” (6 Haziran 2026).'],
     ],
     projectsTitle: 'Sanat projeleri',
     projects: [
@@ -39,7 +39,7 @@ export const ABOUT: Record<Lang, About> = {
       ['2021', 'Aydın Adnan Menderes Üniversitesi, Müzik Öğretmenliği'],
       ['2024', 'TRT THM Gençlik Korosu'],
       ['2025', 'TRT Türkü “Genç Nesilden Türküler” · “East to West” ilk konser'],
-      ['2026', '“Türkülerin Genç Yıldızları”'],
+      ['2026', '“Türkülerin Genç Yıldızları” · TRT Genç “THM Konseri”'],
     ],
   },
   en: {
@@ -52,7 +52,7 @@ export const ABOUT: Record<Lang, About> = {
     careerTitle: 'Career summary',
     career: [
       ['TRT Youth Choir (2024)', 'Active member of the choir as a bağlama player.'],
-      ['TV programmes', 'TRT Türkü “Songs from the Young Generation”: 17 May 2025 (orchestra) and 14 November 2025 (guest artist); “Young Stars of Türkü” (8 March 2026).'],
+      ['TV programmes', 'TRT Türkü “Songs from the Young Generation”: 17 May 2025 (orchestra) and 14 November 2025 (guest artist); “Young Stars of Türkü” (8 March 2026 and 8 August 2026); TRT Genç “Turkish Folk Music Concert” (6 June 2026).'],
     ],
     projectsTitle: 'Art projects',
     projects: [
@@ -65,7 +65,7 @@ export const ABOUT: Record<Lang, About> = {
       ['2021', 'Aydın Adnan Menderes University, Music Teacher Education'],
       ['2024', 'TRT Turkish Folk Music Youth Choir'],
       ['2025', 'TRT Türkü “Songs from the Young Generation” · first “East to West” concert'],
-      ['2026', '“Young Stars of Türkü”'],
+      ['2026', '“Young Stars of Türkü” · TRT Genç “Turkish Folk Music Concert”'],
     ],
   },
   de: {
@@ -78,7 +78,7 @@ export const ABOUT: Record<Lang, About> = {
     careerTitle: 'Werdegang',
     career: [
       ['TRT-Jugendchor (2024)', 'Aktives Mitglied des Chors als Bağlama-Spieler.'],
-      ['Fernsehsendungen', 'TRT Türkü „Lieder der jungen Generation“: 17. Mai 2025 (Orchester) und 14. November 2025 (Gastkünstler); „Junge Stars des Türkü“ (8. März 2026).'],
+      ['Fernsehsendungen', 'TRT Türkü „Lieder der jungen Generation“: 17. Mai 2025 (Orchester) und 14. November 2025 (Gastkünstler); „Junge Stars des Türkü“ (8. März 2026 und 8. August 2026); TRT Genç „Konzert für türkische Volksmusik“ (6. Juni 2026).'],
     ],
     projectsTitle: 'Kunstprojekte',
     projects: [
@@ -91,7 +91,7 @@ export const ABOUT: Record<Lang, About> = {
       ['2021', 'Aydın-Adnan-Menderes-Universität, Musiklehramt'],
       ['2024', 'TRT-Jugendchor für türkische Volksmusik'],
       ['2025', 'TRT Türkü „Lieder der jungen Generation“ · erstes „East to West“-Konzert'],
-      ['2026', '„Junge Stars des Türkü“'],
+      ['2026', '„Junge Stars des Türkü“ · TRT Genç „Konzert für türkische Volksmusik“'],
     ],
   },
   ru: {
@@ -104,7 +104,7 @@ export const ABOUT: Record<Lang, About> = {
     careerTitle: 'Карьера',
     career: [
       ['Молодёжный хор TRT (2024)', 'Постоянный участник хора как исполнитель на багламе.'],
-      ['Телепрограммы', 'TRT Türkü «Песни молодого поколения»: 17 мая 2025 (оркестр) и 14 ноября 2025 (приглашённый артист); «Молодые звёзды тюркю» (8 марта 2026).'],
+      ['Телепрограммы', 'TRT Türkü «Песни молодого поколения»: 17 мая 2025 (оркестр) и 14 ноября 2025 (приглашённый артист); «Молодые звёзды тюркю» (8 марта 2026 и 8 августа 2026); TRT Genç «Концерт турецкой народной музыки» (6 июня 2026).'],
     ],
     projectsTitle: 'Творческие проекты',
     projects: [
@@ -117,7 +117,7 @@ export const ABOUT: Record<Lang, About> = {
       ['2021', 'Университет Айдын Аднан Мендерес, музыкальная педагогика'],
       ['2024', 'Молодёжный хор народной музыки TRT'],
       ['2025', 'TRT Türkü «Песни молодого поколения» · первый концерт «East to West»'],
-      ['2026', '«Молодые звёзды тюркю»'],
+      ['2026', '«Молодые звёзды тюркю» · TRT Genç «Концерт турецкой народной музыки»'],
     ],
   },
 };

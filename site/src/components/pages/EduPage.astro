@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import { href, t, type Lang } from '../../i18n';
-import { FORMSPREE } from '../../data/site';
+import { APP, FORMSPREE } from '../../data/site';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const features = [
@@ -25,7 +25,7 @@ const mock = {
   <section class="page-hero">
     <div class="container hero">
       <div class="hero-text">
-        <span class="eyebrow">{t(lang, 'nav.edu')}</span>
+        <a class="apk" href={APP.apk} rel="noopener"><Icon name="download" size={16} /><span>{t(lang, 'edu.apk')}</span><small>{t(lang, 'edu.apkVer', { v: APP.version })}</small></a>
         <h1 class="title-xl">{t(lang, 'edu.title')}</h1>
         <p class="lead">{t(lang, 'edu.lead')}</p>
         <div class="cta">
@@ -117,6 +117,9 @@ const mock = {
 </Base>
 
 <style>
+  .apk { align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 16px 0 14px; border-radius: 999px; border: 1px solid var(--gold-line); background: rgba(210, 172, 99, 0.08); color: var(--gold-2); font-size: 14px; font-weight: 600; margin-bottom: 6px; transition: background 0.2s, border-color 0.2s; }
+  .apk:hover { background: rgba(210, 172, 99, 0.16); border-color: var(--gold); }
+  .apk small { font-size: 12px; font-weight: 500; color: var(--text-2); padding-left: 10px; border-left: 1px solid var(--line-2); }
   .hero { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; align-items: center; }
   .hero-text { display: flex; flex-direction: column; gap: 22px; }
   .hero-text .title-xl { font-size: clamp(38px, 5.4vw, 72px); }

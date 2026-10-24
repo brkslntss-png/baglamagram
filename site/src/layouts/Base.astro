@@ -91,6 +91,15 @@ const csp = [
         : null;
       document.querySelectorAll('.reveal').forEach((el) => (io ? io.observe(el) : el.classList.add('in')));
 
+      // Dış sitedeki bir görsel açılmazsa kırık simge yerine boş kutu kalsın; bir galerinin hepsi açılmazsa galeri gizlensin
+      const broken = (img: HTMLImageElement) => {
+        img.classList.add('img-broken');
+        const box = img.closest<HTMLElement>('[data-hide-if-broken]');
+        if (box && [...box.querySelectorAll('img')].every((i) => i.classList.contains('img-broken'))) box.hidden = true;
+      };
+      document.addEventListener('error', (e) => { if (e.target instanceof HTMLImageElement) broken(e.target); }, true);
+      document.querySelectorAll('img').forEach((img) => { if (img.complete && img.naturalWidth === 0 && img.currentSrc) broken(img); });
+
       // Tarayıcı dili farklıysa küçük bir öneri (otomatik yönlendirme yok)
       try {
         const pageLang = document.documentElement.dataset.lang;

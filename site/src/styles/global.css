@@ -170,3 +170,7 @@ a.card:hover, .card.hover:hover { border-color: var(--gold-line); transform: tra
 .yt:hover .play { transform: scale(1.08); background: rgba(210, 172, 99, 0.25); }
 .yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .yt button { all: unset; position: absolute; inset: 0; cursor: pointer; }
+
+/* Açılamayan dış görsel: kırık simgesi görünmesin */
+img.img-broken { opacity: 0 !important; }
+[data-hide-if-broken][hidden] { display: none !important; }
