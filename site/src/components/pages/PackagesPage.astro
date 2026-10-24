@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { href, t, type Lang } from '../../i18n';
+import { SHOPIER } from '../../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const cards = [
+  ['user', 'packages.one'],
+  ['users', 'packages.group'],
+  ['gift', 'packages.trial'],
+] as const;
+---
+<Base title={t(lang, 'packages.title')} description={t(lang, 'packages.lead')}>
+  <section class="page-hero">
+    <div class="container narrow">
+      <span class="eyebrow">{t(lang, 'nav.edu')}</span>
+      <h1 class="title-xl">{t(lang, 'packages.title')}</h1>
+      <p class="lead">{t(lang, 'packages.lead')}</p>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container">
+      <div class="grid grid-3 reveal">
+        {cards.map(([icon, k], i) => (
+          <article class={`card pkg ${i === 2 ? 'trial' : ''}`}>
+            <span class="icon-tile"><Icon name={icon} size={22} /></span>
+            <h2 class="serif">{t(lang, `${k}.t` as any)}</h2>
+            <p>{t(lang, `${k}.d` as any)}</p>
+            {i === 2
+              ? <a class="btn btn-ghost" href={href(lang, 'online-egitim.html') + '#basvuru'}>{t(lang, 'packages.apply')}<Icon name="arrow-right" size={17} /></a>
+              : <a class="btn btn-gold" href={SHOPIER} target="_blank" rel="noopener noreferrer"><Icon name="shopping-bag" size={17} />{t(lang, 'packages.shop')}</a>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container narrow includes reveal">
+      <h2 class="title-md">{t(lang, 'packages.includes')}</h2>
+      <ul>
+        {(['packages.i1', 'packages.i2', 'packages.i3', 'packages.i4'] as const).map((k) => <li><Icon name="check" size={18} class="gold" />{t(lang, k)}</li>)}
+      </ul>
+      <p class="muted small"><Icon name="shield-check" size={16} />{t(lang, 'packages.shopNote')}</p>
+      <p class="muted small"><Icon name="log-in" size={16} /><a href="/portal/">{t(lang, 'packages.students')}</a></p>
+    </div>
+  </section>
+</Base>
+<style>
+  .pkg { padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .pkg h2 { font-size: 26px; }
+  .pkg p { color: var(--text-2); flex: 1; }
+  .pkg .btn { align-self: flex-start; margin-top: 8px; }
+  .trial { border-color: var(--gold-line); background: radial-gradient(120% 120% at 100% 0%, rgba(210, 172, 99, 0.12), transparent 60%), var(--surface); }
+  .includes { width: calc(100% - 2 * var(--gutter)); display: flex; flex-direction: column; gap: 18px; padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+  .includes ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
+  .includes li { display: flex; gap: 10px; color: var(--text-2); }
+  .small { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+  .small a { color: var(--gold-2); }
+  @media (max-width: 640px) { .includes ul { grid-template-columns: 1fr; } }
+</style>

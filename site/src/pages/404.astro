@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { t } from '../i18n';
+const lang = 'tr';
+---
+<Base title={t(lang, 'nf.title')} noindex>
+  <section class="page-hero">
+    <div class="container narrow" style="align-items:flex-start">
+      <span class="eyebrow">404</span>
+      <h1 class="title-xl" data-nf-title>{t(lang, 'nf.title')}</h1>
+      <p class="lead" data-nf-text>{t(lang, 'nf.text')}</p>
+      <a class="btn btn-gold" href="/" data-nf-home><Icon name="home" size={18} /><span>{t(lang, 'nf.home')}</span></a>
+    </div>
+  </section>
+</Base>
+<script src="../scripts/notfound.ts"></script>

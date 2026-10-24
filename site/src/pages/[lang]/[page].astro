@@ -1,0 +1,17 @@
+---
+import SongPage from '../../components/pages/SongPage.astro';
+import BlogPostPage from '../../components/pages/BlogPostPage.astro';
+import { SONGS } from '../../data/songs';
+import { posts } from '../../data/blog';
+import { OTHER_LANGS, type Lang } from '../../i18n';
+export function getStaticPaths() {
+  return OTHER_LANGS.flatMap((lang) => [
+    ...SONGS.map((song) => ({ params: { lang, page: song.page.replace(/\.html$/, '') }, props: { song } })),
+    ...posts(lang).map((post) => ({ params: { lang, page: post.page.replace(/\.html$/, '') }, props: { slug: post.slug } })),
+  ]);
+}
+const lang = Astro.params.lang as Lang;
+const { song, slug } = Astro.props as any;
+const post = slug ? posts(lang).find((p) => p.slug === slug) : null;
+---
+{song ? <SongPage lang={lang} song={song} /> : <BlogPostPage lang={lang} post={post!} />}

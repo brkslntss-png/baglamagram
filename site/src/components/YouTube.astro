@@ -1,0 +1,26 @@
+---
+// YouTube videosu: önce yalnızca kapak görseli; tıklanınca (çerezsiz) oynatıcı yüklenir.
+import Icon from './Icon.astro';
+interface Props { id: string; title?: string; label: string }
+const { id, title = 'YouTube', label } = Astro.props;
+---
+<div class="yt" data-yt={id} data-title={title}>
+  <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt={title} loading="lazy" decoding="async" width="480" height="360" />
+  <span class="play" aria-hidden="true"><Icon name="play" size={26} /></span>
+  <button type="button" aria-label={`${label}: ${title}`}></button>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-yt]').forEach((el) => {
+    if (el.dataset.ytReady) return;
+    el.dataset.ytReady = '1';
+    el.querySelector('button')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${el.dataset.yt}?autoplay=1&rel=0`;
+      f.title = el.dataset.title || 'YouTube';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.allowFullscreen = true;
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      el.replaceChildren(f);
+    });
+  });
+</script>

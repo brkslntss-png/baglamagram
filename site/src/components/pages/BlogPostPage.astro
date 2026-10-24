@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { formatDate, href, t, type Lang } from '../../i18n';
+import { CATS, excerptOf, readingMinutes, type Post } from '../../data/blog';
+interface Props { lang: Lang; post: Post }
+const { lang, post } = Astro.props;
+// "Karakter: …" gibi başlıklı paragraflarda baş kısmı kalın yazılır
+const lead = (s: string) => {
+  const m = s.match(/^([^:.!?]{2,30}[:?])\s+(.+)$/s);
+  return m ? { head: m[1], rest: m[2] } : null;
+};
+const ld = {
+  '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.title, datePublished: post.date, image: post.image,
+  author: { '@type': 'Person', name: 'Mahmut Burak Aslantaş', url: 'https://baglamagram.com.tr/hakkinda.html' }, inLanguage: lang,
+};
+---
+<Base title={post.title} description={excerptOf(post, 155)} image={post.image} jsonLd={ld}>
+  <article class="page-hero">
+    <div class="container narrow head">
+      <a class="link-arrow" href={href(lang, 'blog.html')}><Icon name="arrow-left" size={17} />{t(lang, 'blog.back')}</a>
+      <span class="meta">{CATS[post.cat][lang]} · {formatDate(lang, post.date)} · {t(lang, 'blog.minutes', { n: readingMinutes(post) })}</span>
+      <h1 class="title-lg">{post.title}</h1>
+      <span class="by">Mahmut Burak Aslantaş</span>
+    </div>
+    <div class="container cover-wrap"><img class="cover" src={post.image} alt="" decoding="async" /></div>
+    <div class="container narrow prose">
+      {post.blocks.map((b) => {
+        if (b.type === 'h2') return <h2>{b.text}</h2>;
+        if (b.type === 'h3') return <h3>{b.text}</h3>;
+        if (b.type === 'note') return <aside class="note"><Icon name="lightbulb" size={20} class="gold" /><p>{b.text}</p></aside>;
+        const l = lead(b.text);
+        return l ? <p><strong>{l.head}</strong> {l.rest}</p> : <p>{b.text}</p>;
+      })}
+    </div>
+  </article>
+</Base>
+<style>
+  .head { gap: 14px !important; }
+  .meta { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+  .by { color: var(--text-2); font-size: 15px; }
+  .cover-wrap { max-width: 1000px; margin-top: 32px; }
+  .cover { width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--line); aspect-ratio: 16 / 8; object-fit: cover; background: var(--surface); }
+  .prose { margin-top: 40px; font-size: 18px; line-height: 1.8; color: #ddd6ca; }
+  .prose p + p { margin-top: 1.1em; }
+  .prose h2 { font-family: var(--serif); font-size: clamp(26px, 3vw, 34px); color: var(--text); margin: 1.8em 0 0.6em; }
+  .prose h3 { font-size: 20px; color: var(--gold-2); margin: 1.6em 0 0.4em; }
+  .prose strong { color: var(--text); }
+  .note { margin: 1.6em 0; display: flex; gap: 14px; padding: 20px 22px; border-radius: 18px; background: var(--gold-soft); border: 1px solid var(--gold-line); font-style: italic; color: var(--text); }
+</style>

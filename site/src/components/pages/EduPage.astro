@@ -1,0 +1,196 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { href, t, type Lang } from '../../i18n';
+import { FORMSPREE } from '../../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const features = [
+  ['video', 'edu.f.live'],
+  ['moon', 'edu.f.time'],
+  ['mic', 'edu.f.hw'],
+  ['sparkles', 'edu.f.ai'],
+  ['gamepad-2', 'edu.f.tools'],
+  ['message-circle', 'edu.f.chat'],
+] as const;
+const portal = ['edu.portal.i1', 'edu.portal.i2', 'edu.portal.i3', 'edu.portal.i4'] as const;
+const mock = {
+  tr: { hi: 'Merhaba', next: 'Sıradaki ders', when: 'Bugün 19:00', hw: 'Ödevin var', hwt: 'Uşşak dizisi', streak: '5 gün seri', tabs: ['Ana Sayfa', 'Dersler', 'Pratik', 'Hoca', 'Profil'] },
+  en: { hi: 'Hello', next: 'Next lesson', when: 'Today 7:00 PM', hw: 'Homework', hwt: 'Uşşak scale', streak: '5-day streak', tabs: ['Home', 'Lessons', 'Practice', 'Teacher', 'Profile'] },
+  de: { hi: 'Hallo', next: 'Nächste Stunde', when: 'Heute 19:00', hw: 'Hausaufgabe', hwt: 'Uşşak-Leiter', streak: '5 Tage Serie', tabs: ['Start', 'Stunden', 'Üben', 'Lehrer', 'Profil'] },
+  ru: { hi: 'Привет', next: 'Следующий урок', when: 'Сегодня 19:00', hw: 'Задание', hwt: 'Лад Ушшак', streak: 'Серия 5 дней', tabs: ['Главная', 'Уроки', 'Практика', 'Учитель', 'Профиль'] },
+}[lang];
+---
+<Base title={t(lang, 'edu.title')} description={t(lang, 'edu.lead')}>
+  <section class="page-hero">
+    <div class="container hero">
+      <div class="hero-text">
+        <span class="eyebrow">{t(lang, 'nav.edu')}</span>
+        <h1 class="title-xl">{t(lang, 'edu.title')}</h1>
+        <p class="lead">{t(lang, 'edu.lead')}</p>
+        <div class="cta">
+          <a class="btn btn-gold" href="/portal/"><Icon name="log-in" size={18} />{t(lang, 'edu.login')}</a>
+          <a class="btn btn-ghost" href="#basvuru"><Icon name="gift" size={18} />{t(lang, 'edu.apply')}</a>
+        </div>
+      </div>
+      <div class="device" aria-hidden="true">
+        <div class="screen">
+          <div class="s-top"><span class="s-brand"></span><span class="s-dots"><i></i><i></i></span></div>
+          <div class="s-title">{mock.hi}</div>
+          <div class="s-card s-blue"><span class="s-ic"><Icon name="calendar" size={16} /></span><div><b>{mock.next}</b><small>{mock.when}</small></div></div>
+          <div class="s-card"><span class="s-ic s-orange"><Icon name="mic" size={16} /></span><div><b class="s-red">{mock.hw}</b><small>{mock.hwt}</small></div></div>
+          <div class="s-card"><span class="s-ic s-flame"><Icon name="flame" size={16} /></span><div><b>{mock.streak}</b><small>●●●●●○○</small></div></div>
+          <div class="s-tools"><i class="t1"></i><i class="t2"></i><i class="t3"></i><i class="t4"></i></div>
+          <div class="s-tab">{mock.tabs.map((x, i) => <span class={i === 0 ? 'on' : ''}>{x}</span>)}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow center">{t(lang, 'nav.edu')}</span>
+        <h2 class="title-lg">{t(lang, 'edu.why')}</h2>
+      </div>
+      <div class="grid grid-3 reveal">
+        {features.map(([icon, k]) => (
+          <article class="card feature">
+            <span class="icon-tile"><Icon name={icon} size={22} /></span>
+            <h3>{t(lang, `${k}.t` as any)}</h3>
+            <p>{t(lang, `${k}.d` as any)}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container portal reveal">
+      <div>
+        <h2 class="title-md">{t(lang, 'edu.portal.title')}</h2>
+        <p class="muted">{t(lang, 'edu.portal.text')}</p>
+      </div>
+      <ul>
+        {portal.map((k) => <li><Icon name="check" size={18} class="gold" />{t(lang, k)}</li>)}
+      </ul>
+      <a class="btn btn-gold" href="/portal/"><Icon name="log-in" size={18} />{t(lang, 'edu.login')}</a>
+    </div>
+  </section>
+
+  <section class="section" id="basvuru">
+    <div class="container form-wrap reveal">
+      <div class="form-intro">
+        <span class="eyebrow">{t(lang, 'footer.trial')}</span>
+        <h2 class="title-lg">{t(lang, 'edu.form.title')}</h2>
+        <p class="lead">{t(lang, 'edu.form.lead')}</p>
+        <div class="card app-card">
+          <span class="icon-tile"><Icon name="smartphone" size={22} /></span>
+          <div><h3>{t(lang, 'edu.app.title')}</h3><p class="muted">{t(lang, 'edu.app.text')}</p></div>
+        </div>
+      </div>
+      <form class="card form" action={FORMSPREE} method="POST" data-apply data-sent={t(lang, 'edu.form.sent')} data-error={t(lang, 'edu.form.error')}>
+        <input type="hidden" name="_language" value={lang} />
+        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="field"><label for="f-name">{t(lang, 'edu.form.name')}</label><input id="f-name" class="input" type="text" name="ad_soyad" autocomplete="name" required maxlength="80" /></div>
+        <div class="field"><label for="f-tel">{t(lang, 'edu.form.phone')}</label><input id="f-tel" class="input" type="tel" name="telefon" autocomplete="tel" required maxlength="24" inputmode="tel" /></div>
+        <div class="two">
+          <div class="field"><label for="f-age">{t(lang, 'edu.form.age')}</label><input id="f-age" class="input" type="number" name="yas" min="16" max="99" required /></div>
+          <div class="field"><label for="f-job">{t(lang, 'edu.form.job')}</label><input id="f-job" class="input" type="text" name="meslek" maxlength="60" /></div>
+        </div>
+        <div class="field">
+          <label for="f-level">{t(lang, 'edu.form.level')}</label>
+          <select id="f-level" class="select" name="seviye" required>
+            <option value="" disabled selected>—</option>
+            <option value="sifir">{t(lang, 'edu.form.level0')}</option>
+            <option value="temel">{t(lang, 'edu.form.level1')}</option>
+            <option value="ileri">{t(lang, 'edu.form.level2')}</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-msg">{t(lang, 'edu.form.msg')}</label><textarea id="f-msg" class="textarea" name="mesaj" rows="4" required maxlength="2000"></textarea></div>
+        <button class="btn btn-gold" type="submit"><Icon name="send" size={17} />{t(lang, 'edu.form.send')}</button>
+        <p class="note">{t(lang, 'edu.form.privacy')}</p>
+        <p class="status" role="status" aria-live="polite" data-status></p>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; align-items: center; }
+  .hero-text { display: flex; flex-direction: column; gap: 22px; }
+  .hero-text .title-xl { font-size: clamp(38px, 5.4vw, 72px); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  /* Uygulama önizlemesi (HTML ile çizilmiş temsili ekran) */
+  .device { justify-self: center; width: 280px; aspect-ratio: 9 / 18.5; border-radius: 44px; padding: 10px; background: linear-gradient(160deg, #2a2a2e, #111113); border: 1px solid var(--line-2); box-shadow: 0 50px 120px -40px rgba(210, 172, 99, 0.35), var(--shadow); transform: rotate(3deg); }
+  .screen { height: 100%; border-radius: 34px; background: #f2f2f7; color: #1c1c1e; padding: 18px 14px 12px; display: flex; flex-direction: column; gap: 9px; overflow: hidden; font-family: var(--sans); }
+  .s-top { display: flex; justify-content: space-between; align-items: center; }
+  .s-brand { width: 82px; height: 15px; background: #1c1c1e; -webkit-mask: url('/img/wordmark.png') left center / contain no-repeat; mask: url('/img/wordmark.png') left center / contain no-repeat; }
+  .s-dots { display: flex; gap: 6px; } .s-dots i { width: 24px; height: 24px; border-radius: 50%; background: #34c759; } .s-dots i + i { background: #fff; border: 1px solid #e5e5ea; }
+  .s-title { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 4px 0 2px; }
+  .s-card { display: flex; gap: 10px; align-items: center; background: #fff; border-radius: 16px; padding: 11px; }
+  .s-card b { display: block; font-size: 12.5px; } .s-card small { font-size: 11px; color: #8a8a8e; }
+  .s-ic { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: #5856d6; color: #fff; }
+  .s-orange { background: #ff9500; } .s-flame { background: #ff3b30; } .s-red { color: #ff3b30; }
+  .s-tools { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 4px 2px; }
+  .s-tools i { aspect-ratio: 1; border-radius: 12px; } .t1 { background: #ff9500; } .t2 { background: #34c759; } .t3 { background: #007aff; } .t4 { background: #ff3b30; }
+  .s-tab { margin-top: auto; display: flex; justify-content: space-between; background: rgba(255,255,255,0.9); border-radius: 22px; padding: 9px 8px; font-size: 8.5px; font-weight: 600; color: #1c1c1e; }
+  .s-tab .on { color: #007aff; }
+
+  .feature { padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .feature h3 { font-size: 18px; }
+  .feature p { color: var(--text-2); font-size: 15px; }
+
+  .portal { width: calc(100% - 2 * var(--gutter)); display: grid; grid-template-columns: 1fr 1.2fr auto; gap: 32px; align-items: center; padding: 32px; border: 1px solid var(--gold-line); border-radius: var(--radius-lg); background: radial-gradient(120% 140% at 0% 0%, rgba(210, 172, 99, 0.1), transparent 60%), var(--surface); }
+  .portal ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .portal li { display: flex; gap: 10px; align-items: flex-start; color: var(--text-2); }
+  .portal .title-md { margin-bottom: 8px; }
+
+  .form-wrap { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .form-intro { display: flex; flex-direction: column; gap: 18px; position: sticky; top: calc(var(--header-h) + 24px); }
+  .app-card { padding: 20px; display: flex; gap: 16px; margin-top: 8px; }
+  .app-card h3 { font-size: 16px; margin-bottom: 4px; }
+  .app-card p { font-size: 14px; }
+  .form { padding: clamp(20px, 3vw, 32px); display: flex; flex-direction: column; gap: 16px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .note { font-size: 13px; color: var(--text-3); text-align: center; }
+  .status { min-height: 1.2em; text-align: center; font-weight: 600; }
+  .status.ok { color: var(--ok); } .status.err { color: var(--err); }
+
+  @media (max-width: 960px) {
+    .hero, .form-wrap { grid-template-columns: 1fr; }
+    .device { width: 240px; transform: none; }
+    .portal { grid-template-columns: 1fr; }
+    .form-intro { position: static; }
+  }
+  @media (max-width: 480px) { .two { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  // Eski portal bağlantıları (online-egitim.html#dashboard vb.) yeni portala gider
+  const OLD_VIEWS = ['admin', 'ai-mentor', 'baglama-menu', 'dashboard', 'ders-kayitlari', 'ear-training', 'exam-categories', 'exam-detail', 'exam-list', 'fa-key', 'fun-learning', 'generator', 'live-class', 'makam-ustadi', 'materials', 'memory-game', 'metronome', 'musical-memory', 'nota-yagmuru', 'quiz-game', 'tools-menu', 'tsm-game', 'tuner'];
+  if (OLD_VIEWS.includes(location.hash.slice(1))) {
+    location.replace('/portal/');
+  }
+
+  // Başvuru formu: sayfadan ayrılmadan gönder
+  const form = document.querySelector<HTMLFormElement>('[data-apply]');
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const btn = form.querySelector<HTMLButtonElement>('button[type=submit]');
+    if (btn) btn.disabled = true;
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset();
+      if (status) { status.textContent = form.dataset.sent || ''; status.className = 'status ok'; }
+    } catch (_) {
+      if (status) { status.textContent = form.dataset.error || ''; status.className = 'status err'; }
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  });
+</script>

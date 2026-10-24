@@ -1,0 +1,8 @@
+---
+import P from '../../components/pages/PoemPage.astro';
+import { POEMS } from '../../data/poems';
+import { OTHER_LANGS, type Lang } from '../../i18n';
+export function getStaticPaths() { return OTHER_LANGS.flatMap((lang) => POEMS.map((poem) => ({ params: { lang, slug: poem.slug }, props: { poem } }))); }
+const { poem } = Astro.props;
+---
+<P lang={Astro.params.lang as Lang} poem={poem} />

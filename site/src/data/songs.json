@@ -1,0 +1,39 @@
+[
+ {
+  "slug": "ardic-sazim",
+  "page": "nota-ardic-sazim.html",
+  "title": "Ardıç Sazım",
+  "by": "Mahmut Burak ASLANTAŞ",
+  "images": [
+   "https://i.hizliresim.com/659nors.png"
+  ],
+  "pdf": "nota-ardic-sazim.pdf",
+  "lyrics": "Düştün ustanın eline.\nRuhun üfürdü teline.\nGel benimle konuş diye.\nBenim canım dertli sazım.\n\nBen düştüm ana karnına.\nSen düştün kara toprağa.\nKursaktan geldin elime.\nBenim güzel ardıç sazım.",
+  "listed": true
+ },
+ {
+  "slug": "yoruldum",
+  "page": "Nota-yoruldum.html",
+  "title": "Yoruldum",
+  "by": "Mahmut Burak ASLANTAŞ",
+  "images": [
+   "https://i.hizliresim.com/oncuy30.png"
+  ],
+  "pdf": "nota-yoruldum.pdf",
+  "lyrics": "Yoruldum artık sevmekten\nYar derdi ile yaş dökmekten\nFeryad edip inlemekten\nGözlerimde fer (yaş) kalmadı\n\nGül gibi sarardım soldum\nGenç delikanlı yaşımda\nKaderime tüm sitemim\nGözlerimin al (kan) yaşında.",
+  "listed": false
+ },
+ {
+  "slug": "cehennem-nari",
+  "page": "Nota-cehennem-nari.html",
+  "title": "Cehennem Narı",
+  "by": "Mahmut Burak ASLANTAŞ",
+  "images": [
+   "https://i.hizliresim.com/fts26sm.png",
+   "https://i.hizliresim.com/8a8turx.png"
+  ],
+  "pdf": "nota-cehennem-nari.pdf",
+  "lyrics": "Yandı içimde cehennem narı.\nAla gözlü bir güzelden gayrı.\nVar mıdır bunca derdin dermanı.\nDermanı vardır, bekle zamanı.\n\nZalım felek geldi beni seçti.\nDermansız derdi başıma açtı.\nYaş aldı başını ömür geçti.\nBir daha göremedim o zatı.",
+  "listed": false
+ }
+]

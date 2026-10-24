@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { href, t, type Lang } from '../../i18n';
+import { LISTED_POEMS, POEMS, poemUrl, excerpt, type Poem } from '../../data/poems';
+import { SONGS } from '../../data/songs';
+interface Props { lang: Lang; poem: Poem }
+const { lang, poem } = Astro.props;
+const list = poem.listed ? LISTED_POEMS : POEMS;
+const i = list.findIndex((p) => p.slug === poem.slug);
+const prev = i > 0 ? list[i - 1] : null;
+const next = i >= 0 && i < list.length - 1 ? list[i + 1] : null;
+const song = SONGS.find((s) => s.slug === poem.slug);
+const stanzas = poem.text.split(/\n\s*\n/);
+---
+<Base title={poem.title} description={excerpt(poem, 3)}>
+  <article class="page-hero poem-page">
+    <div class="container narrow">
+      <a class="link-arrow" href={href(lang, 'siirler.html')}><Icon name="arrow-left" size={17} />{t(lang, 'poems.back')}</a>
+      <h1 class="title-xl" lang="tr">{poem.title}</h1>
+      <p class="by">Mahmut Burak Aslantaş</p>
+      <div class="text serif" lang="tr">
+        {stanzas.map((s) => <p>{s}</p>)}
+      </div>
+      {song ? <a class="btn btn-ghost" href={href(lang, song.page)}><Icon name="music" size={17} />{t(lang, 'notes.title')}: {song.title}</a> : null}
+      <nav class="pn" aria-label="">
+        {prev ? <a class="card" href={href(lang, poemUrl(prev.slug))}><small>{t(lang, 'poems.prev')}</small><span class="serif" lang="tr">{prev.title}</span></a> : <span></span>}
+        {next ? <a class="card next" href={href(lang, poemUrl(next.slug))}><small>{t(lang, 'poems.next')}</small><span class="serif" lang="tr">{next.title}</span></a> : <span></span>}
+      </nav>
+    </div>
+  </article>
+</Base>
+<style>
+  .poem-page .container { gap: 20px; }
+  .by { color: var(--gold); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .text { margin: 12px 0 8px; padding: clamp(24px, 4vw, 44px); border-radius: var(--radius-lg); border: 1px solid var(--line); background: radial-gradient(120% 80% at 0% 0%, rgba(210, 172, 99, 0.07), transparent 60%), var(--surface); display: flex; flex-direction: column; gap: 1.4em; }
+  .text p { white-space: pre-line; font-size: clamp(19px, 2vw, 23px); line-height: 1.85; font-style: italic; }
+  .pn { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  .pn a { padding: 18px 20px; display: flex; flex-direction: column; gap: 4px; }
+  .pn small { color: var(--text-3); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .pn span { font-size: 20px; }
+  .pn .next { text-align: right; }
+  .btn { align-self: flex-start; }
+</style>

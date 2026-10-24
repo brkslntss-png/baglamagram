@@ -1,0 +1,18 @@
+{
+  "name": "baglamagram-site",
+  "private": true,
+  "type": "module",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource/playfair-display": "5.3.0",
+    "astro": "7.3.8",
+    "lucide-static": "1.52.0",
+    "simple-icons": "16.34.0"
+  }
+}

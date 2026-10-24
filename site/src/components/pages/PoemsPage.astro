@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { href, t, type Lang } from '../../i18n';
+import { LISTED_POEMS, excerpt, poemUrl } from '../../data/poems';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<Base title={t(lang, 'poems.title')} description={t(lang, 'poems.lead')}>
+  <section class="page-hero">
+    <div class="container narrow">
+      <span class="eyebrow">{t(lang, 'poems.count', { n: LISTED_POEMS.length })}</span>
+      <h1 class="title-xl">{t(lang, 'poems.title')}</h1>
+      <p class="lead">{t(lang, 'poems.lead')}</p>
+      {lang !== 'tr' ? <p class="note"><Icon name="languages" size={16} />{t(lang, 'common.onlyTurkish')}</p> : null}
+      <label class="search">
+        <Icon name="search" size={18} />
+        <span class="sr-only">{t(lang, 'poems.search')}</span>
+        <input type="search" placeholder={t(lang, 'poems.search')} data-filter="[data-poem]" autocomplete="off" />
+      </label>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container">
+      <div class="grid grid-3">
+        {LISTED_POEMS.map((p) => (
+          <a class="card poem" href={href(lang, poemUrl(p.slug))} lang="tr" data-poem data-text={`${p.title} ${p.text}`.toLocaleLowerCase('tr')}>
+            <Icon name="feather" size={20} class="gold" />
+            <h2 class="serif">{p.title}</h2>
+            <p>{excerpt(p)}</p>
+            <span class="more" lang={lang}>{t(lang, 'poems.read')}<Icon name="arrow-right" size={16} /></span>
+          </a>
+        ))}
+      </div>
+      <p class="empty muted" hidden data-empty>{t(lang, 'common.noResult')}</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .page-hero .container { gap: 18px; }
+  .note { display: inline-flex; gap: 8px; align-items: center; color: var(--text-3); font-size: 14px; }
+  .search { margin-top: 8px; display: flex; align-items: center; gap: 10px; height: 54px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--bg-2); color: var(--text-3); max-width: 520px; }
+  .search:focus-within { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-soft); }
+  .search input { flex: 1; border: 0; background: transparent; color: var(--text); font: inherit; outline: none; }
+  .poem { padding: 26px; display: flex; flex-direction: column; gap: 12px; }
+  .poem[hidden] { display: none; }
+  .poem h2 { font-size: 24px; }
+  .poem p { color: var(--text-2); font-family: var(--serif); font-style: italic; line-height: 1.6; flex: 1; }
+  .more { display: inline-flex; align-items: center; gap: 6px; color: var(--gold); font-weight: 600; font-size: 14px; }
+  .empty { text-align: center; padding: 24px; }
+</style>
+<script src="../../scripts/filter.ts"></script>

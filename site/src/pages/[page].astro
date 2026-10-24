@@ -1,0 +1,16 @@
+---
+// Kök düzeydeki tekil sayfalar: nota sayfaları ve blog yazıları (eski adresler korunur).
+import SongPage from '../components/pages/SongPage.astro';
+import BlogPostPage from '../components/pages/BlogPostPage.astro';
+import { SONGS } from '../data/songs';
+import { posts } from '../data/blog';
+export function getStaticPaths() {
+  return [
+    ...SONGS.map((song) => ({ params: { page: song.page.replace(/\.html$/, '') }, props: { song } })),
+    ...posts('tr').map((post) => ({ params: { page: post.page.replace(/\.html$/, '') }, props: { slug: post.slug } })),
+  ];
+}
+const { song, slug } = Astro.props as any;
+const post = slug ? posts('tr').find((p) => p.slug === slug) : null;
+---
+{song ? <SongPage lang="tr" song={song} /> : <BlogPostPage lang="tr" post={post!} />}
