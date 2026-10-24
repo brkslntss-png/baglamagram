@@ -35,5 +35,12 @@ export const INSTAGRAM = [
 // Kreatif köşe videoları (YouTube kimlikleri)
 export const CREATIVE_VIDEOS = ['SvliCP5Wznw', 'DfzEr4qozlI', 'v39ygvfSdGE'];
 
+// Android uygulaması: GitHub Releases'te en son sürümdeki APK dosyası (adı burada yazanla aynı olmalı) indirilir.
+// Yeni sürümde yalnızca yeni bir Release açıp dosyayı aynı adla yükle ve buradaki sürüm numarasını değiştir.
+export const APP = {
+  version: '2.0',
+  apk: 'https://github.com/brkslntss-png/baglamagram/releases/latest/download/baglamagram.2.0.apk',
+};
+
 export const FORMSPREE = 'https://formspree.io/f/xnjvyknz';
 export const SHOPIER = 'https://www.shopier.com/baglamagram';

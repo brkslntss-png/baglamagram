@@ -20,7 +20,6 @@ const withAge = (s: string) => s.replace('{age}', `<span data-age data-birth="${
         </div>
       </div>
       <div class="text">
-        <span class="eyebrow">{t(lang, 'site.tagline')}</span>
         <h1 class="title-xl">{a.title}</h1>
         {a.p.map((p) => <p class="lead" set:html={withAge(p)} />)}
 
