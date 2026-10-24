@@ -2440,27 +2440,30 @@ gununBilgisiniGetir();
       }
   }
 
-  // Öğrenci Listesi YENİ ÖĞRENCİ KAYDI YENİ KAYIT
-  const ogrenciListesi = {
-      "Z29rYm95MDlAZ21haWwuY29t": { ad: "R29rMg==", soyad: "UEFJTlRFUg==" },
-      "ZHJ0b2xnYXNldmVuQHlhaG9vLmNvbQ==": { ad: "VG9sZ2E=", soyad: "U0VWRU4=" },
-      "YmFyaXNzdW5tZXo0OUBnbWFpbC5jb20=": { ad: "U2F2YcWf", soyad: "U8O8bm1leg==" },
-      "ZXJrYW5zbmRrOTVAZ21haWwuY29t": { ad: "RXJrYW4=", soyad: "" },
-      "ZWxpZmthcm1hbjUyNkBnbWFpbC5jb20=": { ad: "RWxpZg==", soyad: "S0FSTUFO" },
-      "ZmVyaGF0Y2l2YW4wMjA1QG91dGxvb2suY29t": { ad: "RmVyaGF0ZQ==", soyad: "Q2l2YW5lIEJha2FuZQ==" },
-      "YnJrc2xudHNzQGdtYWlsLmNvbQ==": { ad: "TWFobXV0IEJ1cmFr", soyad: "QVNMQU5UQcWe" },
-      "NDJ0ZXJvYmF5dDYzQGdtYWlsLmNvbQ==": { ad: "ZGVuZW1l", soyad: "aGVzYWLEsW7EsQ==" },
-      "Y2FraW5jaUBhZHUuZWR1LnRy": { ad: "w4dhZ2RhxZ8=", soyad: "QUtJTkNJ" },
-      "a2VuYW5udTE5ODFAZ21haWwuY29t": { ad: "S2VuYW4=", soyad: "w5ZjYWw=" },
-      "ZXZpbmVyZGVuQGFkdS5lZHUudHI=": { ad: "RXZpbiBFUkRFTg==", soyad: "VE9QT0dMVQ==" },
-      "aGF0aWNlb25rMzlAZ290bWFpbC5jb20=": { ad: "SGF0aWNl", soyad: "T05DVUs=" },
-      "YXl0ZWtua2FuZGVtckBnbWFpbC5jb20=": { ad: "QXl0ZWtpbg==", soyad: "S0FOREVNxLBSRQ==" },
-      "c3NlcmthbnNla2VyQGdtYWlsLmNvbQ==": { ad: "Uy4gU2Vya2Fu", soyad: "xZ5la2Vy" },
-      "bWFobXV0YmF5a2FuOTNAZ21haWwuY29t": { ad: "TWFobXV0", soyad: "QkFZS0FO" },
-      "aGVmZTI2MzRAZ21haWwuY29t": { ad: "SGFzYW4gSMO8c2V5aW4=", soyad: "RUZF" },
-      "eXVjZWxpenpldHRpbjAyMzRAZ21haWwuY29t": { ad: "SXp6ZXR0aW4=", soyad: "WcO8Y2Vs" }
-    
-  };
+  // Öğrenci adı ve profil fotoğrafı veritabanından gelir (kullanicilar/{e-posta}).
+  // Öğrenciler Bağlamagram uygulamasındaki öğretmen panelinden eklenir; buraya elle yazmaya gerek yok.
+  function profilDoldur(email) {
+      const yedekAd = (email || "").split("@")[0];
+      document.getElementById("displayAd").innerText = yedekAd;
+      document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
+      document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
+      getDoc(doc(db, "kullanicilar", email)).then((docSnap) => {
+          if (!docSnap.exists()) return;
+          const veri = docSnap.data();
+          const tamAd = String(veri.ad_soyad || "").trim().replace(/\s+/g, " ");
+          if (tamAd) {
+              const parcalar = tamAd.split(" ");
+              const soyad = parcalar.length > 1 ? parcalar.pop() : "";
+              const ad = parcalar.join(" ");
+              document.getElementById("displayAd").innerText = ad;
+              document.getElementById("displaySoyad").innerText = soyad;
+              document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + ad + "!";
+          }
+          if (veri.profil_fotosu) {
+              document.getElementById("userAvatar").src = veri.profil_fotosu;
+          }
+      }).catch((e) => console.error("Profil okunamadı:", e));
+  }
 
   // Şifre Sıfırlama
   window.sifreSifirla = function() {
@@ -2565,27 +2568,8 @@ gununBilgisiniGetir();
           document.getElementById("student-portal").style.display = "block";
           document.body.classList.add("portal-active");
 
-          // İsim Soyisim Doldurma
-          const sifreliMail = window.btoa(unescape(encodeURIComponent(user.email)));
-          let ogrenci = ogrenciListesi[sifreliMail];
-          
-          if (ogrenci) {
-                document.getElementById("displayAd").innerText = sifreCo(ogrenci.ad);
-                document.getElementById("displaySoyad").innerText = sifreCo(ogrenci.soyad);
-                document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + sifreCo(ogrenci.ad) + "!";
-            } else {
-                document.getElementById("displayAd").innerText = user.email.split('@')[0];
-                document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
-                document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
-            }
-
-            // Profil Fotosunu Çek
-            const userRef = doc(db, "kullanicilar", user.email);
-            getDoc(userRef).then((docSnap) => {
-                if (docSnap.exists() && docSnap.data().profil_fotosu) {
-                    document.getElementById('userAvatar').src = docSnap.data().profil_fotosu;
-                }
-            });
+          // İsim, soyisim ve profil fotoğrafı
+          profilDoldur(user.email);
       }
   });
 
@@ -2619,7 +2603,6 @@ gununBilgisiniGetir();
                     window.adminButonuKontrol(girisYapanMail);
                 }
 
-                const sifreliMail = window.btoa(unescape(encodeURIComponent(girisYapanMail)));
                 localStorage.setItem('aktifKullaniciMail', girisYapanMail);
 
                 setTimeout(() => {
@@ -2631,23 +2614,7 @@ gununBilgisiniGetir();
                     document.getElementById("student-portal").style.display = "block";
                     document.body.classList.add("portal-active");
 
-                    let ogrenci = ogrenciListesi[sifreliMail];
-                    if (ogrenci) {
-                        document.getElementById("displayAd").innerText = sifreCo(ogrenci.ad);
-                        document.getElementById("displaySoyad").innerText = sifreCo(ogrenci.soyad);
-                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin, " + sifreCo(ogrenci.ad) + "!";
-                    } else {
-                        document.getElementById("displayAd").innerText = girisYapanMail.split('@')[0];
-                        document.getElementById("displaySoyad").innerText = "ÖĞRENCİ";
-                        document.getElementById("welcomeTitle").innerText = "Hoş Geldin!";
-                    }
-
-                    const userRef = doc(db, "kullanicilar", girisYapanMail);
-                    getDoc(userRef).then((docSnap) => {
-                        if (docSnap.exists() && docSnap.data().profil_fotosu) {
-                            document.getElementById('userAvatar').src = docSnap.data().profil_fotosu;
-                        }
-                    });
+                    profilDoldur(girisYapanMail);
                     
                     history.replaceState({view: 'dashboard-view'}, "", "#dashboard");
                 }, 1000);
