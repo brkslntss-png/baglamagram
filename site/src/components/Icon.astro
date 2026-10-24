@@ -1,0 +1,20 @@
+---
+// SVG simge: Lucide (ISC) çizgi simgeleri ve Simple Icons (CC0) marka simgeleri, derleme anında gömülür.
+import fs from 'node:fs';
+import { createRequire } from 'node:module';
+interface Props { name: string; size?: number; class?: string; label?: string; stroke?: number }
+const { name, size = 20, class: cls = '', label, stroke = 1.75 } = Astro.props;
+const require = createRequire(import.meta.url);
+const BRANDS = ['instagram', 'youtube', 'spotify', 'whatsapp'];
+let svg = '';
+if (BRANDS.includes(name)) {
+  const raw = fs.readFileSync(require.resolve(`simple-icons/icons/${name}.svg`), 'utf8');
+  const d = raw.match(/<path d="([^"]+)"/)?.[1] ?? '';
+  svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${size}" height="${size}" fill="currentColor"><path d="${d}"/></svg>`;
+} else {
+  const raw = fs.readFileSync(require.resolve(`lucide-static/icons/${name}.svg`), 'utf8');
+  const inner = raw.replace(/<!--.*?-->/s, '').replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+  svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+}
+---
+<span class={`icon ${cls}`} aria-hidden={label ? undefined : 'true'} role={label ? 'img' : undefined} aria-label={label} set:html={svg} />

@@ -1,0 +1,187 @@
+---
+import Icon from './Icon.astro';
+import { href, LANG_NAMES, LANGS, t, type Lang } from '../i18n';
+interface Props { lang: Lang; page: string }
+const { lang, page } = Astro.props;
+const NAV = [
+  { key: 'nav.home', page: '' },
+  { key: 'nav.about', page: 'hakkinda.html' },
+  { key: 'nav.edu', page: 'online-egitim.html' },
+  { key: 'nav.notes', page: 'notalar.html' },
+  { key: 'nav.poems', page: 'siirler.html' },
+  { key: 'nav.concerts', page: 'konserler.html' },
+  { key: 'nav.packages', page: 'magaza.html' },
+] as const;
+const section = (p: string) => {
+  if (p === '' || p === 'index.html') return '';
+  if (p.startsWith('siir-')) return 'siirler.html';
+  if (p.startsWith('nota-') || p.startsWith('Nota-')) return 'notalar.html';
+  return p;
+};
+const current = section(page);
+---
+<a class="skip" href="#main">{t(lang, 'nav.skip')}</a>
+<header class="site-header" data-header>
+  <div class="container bar">
+    <a class="brand" href={href(lang, '')} aria-label="baglamagram — {t(lang, 'nav.home')}">
+      <span class="wordmark" aria-hidden="true"></span>
+    </a>
+    <nav class="nav" aria-label={t(lang, 'nav.menu')}>
+      <ul>
+        {NAV.map((n) => (
+          <li><a href={href(lang, n.page)} aria-current={current === n.page ? 'page' : undefined}>{t(lang, n.key)}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="actions">
+      <details class="lang" data-lang-menu>
+        <summary aria-label={t(lang, 'nav.language')}>
+          <Icon name="globe" size={17} />
+          <span>{lang.toUpperCase()}</span>
+        </summary>
+        <ul class="lang-list">
+          {LANGS.map((l) => (
+            <li><a href={href(l, page === 'index.html' ? '' : page)} hreflang={l} lang={l} data-set-lang={l} aria-current={l === lang ? 'true' : undefined}>{LANG_NAMES[l]}</a></li>
+          ))}
+        </ul>
+      </details>
+      <a class="btn btn-gold btn-sm login" href="/portal/">
+        <Icon name="log-in" size={16} />
+        <span>{t(lang, 'nav.login')}</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-open>
+        <span class="sr-only">{t(lang, 'nav.menu')}</span>
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" hidden data-menu>
+  <div class="mm-top container">
+    <a class="brand" href={href(lang, '')}><span class="wordmark" aria-hidden="true"></span><span class="sr-only">baglamagram</span></a>
+    <button class="menu-btn" type="button" data-menu-close><span class="sr-only">{t(lang, 'nav.close')}</span><Icon name="x" size={24} /></button>
+  </div>
+  <nav class="container mm-nav" aria-label={t(lang, 'nav.menu')}>
+    {NAV.map((n, i) => (
+      <a href={href(lang, n.page)} aria-current={current === n.page ? 'page' : undefined} style={`--i:${i}`}>{t(lang, n.key)}</a>
+    ))}
+    <a href={href(lang, 'blog.html')} style={`--i:${NAV.length}`}>{t(lang, 'nav.blog')}</a>
+  </nav>
+  <div class="container mm-foot">
+    <a class="btn btn-gold" href="/portal/"><Icon name="log-in" size={18} />{t(lang, 'nav.login')}</a>
+    <div class="mm-langs">
+      {LANGS.map((l) => <a href={href(l, page === 'index.html' ? '' : page)} lang={l} data-set-lang={l} aria-current={l === lang ? 'true' : undefined}>{LANG_NAMES[l]}</a>)}
+    </div>
+  </div>
+</div>
+
+<style>
+  .site-header {
+    position: fixed; inset: 0 0 auto; z-index: 50; height: var(--header-h);
+    transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .site-header.scrolled {
+    background: rgba(10, 10, 11, 0.72);
+    backdrop-filter: saturate(160%) blur(18px); -webkit-backdrop-filter: saturate(160%) blur(18px);
+    border-bottom-color: var(--line);
+  }
+  .bar { height: 100%; display: flex; align-items: center; gap: 24px; max-width: 1320px; }
+  .brand { display: inline-flex; align-items: center; height: 40px; flex-shrink: 0; }
+  .wordmark {
+    display: block; width: 148px; height: 26px;
+    background: linear-gradient(90deg, var(--gold-2), var(--gold));
+    -webkit-mask: url('/img/wordmark.png') left center / contain no-repeat;
+    mask: url('/img/wordmark.png') left center / contain no-repeat;
+  }
+  .nav { margin: 0 auto; }
+  .nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .nav a {
+    display: block; padding: 8px 12px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--text-2);
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .nav a:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+  .nav a[aria-current='page'] { color: var(--gold-2); background: var(--gold-soft); }
+  .actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+  .lang { position: relative; }
+  .lang summary {
+    list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 12px;
+    border-radius: 999px; border: 1px solid var(--line-2); font-size: 13px; font-weight: 600; color: var(--text-2);
+  }
+  .lang summary::-webkit-details-marker { display: none; }
+  .lang summary:hover, .lang[open] summary { color: var(--text); border-color: var(--gold-line); }
+  .lang-list {
+    position: absolute; right: 0; top: calc(100% + 8px); min-width: 170px; list-style: none; margin: 0; padding: 6px;
+    background: rgba(22, 22, 25, 0.96); border: 1px solid var(--line-2); border-radius: 16px; box-shadow: var(--shadow);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  }
+  .lang-list a { display: block; padding: 10px 12px; border-radius: 10px; font-size: 14px; color: var(--text-2); }
+  .lang-list a:hover { background: rgba(255, 255, 255, 0.06); color: var(--text); }
+  .lang-list a[aria-current='true'] { color: var(--gold-2); }
+  .menu-btn { display: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-2); background: transparent; place-items: center; cursor: pointer; }
+
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 60; background: rgba(8, 8, 9, 0.98);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    display: flex; flex-direction: column; overflow-y: auto;
+  }
+  .mobile-menu[hidden] { display: none; }
+  .mm-top { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; }
+  .mm-top .menu-btn { display: grid; }
+  .mm-nav { display: flex; flex-direction: column; padding-top: 24px; padding-bottom: 24px; }
+  .mm-nav a {
+    font-family: var(--serif); font-size: 30px; padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--text);
+    opacity: 0; transform: translateY(8px); animation: mmIn 0.45s ease forwards; animation-delay: calc(var(--i) * 40ms);
+  }
+  .mm-nav a[aria-current='page'] { color: var(--gold-2); }
+  @keyframes mmIn { to { opacity: 1; transform: none; } }
+  .mm-foot { margin-top: auto; padding-bottom: 32px; display: flex; flex-direction: column; gap: 18px; }
+  .mm-langs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mm-langs a { padding: 8px 14px; border: 1px solid var(--line-2); border-radius: 999px; font-size: 14px; color: var(--text-2); }
+  .mm-langs a[aria-current='true'] { color: var(--gold-2); border-color: var(--gold-line); }
+
+  @media (max-width: 1100px) {
+    .nav { display: none; }
+    .menu-btn { display: grid; }
+    .lang { display: none; }
+  }
+  @media (max-width: 560px) {
+    .login span { display: none; }
+    .login { width: 40px; padding: 0; }
+    .wordmark { width: 128px; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('[data-header]');
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+  const setOpen = (open: boolean) => {
+    if (!menu) return;
+    menu.hidden = !open;
+    openBtn?.setAttribute('aria-expanded', String(open));
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    if (open) closeBtn?.focus(); else openBtn?.focus();
+  };
+  openBtn?.addEventListener('click', () => setOpen(true));
+  closeBtn?.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu && !menu.hidden) setOpen(false); });
+
+  // Dil menüsü dışarı tıklayınca kapansın
+  const langMenu = document.querySelector<HTMLDetailsElement>('[data-lang-menu]');
+  document.addEventListener('click', (e) => { if (langMenu?.open && !langMenu.contains(e.target as Node)) langMenu.open = false; });
+
+  // Seçilen dil hatırlanır; öğrenci portalı da aynı dilde açılır
+  document.querySelectorAll<HTMLAnchorElement>('[data-set-lang]').forEach((a) => a.addEventListener('click', () => {
+    try {
+      localStorage.setItem('bg_lang', a.dataset.setLang || 'tr');
+      localStorage.setItem('@baglamagram_dil', a.dataset.setLang || 'tr');
+    } catch (_) {}
+  }));
+</script>

@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import YouTube from '../YouTube.astro';
+import Lightbox from '../Lightbox.astro';
+import { t, type Lang } from '../../i18n';
+import { CONCERT_FEATURED as c, CONCERTS_PAST } from '../../data/concerts';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<Base title={t(lang, 'concerts.title')} description={t(lang, 'concerts.lead')}>
+  <section class="page-hero">
+    <div class="container narrow">
+      <span class="eyebrow">{t(lang, 'nav.concerts')}</span>
+      <h1 class="title-xl">{t(lang, 'concerts.title')}</h1>
+      <p class="lead">{t(lang, 'concerts.lead')}</p>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container featured reveal">
+      <a class="poster" href={c.poster} data-zoom data-alt={c.title}><img src={c.poster} alt={c.title} decoding="async" /></a>
+      <div class="info">
+        <span class="chip"><Icon name="star" size={13} />{t(lang, 'home.concert.eyebrow')}</span>
+        <h2 class="title-lg">{c.title}</h2>
+        <p class="lead">{c.desc[lang]}</p>
+        <ul class="meta">
+          <li><Icon name="calendar" size={17} />{c.date[lang]}</li>
+          <li><Icon name="map-pin" size={17} />{c.place[lang]}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container narrow">
+      <div class="section-head reveal">
+        <div class="row-between">
+          <h2 class="title-md">{t(lang, 'concerts.watch')}</h2>
+          <a class="link-arrow" href={`https://www.youtube.com/watch?v=${c.youtube}`} target="_blank" rel="noopener noreferrer"><Icon name="youtube" size={18} />{t(lang, 'common.watchOnYoutube')}</a>
+        </div>
+      </div>
+      <div class="reveal"><YouTube id={c.youtube} title={c.title} label={t(lang, 'common.playVideo')} /></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal"><h2 class="title-lg">{t(lang, 'concerts.past')}</h2></div>
+      <div class="grid grid-3 past reveal">
+        {CONCERTS_PAST.map((p) => (
+          <a class="card item" href={p.poster} data-zoom data-alt={p.title[lang]}>
+            <span class="img"><img src={p.poster} alt={p.title[lang]} loading="lazy" decoding="async" /></span>
+            <h3>{p.title[lang]}</h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <Lightbox closeLabel={t(lang, 'nav.close')} />
+</Base>
+<style>
+  .featured { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(24px, 5vw, 56px); align-items: center; padding: clamp(16px, 3vw, 28px); border: 1px solid var(--gold-line); border-radius: var(--radius-lg); background: radial-gradient(100% 100% at 100% 0%, rgba(210, 172, 99, 0.09), transparent 60%), var(--surface); }
+  .poster { display: block; border-radius: 22px; overflow: hidden; aspect-ratio: 3 / 4; background: var(--bg-2); cursor: zoom-in; }
+  .poster img { width: 100%; height: 100%; object-fit: cover; }
+  .info { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+  .meta { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 24px; color: var(--text-2); font-size: 15px; }
+  .meta li { display: inline-flex; align-items: center; gap: 8px; }
+  .meta :global(.icon) { color: var(--gold); }
+  .item { overflow: hidden; display: flex; flex-direction: column; cursor: zoom-in; }
+  .img { aspect-ratio: 4 / 5; overflow: hidden; background: var(--bg-2); }
+  .img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+  .item:hover img { transform: scale(1.04); }
+  .item h3 { padding: 16px 18px; font-size: 16px; }
+  @media (max-width: 860px) { .featured { grid-template-columns: 1fr; } .poster { max-width: 420px; } }
+</style>

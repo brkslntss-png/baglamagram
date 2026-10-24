@@ -1,0 +1,7 @@
+---
+import P from '../components/pages/PoemPage.astro';
+import { POEMS } from '../data/poems';
+export function getStaticPaths() { return POEMS.map((poem) => ({ params: { slug: poem.slug }, props: { poem } })); }
+const { poem } = Astro.props;
+---
+<P lang="tr" poem={poem} />

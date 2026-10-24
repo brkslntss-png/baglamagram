@@ -1,0 +1,63 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { href, t, type Lang } from '../../i18n';
+import { SONGS } from '../../data/songs';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const songs = SONGS.filter((s) => s.listed);
+---
+<Base title={t(lang, 'notes.title')} description={t(lang, 'notes.lead')}>
+  <section class="page-hero">
+    <div class="container narrow">
+      <span class="eyebrow">{t(lang, 'nav.notes')}</span>
+      <h1 class="title-xl">{t(lang, 'notes.title')}</h1>
+      <p class="lead">{t(lang, 'notes.lead')}</p>
+      <label class="search">
+        <Icon name="search" size={18} />
+        <span class="sr-only">{t(lang, 'notes.search')}</span>
+        <input type="search" placeholder={t(lang, 'notes.search')} data-filter="[data-song]" autocomplete="off" />
+      </label>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container narrow">
+      <ul class="list">
+        {songs.map((s) => (
+          <li data-song data-text={`${s.title} ${s.by}`.toLocaleLowerCase('tr')}>
+            <a class="card row" href={href(lang, s.page)}>
+              <span class="thumb"><img src={s.images[0]} alt="" loading="lazy" decoding="async" /></span>
+              <span class="info">
+                <strong class="serif">{s.title}</strong>
+                <small>{t(lang, 'notes.by', { name: s.by })}</small>
+              </span>
+              <Icon name="chevron-right" size={20} class="chev" />
+            </a>
+            <a class="dl" href={`/${s.pdf}`} download aria-label={`${t(lang, 'notes.pdf')}: ${s.title}`}><Icon name="download" size={18} /></a>
+          </li>
+        ))}
+      </ul>
+      <p class="empty muted" hidden data-empty>{t(lang, 'common.noResult')}</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .page-hero .container { gap: 18px; }
+  .search { margin-top: 12px; display: flex; align-items: center; gap: 10px; height: 54px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--bg-2); color: var(--text-3); max-width: 520px; }
+  .search:focus-within { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-soft); }
+  .search input { flex: 1; border: 0; background: transparent; color: var(--text); font: inherit; outline: none; }
+  .list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .list li { position: relative; }
+  .row { display: flex; align-items: center; gap: 18px; padding: 14px 70px 14px 14px; }
+  .thumb { width: 72px; height: 92px; border-radius: 12px; overflow: hidden; background: #f4f1ea; flex-shrink: 0; border: 1px solid var(--line); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .info strong { font-size: 22px; font-weight: 600; }
+  .info small { color: var(--text-2); font-size: 14px; }
+  .chev { color: var(--text-3); }
+  .dl { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--gold-line); color: var(--gold-2); background: var(--gold-soft); }
+  .dl:hover { background: var(--gold); color: #111; }
+  .row :global(.chev) { margin-right: 6px; }
+  .empty { text-align: center; padding: 24px; }
+</style>
+<script src="../../scripts/filter.ts"></script>

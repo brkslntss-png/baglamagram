@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { href, t, type Lang } from '../../i18n';
+import { ABOUT, ageOn, ageText, BIRTH } from '../../data/about';
+import { IMG, SOCIAL } from '../../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const a = ABOUT[lang];
+const age = ageText(lang, ageOn());
+const withAge = (s: string) => s.replace('{age}', `<span data-age data-birth="${BIRTH}" data-lang="${lang}">${age}</span>`);
+---
+<Base title={a.title} description={a.p[0].replace('{age}', age).slice(0, 155)}>
+  <section class="page-hero">
+    <div class="container about">
+      <div class="photo reveal">
+        <div class="frame"><img src={IMG.portrait} alt="Mahmut Burak Aslantaş" loading="eager" decoding="async" width="720" height="900" /></div>
+        <div class="social">
+          {SOCIAL.map((s) => <a href={s.url} target="_blank" rel="noopener noreferrer"><Icon name={s.icon} size={18} /><span>{s.name}</span></a>)}
+        </div>
+      </div>
+      <div class="text">
+        <span class="eyebrow">{t(lang, 'site.tagline')}</span>
+        <h1 class="title-xl">{a.title}</h1>
+        {a.p.map((p) => <p class="lead" set:html={withAge(p)} />)}
+
+        <h2 class="title-md sub">{a.timelineTitle}</h2>
+        <ol class="timeline">
+          {a.timeline.map(([y, d]) => <li><span class="year">{y}</span><span>{d}</span></li>)}
+        </ol>
+
+        <div class="grid grid-2 boxes">
+          <div class="card box">
+            <h2><Icon name="award" size={18} class="gold" />{a.careerTitle}</h2>
+            {a.career.map(([k, v]) => <p><strong>{k}</strong>{v}</p>)}
+          </div>
+          <div class="card box">
+            <h2><Icon name="palette" size={18} class="gold" />{a.projectsTitle}</h2>
+            {a.projects.map(([k, v]) => <p><strong>{k}</strong>{v}</p>)}
+          </div>
+        </div>
+        <div class="cta">
+          <a class="btn btn-gold" href={href(lang, 'online-egitim.html')}><Icon name="graduation-cap" size={18} />{t(lang, 'home.ctaEdu')}</a>
+          <a class="btn btn-ghost" href={href(lang, 'konserler.html')}>{t(lang, 'home.ctaConcerts')}<Icon name="arrow-right" size={17} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .about { display: grid !important; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .photo { position: sticky; top: calc(var(--header-h) + 24px); display: flex; flex-direction: column; gap: 16px; }
+  .frame { border-radius: 32px; overflow: hidden; aspect-ratio: 4 / 5; background: var(--surface); border: 1px solid var(--gold-line); box-shadow: 0 40px 120px -40px rgba(210, 172, 99, 0.3), var(--shadow); }
+  .frame img { width: 100%; height: 100%; object-fit: cover; }
+  .social { display: flex; flex-wrap: wrap; gap: 8px; }
+  .social a { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); font-size: 14px; }
+  .social a:hover { color: var(--gold-2); border-color: var(--gold-line); }
+  .text { display: flex; flex-direction: column; gap: 20px; }
+  .text .lead { color: var(--text-2); }
+  .sub { margin-top: 20px; }
+  .timeline { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--gold-line); display: flex; flex-direction: column; gap: 14px; }
+  .timeline li { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding-left: 20px; position: relative; color: var(--text-2); }
+  .timeline li::before { content: ''; position: absolute; left: -5px; top: 9px; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px var(--bg); }
+  .year { font-family: var(--serif); color: var(--gold-2); font-size: 18px; }
+  .boxes { margin-top: 12px; }
+  .box { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .box h2 { font-size: 16px; font-family: var(--sans); display: flex; gap: 10px; align-items: center; letter-spacing: 0.02em; }
+  .box p { font-size: 15px; color: var(--text-2); }
+  .box strong { display: block; color: var(--text); font-weight: 600; margin-bottom: 2px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+  @media (max-width: 960px) {
+    .about { grid-template-columns: 1fr; }
+    .photo { position: static; max-width: 420px; }
+  }
+</style>
+
+<script>
+  // Yaşı her gün doğru göster
+  document.querySelectorAll<HTMLElement>('[data-age]').forEach((el) => {
+    const b = new Date(el.dataset.birth || '2002-02-08');
+    const d = new Date();
+    let a = d.getFullYear() - b.getFullYear();
+    if (d.getMonth() < b.getMonth() || (d.getMonth() === b.getMonth() && d.getDate() < b.getDate())) a -= 1;
+    if (el.dataset.lang === 'ru') {
+      const m10 = a % 10, m100 = a % 100;
+      el.textContent = `${a} ${m10 === 1 && m100 !== 11 ? 'год' : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? 'года' : 'лет'}`;
+    } else el.textContent = String(a);
+  });
+</script>

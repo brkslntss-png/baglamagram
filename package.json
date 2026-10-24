@@ -1,9 +1,7 @@
 {
   "name": "baglamagram-ai",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "private": true,
   "type": "module",
-  "dependencies": {
-    "@google/generative-ai": "^0.21.0",
-    "formidable": "^3.5.1"
-  }
+  "description": "Vercel: BurakAI Hoca API (api/chat.js). Web sitesi site/ klasöründe (Astro), GitHub Pages'te yayınlanır."
 }

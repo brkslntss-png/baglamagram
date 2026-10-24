@@ -1,0 +1,6 @@
+---
+import P from '../../components/pages/AboutPage.astro';
+import { langStaticPaths, type Lang } from '../../i18n';
+export const getStaticPaths = langStaticPaths;
+---
+<P lang={Astro.params.lang as Lang} />

@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { formatDate, href, t, type Lang } from '../../i18n';
+import { CATS, excerptOf, posts, readingMinutes } from '../../data/blog';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const list = posts(lang);
+---
+<Base title={t(lang, 'blog.title')} description={t(lang, 'blog.lead')}>
+  <section class="page-hero">
+    <div class="container narrow">
+      <span class="eyebrow">{t(lang, 'nav.blog')}</span>
+      <h1 class="title-xl">{t(lang, 'blog.title')}</h1>
+      <p class="lead">{t(lang, 'blog.lead')}</p>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container">
+      <div class="grid grid-3">
+        {list.map((p) => (
+          <a class="card post" href={href(lang, p.page)}>
+            <span class="img"><img src={p.image} alt="" loading="lazy" decoding="async" /></span>
+            <span class="body">
+              <span class="meta">{CATS[p.cat][lang]} · {formatDate(lang, p.date)}</span>
+              <h2 class="serif">{p.title}</h2>
+              <p>{excerptOf(p)}</p>
+              <span class="more">{t(lang, 'common.readMore')}<Icon name="arrow-right" size={16} /><small>{t(lang, 'blog.minutes', { n: readingMinutes(p) })}</small></span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .post { overflow: hidden; display: flex; flex-direction: column; }
+  .img { aspect-ratio: 16 / 10; background: var(--bg-2); overflow: hidden; }
+  .img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+  .post:hover img { transform: scale(1.04); }
+  .body { padding: 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .meta { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+  .body h2 { font-size: 23px; }
+  .body p { color: var(--text-2); font-size: 15px; flex: 1; }
+  .more { display: inline-flex; align-items: center; gap: 6px; color: var(--gold); font-weight: 600; font-size: 14px; }
+  .more small { margin-left: auto; color: var(--text-3); font-weight: 500; }
+</style>

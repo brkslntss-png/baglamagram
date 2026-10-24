@@ -1,0 +1,5 @@
+# Vercel'de yalnızca BurakAI API'si çalışır; site GitHub Pages'te.
+/*
+!/api
+!/package.json
+!/vercel.json
