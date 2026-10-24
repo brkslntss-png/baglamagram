@@ -10,11 +10,11 @@ const a = ABOUT[lang];
 const age = ageText(lang, ageOn());
 const withAge = (s: string) => s.replace('{age}', `<span data-age data-birth="${BIRTH}" data-lang="${lang}">${age}</span>`);
 ---
-<Base title={a.title} description={a.p[0].replace('{age}', age).slice(0, 155)}>
+<Base title={a.title} description={a.p[0].replace('{age}', age).slice(0, 155)} image={`https://baglamagram.com.tr${IMG.baglama.full}`}>
   <section class="page-hero">
     <div class="container about">
       <div class="photo reveal">
-        <div class="frame"><img src={IMG.portrait} alt="Mahmut Burak Aslantaş" loading="eager" decoding="async" width="720" height="900" /></div>
+        <div class="frame"><img src={IMG.baglama.src} srcset={IMG.baglama.srcset} sizes="(max-width: 860px) 92vw, 460px" width={IMG.baglama.w} height={IMG.baglama.h} alt={a.photoAlt} loading="eager" decoding="async" /></div>
         <div class="social">
           {SOCIAL.map((s) => <a href={s.url} target="_blank" rel="noopener noreferrer"><Icon name={s.icon} size={18} /><span>{s.name}</span></a>)}
         </div>
@@ -51,7 +51,7 @@ const withAge = (s: string) => s.replace('{age}', `<span data-age data-birth="${
 <style>
   .about { display: grid !important; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
   .photo { position: sticky; top: calc(var(--header-h) + 24px); display: flex; flex-direction: column; gap: 16px; }
-  .frame { border-radius: 32px; overflow: hidden; aspect-ratio: 4 / 5; background: var(--surface); border: 1px solid var(--gold-line); box-shadow: 0 40px 120px -40px rgba(210, 172, 99, 0.3), var(--shadow); }
+  .frame { border-radius: 32px; overflow: hidden; aspect-ratio: 1 / 1; background: var(--surface); border: 1px solid var(--gold-line); box-shadow: 0 40px 120px -40px rgba(210, 172, 99, 0.3), var(--shadow); }
   .frame img { width: 100%; height: 100%; object-fit: cover; }
   .social { display: flex; flex-wrap: wrap; gap: 8px; }
   .social a { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); font-size: 14px; }

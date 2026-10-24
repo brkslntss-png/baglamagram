@@ -5,11 +5,25 @@ export const SOCIAL = [
   { name: 'Spotify', icon: 'spotify', url: 'https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft' },
 ];
 
-// Görseller şimdilik hizliresim.com üzerinde
+// Fotoğraflar ve afişler sitenin kendi sunucusunda (public/img). Yeni boyut gerekirse
+// aynı adla -480/-960 gibi WebP dosyaları eklenir.
+export type Pic = { src: string; srcset: string; w: number; h: number; full: string };
+const pic = (base: string, small: number, large: number, w: number, h: number, full = `${base}-${large}.webp`): Pic => ({
+  src: `${base}-${large}.webp`,
+  srcset: `${base}-${small}.webp ${small}w, ${base}-${large}.webp ${large}w`,
+  w,
+  h,
+  full,
+});
+
 export const IMG = {
-  portrait: 'https://i.hizliresim.com/olj28le.jpg',
-  eastToWest: 'https://i.hizliresim.com/6vp28ri.JPG',
+  // Ana sayfa: yelekli, kravatlı portre
+  portrait: pic('/img/portre', 480, 960, 960, 1280, '/img/portre.jpg'),
+  // Hakkında: bağlamayla siyah-beyaz fotoğraf
+  baglama: pic('/img/baglama', 720, 1280, 1280, 1280, '/img/baglama.jpg'),
 };
+
+export const poster = (name: string): Pic => pic(`/img/konser/${name}`, 480, 1131, 1131, 1600);
 
 export const INSTAGRAM = [
   'https://i.hizliresim.com/ne9q1cu.jpg',

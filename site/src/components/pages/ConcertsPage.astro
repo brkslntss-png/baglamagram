@@ -3,10 +3,11 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import YouTube from '../YouTube.astro';
 import Lightbox from '../Lightbox.astro';
-import { t, type Lang } from '../../i18n';
+import { formatDate, t, type Lang } from '../../i18n';
 import { CONCERT_FEATURED as c, CONCERTS_PAST } from '../../data/concerts';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
+const when = (iso: string, day = true) => formatDate(lang, iso, day ? { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' } : { month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
 <Base title={t(lang, 'concerts.title')} description={t(lang, 'concerts.lead')}>
   <section class="page-hero">
@@ -18,7 +19,7 @@ const { lang } = Astro.props;
   </section>
   <section class="section-tight">
     <div class="container featured reveal">
-      <a class="poster" href={c.poster} data-zoom data-alt={c.title}><img src={c.poster} alt={c.title} decoding="async" /></a>
+      <a class="poster" href={c.poster.full} data-zoom data-alt={c.title}><img src={c.poster.src} srcset={c.poster.srcset} sizes="(max-width: 860px) 90vw, 420px" width={c.poster.w} height={c.poster.h} alt={c.title} decoding="async" /></a>
       <div class="info">
         <span class="chip"><Icon name="star" size={13} />{t(lang, 'home.concert.eyebrow')}</span>
         <h2 class="title-lg">{c.title}</h2>
@@ -46,9 +47,9 @@ const { lang } = Astro.props;
       <div class="section-head reveal"><h2 class="title-lg">{t(lang, 'concerts.past')}</h2></div>
       <div class="grid grid-3 past reveal">
         {CONCERTS_PAST.map((p) => (
-          <a class="card item" href={p.poster} data-zoom data-alt={p.title[lang]}>
-            <span class="img"><img src={p.poster} alt={p.title[lang]} loading="lazy" decoding="async" /></span>
-            <h3>{p.title[lang]}</h3>
+          <a class="card item" href={p.poster.full} data-zoom data-alt={p.title[lang]}>
+            <span class="img"><img src={p.poster.src} srcset={p.poster.srcset} sizes="(max-width: 640px) 92vw, (max-width: 960px) 46vw, 380px" width={p.poster.w} height={p.poster.h} alt={p.title[lang]} loading="lazy" decoding="async" /></span>
+            <div class="cap"><h3>{p.title[lang]}</h3><time datetime={p.date}><Icon name="calendar" size={14} />{when(p.date, p.day !== false)}</time></div>
           </a>
         ))}
       </div>
@@ -57,17 +58,20 @@ const { lang } = Astro.props;
   <Lightbox closeLabel={t(lang, 'nav.close')} />
 </Base>
 <style>
-  .featured { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(24px, 5vw, 56px); align-items: center; padding: clamp(16px, 3vw, 28px); border: 1px solid var(--gold-line); border-radius: var(--radius-lg); background: radial-gradient(100% 100% at 100% 0%, rgba(210, 172, 99, 0.09), transparent 60%), var(--surface); }
-  .poster { display: block; border-radius: 22px; overflow: hidden; aspect-ratio: 3 / 4; background: var(--bg-2); cursor: zoom-in; }
+  .featured { width: calc(100% - 2 * var(--gutter)); display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(24px, 5vw, 56px); align-items: center; padding: clamp(16px, 3vw, 28px); border: 1px solid var(--gold-line); border-radius: var(--radius-lg); background: radial-gradient(100% 100% at 100% 0%, rgba(210, 172, 99, 0.09), transparent 60%), var(--surface); }
+  .poster { display: block; border-radius: 22px; overflow: hidden; aspect-ratio: 1131 / 1600; background: var(--bg-2); cursor: zoom-in; }
   .poster img { width: 100%; height: 100%; object-fit: cover; }
   .info { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
   .meta { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 24px; color: var(--text-2); font-size: 15px; }
   .meta li { display: inline-flex; align-items: center; gap: 8px; }
   .meta :global(.icon) { color: var(--gold); }
   .item { overflow: hidden; display: flex; flex-direction: column; cursor: zoom-in; }
-  .img { aspect-ratio: 4 / 5; overflow: hidden; background: var(--bg-2); }
+  .img { aspect-ratio: 1131 / 1600; overflow: hidden; background: var(--bg-2); }
   .img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
   .item:hover img { transform: scale(1.04); }
-  .item h3 { padding: 16px 18px; font-size: 16px; }
+  .cap { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px 18px; }
+  .item h3 { font-size: 16px; line-height: 1.35; }
+  .cap time { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-2); }
+  .cap time :global(.icon) { color: var(--gold); }
   @media (max-width: 860px) { .featured { grid-template-columns: 1fr; } .poster { max-width: 420px; } }
 </style>

@@ -52,7 +52,7 @@ const cards = [
   .pkg p { color: var(--text-2); flex: 1; }
   .pkg .btn { align-self: flex-start; margin-top: 8px; }
   .trial { border-color: var(--gold-line); background: radial-gradient(120% 120% at 100% 0%, rgba(210, 172, 99, 0.12), transparent 60%), var(--surface); }
-  .includes { display: flex; flex-direction: column; gap: 18px; padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+  .includes { width: calc(100% - 2 * var(--gutter)); display: flex; flex-direction: column; gap: 18px; padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
   .includes ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
   .includes li { display: flex; gap: 10px; color: var(--text-2); }
   .small { display: flex; gap: 8px; align-items: center; font-size: 14px; }
