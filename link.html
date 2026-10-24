@@ -6,20 +6,20 @@
     <title>Mahmut Burak Aslantaş | Baglamagram</title>
     <meta name="description" content="Mahmut Burak Aslantaş resmi bağlantıları, Baglamagram online bağlama eğitimi, YouTube, Spotify ve Apple Music profilleri.">
     
-    <!-- Modern ve ferah görünüm için Google Fonts (Plus Jakarta Sans) -->
+    <!-- Google Fonts (Plus Jakarta Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #090a0f;
-            --glass-bg: rgba(255, 255, 255, 0.035);
-            --glass-border: rgba(255, 255, 255, 0.09);
-            --glass-highlight: rgba(255, 255, 255, 0.22);
+            --bg-base: #050508;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.25);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent-warm: #e5a052; /* Fotoğraftaki sıcak stüdyo ışığı tonu */
+            --accent-gold: #e5a052;
         }
 
         * {
@@ -31,7 +31,7 @@
 
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-dark);
+            background-color: var(--bg-base);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -42,63 +42,131 @@
             padding: 48px 20px;
         }
 
-        /* Liquid Glass Arka Plan Küreleri (Ambient Orbs) */
-        .ambient-bg {
+        /* ==========================================
+           YENİ NESİL LIQUID & AKUSTİK ARKA PLAN
+           ========================================== */
+        .liquid-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            inset: 0;
             z-index: 0;
             overflow: hidden;
             pointer-events: none;
+            background: radial-gradient(circle at 50% 0%, #13111c 0%, #050508 75%);
         }
 
-        .orb {
+        /* Sıvı Aurora Katmanı */
+        .aurora-container {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(95px);
-            opacity: 0.5;
-            animation: float 16s infinite ease-in-out alternate;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            filter: blur(85px);
+            opacity: 0.65;
+            animation: slowSpin 45s linear infinite;
         }
 
-        /* Fotoğrafın sol üstündeki sıcak ışıkla uyumlu küre */
-        .orb-1 {
-            width: 340px;
-            height: 340px;
-            background: radial-gradient(circle, rgba(229, 160, 82, 0.42), transparent 70%);
-            top: -10%;
-            left: -10%;
+        .liquid-blob {
+            position: absolute;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            mix-blend-mode: screen;
         }
 
-        /* Derinlik katan soğuk gece mavisi alt küre */
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 70%);
-            bottom: -15%;
-            right: -10%;
+        /* Sıcak Kehribar / Altın Işık (Fotoğraftaki ışıkla uyumlu) */
+        .blob-gold {
+            width: 45vw;
+            height: 45vw;
+            min-width: 380px;
+            min-height: 380px;
+            background: radial-gradient(circle, rgba(229, 160, 82, 0.45) 0%, rgba(180, 83, 9, 0.15) 60%, transparent 80%);
+            top: 18%;
+            left: 22%;
+            animation: morph 18s ease-in-out infinite both alternate;
+        }
+
+        /* Derin Gece Mavisi / Turkuaz Akış */
+        .blob-cyan {
+            width: 50vw;
+            height: 50vw;
+            min-width: 420px;
+            min-height: 420px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, rgba(30, 58, 138, 0.15) 60%, transparent 80%);
+            bottom: 18%;
+            right: 20%;
+            animation: morph 22s ease-in-out infinite both alternate-reverse;
+        }
+
+        /* Mistik Mor / İndigo Derinlik */
+        .blob-indigo {
+            width: 40vw;
+            height: 40vw;
+            min-width: 340px;
+            min-height: 340px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, rgba(190, 24, 93, 0.1) 60%, transparent 80%);
+            top: 35%;
+            left: 42%;
+            animation: morph 15s ease-in-out infinite both alternate;
             animation-delay: -5s;
         }
 
-        /* Orta kısımdaki hafif mor/indigo ambiyans küresi */
-        .orb-3 {
-            width: 280px;
-            height: 280px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.18), transparent 70%);
-            top: 40%;
-            left: 50%;
-            transform: translateX(-50%);
-            animation-delay: -10s;
+        /* Müzikal & Bağlama Telleri Akustik Dalgaları (SVG) */
+        .acoustic-waves {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.22;
+            mix-blend-mode: color-dodge;
         }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(25px, -25px) scale(1.06); }
-            100% { transform: translate(-20px, 20px) scale(0.95); }
+        .acoustic-waves svg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        /* Ana Kapsayıcı (Ferah ve Mobil Öncelikli) */
+        /* İnce Mimari Perspektif Izgarası */
+        .subtle-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 56px 56px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 20%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 20%, transparent 100%);
+        }
+
+        /* Premium Kumlama (Noise) Dokusu - Cam hissini güçlendirir */
+        .noise-overlay {
+            position: absolute;
+            inset: 0;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @keyframes morph {
+            0% {
+                border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            50% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+                transform: translate(40px, -30px) scale(1.08) rotate(12deg);
+            }
+            100% {
+                border-radius: 30% 70% 50% 50% / 50% 60% 40% 60%;
+                transform: translate(-30px, 25px) scale(0.95) rotate(-10deg);
+            }
+        }
+
+        @keyframes slowSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ==========================================
+           İÇERİK & LIQUID GLASS BUTONLAR
+           ========================================== */
         .container {
             width: 100%;
             max-width: 420px;
@@ -107,11 +175,11 @@
             flex-direction: column;
             align-items: center;
             gap: 32px;
-            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(18px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -126,17 +194,18 @@
 
         .avatar-wrapper {
             position: relative;
-            width: 116px;
-            height: 116px;
+            width: 118px;
+            height: 118px;
             border-radius: 50%;
             padding: 4px;
-            background: linear-gradient(135deg, rgba(229, 160, 82, 0.6), rgba(255, 255, 255, 0.1), rgba(56, 189, 248, 0.3));
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 25px rgba(229, 160, 82, 0.2);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(135deg, rgba(229, 160, 82, 0.75), rgba(255, 255, 255, 0.12), rgba(56, 189, 248, 0.45));
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 30px rgba(229, 160, 82, 0.22);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
         }
 
         .avatar-wrapper:hover {
             transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 40px rgba(229, 160, 82, 0.35);
         }
 
         .avatar {
@@ -146,15 +215,16 @@
             object-fit: cover;
             object-position: center 20%;
             display: block;
-            border: 2px solid var(--bg-dark);
+            border: 2px solid var(--bg-base);
         }
 
         .profile-name {
-            font-size: 1.35rem;
+            font-size: 1.38rem;
             font-weight: 700;
             letter-spacing: -0.02em;
             color: var(--text-main);
             margin-top: 2px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .profile-bio {
@@ -180,16 +250,19 @@
             justify-content: space-between;
             width: 100%;
             padding: 16px 20px;
-            border-radius: 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
             text-decoration: none;
             overflow: hidden;
             transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 10px 30px -5px rgba(0, 0, 0, 0.45),
+                inset 0 1px 1px rgba(255, 255, 255, 0.14),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.2);
         }
 
         /* Cam Yüzeyinden Geçen Işık Yansıması (Liquid Shimmer) */
@@ -203,7 +276,7 @@
             background: linear-gradient(
                 90deg,
                 transparent,
-                rgba(255, 255, 255, 0.08),
+                rgba(255, 255, 255, 0.1),
                 transparent
             );
             transform: skewX(-20deg);
@@ -221,7 +294,7 @@
         .glass-btn:focus-visible {
             transform: translateY(-4px) scale(1.02);
             border-color: var(--glass-highlight);
-            background: rgba(255, 255, 255, 0.065);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%);
         }
 
         .glass-btn:active {
@@ -230,28 +303,28 @@
 
         /* Platformlara Özel Gölge (Glow) Efektleri */
         .btn-web:hover {
-            box-shadow: 0 12px 28px -6px rgba(229, 160, 82, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            border-color: rgba(229, 160, 82, 0.4);
+            box-shadow: 0 14px 32px -6px rgba(229, 160, 82, 0.32), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            border-color: rgba(229, 160, 82, 0.5);
         }
 
         .btn-edu:hover {
-            box-shadow: 0 12px 28px -6px rgba(56, 189, 248, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 14px 32px -6px rgba(56, 189, 248, 0.32), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            border-color: rgba(56, 189, 248, 0.5);
         }
 
         .btn-youtube:hover {
-            box-shadow: 0 12px 28px -6px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            border-color: rgba(239, 68, 68, 0.45);
+            box-shadow: 0 14px 32px -6px rgba(239, 68, 68, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            border-color: rgba(239, 68, 68, 0.5);
         }
 
         .btn-spotify:hover {
-            box-shadow: 0 12px 28px -6px rgba(34, 197, 94, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            border-color: rgba(34, 197, 94, 0.45);
+            box-shadow: 0 14px 32px -6px rgba(34, 197, 94, 0.32), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            border-color: rgba(34, 197, 94, 0.5);
         }
 
         .btn-apple:hover {
-            box-shadow: 0 12px 28px -6px rgba(244, 63, 94, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            border-color: rgba(244, 63, 94, 0.45);
+            box-shadow: 0 14px 32px -6px rgba(244, 63, 94, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            border-color: rgba(244, 63, 94, 0.5);
         }
 
         /* Buton İçerik Düzeni */
@@ -262,21 +335,22 @@
         }
 
         .icon-box {
-            width: 42px;
-            height: 42px;
-            border-radius: 13px;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
             transition: transform 0.3s ease, background 0.3s ease;
             flex-shrink: 0;
         }
 
         .glass-btn:hover .icon-box {
             transform: scale(1.08);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .icon-box svg {
@@ -325,7 +399,6 @@
             letter-spacing: 0.02em;
         }
 
-        /* Küçük Ekran İyileştirmeleri */
         @media (max-width: 380px) {
             .glass-btn {
                 padding: 14px 16px;
@@ -338,23 +411,50 @@
 </head>
 <body>
 
-    <!-- Arka Plan Ambiyans Işıkları -->
-    <div class="ambient-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+    <!-- YENİ KATMANLI LIQUID & AKUSTİK ARKA PLAN -->
+    <div class="liquid-bg">
+        <div class="aurora-container">
+            <div class="liquid-blob blob-gold"></div>
+            <div class="liquid-blob blob-cyan"></div>
+            <div class="liquid-blob blob-indigo"></div>
+        </div>
+        
+        <div class="subtle-grid"></div>
+
+        <!-- Bağlama Tellerini ve Ses Dalgalarını Temsil Eden Akustik Çizgiler -->
+        <div class="acoustic-waves">
+            <svg viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <path d="M-100 600 C 300 400, 600 800, 1540 300" stroke="url(#gold-grad)" stroke-width="1.5" opacity="0.6"/>
+                <path d="M-100 650 C 400 350, 700 850, 1540 250" stroke="url(#gold-grad)" stroke-width="1" opacity="0.4"/>
+                <path d="M-100 700 C 500 300, 800 900, 1540 200" stroke="url(#cyan-grad)" stroke-width="1.5" opacity="0.5"/>
+                <path d="M-100 200 C 400 600, 900 100, 1540 550" stroke="url(#cyan-grad)" stroke-width="1" opacity="0.35"/>
+                <defs>
+                    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="transparent"/>
+                        <stop offset="50%" stop-color="#e5a052"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </linearGradient>
+                    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="transparent"/>
+                        <stop offset="50%" stop-color="#38bdf8"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="noise-overlay"></div>
     </div>
 
     <main class="container">
         <!-- Profil Kısmı -->
         <header class="profile-section">
             <div class="avatar-wrapper">
-                <!-- Fotoğrafının adını profil.jpg olarak kaydedip aynı dizine yükleyebilirsin -->
                 <img src="profil.jpg" alt="Mahmut Burak Aslantaş" class="avatar">
             </div>
             <div>
                 <h1 class="profile-name">Mahmut Burak Aslantaş</h1>
-                <p class="profile-bio">Bağlama  İcracısı & Müzik Öğretmeni • Baglamagram Kurucusu</p>
+                <p class="profile-bio">Bağlama  İcracısı & Müzik Öğretmeni   Baglamagram Kurucusu</p>
             </div>
         </header>
 
