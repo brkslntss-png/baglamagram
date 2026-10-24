@@ -1,1 +1,477 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahmut Burak Aslantaş | Baglamagram</title>
+    <meta name="description" content="Mahmut Burak Aslantaş resmi bağlantıları, Baglamagram online bağlama eğitimi, YouTube, Spotify ve Apple Music profilleri.">
+    
+    <!-- Modern ve ferah görünüm için Google Fonts (Plus Jakarta Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #090a0f;
+            --glass-bg: rgba(255, 255, 255, 0.035);
+            --glass-border: rgba(255, 255, 255, 0.09);
+            --glass-highlight: rgba(255, 255, 255, 0.22);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-warm: #e5a052; /* Fotoğraftaki sıcak stüdyo ışığı tonu */
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 48px 20px;
+        }
+
+        /* Liquid Glass Arka Plan Küreleri (Ambient Orbs) */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(95px);
+            opacity: 0.5;
+            animation: float 16s infinite ease-in-out alternate;
+        }
+
+        /* Fotoğrafın sol üstündeki sıcak ışıkla uyumlu küre */
+        .orb-1 {
+            width: 340px;
+            height: 340px;
+            background: radial-gradient(circle, rgba(229, 160, 82, 0.42), transparent 70%);
+            top: -10%;
+            left: -10%;
+        }
+
+        /* Derinlik katan soğuk gece mavisi alt küre */
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 70%);
+            bottom: -15%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        /* Orta kısımdaki hafif mor/indigo ambiyans küresi */
+        .orb-3 {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.18), transparent 70%);
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(25px, -25px) scale(1.06); }
+            100% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* Ana Kapsayıcı (Ferah ve Mobil Öncelikli) */
+        .container {
+            width: 100%;
+            max-width: 420px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Profil Bölümü */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 116px;
+            height: 116px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, rgba(229, 160, 82, 0.6), rgba(255, 255, 255, 0.1), rgba(56, 189, 248, 0.3));
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 25px rgba(229, 160, 82, 0.2);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .avatar-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 20%;
+            display: block;
+            border: 2px solid var(--bg-dark);
+        }
+
+        .profile-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            margin-top: 2px;
+        }
+
+        .profile-bio {
+            font-size: 0.92rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            max-width: 320px;
+            line-height: 1.45;
+        }
+
+        /* Bağlantılar (Liquid Glass Butonlar) */
+        .links-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .glass-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            text-decoration: none;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Cam Yüzeyinden Geçen Işık Yansıması (Liquid Shimmer) */
+        .glass-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.08),
+                transparent
+            );
+            transform: skewX(-20deg);
+            transition: left 0.65s ease;
+            pointer-events: none;
+        }
+
+        .glass-btn:hover::before,
+        .glass-btn:active::before {
+            left: 150%;
+        }
+
+        /* Buton Hover & Dokunma (Touch) Animasyonları */
+        .glass-btn:hover,
+        .glass-btn:focus-visible {
+            transform: translateY(-4px) scale(1.02);
+            border-color: var(--glass-highlight);
+            background: rgba(255, 255, 255, 0.065);
+        }
+
+        .glass-btn:active {
+            transform: translateY(-1px) scale(0.99);
+        }
+
+        /* Platformlara Özel Gölge (Glow) Efektleri */
+        .btn-web:hover {
+            box-shadow: 0 12px 28px -6px rgba(229, 160, 82, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(229, 160, 82, 0.4);
+        }
+
+        .btn-edu:hover {
+            box-shadow: 0 12px 28px -6px rgba(56, 189, 248, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-youtube:hover {
+            box-shadow: 0 12px 28px -6px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(239, 68, 68, 0.45);
+        }
+
+        .btn-spotify:hover {
+            box-shadow: 0 12px 28px -6px rgba(34, 197, 94, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(34, 197, 94, 0.45);
+        }
+
+        .btn-apple:hover {
+            box-shadow: 0 12px 28px -6px rgba(244, 63, 94, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(244, 63, 94, 0.45);
+        }
+
+        /* Buton İçerik Düzeni */
+        .btn-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.3s ease, background 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .glass-btn:hover .icon-box {
+            transform: scale(1.08);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-box svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .btn-text-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            gap: 2px;
+        }
+
+        .btn-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .btn-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .btn-arrow {
+            color: var(--text-muted);
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .glass-btn:hover .btn-arrow {
+            transform: translateX(4px);
+            color: var(--text-main);
+        }
+
+        /* Alt Bilgi (Footer) */
+        .footer {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: rgba(148, 163, 184, 0.6);
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+
+        /* Küçük Ekran İyileştirmeleri */
+        @media (max-width: 380px) {
+            .glass-btn {
+                padding: 14px 16px;
+            }
+            .btn-title {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Arka Plan Ambiyans Işıkları -->
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <main class="container">
+        <!-- Profil Kısmı -->
+        <header class="profile-section">
+            <div class="avatar-wrapper">
+                <!-- Fotoğrafının adını profil.jpg olarak kaydedip aynı dizine yükleyebilirsin -->
+                <img src="profil.jpg" alt="Mahmut Burak Aslantaş" class="avatar">
+            </div>
+            <div>
+                <h1 class="profile-name">Mahmut Burak Aslantaş</h1>
+                <p class="profile-bio">Bağlama İcracısı & Eğitmen • Baglamagram Kurucusu</p>
+            </div>
+        </header>
+
+        <!-- Bağlantı Butonları -->
+        <nav class="links-wrapper">
+            
+            <!-- 1. Baglamagram Web Sitesi -->
+            <a href="https://baglamagram.com.tr/" target="_blank" rel="noopener noreferrer" class="glass-btn btn-web">
+                <div class="btn-left">
+                    <div class="icon-box" style="color: #e5a052;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </div>
+                    <div class="btn-text-group">
+                        <span class="btn-title">Baglamagram Web Sitesi</span>
+                        <span class="btn-subtitle">baglamagram.com.tr</span>
+                    </div>
+                </div>
+                <div class="btn-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 2. Baglamagram Online Eğitim -->
+            <a href="https://baglamagram.com.tr/online-egitim.html" target="_blank" rel="noopener noreferrer" class="glass-btn btn-edu">
+                <div class="btn-left">
+                    <div class="icon-box" style="color: #38bdf8;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                    </div>
+                    <div class="btn-text-group">
+                        <span class="btn-title">Online Bağlama Eğitimi</span>
+                        <span class="btn-subtitle">İnteraktif dersler ve eğitim portalı</span>
+                    </div>
+                </div>
+                <div class="btn-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 3. YouTube Sayfası -->
+            <a href="https://www.youtube.com/@baglamagram" target="_blank" rel="noopener noreferrer" class="glass-btn btn-youtube">
+                <div class="btn-left">
+                    <div class="icon-box" style="color: #ef4444;">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </div>
+                    <div class="btn-text-group">
+                        <span class="btn-title">YouTube</span>
+                        <span class="btn-subtitle">@baglamagram</span>
+                    </div>
+                </div>
+                <div class="btn-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 4. Spotify Sanatçı Profili -->
+            <a href="https://open.spotify.com/intl-tr/artist/5rXy7D9yXqn3kOvLYXDxft" target="_blank" rel="noopener noreferrer" class="glass-btn btn-spotify">
+                <div class="btn-left">
+                    <div class="icon-box" style="color: #22c55e;">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                        </svg>
+                    </div>
+                    <div class="btn-text-group">
+                        <span class="btn-title">Spotify</span>
+                        <span class="btn-subtitle">Sanatçı Profili & Eserler</span>
+                    </div>
+                </div>
+                <div class="btn-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 5. Apple Music Sanatçı Profili -->
+            <a href="https://music.apple.com/tr/artist/mahmut-burak-aslanta%C5%9F/1661705571?l=tr" target="_blank" rel="noopener noreferrer" class="glass-btn btn-apple">
+                <div class="btn-left">
+                    <div class="icon-box" style="color: #f43f5e;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18V5l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3"></circle>
+                            <circle cx="18" cy="16" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div class="btn-text-group">
+                        <span class="btn-title">Apple Music</span>
+                        <span class="btn-subtitle">Mahmut Burak Aslantaş</span>
+                    </div>
+                </div>
+                <div class="btn-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </a>
+
+        </nav>
+
+        <footer class="footer">
+            © 2026 Baglamagram. Tüm hakları saklıdır.
+        </footer>
+    </main>
+
+</body>
+</html>
