@@ -38,8 +38,8 @@ export const CREATIVE_VIDEOS = ['SvliCP5Wznw', 'DfzEr4qozlI', 'v39ygvfSdGE'];
 // Android uygulaması: GitHub Releases'te en son sürümdeki APK dosyası (adı burada yazanla aynı olmalı) indirilir.
 // Yeni sürümde yalnızca yeni bir Release açıp dosyayı aynı adla yükle ve buradaki sürüm numarasını değiştir.
 export const APP = {
-  version: '2.0',
-  apk: 'https://github.com/brkslntss-png/baglamagram/releases/latest/download/baglamagram.2.0.apk',
+  version: '2.4',
+  apk: 'https://github.com/brkslntss-png/baglamagram/releases/latest/download/baglamagram.2.4.apk',
 };
 
 export const FORMSPREE = 'https://formspree.io/f/xnjvyknz';
