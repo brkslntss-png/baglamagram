@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
-import { href, t, type Lang } from '../../i18n';
+import { href, LOCALE, t, type Lang } from '../../i18n';
 import { APP, FORMSPREE } from '../../data/site';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -148,6 +148,35 @@ const mock = {
       </form>
     </div>
   </section>
+
+  <section class="section-tight" id="sertifika">
+    <div class="container cert reveal">
+      <div class="cert-intro">
+        <span class="icon-tile"><Icon name="award" size={22} /></span>
+        <div>
+          <span class="eyebrow">{t(lang, 'edu.cert.eyebrow')}</span>
+          <h2 class="title-md">{t(lang, 'edu.cert.title')}</h2>
+          <p class="muted">{t(lang, 'edu.cert.lead')}</p>
+        </div>
+      </div>
+      <form class="cert-form" data-cert
+        data-wait={t(lang, 'edu.cert.wait')} data-btn={t(lang, 'edu.cert.btn')}
+        data-valid={t(lang, 'edu.cert.valid')} data-invalid={t(lang, 'edu.cert.invalid')}
+        data-invalid-text={t(lang, 'edu.cert.invalidText')} data-revoked={t(lang, 'edu.cert.revoked')}
+        data-holder={t(lang, 'edu.cert.holder')} data-program={t(lang, 'edu.cert.program')} data-date={t(lang, 'edu.cert.date')}
+        data-error={t(lang, 'edu.cert.error')} data-locale={LOCALE[lang]}
+        data-p-muzik={t(lang, 'edu.cert.p.muzik')} data-p-yetenek={t(lang, 'edu.cert.p.yetenek')}
+        data-p-baglama={t(lang, 'edu.cert.p.baglama')} data-p-yetenek_baglama={t(lang, 'edu.cert.p.yetenek_baglama')}>
+        <label for="c-no">{t(lang, 'edu.cert.label')}</label>
+        <div class="cert-row">
+          <input id="c-no" class="input" type="text" name="no" placeholder="BG-2026-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" required />
+          <button class="btn btn-gold" type="submit"><Icon name="search" size={17} /><span data-cert-btn>{t(lang, 'edu.cert.btn')}</span></button>
+        </div>
+        <div class="cert-result" data-cert-result role="status" aria-live="polite" hidden></div>
+        <p class="note">{t(lang, 'edu.cert.privacy')}</p>
+      </form>
+    </div>
+  </section>
 </Base>
 
 <style>
@@ -230,6 +259,28 @@ const mock = {
   .status { min-height: 1.2em; text-align: center; font-weight: 600; }
   .status.ok { color: var(--ok); } .status.err { color: var(--err); }
 
+  /* Sertifika sorgulama */
+  .cert { width: calc(100% - 2 * var(--gutter)); display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: start; padding: 32px; border: 1px solid var(--gold-line); border-radius: var(--radius-lg); background: radial-gradient(120% 140% at 100% 0%, rgba(210, 172, 99, 0.1), transparent 60%), var(--surface); }
+  .cert-intro { display: flex; gap: 16px; align-items: flex-start; }
+  .cert-intro .icon-tile { flex: none; }
+  .cert-intro .title-md { margin: 4px 0 8px; }
+  .cert-form { display: flex; flex-direction: column; gap: 10px; }
+  .cert-form label { font-size: 14px; font-weight: 600; color: var(--text-2); }
+  .cert-row { display: flex; gap: 10px; }
+  .cert-row .input { flex: 1; min-width: 0; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; text-transform: uppercase; }
+  .cert-row .btn { flex: none; }
+  .cert-result { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 18px; border: 1px solid var(--line-2); background: rgba(255, 255, 255, 0.02); }
+  .cert-result.ok { border-color: color-mix(in srgb, var(--ok) 55%, transparent); background: color-mix(in srgb, var(--ok) 9%, transparent); }
+  .cert-result.bad { border-color: color-mix(in srgb, var(--err) 55%, transparent); background: color-mix(in srgb, var(--err) 8%, transparent); }
+  .cert-result :global(.mark) { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; font-weight: 800; color: #fff; }
+  .cert-result.ok :global(.mark) { background: var(--ok); } .cert-result.bad :global(.mark) { background: var(--err); }
+  .cert-result :global(h3) { font-size: 17px; margin: 4px 0 8px; }
+  .cert-result :global(dl) { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 14.5px; }
+  .cert-result :global(dt) { color: var(--text-3); } .cert-result :global(dd) { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+  .cert-result :global(p) { margin: 0; color: var(--text-2); font-size: 14.5px; }
+  @media (max-width: 960px) { .cert { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .cert { padding: 22px 18px; } .cert-row { flex-direction: column; } .cert-row .btn { width: 100%; justify-content: center; } .cert-result :global(dl) { grid-template-columns: 1fr; gap: 0; } .cert-result :global(dt) { font-size: 12.5px; margin-top: 6px; } }
+
   @media (max-width: 960px) {
     .hero, .form-wrap { grid-template-columns: 1fr; }
     .device { width: 240px; transform: none; }
@@ -257,6 +308,54 @@ const mock = {
   guide?.querySelector('[data-ios-close]')?.addEventListener('click', () => guide.close());
   // Pencerenin dışına (bulanık zemine) dokununca kapanır
   guide?.addEventListener('click', (e) => { if (e.target === guide) guide.close(); });
+
+  // Sertifika sorgulama: herkese açık doğrulama kaydı (sertifika_dogrula/{no}) Firestore REST ile okunur.
+  // Kayıtta yalnız adların ilk iki harfi, program ve tarih durur.
+  const FS_DOC = 'https://firestore.googleapis.com/v1/projects/baglamagram-portal/databases/(default)/documents/sertifika_dogrula/';
+  const FS_KEY = 'AIzaSyBIx9TujKPX82NaWXGh2QTxyG6TEQ-abi8';
+  const certForm = document.querySelector<HTMLFormElement>('[data-cert]');
+  const normalizeNo = (v: string) => {
+    const s = v.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const m = s.match(/^BG(\d{4})([A-Z0-9]{4})([A-Z0-9]{4})$/);
+    return m ? `BG-${m[1]}-${m[2]}-${m[3]}` : '';
+  };
+  const esc = (v: string) => v.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+  certForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const d = certForm.dataset;
+    const out = certForm.querySelector<HTMLElement>('[data-cert-result]');
+    const btn = certForm.querySelector<HTMLButtonElement>('button[type=submit]');
+    const label = certForm.querySelector<HTMLElement>('[data-cert-btn]');
+    const input = certForm.querySelector<HTMLInputElement>('input[name=no]');
+    if (!out || !input) return;
+    const show = (ok: boolean, html: string) => { out.hidden = false; out.className = `cert-result ${ok ? 'ok' : 'bad'}`; out.innerHTML = html; };
+    const bad = (title: string, text: string) => show(false, `<span class="mark">✕</span><div><h3>${esc(title)}</h3><p>${esc(text)}</p></div>`);
+    const no = normalizeNo(input.value);
+    if (!no) { bad(d.invalid || '', d.invalidText || ''); return; }
+    input.value = no;
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = d.wait || '';
+    try {
+      const res = await fetch(`${FS_DOC}${encodeURIComponent(no)}?key=${FS_KEY}`);
+      if (res.status === 404) { bad(d.invalid || '', d.invalidText || ''); return; }
+      if (!res.ok) throw new Error(String(res.status));
+      const f = (await res.json()).fields || {};
+      if (f.gecerli && f.gecerli.booleanValue === false) { bad(d.invalid || '', d.revoked || ''); return; }
+      const program = (d as Record<string, string | undefined>)[`p-${f.program?.stringValue}`.replace(/-([a-z])/g, (_m, c) => c.toUpperCase())] || '';
+      let date = '';
+      try { date = new Date(f.tarih?.timestampValue).toLocaleDateString(d.locale || 'tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (_) { date = ''; }
+      show(true, `<span class="mark">✓</span><div><h3>${esc(d.valid || '')}</h3><dl>`
+        + `<dt>${esc(d.holder || '')}</dt><dd>${esc(f.kisaltma?.stringValue || '')}</dd>`
+        + (program ? `<dt>${esc(d.program || '')}</dt><dd>${esc(program)}</dd>` : '')
+        + (date ? `<dt>${esc(d.date || '')}</dt><dd>${esc(date)}</dd>` : '')
+        + `<dt>No</dt><dd>${esc(no)}</dd></dl></div>`);
+    } catch (_) {
+      bad(d.error || '', '');
+    } finally {
+      if (btn) btn.disabled = false;
+      if (label) label.textContent = d.btn || '';
+    }
+  });
 
   // Başvuru formu: sayfadan ayrılmadan gönder
   const form = document.querySelector<HTMLFormElement>('[data-apply]');
