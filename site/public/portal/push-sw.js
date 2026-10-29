@@ -12,14 +12,29 @@ self.addEventListener('push', function (event) {
     body: n.body || d.body || '',
     icon: '/portal/apple-touch-icon.png',
     badge: '/portal/apple-touch-icon.png',
-    data: { link: link, screen: d.screen || '' },
+    data: { link: link, screen: d.screen || '', d: d },
   }));
 });
+// Dokununca: açık portal varsa ona ekranı söyler (mesajla), yoksa portalı ekranın adresiyle açar (?git=DersHazirlik&…)
+var GIT = ['DersHazirlik', 'OdemeTalepleri', 'Basvurular', 'HataBildirimleri'];
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
-  var link = (event.notification.data && event.notification.data.link) || '/portal/';
+  var nd = event.notification.data || {};
+  var link = nd.link || '/portal/';
+  var d = nd.d || {};
+  var git = GIT.indexOf(nd.screen) !== -1 ? nd.screen : '';
+  if (git) {
+    var q = ['git=' + encodeURIComponent(git)];
+    Object.keys(d).forEach(function (k) { if (['title', 'body', 'screen', 'type'].indexOf(k) === -1) q.push(encodeURIComponent(k) + '=' + encodeURIComponent(d[k])); });
+    link = '/portal/?' + q.join('&');
+  }
   event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
-    for (var i = 0; i < list.length; i++) { if (list[i].url.indexOf('/portal') !== -1 && 'focus' in list[i]) return list[i].focus(); }
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].url.indexOf('/portal') !== -1 && 'focus' in list[i]) {
+        if (git) list[i].postMessage({ tip: 'bildirim', data: Object.assign({}, d, { screen: git }) });
+        return list[i].focus();
+      }
+    }
     return self.clients.openWindow(link);
   }));
 });
