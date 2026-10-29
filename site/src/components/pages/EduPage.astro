@@ -36,6 +36,7 @@ const mock = {
         <p class="lead">{t(lang, 'edu.lead')}</p>
         <div class="cta">
           <a class="btn btn-gold" href="/portal/"><Icon name="log-in" size={18} />{t(lang, 'edu.login')}</a>
+          <a class="btn btn-ghost" href="/portal/?kayit=1"><Icon name="user-plus" size={18} />{t(lang, 'edu.signup')}</a>
           <a class="btn btn-ghost" href="#basvuru"><Icon name="gift" size={18} />{t(lang, 'edu.apply')}</a>
         </div>
       </div>
@@ -108,7 +109,10 @@ const mock = {
       <ul>
         {portal.map((k) => <li><Icon name="check" size={18} class="gold" />{t(lang, k)}</li>)}
       </ul>
-      <a class="btn btn-gold" href="/portal/"><Icon name="log-in" size={18} />{t(lang, 'edu.login')}</a>
+      <div class="portal-cta">
+        <a class="btn btn-gold" href="/portal/"><Icon name="log-in" size={18} />{t(lang, 'edu.login')}</a>
+        <a class="btn btn-ghost" href="/portal/?kayit=1"><Icon name="user-plus" size={18} />{t(lang, 'edu.signup')}</a>
+      </div>
     </div>
   </section>
 
@@ -180,6 +184,7 @@ const mock = {
 </Base>
 
 <style>
+  .portal-cta { display: flex; flex-wrap: wrap; gap: 12px; }
   .stores { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
   .stores .apk { margin-bottom: 0; }
   button.apk { font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
@@ -357,6 +362,28 @@ const mock = {
     }
   });
 
+  // Başvuruyu Firestore'a (basvurular, kaynak: site) yazar; kurallar girişsiz eklemeye izin verir, tarih sunucu saati.
+  const LEVEL: Record<string, string> = { sifir: 'Hiç bilmiyorum', temel: 'Başlangıç', ileri: 'İleri' };
+  async function saveToApp(d: FormData) {
+    const str = (k: string, n: number) => ({ stringValue: String(d.get(k) || '').trim().slice(0, n) });
+    const fields = {
+      ad_soyad: str('ad_soyad', 80), telefon: str('telefon', 30), yas: str('yas', 3), meslek: str('meslek', 80),
+      seviye: { stringValue: LEVEL[String(d.get('seviye') || '')] || '' }, mesaj: str('mesaj', 1000),
+      kaynak: { stringValue: 'site' }, durum: { stringValue: 'yeni' },
+    };
+    const id = `s${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+    const base = 'projects/baglamagram-portal/databases/(default)/documents';
+    await fetch(`https://firestore.googleapis.com/v1/${base}:commit?key=${FS_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ writes: [{
+        update: { name: `${base}/basvurular/${id}`, fields },
+        updateTransforms: [{ fieldPath: 'tarih', setToServerValue: 'REQUEST_TIME' }],
+        currentDocument: { exists: false },
+      }] }),
+    });
+  }
+
   // Başvuru formu: sayfadan ayrılmadan gönder
   const form = document.querySelector<HTMLFormElement>('[data-apply]');
   form?.addEventListener('submit', async (e) => {
@@ -365,7 +392,10 @@ const mock = {
     const btn = form.querySelector<HTMLButtonElement>('button[type=submit]');
     if (btn) btn.disabled = true;
     try {
-      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      const data = new FormData(form);
+      // Başvuru, uygulamanın Yönetim › Deneme dersi başvuruları listesine de düşer (en iyi çaba; e-posta yolu bozulmaz)
+      if (!data.get('_gotcha')) saveToApp(data).catch(() => {});
+      const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
       if (!res.ok) throw new Error(String(res.status));
       form.reset();
       if (status) { status.textContent = form.dataset.sent || ''; status.className = 'status ok'; }
