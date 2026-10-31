@@ -1,61 +1,608 @@
 ---
+// Ders paketleri (Burak, 1 Kasım 2026): tanıtım ve satış sayfası. Sırayla: giriş (çizimli), dört adım, neden
+// Bağlamagram (çizimli dört özellik), fiyatlar, karşılaştırma tablosu, hoca, güvence, sık sorulanlar, kayıt çağrısı.
+// Bütün "kayıt ol" bağlantıları portalın kayıt ekranına seçili paketle gider (/portal/?kayit=1&paket=…).
+// Sayfa açılışı ve kayıt tıklaması kişisiz sayılır (scripts/olay.ts → Yönetim › İstatistikler › Kayıt hunisi).
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import { href, t, type Lang } from '../../i18n';
-import { SHOPIER } from '../../data/site';
+import { IMG, PAKETLER, WHATSAPP } from '../../data/site';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const cards = [
-  ['user', 'packages.one'],
-  ['users', 'packages.group'],
-  ['gift', 'packages.trial'],
+// Fiyat yazısı: 14.684,08 ₺ / 3.600 ₺
+const fiyat = (n: number) => {
+  const tam = Math.floor(n);
+  const kurus = Math.round((n - tam) * 100);
+  return `${String(tam).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}${kurus ? `,${String(kurus).padStart(2, '0')}` : ''} ₺`;
+};
+const kayit = (uyelik: string, id: string) => `/portal/?kayit=1&uyelik=${uyelik}&paket=${id}`;
+const paketler = PAKETLER.map((p) => ({
+  ...p,
+  oran: Math.round(((p.kart - p.havale) / p.kart) * 100),
+  link: kayit(p.uyelik, p.id),
+}));
+const oranlar = paketler.map((p) => p.oran);
+const indirim = { a: Math.min(...oranlar), b: Math.max(...oranlar) };
+const gold4 = paketler.find((p) => p.id === 'gold4')!;
+const silver = paketler.find((p) => p.id === 'silver')!;
+const dersBasi = gold4.havale / gold4.ders;
+const deneme = href(lang, 'online-egitim.html') + '#basvuru';
+
+const adimlar = [
+  ['user-plus', 'pk.s1'],
+  ['shopping-bag', 'pk.s2'],
+  ['calendar', 'pk.s3'],
+  ['video', 'pk.s4'],
 ] as const;
+
+// Karşılaştırma: [özellik, ücretsiz, silver, gold]; true var, false yok, metin kısmen
+const Y = true;
+const N = false;
+const tablo: [string, boolean | string, boolean | string, boolean | string][] = [
+  [t(lang, 'pk.cmp.r1'), N, N, Y],
+  [t(lang, 'pk.cmp.r2'), N, N, Y],
+  [t(lang, 'pk.g.l2'), N, N, Y],
+  [t(lang, 'pk.cmp.r4'), N, N, Y],
+  [t(lang, 'pk.cmp.r5'), N, N, Y],
+  [t(lang, 'pk.cmp.r6'), t(lang, 'pk.cmp.trial'), Y, Y],
+  [t(lang, 'pk.cmp.r7'), t(lang, 'pk.cmp.first'), Y, Y],
+  [t(lang, 'pk.cmp.r8'), Y, Y, Y],
+  [t(lang, 'pk.s.l3'), N, Y, Y],
+];
+const sorular = [1, 2, 3, 4, 5, 6, 7] as const;
+const guvence = [
+  ['shield-check', 'pk.tr1'],
+  ['gift', 'pk.tr2'],
+  ['badge-check', 'pk.tr3'],
+  ['whatsapp', 'pk.tr4'],
+] as const;
+const ozellikler = ['live', 'games', 'feedback', 'theory'] as const;
 ---
-<Base title={t(lang, 'packages.title')} description={t(lang, 'packages.lead')}>
-  <section class="page-hero">
-    <div class="container narrow">
-      <span class="eyebrow">{t(lang, 'nav.edu')}</span>
-      <h1 class="title-xl">{t(lang, 'packages.title')}</h1>
-      <p class="lead">{t(lang, 'packages.lead')}</p>
+<Base title={t(lang, 'packages.title')} description={t(lang, 'pk.hero.lead')}>
+  <!-- Giriş -->
+  <section class="pk-hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <span class="eyebrow">{t(lang, 'pk.hero.eyebrow')}</span>
+        <h1 class="title-xl">{t(lang, 'pk.hero.title')}</h1>
+        <p class="lead">{t(lang, 'pk.hero.lead')}</p>
+        <div class="cta">
+          <a class="btn btn-gold" href="#paketler"><Icon name="shopping-bag" size={18} />{t(lang, 'pk.hero.see')}</a>
+          <a class="btn btn-ghost" href={deneme}><Icon name="gift" size={18} />{t(lang, 'pk.hero.trial')}</a>
+        </div>
+        <ul class="chips">
+          <li><Icon name="video" size={15} />{t(lang, 'pk.chip.live')}</li>
+          <li><Icon name="gift" size={15} />{t(lang, 'pk.chip.off', indirim)}</li>
+          <li><Icon name="shield-check" size={15} />{t(lang, 'pk.chip.safe')}</li>
+        </ul>
+      </div>
+
+      <!-- Çizim: canlı ders ekranı, bağlama ve uçuşan notalar -->
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 520 470" width="100%" height="100%" role="presentation">
+          <defs>
+            <radialGradient id="pk-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#d2ac63" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#d2ac63" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="pk-wood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#c98a4b" />
+              <stop offset="0.55" stop-color="#8e5524" />
+              <stop offset="1" stop-color="#5a3213" />
+            </linearGradient>
+            <linearGradient id="pk-top" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#e9c99a" />
+              <stop offset="1" stop-color="#b98a52" />
+            </linearGradient>
+            <linearGradient id="pk-screen" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#232327" />
+              <stop offset="1" stop-color="#141416" />
+            </linearGradient>
+            <linearGradient id="pk-tile" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3a2f1d" />
+              <stop offset="1" stop-color="#1f1a12" />
+            </linearGradient>
+          </defs>
+          <circle cx="280" cy="230" r="235" fill="url(#pk-glow)" />
+
+          <!-- bağlama: armut tekne, uzun sap, burgular -->
+          <g transform="translate(70 440) rotate(-43)">
+            <path d="M0 -40 C 70 -46 128 -24 140 0 C 128 24 70 46 0 40 C -36 36 -54 18 -54 0 C -54 -18 -36 -36 0 -40 Z" fill="url(#pk-wood)" />
+            <path d="M6 -30 C 60 -34 108 -18 120 0 C 108 18 60 34 6 30 C -24 27 -40 14 -40 0 C -40 -14 -24 -27 6 -30 Z" fill="url(#pk-top)" />
+            <circle cx="40" cy="0" r="7" fill="#3a2410" />
+            <rect x="-30" y="-6" width="10" height="12" rx="2" fill="#3a2410" />
+            <rect x="136" y="-7" width="384" height="14" rx="5" fill="#2a1a0c" />
+            <g stroke="#d2ac63" stroke-width="1.6" opacity="0.85">
+              <line x1="160" y1="-7" x2="160" y2="7" /><line x1="182" y1="-7" x2="182" y2="7" /><line x1="202" y1="-7" x2="202" y2="7" />
+              <line x1="221" y1="-7" x2="221" y2="7" /><line x1="239" y1="-7" x2="239" y2="7" /><line x1="256" y1="-7" x2="256" y2="7" />
+              <line x1="272" y1="-7" x2="272" y2="7" /><line x1="288" y1="-7" x2="288" y2="7" /><line x1="303" y1="-7" x2="303" y2="7" />
+              <line x1="317" y1="-7" x2="317" y2="7" /><line x1="331" y1="-7" x2="331" y2="7" /><line x1="344" y1="-7" x2="344" y2="7" />
+              <line x1="357" y1="-7" x2="357" y2="7" /><line x1="369" y1="-7" x2="369" y2="7" />
+              <line x1="381" y1="-7" x2="381" y2="7" /><line x1="392" y1="-7" x2="392" y2="7" /><line x1="403" y1="-7" x2="403" y2="7" />
+            </g>
+            <g stroke="rgba(243,239,231,0.7)" stroke-width="0.8">
+              <line x1="-26" y1="-3" x2="550" y2="-3" /><line x1="-26" y1="0" x2="550" y2="0" /><line x1="-26" y1="3" x2="550" y2="3" />
+            </g>
+            <rect x="518" y="-10" width="60" height="20" rx="6" fill="#4a2c12" />
+            <g fill="#e6c88a">
+              <circle cx="530" cy="-16" r="5" /><circle cx="546" cy="-16" r="5" /><circle cx="562" cy="-16" r="5" />
+              <circle cx="530" cy="16" r="5" /><circle cx="546" cy="16" r="5" /><circle cx="562" cy="16" r="5" /><circle cx="578" cy="16" r="5" />
+            </g>
+          </g>
+
+          <!-- Tablet: canlı ders -->
+          <g transform="translate(130 60)">
+            <rect x="0" y="0" width="330" height="236" rx="26" fill="#0d0d0f" stroke="rgba(255,255,255,0.14)" />
+            <rect x="12" y="12" width="306" height="212" rx="17" fill="url(#pk-screen)" />
+            <!-- hoca karesi -->
+            <rect x="24" y="24" width="282" height="188" rx="12" fill="url(#pk-tile)" />
+            <circle cx="165" cy="98" r="30" fill="#d2ac63" opacity="0.9" />
+            <path d="M105 212c4-44 30-66 60-66s56 22 60 66z" fill="#d2ac63" opacity="0.9" />
+            <!-- canlı etiketi -->
+            <rect x="36" y="36" width="104" height="26" rx="13" fill="rgba(0,0,0,0.55)" />
+            <circle cx="52" cy="49" r="5" fill="#ff453a"><animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite" /></circle>
+            <text x="64" y="54" fill="#f3efe7" font-size="13" font-weight="600" font-family="Inter, sans-serif">{t(lang, 'pk.ill.live')}</text>
+            <text x="38" y="200" fill="rgba(243,239,231,0.85)" font-size="12" font-weight="600" font-family="Inter, sans-serif">{t(lang, 'pk.ill.teacher')}</text>
+            <!-- öğrenci karesi -->
+            <rect x="212" y="138" width="84" height="64" rx="10" fill="#2b2b30" stroke="#d2ac63" stroke-width="1.5" />
+            <circle cx="254" cy="168" r="10" fill="#8e9aaf" />
+            <path d="M236 202c2-14 9-21 18-21s16 7 18 21z" fill="#8e9aaf" />
+            <text x="220" y="152" fill="rgba(243,239,231,0.8)" font-size="10" font-weight="600" font-family="Inter, sans-serif">{t(lang, 'pk.ill.you')}</text>
+          </g>
+
+          <!-- konuşma balonu -->
+          <g class="pk-bubble" transform="translate(296 314)">
+            <rect x="0" y="0" width="176" height="46" rx="16" fill="#1b1b1e" stroke="rgba(210,172,99,0.55)" />
+            <path d="M28 46l10 12 6-12z" fill="#1b1b1e" stroke="rgba(210,172,99,0.55)" />
+            <path d="M27 45h18" stroke="#1b1b1e" stroke-width="3" />
+            <circle cx="22" cy="23" r="9" fill="#5fbf7f" />
+            <path d="M18 23l3 3 5-6" stroke="#0a0a0b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            <text x="38" y="28" fill="#f3efe7" font-size="12.5" font-weight="600" font-family="Inter, sans-serif">{t(lang, 'pk.ill.feedback')}</text>
+          </g>
+
+          <!-- uçuşan notalar -->
+          <g fill="#e6c88a">
+            <g class="pk-note n1"><ellipse cx="88" cy="132" rx="11" ry="8" transform="rotate(-20 88 132)" /><rect x="96" y="82" width="3" height="50" /><path d="M99 82c10 6 20 10 18 26-3-10-9-14-18-16z" /></g>
+            <g class="pk-note n2"><ellipse cx="64" cy="250" rx="9" ry="6.5" transform="rotate(-20 64 250)" /><rect x="70.5" y="210" width="2.6" height="40" /><ellipse cx="96" cy="240" rx="9" ry="6.5" transform="rotate(-20 96 240)" /><rect x="102.5" y="200" width="2.6" height="40" /><path d="M70.5 210l34.6-10v8l-34.6 10z" /></g>
+            <g class="pk-note n3"><ellipse cx="494" cy="240" rx="8" ry="6" transform="rotate(-20 494 240)" /><rect x="499.6" y="204" width="2.4" height="36" /></g>
+          </g>
+          <g fill="#f3efe7" opacity="0.9">
+            <path class="pk-spark" d="M128 40l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" />
+            <path class="pk-spark s2" d="M498 370l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" />
+          </g>
+        </svg>
+      </div>
     </div>
   </section>
+
+  <!-- Dört adım -->
   <section class="section-tight">
     <div class="container">
-      <div class="grid grid-3 reveal">
-        {cards.map(([icon, k], i) => (
-          <article class={`card pkg ${i === 2 ? 'trial' : ''}`}>
-            <span class="icon-tile"><Icon name={icon} size={22} /></span>
-            <h2 class="serif">{t(lang, `${k}.t` as any)}</h2>
+      <div class="section-head center reveal">
+        <h2 class="title-lg">{t(lang, 'pk.steps.title')}</h2>
+      </div>
+      <ol class="steps reveal">
+        {adimlar.map(([icon, k], i) => (
+          <li class="step">
+            <span class="step-num"><Icon name={icon} size={22} /><b>{i + 1}</b></span>
+            <h3>{t(lang, `${k}.t` as any)}</h3>
             <p>{t(lang, `${k}.d` as any)}</p>
-            {i === 2
-              ? <a class="btn btn-ghost" href={href(lang, 'online-egitim.html') + '#basvuru'}>{t(lang, 'packages.apply')}<Icon name="arrow-right" size={17} /></a>
-              : <a class="btn btn-gold" href={SHOPIER} target="_blank" rel="noopener noreferrer"><Icon name="shopping-bag" size={17} />{t(lang, 'packages.shop')}</a>}
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Neden Bağlamagram: çizimli dört özellik -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow center">{t(lang, 'nav.edu')}</span>
+        <h2 class="title-lg">{t(lang, 'pk.why.title')}</h2>
+      </div>
+      <div class="features reveal">
+        {ozellikler.map((o, i) => (
+          <article class="card feat">
+            <div class="feat-art" aria-hidden="true">
+              {o === 'live' ? (
+                <svg viewBox="0 0 240 140" width="100%" height="100%">
+                  <rect x="40" y="14" width="160" height="100" rx="10" fill="#1b1b1e" stroke="rgba(255,255,255,0.16)" />
+                  <rect x="50" y="24" width="94" height="80" rx="6" fill="#3a2f1d" />
+                  <circle cx="97" cy="54" r="14" fill="#d2ac63" />
+                  <path d="M71 104c2-20 13-30 26-30s24 10 26 30z" fill="#d2ac63" />
+                  <rect x="150" y="24" width="40" height="38" rx="6" fill="#2b2b30" stroke="#d2ac63" />
+                  <circle cx="170" cy="38" r="7" fill="#8e9aaf" />
+                  <path d="M158 62c1-9 6-13 12-13s11 4 12 13z" fill="#8e9aaf" />
+                  <rect x="150" y="68" width="40" height="36" rx="6" fill="#232327" />
+                  <circle cx="170" cy="86" r="8" fill="#ff453a" opacity="0.9" />
+                  <path d="M24 120h192l-10 10H34z" fill="#2a2a2e" />
+                </svg>
+              ) : o === 'games' ? (
+                <svg viewBox="0 0 240 140" width="100%" height="100%">
+                  <path d="M120 14l34 26-34 86-34-86z" fill="#5ac8c8" opacity="0.85" />
+                  <path d="M120 14l34 26h-68z" fill="#a8eded" />
+                  <path d="M86 40h68l-34 86z" fill="#2f9e9e" opacity="0.7" />
+                  <path d="M120 40l0 86" stroke="#e6fbfb" stroke-width="1.5" opacity="0.6" />
+                  <g fill="#d2ac63">
+                    <path d="M46 52l5 11 12 2-9 8 2 12-10-6-10 6 2-12-9-8 12-2z" />
+                    <path d="M190 30l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z" />
+                    <path d="M198 92l3.5 8 9 1-6.5 6 2 9-8-4.5-8 4.5 2-9-6.5-6 9-1z" />
+                  </g>
+                  <rect x="26" y="98" width="56" height="30" rx="15" fill="#2b2b30" stroke="rgba(255,255,255,0.18)" />
+                  <path d="M42 107v12M36 113h12" stroke="#f3efe7" stroke-width="2.4" stroke-linecap="round" />
+                  <circle cx="64" cy="109" r="3" fill="#ff9f0a" /><circle cx="70" cy="117" r="3" fill="#5fbf7f" />
+                </svg>
+              ) : o === 'feedback' ? (
+                <svg viewBox="0 0 240 140" width="100%" height="100%">
+                  <rect x="34" y="24" width="30" height="52" rx="15" fill="#d2ac63" />
+                  <path d="M26 64c0 18 12 28 23 28s23-10 23-28" stroke="#d2ac63" stroke-width="4" fill="none" stroke-linecap="round" />
+                  <path d="M49 92v18M36 112h26" stroke="#d2ac63" stroke-width="4" stroke-linecap="round" />
+                  <g fill="#e6c88a">
+                    <rect x="88" y="58" width="6" height="24" rx="3" /><rect x="100" y="46" width="6" height="48" rx="3" /><rect x="112" y="36" width="6" height="68" rx="3" />
+                    <rect x="124" y="50" width="6" height="40" rx="3" /><rect x="136" y="62" width="6" height="16" rx="3" /><rect x="148" y="52" width="6" height="36" rx="3" />
+                  </g>
+                  <rect x="150" y="14" width="78" height="44" rx="14" fill="#1b1b1e" stroke="#5fbf7f" />
+                  <path d="M168 58l6 10 6-10z" fill="#1b1b1e" />
+                  <circle cx="172" cy="36" r="10" fill="#5fbf7f" />
+                  <path d="M167 36l4 4 6-7" stroke="#0a0a0b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                  <rect x="188" y="28" width="30" height="5" rx="2.5" fill="rgba(243,239,231,0.6)" /><rect x="188" y="39" width="22" height="5" rx="2.5" fill="rgba(243,239,231,0.35)" />
+                  <g transform="translate(150 84)">
+                    <rect width="78" height="44" rx="10" fill="#141416" stroke="rgba(255,255,255,0.14)" />
+                    <g fill="#d2ac63"><rect x="10" y="12" width="12" height="20" rx="3" /><rect x="26" y="12" width="12" height="20" rx="3" opacity="0.7" /><rect x="42" y="12" width="12" height="20" rx="3" opacity="0.45" /><rect x="58" y="12" width="12" height="20" rx="3" opacity="0.2" /></g>
+                  </g>
+                </svg>
+              ) : (
+                <svg viewBox="0 0 240 140" width="100%" height="100%">
+                  <g stroke="rgba(243,239,231,0.45)" stroke-width="1.2">
+                    <line x1="20" y1="22" x2="220" y2="22" /><line x1="20" y1="32" x2="220" y2="32" /><line x1="20" y1="42" x2="220" y2="42" />
+                    <line x1="20" y1="52" x2="220" y2="52" /><line x1="20" y1="62" x2="220" y2="62" />
+                  </g>
+                  <g fill="#e6c88a">
+                    <ellipse cx="60" cy="62" rx="7" ry="5" transform="rotate(-20 60 62)" /><rect x="65.5" y="30" width="2" height="32" />
+                    <ellipse cx="92" cy="52" rx="7" ry="5" transform="rotate(-20 92 52)" /><rect x="97.5" y="20" width="2" height="32" />
+                    <ellipse cx="124" cy="42" rx="7" ry="5" transform="rotate(-20 124 42)" /><rect x="129.5" y="10" width="2" height="32" />
+                    <ellipse cx="156" cy="37" rx="7" ry="5" transform="rotate(-20 156 37)" /><rect x="161.5" y="5" width="2" height="32" />
+                    <ellipse cx="188" cy="47" rx="7" ry="5" transform="rotate(-20 188 47)" /><rect x="193.5" y="15" width="2" height="32" />
+                  </g>
+                  <g transform="translate(30 82)">
+                    <rect width="180" height="50" rx="6" fill="#f3efe7" />
+                    <g stroke="#b9b3a9" stroke-width="1"><line x1="25.7" y1="0" x2="25.7" y2="50" /><line x1="51.4" y1="0" x2="51.4" y2="50" /><line x1="77.1" y1="0" x2="77.1" y2="50" /><line x1="102.8" y1="0" x2="102.8" y2="50" /><line x1="128.5" y1="0" x2="128.5" y2="50" /><line x1="154.2" y1="0" x2="154.2" y2="50" /></g>
+                    <g fill="#141416"><rect x="18" y="0" width="14" height="30" rx="2" /><rect x="44" y="0" width="14" height="30" rx="2" /><rect x="95" y="0" width="14" height="30" rx="2" /><rect x="121" y="0" width="14" height="30" rx="2" /><rect x="147" y="0" width="14" height="30" rx="2" /></g>
+                    <rect x="52" y="34" width="24" height="14" rx="3" fill="#d2ac63" opacity="0.85" />
+                  </g>
+                </svg>
+              )}
+            </div>
+            <h3>{t(lang, `pk.f${i + 1}.t` as any)}</h3>
+            <p>{t(lang, `pk.f${i + 1}.d` as any)}</p>
           </article>
         ))}
       </div>
     </div>
   </section>
+
+  <!-- Fiyatlar -->
+  <section class="section-tight" id="paketler">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow center">{t(lang, 'packages.title')}</span>
+        <h2 class="title-lg">{t(lang, 'pk.price.title')}</h2>
+        <p class="lead">{t(lang, 'pk.price.lead')}</p>
+      </div>
+      <div class="prices reveal">
+        {paketler.map((p) => (
+          <article class={`card pkg is-${p.uyelik}${p.id === 'gold8' ? ' featured' : ''}`}>
+            <div class="pkg-top">
+              <span class={`tag ${p.uyelik}`}>{p.uyelik === 'gold' ? 'GOLD' : 'SILVER'}</span>
+              <span class="badge">{t(lang, `pk.badge.${p.id}` as any)}</span>
+            </div>
+            <h3 class="serif">{t(lang, p.key)}</h3>
+            <div class="price">
+              <span class="muted small-label">{t(lang, 'packages.transfer')}</span>
+              <strong>{fiyat(p.havale)}{p.uyelik === 'silver' ? <small> {t(lang, 'packages.month')}</small> : null}</strong>
+              {p.uyelik === 'gold' ? <span class="per">{t(lang, 'pk.perLesson', { p: fiyat(p.havale / (p as any).ders) })}</span> : null}
+              <span class="save-row"><span class="save">{t(lang, 'packages.off', { n: p.oran })}</span><span class="gain">{t(lang, 'pk.save', { p: fiyat(p.kart - p.havale) })}</span></span>
+              <span class="muted card-price">
+                {p.uyelik === 'gold'
+                  ? t(lang, 'pk.cardPer', { p: fiyat(p.kart), q: fiyat(p.kart / (p as any).ders) })
+                  : t(lang, 'packages.card', { p: fiyat(p.kart) })}
+              </span>
+            </div>
+            <ul class="pkg-list">
+              {(p.uyelik === 'gold'
+                ? [t(lang, 'pk.g.l1', { n: (p as any).ders, w: Math.round((p as any).ders / 4) }), t(lang, 'pk.g.l2'), t(lang, 'pk.g.l3'), t(lang, 'pk.g.l4')]
+                : [t(lang, 'pk.s.l1'), t(lang, 'pk.s.l2'), t(lang, 'pk.s.l3'), t(lang, 'pk.s.l4')]
+              ).map((x) => <li><Icon name="check" size={16} class="gold" />{x}</li>)}
+            </ul>
+            <a class={`btn ${p.uyelik === 'gold' ? 'btn-gold' : 'btn-ghost'}`} href={p.link} data-kayit><Icon name="user-plus" size={17} />{t(lang, 'pk.choose')}</a>
+          </article>
+        ))}
+      </div>
+      <article class="card trial reveal">
+        <span class="icon-tile"><Icon name="gift" size={22} /></span>
+        <div class="trial-text">
+          <h3 class="serif">{t(lang, 'packages.trial.t')}</h3>
+          <p>{t(lang, 'packages.trial.d')}</p>
+        </div>
+        <a class="btn btn-ghost" href={deneme}>{t(lang, 'packages.apply')}<Icon name="arrow-right" size={17} /></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Karşılaştırma -->
   <section class="section-tight">
-    <div class="container narrow includes reveal">
-      <h2 class="title-md">{t(lang, 'packages.includes')}</h2>
-      <ul>
-        {(['packages.i1', 'packages.i2', 'packages.i3', 'packages.i4'] as const).map((k) => <li><Icon name="check" size={18} class="gold" />{t(lang, k)}</li>)}
-      </ul>
-      <p class="muted small"><Icon name="shield-check" size={16} />{t(lang, 'packages.shopNote')}</p>
-      <p class="muted small"><Icon name="log-in" size={16} /><a href="/portal/">{t(lang, 'packages.students')}</a></p>
+    <div class="container narrow">
+      <div class="section-head center reveal">
+        <h2 class="title-lg">{t(lang, 'pk.cmp.title')}</h2>
+        <p class="lead">{t(lang, 'pk.cmp.lead')}</p>
+      </div>
+      <div class="cmp-wrap reveal">
+        <table class="cmp">
+          <thead>
+            <tr>
+              <th scope="col"><span class="sr-only">{t(lang, 'pk.cmp.feature')}</span></th>
+              <th scope="col">{t(lang, 'pk.cmp.free')}</th>
+              <th scope="col" class="c-silver" lang="en">Silver</th>
+              <th scope="col" class="c-gold" lang="en">Gold</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tablo.map(([ad, ...v]) => (
+              <tr>
+                <th scope="row">{ad}</th>
+                {v.map((x, j) => (
+                  <td class={j === 2 ? 'c-gold' : ''}>
+                    {x === true ? <span class="yes"><Icon name="check" size={18} stroke={2.4} /><span class="sr-only">{t(lang, 'pk.cmp.yes')}</span></span>
+                      : x === false ? <span class="no"><Icon name="x" size={16} /><span class="sr-only">{t(lang, 'pk.cmp.no')}</span></span>
+                      : <span class="part">{x}</span>}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            <tr class="price-row">
+              <th scope="row">{t(lang, 'pk.cmp.price')}</th>
+              <td>{t(lang, 'pk.cmp.free')}</td>
+              <td>{t(lang, 'pk.cmp.perMonth', { p: fiyat(silver.havale) })}</td>
+              <td class="c-gold">{t(lang, 'pk.perLesson', { p: fiyat(dersBasi) })}</td>
+            </tr>
+            <tr class="cta-row">
+              <td></td>
+              <td><a class="mini" href="/portal/">{t(lang, 'nav.login')}</a></td>
+              <td><a class="mini" href={silver.link} data-kayit>Silver</a></td>
+              <td class="c-gold"><a class="mini gold-btn" href={gold4.link} data-kayit>Gold</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hoca -->
+  <section class="section-tight">
+    <div class="container teacher reveal">
+      <div class="t-photo">
+        <img src={IMG.portrait.src} srcset={IMG.portrait.srcset} sizes="(max-width: 760px) 70vw, 360px" width={IMG.portrait.w} height={IMG.portrait.h} loading="lazy" decoding="async" alt="Mahmut Burak Aslantaş" />
+      </div>
+      <div class="t-text">
+        <span class="eyebrow">{t(lang, 'pk.t.eyebrow')}</span>
+        <h2 class="title-md">Mahmut Burak Aslantaş</h2>
+        <ul class="creds">
+          <li><Icon name="graduation-cap" size={16} />{t(lang, 'pk.t.c1')}</li>
+          <li><Icon name="music" size={16} />{t(lang, 'pk.t.c2')}</li>
+        </ul>
+        <p class="lead">{t(lang, 'pk.t.d')}</p>
+        <a class="link-arrow" href={href(lang, 'hakkinda.html')}>{t(lang, 'nav.about')}<Icon name="arrow-right" size={16} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Güvence -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="section-head center reveal">
+        <h2 class="title-md">{t(lang, 'pk.trust.title')}</h2>
+      </div>
+      <div class="grid grid-4 reveal">
+        {guvence.map(([icon, k]) => (
+          <article class="card trust">
+            <span class="icon-tile"><Icon name={icon} size={20} /></span>
+            <h3>{t(lang, `${k}.t` as any)}</h3>
+            <p>{t(lang, `${k}.d` as any, indirim)}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Sık sorulanlar -->
+  <section class="section-tight">
+    <div class="container narrow">
+      <div class="section-head center reveal">
+        <h2 class="title-lg">{t(lang, 'pk.faq.title')}</h2>
+      </div>
+      <div class="faq reveal">
+        {sorular.map((n) => (
+          <details>
+            <summary>{t(lang, `pk.q${n}` as any)}<Icon name="chevron-right" size={18} /></summary>
+            <p>{t(lang, `pk.a${n}` as any)}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Kayıt çağrısı -->
+  <section class="section-tight">
+    <div class="container final reveal">
+      <div>
+        <h2 class="title-lg">{t(lang, 'pk.cta.title')}</h2>
+        <p class="lead">{t(lang, 'pk.cta.lead')}</p>
+      </div>
+      <div class="final-btns">
+        <a class="btn btn-gold" href={gold4.link} data-kayit><Icon name="user-plus" size={18} />{t(lang, 'pk.cta.signup')}</a>
+        <a class="btn btn-ghost" href={deneme}><Icon name="gift" size={18} />{t(lang, 'pk.cta.trial')}</a>
+      </div>
+      <p class="final-note">
+        <Icon name="log-in" size={15} /><a href="/portal/">{t(lang, 'packages.students')}</a>
+      </p>
+      <p class="final-note">
+        <Icon name="shield-check" size={15} />
+        <span>{t(lang, 'pk.legalNote')} <a href={href(lang, 'on-bilgilendirme-formu.html')}>{t(lang, 'legal.preinfo')}</a> · <a href={href(lang, 'mesafeli-satis-sozlesmesi.html')}>{t(lang, 'legal.distance')}</a> · <a href={WHATSAPP} target="_blank" rel="noopener">WhatsApp</a></span>
+      </p>
     </div>
   </section>
 </Base>
+
 <style>
-  .pkg { padding: 28px; display: flex; flex-direction: column; gap: 14px; }
-  .pkg h2 { font-size: 26px; }
-  .pkg p { color: var(--text-2); flex: 1; }
-  .pkg .btn { align-self: flex-start; margin-top: 8px; }
-  .trial { border-color: var(--gold-line); background: radial-gradient(120% 120% at 100% 0%, rgba(210, 172, 99, 0.12), transparent 60%), var(--surface); }
-  .includes { width: calc(100% - 2 * var(--gutter)); display: flex; flex-direction: column; gap: 18px; padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
-  .includes ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
-  .includes li { display: flex; gap: 10px; color: var(--text-2); }
-  .small { display: flex; gap: 8px; align-items: center; font-size: 14px; }
-  .small a { color: var(--gold-2); }
-  @media (max-width: 640px) { .includes ul { grid-template-columns: 1fr; } }
+  /* Giriş */
+  .pk-hero { padding: calc(var(--header-h) + clamp(28px, 6vw, 72px)) 0 clamp(28px, 5vw, 56px); position: relative; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(24px, 4vw, 56px); align-items: center; }
+  .hero-text { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+  .hero-text .title-xl { font-size: clamp(36px, 5.2vw, 68px); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .chips { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips li { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line-2); background: rgba(255, 255, 255, 0.03); color: var(--text-2); font-size: 13.5px; font-weight: 600; }
+  .chips li :global(.icon) { color: var(--gold); }
+  .hero-art { width: 100%; max-width: 560px; justify-self: center; aspect-ratio: 520 / 470; }
+  .hero-art svg { display: block; overflow: visible; }
+  .pk-note { animation: pk-float 6s ease-in-out infinite; transform-box: fill-box; }
+  .pk-note.n2 { animation-delay: -2s; } .pk-note.n3 { animation-delay: -4s; }
+  .pk-spark { animation: pk-twinkle 3.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .pk-spark.s2 { animation-delay: -1.6s; }
+  .pk-bubble { animation: pk-pop 0.9s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1.2) both; transform-box: fill-box; }
+  @keyframes pk-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes pk-twinkle { 0%, 100% { opacity: 0.25; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
+  @keyframes pk-pop { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+  @media (prefers-reduced-motion: reduce) { .pk-note, .pk-spark, .pk-bubble { animation: none; } }
+
+  /* Adımlar */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 22px); counter-reset: s; position: relative; }
+  .steps::before { content: ''; position: absolute; top: 31px; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-line), var(--gold-line), transparent); }
+  .step { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 0 6px; }
+  .step-num { position: relative; width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 30% 25%, #2a2418, #141416); border: 1px solid var(--gold-line); color: var(--gold-2); box-shadow: 0 12px 32px -14px rgba(210, 172, 99, 0.6); }
+  .step-num b { position: absolute; top: -6px; right: -6px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: #15110a; font-size: 12.5px; }
+  .step h3 { font-size: 18px; margin-top: 6px; }
+  .step p { font-size: 15px; color: var(--text-2); }
+
+  /* Özellikler */
+  .features { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 22px); }
+  .feat { padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .feat-art { aspect-ratio: 240 / 140; border-radius: 14px; background: radial-gradient(120% 120% at 50% 0%, rgba(210, 172, 99, 0.12), transparent 70%), #0f0f11; border: 1px solid var(--line); padding: 8px; margin-bottom: 6px; }
+  .feat-art svg { display: block; }
+  .feat h3 { font-size: 18px; }
+  .feat p { font-size: 15px; color: var(--text-2); }
+
+  /* Fiyatlar */
+  .prices { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 20px); align-items: stretch; }
+  .pkg { padding: 22px; display: flex; flex-direction: column; gap: 14px; position: relative; }
+  .pkg.is-gold { border-color: var(--gold-line); }
+  .pkg.featured { background: radial-gradient(120% 80% at 50% 0%, rgba(210, 172, 99, 0.16), transparent 70%), linear-gradient(180deg, var(--surface), var(--bg-2)); box-shadow: 0 30px 70px -40px rgba(210, 172, 99, 0.7); border-color: var(--gold); }
+  .pkg-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 26px; }
+  .pkg h3 { font-size: 23px; }
+  .tag { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 999px; color: #fff; }
+  .tag.gold { background: #C9A227; color: #15110a; }
+  .tag.silver { background: #8E9AAF; }
+  .badge { font-size: 12px; font-weight: 600; color: var(--gold-2); text-align: right; line-height: 1.3; }
+  .is-silver .badge { color: var(--text-3); }
+  .featured .badge { color: #15110a; background: var(--gold-2); padding: 3px 9px; border-radius: 999px; }
+  .price { display: flex; flex-direction: column; gap: 5px; }
+  .price strong { font-size: 32px; line-height: 1.1; letter-spacing: -0.01em; }
+  .price small { font-size: 15px; font-weight: 500; color: var(--text-2); }
+  .small-label { font-size: 13px; }
+  .per { font-size: 14px; color: var(--text-2); font-weight: 600; }
+  .save-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .save { font-size: 12.5px; font-weight: 800; color: #fff; background: #2f9e55; padding: 3px 8px; border-radius: 8px; }
+  .gain { font-size: 13px; font-weight: 700; color: var(--ok); }
+  .card-price { font-size: 13.5px; }
+  .pkg-list { list-style: none; margin: 0; padding: 14px 0 0; border-top: 1px solid var(--line); display: grid; gap: 9px; flex: 1; align-content: start; }
+  .pkg-list li { display: flex; gap: 8px; font-size: 14.5px; color: var(--text-2); line-height: 1.45; }
+  .pkg-list li :global(.icon) { margin-top: 2px; }
+  .pkg .btn { align-self: stretch; justify-content: center; white-space: normal; text-align: center; height: auto; min-height: 50px; padding-top: 10px; padding-bottom: 10px; line-height: 1.25; }
+  .trial { margin-top: clamp(14px, 2vw, 22px); padding: 24px; display: flex; align-items: center; gap: 20px; border-color: var(--gold-line); background: radial-gradient(120% 120% at 100% 0%, rgba(210, 172, 99, 0.12), transparent 60%), var(--surface); }
+  .trial .trial-text { flex: 1; }
+  .trial h3 { font-size: 22px; margin-bottom: 4px; }
+  .trial p { color: var(--text-2); }
+
+  /* Karşılaştırma */
+  .cmp-wrap { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); }
+  .cmp { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .cmp th, .cmp td { padding: 13px 12px; text-align: center; border-bottom: 1px solid var(--line); }
+  .cmp tbody th { text-align: left; font-weight: 500; color: var(--text-2); }
+  .cmp thead th { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); padding-top: 18px; }
+  .cmp thead th.c-silver { color: #b9c2d3; }
+  .cmp thead th.c-gold { color: var(--gold-2); }
+  .cmp .c-gold { background: rgba(210, 172, 99, 0.07); }
+  .cmp th:first-child { width: 46%; }
+  .yes { color: var(--ok); display: inline-flex; }
+  .c-gold .yes { color: var(--gold); }
+  .no { color: var(--text-3); opacity: 0.6; display: inline-flex; }
+  .part { font-size: 12.5px; font-weight: 600; color: var(--text-2); }
+  .price-row td { font-weight: 700; font-size: 14px; }
+  .cta-row td { border-bottom: 0; padding-bottom: 18px; }
+  .mini { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-2); font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; }
+  .mini:hover { border-color: var(--gold-line); color: var(--gold-2); }
+  .mini.gold-btn { background: linear-gradient(180deg, var(--gold-2), var(--gold)); color: #15110a; border-color: transparent; }
+
+  /* Hoca */
+  .teacher { width: calc(100% - 2 * var(--gutter)); max-width: calc(var(--max) - 2 * var(--gutter)); display: grid; grid-template-columns: 300px 1fr; gap: clamp(24px, 4vw, 48px); align-items: center; padding: clamp(22px, 3vw, 36px); border: 1px solid var(--gold-line); border-radius: var(--radius-lg); background: radial-gradient(120% 140% at 0% 0%, rgba(210, 172, 99, 0.1), transparent 60%), var(--surface); }
+  .t-photo img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 22px; border: 1px solid var(--line-2); display: block; }
+  .t-text { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; min-width: 0; }
+  .creds { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .creds li { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px; background: var(--gold-soft); border: 1px solid var(--gold-line); color: var(--gold-2); font-size: 13.5px; font-weight: 600; }
+
+  /* Güvence */
+  .trust { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+  .trust h3 { font-size: 17px; }
+  .trust p { font-size: 14.5px; color: var(--text-2); }
+
+  /* Sık sorulanlar */
+  .faq { display: grid; gap: 10px; }
+  .faq details { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); transition: border-color 0.2s; }
+  .faq details[open] { border-color: var(--gold-line); }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 20px; font-weight: 600; font-size: 16.5px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary :global(.icon) { color: var(--gold); transition: transform 0.2s; }
+  .faq details[open] summary :global(.icon) { transform: rotate(90deg); }
+  .faq p { padding: 0 20px 18px; color: var(--text-2); font-size: 15.5px; line-height: 1.6; }
+
+  /* Kayıt çağrısı */
+  .final { width: calc(100% - 2 * var(--gutter)); max-width: calc(var(--max) - 2 * var(--gutter)); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; padding: clamp(32px, 5vw, 56px) clamp(20px, 4vw, 48px); border-radius: var(--radius-lg); border: 1px solid var(--gold-line); background: radial-gradient(90% 120% at 50% 0%, rgba(210, 172, 99, 0.22), transparent 65%), linear-gradient(180deg, #17140e, var(--bg-2)); }
+  .final .lead { margin-top: 10px; }
+  .final-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .final-note { display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 14px; color: var(--text-3); }
+  .final-note a { color: var(--gold-2); }
+
+  @media (max-width: 1060px) {
+    .prices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-art { max-width: 460px; }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+    .steps::before { display: none; }
+    .teacher { grid-template-columns: 1fr; }
+    .t-photo { max-width: 260px; }
+  }
+  @media (max-width: 640px) {
+    .prices, .features { grid-template-columns: minmax(0, 1fr); }
+    .trial { flex-direction: column; align-items: flex-start; }
+    .trial .btn { align-self: stretch; justify-content: center; }
+    .cmp { font-size: 13px; table-layout: fixed; }
+    .cmp th, .cmp td { padding: 10px 4px; overflow-wrap: anywhere; hyphens: auto; }
+    .cmp th:first-child { width: 37%; padding-left: 12px; }
+    .cmp thead th { font-size: 10.5px; letter-spacing: 0.02em; }
+    .part { font-size: 10.5px; }
+    .price-row td { font-size: 12px; }
+    .mini { padding: 4px 8px; font-size: 11.5px; white-space: normal; line-height: 1.2; min-height: 30px; }
+  }
+  @media (max-width: 420px) {
+    .steps { grid-template-columns: 1fr; }
+  }
 </style>
+
+<script>
+  import { olay } from '../../scripts/olay';
+  olay('site_paketler');
+  document.querySelectorAll('[data-kayit]').forEach((a) => a.addEventListener('click', () => olay('site_kayit_tikla')));
+</script>

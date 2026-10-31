@@ -44,3 +44,22 @@ export const APP = {
 
 export const FORMSPREE = 'https://formspree.io/f/xnjvyknz';
 export const SHOPIER = 'https://www.shopier.com/baglamagram';
+// Destek (Burak): WhatsApp 0533 506 0921
+export const WHATSAPP = 'https://wa.me/905335060921';
+
+// Satılan paketler (uygulamada features/access/plans.js ve functions/index.js → PAKETLER ile aynı).
+// Havale/EFT ders başı 900 ₺, Silver 200 ₺; kartla Shopier fiyatı. Satın alma portalda: kayıt → ödeme.
+export const PAKETLER = [
+  { id: 'gold4', key: 'packages.gold4', uyelik: 'gold', ders: 4, havale: 3600, kart: 5400 },
+  { id: 'gold8', key: 'packages.gold8', uyelik: 'gold', ders: 8, havale: 7200, kart: 9639 },
+  { id: 'gold12', key: 'packages.gold12', uyelik: 'gold', ders: 12, havale: 10800, kart: 14684.08 },
+  { id: 'silver', key: 'packages.silver', uyelik: 'silver', ay: 1, havale: 200, kart: 328 },
+] as const;
+
+// Yasal sayfalar (metinler src/data/legal.ts): alt bilgide ve paketler sayfasında bağlantı
+export const YASAL = [
+  { doc: 'kullanim', page: 'kullanim-sartlari.html', key: 'legal.terms' },
+  { doc: 'kvkk', page: 'kvkk.html', key: 'legal.kvkk' },
+  { doc: 'onbilgi', page: 'on-bilgilendirme-formu.html', key: 'legal.preinfo' },
+  { doc: 'mesafeli', page: 'mesafeli-satis-sozlesmesi.html', key: 'legal.distance' },
+] as const;

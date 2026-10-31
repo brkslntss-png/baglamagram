@@ -1,0 +1,54 @@
+---
+// Yasal metinler (Kullanım Şartları, KVKK Aydınlatma Metni, Mesafeli Satış Sözleşmesi, Ön Bilgilendirme Formu).
+// Metinler src/data/legal.ts'te (uygulamadaki features/legal/texts.js ile aynı); bağlayıcı olan Türkçe metindir,
+// öteki dillerde başta bir uyarı çıkar. Sayfa adları src/data/site.ts → YASAL.
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { href, t, type Lang } from '../../i18n';
+import { BELGELER, SURUM } from '../../data/legal';
+import { YASAL } from '../../data/site';
+interface Props { lang: Lang; doc: keyof typeof BELGELER }
+const { lang, doc } = Astro.props;
+const metin = BELGELER[doc].metin();
+const satirlar = metin.split('\n').map((s) => s.trim()).filter(Boolean);
+// "1. Taraflar" / "Madde 1 · Taraflar" → başlık; "1.1 Satıcı" (kısa) → ara başlık; "7.1 Satıcı, hizmeti…" (uzun) → paragraf
+const tur = (s: string) => (/^(\d+\.\s|Madde \d+\s·)/.test(s) ? 'h2' : /^\d+\.\d+\s/.test(s) && s.length < 40 ? 'h3' : 'p');
+// İlk satır belgenin büyük harfli adıysa (ÖN BİLGİLENDİRME FORMU) ve "Sürüm:" satırı başlıkta gösterildiği için atlanır
+const govde = satirlar.filter((s, i) => !(i === 0 && s === s.toLocaleUpperCase('tr-TR')) && !/^Sürüm:/.test(s));
+const sayfa = YASAL.find((y) => y.doc === doc)!;
+const title = t(lang, sayfa.key);
+---
+<Base title={title} description={title}>
+  <section class="page-hero">
+    <div class="container narrow">
+      <span class="eyebrow">{t(lang, 'legal.eyebrow')}</span>
+      <h1 class="title-lg">{title}</h1>
+      <p class="muted">{t(lang, 'legal.version', { v: SURUM })}</p>
+      <nav class="docs" aria-label={t(lang, 'legal.eyebrow')}>
+        {YASAL.map((v) => (
+          <a href={href(lang, v.page)} aria-current={v.doc === doc ? 'page' : undefined} class={v.doc === doc ? 'on' : ''}>{t(lang, v.key)}</a>
+        ))}
+      </nav>
+    </div>
+  </section>
+  <section class="section-tight">
+    <div class="container narrow">
+      <p class="notice"><Icon name="shield-check" size={18} /><span>{t(lang, 'legal.notice')}</span></p>
+      <article class="legal" lang="tr">
+        {govde.map((s) => (tur(s) === 'h2' ? <h2>{s}</h2> : tur(s) === 'h3' ? <h3>{s}</h3> : <p>{s}</p>))}
+      </article>
+    </div>
+  </section>
+</Base>
+<style>
+  .docs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .docs a { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); font-size: 14px; font-weight: 600; }
+  .docs a:hover { border-color: var(--gold-line); color: var(--gold-2); }
+  .docs a.on { background: var(--gold-soft); border-color: var(--gold-line); color: var(--gold-2); }
+  .notice { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--gold-line); background: rgba(210, 172, 99, 0.07); color: var(--text-2); font-size: 14.5px; margin-bottom: 28px; }
+  .notice :global(.icon) { color: var(--gold); margin-top: 1px; }
+  .legal { display: flex; flex-direction: column; gap: 12px; }
+  .legal h2 { font-family: var(--sans); font-size: 18px; font-weight: 700; margin-top: 18px; color: var(--text); }
+  .legal h3 { font-family: var(--sans); font-size: 16px; font-weight: 700; margin-top: 6px; color: var(--text); }
+  .legal p { color: var(--text-2); font-size: 15.5px; line-height: 1.7; overflow-wrap: anywhere; }
+</style>
