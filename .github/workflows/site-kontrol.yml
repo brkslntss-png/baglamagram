@@ -1,0 +1,26 @@
+# PR'larda siteyi yalnız derler (yayınlamaz): Astro derlemesi bozulursa birleştirmeden önce görünür.
+name: Site derleme kontrolü
+
+on:
+  pull_request:
+    paths: ['site/**']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Paketleri kur
+        run: npm ci
+        working-directory: site
+      - name: Derle
+        run: npm run build
+        working-directory: site

@@ -9,6 +9,7 @@ const SITE = 'https://baglamagram.com.tr';
 export function GET() {
   const pages = [
     '', 'hakkinda.html', 'online-egitim.html', 'notalar.html', 'siirler.html', 'konserler.html', 'magaza.html', 'blog.html',
+    'kullanim-sartlari.html', 'kvkk.html', 'on-bilgilendirme-formu.html', 'mesafeli-satis-sozlesmesi.html',
     ...POEMS.filter((p) => p.listed).map((p) => `siir-${p.slug}.html`),
     ...SONGS.filter((s) => s.listed).map((s) => s.page),
     ...posts('tr').map((p) => p.page),
