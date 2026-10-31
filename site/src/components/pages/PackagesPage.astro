@@ -310,7 +310,7 @@ const ozellikler = ['live', 'games', 'feedback', 'theory'] as const;
             </div>
             <ul class="pkg-list">
               {(p.uyelik === 'gold'
-                ? [t(lang, 'pk.g.l1', { n: (p as any).ders }), t(lang, 'pk.g.l2'), t(lang, 'pk.g.l3'), t(lang, 'pk.g.l4')]
+                ? [t(lang, 'pk.g.l1', { n: (p as any).ders, w: Math.round((p as any).ders / 4) }), t(lang, 'pk.g.l2'), t(lang, 'pk.g.l3'), t(lang, 'pk.g.l4')]
                 : [t(lang, 'pk.s.l1'), t(lang, 'pk.s.l2'), t(lang, 'pk.s.l3'), t(lang, 'pk.s.l4')]
               ).map((x) => <li><Icon name="check" size={16} class="gold" />{x}</li>)}
             </ul>

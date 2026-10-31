@@ -1,6 +1,6 @@
 // Yasal metinler: uygulamadaki features/legal/texts.js'in kopyası (mobil depo). Birini değiştirince ötekini de güncelle
 // ve SURUM'u artır. Sitede sipariş alanları "Sipariş sırasında belirtilir" olarak görünür.
-export const SURUM = '2026-11-01';
+export const SURUM = '2026-11-01.2';
 
 export const SATICI = {
   unvan: 'Mahmut Burak Aslantaş (Bağlamagram)',
@@ -10,9 +10,9 @@ export const SATICI = {
   web: 'https://baglamagram.com.tr',
 };
 
-// Paketteki dersler, ödemenin onaylandığı günden itibaren (ders sayısı × bu sayı) hafta içinde kullanılır.
-// 4 ders → 8 hafta, 8 ders → 16 hafta, 12 ders → 24 hafta.
-export const PAKET_HAFTA_CARPANI = 2;
+// Gold paketler aylıktır (Burak, 1 Kasım 2026): 4 ders haftada 1, 8 ders haftada 2, 12 ders haftada 3 ders;
+// dersler ilk dersin yapıldığı günden itibaren 1 ay içinde kullanılır.
+export const PAKET_SURESI = `Gold paketler aylıktır: 4 derslik paket haftada 1, 8 derslik paket haftada 2, 12 derslik paket haftada 3 ders olarak planlanır ve paketteki dersler ilk dersin yapıldığı günden itibaren 1 (bir) ay içinde kullanılır.`;
 
 const adres = () => SATICI.adres || '(adres eklenecek)';
 const saticiBlok = () => `Unvanı: ${SATICI.unvan}
@@ -42,7 +42,7 @@ Güncel ücretler, satın alma ekranında ve internet sitesinde vergiler dahil o
 Ders günü ve saati, öğrencinin tercihleri ve hocanın uygunluğuna göre birlikte belirlenir; belirlenen haftalık ders saati öğrenci adına ayrılır. Öğrenci, dersini en geç ders saatinden 6 (altı) saat önce Platform üzerinden erteleme isteği göndererek veya hocasına yazarak erteleyebilir. Ders saatine 6 saatten az kala yapılan iptaller ile haber verilmeden derse katılınmaması hâlinde o ders yapılmış sayılır ve paketteki ders hakkından düşülür. Öğrencinin 15 dakikadan fazla gecikmesi hâlinde ders yapılmış sayılabilir; geç başlayan ders, ders saatinin sonunda biter. Öğrencinin internet bağlantısı, cihazı, kamerası veya mikrofonundan kaynaklanan aksaklıklar nedeniyle yapılamayan dersler yapılmış sayılır. Hocanın iptal ettiği veya hocadan ya da Bağlamagram'dan kaynaklanan nedenlerle yapılamayan dersler için telafi dersi planlanır; telafi mümkün olmazsa o dersin bedeli iade edilir.
 
 7. Paket Geçerlilik Süresi
-Paketteki dersler, ödemenin onaylandığı günden itibaren ders sayısının ${PAKET_HAFTA_CARPANI} katı hafta içinde kullanılır (4 derslik paket ${4 * PAKET_HAFTA_CARPANI} hafta, 8 derslik paket ${8 * PAKET_HAFTA_CARPANI} hafta, 12 derslik paket ${12 * PAKET_HAFTA_CARPANI} hafta). Bu süre içinde kullanılmayan ders hakları, hocadan kaynaklanan aksaklıklar dışında sona erer ve bedeli iade edilmez. Sağlık sorunu gibi belgelenen haklı nedenlerle Bağlamagram süreyi uzatabilir.
+${PAKET_SURESI} Bu süre içinde kullanılmayan ders hakları, hocadan kaynaklanan aksaklıklar dışında sona erer ve bedeli iade edilmez. Sağlık sorunu gibi belgelenen haklı nedenlerle Bağlamagram süreyi uzatabilir.
 
 8. Cayma Hakkı ve İade
 Cayma hakkı, Mesafeli Satış Sözleşmesi'nde ve 6502 sayılı Tüketicinin Korunması Hakkında Kanun ile Mesafeli Sözleşmeler Yönetmeliği'nde belirtildiği şekilde kullanılır. Gold paketlerde Öğrenci, ödeme tarihinden itibaren 14 gün içinde ve ilk ders yapılmadan önce gerekçe göstermeden cayabilir; bu durumda ödenen tutarın tamamı iade edilir. Öğrencinin onayıyla ilk dersin yapılmasıyla hizmetin ifasına başlanmış olur ve Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinin (h) bendi uyarınca cayma hakkı sona erer. Silver Üyelik, elektronik ortamda anında ifa edilen bir hizmet olduğundan, Kullanıcının onayıyla erişim açıldığı anda aynı maddenin (ğ) bendi uyarınca cayma hakkı kullanılamaz. İadeler, cayma bildiriminin ulaşmasından itibaren 14 gün içinde ödemenin yapıldığı yöntemle yapılır; kartla ödemelerde iade Shopier üzerinden karta yapılır ve bankaya yansıma süresi bankaya göre değişebilir.
@@ -108,7 +108,7 @@ E-posta: ${siparisAlani(s, 'eposta')}
 Telefon: ${siparisAlani(s, 'telefon')}`;
 }
 
-const HIZMET_NITELIK = `Gold ders paketi: Paketteki ders sayısı kadar, hocayla birebir, yaklaşık 60 dakikalık canlı online bağlama/müzik dersi; derslerin kayıtlarına erişim, ders notları, ödevlere geri bildirim ve Platformun tüm içerikleri. Dersler internet üzerinden görüntülü olarak yapılır; ders günü ve saati Alıcının tercihleri ve hocanın uygunluğuna göre birlikte belirlenir. Paketteki dersler, ödemenin onaylandığı günden itibaren ders sayısının ${PAKET_HAFTA_CARPANI} katı hafta içinde kullanılır.
+const HIZMET_NITELIK = `Gold ders paketi: Paketteki ders sayısı kadar, hocayla birebir, yaklaşık 60 dakikalık canlı online bağlama/müzik dersi; derslerin kayıtlarına erişim, ders notları, ödevlere geri bildirim ve Platformun tüm içerikleri. Dersler internet üzerinden görüntülü olarak yapılır; ders günü ve saati Alıcının tercihleri ve hocanın uygunluğuna göre birlikte belirlenir. ${PAKET_SURESI}
 Silver Üyelik: Bir ay süreyle Platformun oyunlar, ders içerikleri, araçlar, teori testleri ve yetenek sınavı hazırlığı gibi uygulama içeriklerine erişim; hocayla ders içermez ve kendiliğinden yenilenmez.`;
 
 const IFA = `Hizmet elektronik ortamda sunulur; fiziksel teslimat yoktur. Ödeme kartla yapıldığında ve Shopier tarafından onaylandığında, havale/EFT ile yapıldığında ise ödeme Satıcının hesabına geçip doğrulandığında paket veya üyelik Alıcının hesabında kendiliğinden açılır (havale/EFT'de en geç 2 iş günü). Gold pakette ilk ders, ödemenin onaylanmasından sonra Alıcı ile birlikte belirlenen ilk uygun gün ve saatte yapılır.`;
@@ -190,7 +190,7 @@ Madde 7 · Tarafların yükümlülükleri
 7.3 Alıcı, derslere katılmak için gerekli cihazı, kamerayı, mikrofonu ve internet bağlantısını sağlamakla yükümlüdür.
 
 Madde 8 · Paket geçerlilik süresi
-Paketteki dersler, ödemenin onaylandığı günden itibaren ders sayısının ${PAKET_HAFTA_CARPANI} katı hafta içinde kullanılır. Bu süre içinde kullanılmayan ders hakları, Satıcıdan kaynaklanan aksaklıklar dışında sona erer. Belgelenen haklı nedenlerle Satıcı süreyi uzatabilir.
+${PAKET_SURESI} Bu süre içinde kullanılmayan ders hakları, Satıcıdan kaynaklanan aksaklıklar dışında sona erer. Belgelenen haklı nedenlerle Satıcı süreyi uzatabilir.
 
 Madde 9 · Kişisel veriler
 Alıcının kişisel verileri, Kişisel Verilerin Korunması Aydınlatma Metni'nde açıklandığı şekilde işlenir.
