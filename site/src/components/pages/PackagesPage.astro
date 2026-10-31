@@ -2,14 +2,20 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import { href, t, type Lang } from '../../i18n';
-import { SHOPIER } from '../../data/site';
+import { PAKETLER } from '../../data/site';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const cards = [
-  ['user', 'packages.one'],
-  ['users', 'packages.group'],
-  ['gift', 'packages.trial'],
-] as const;
+// Fiyat yazısı: 14.684,08 ₺ / 3.600 ₺
+const fiyat = (n: number) => {
+  const tam = Math.floor(n);
+  const kurus = Math.round((n - tam) * 100);
+  return `${String(tam).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}${kurus ? `,${String(kurus).padStart(2, '0')}` : ''} ₺`;
+};
+const paketler = PAKETLER.map((p) => ({
+  ...p,
+  oran: Math.round(((p.kart - p.havale) / p.kart) * 100),
+  link: `/portal/?kayit=1&uyelik=${p.uyelik}&paket=${p.id}`,
+}));
 ---
 <Base title={t(lang, 'packages.title')} description={t(lang, 'packages.lead')}>
   <section class="page-hero">
@@ -21,18 +27,30 @@ const cards = [
   </section>
   <section class="section-tight">
     <div class="container">
-      <div class="grid grid-3 reveal">
-        {cards.map(([icon, k], i) => (
-          <article class={`card pkg ${i === 2 ? 'trial' : ''}`}>
-            <span class="icon-tile"><Icon name={icon} size={22} /></span>
-            <h2 class="serif">{t(lang, `${k}.t` as any)}</h2>
-            <p>{t(lang, `${k}.d` as any)}</p>
-            {i === 2
-              ? <a class="btn btn-ghost" href={href(lang, 'online-egitim.html') + '#basvuru'}>{t(lang, 'packages.apply')}<Icon name="arrow-right" size={17} /></a>
-              : <a class="btn btn-gold" href={SHOPIER} target="_blank" rel="noopener noreferrer"><Icon name="shopping-bag" size={17} />{t(lang, 'packages.shop')}</a>}
+      <div class="grid grid-4 reveal">
+        {paketler.map((p) => (
+          <article class={`card pkg ${p.uyelik}`}>
+            <span class={`tag ${p.uyelik}`}>{p.uyelik === 'gold' ? 'GOLD' : 'SILVER'}</span>
+            <h2 class="serif">{t(lang, p.key)}</h2>
+            <p>{p.uyelik === 'gold' ? t(lang, 'packages.gold.d').replace('{n}', String(p.ders)) : t(lang, 'packages.silver.d')}</p>
+            <div class="price">
+              <span class="muted small-label">{t(lang, 'packages.transfer')}</span>
+              <strong>{fiyat(p.havale)}{p.uyelik === 'silver' ? <small> {t(lang, 'packages.month')}</small> : null}</strong>
+              <span class="off">{t(lang, 'packages.off').replace('{n}', String(p.oran))}</span>
+              <span class="muted card-price">{t(lang, 'packages.card').replace('{p}', fiyat(p.kart))}</span>
+            </div>
+            <a class="btn btn-gold" href={p.link}><Icon name="shopping-bag" size={17} />{t(lang, 'packages.buy')}</a>
           </article>
         ))}
       </div>
+      <article class="card pkg trial reveal">
+        <span class="icon-tile"><Icon name="gift" size={22} /></span>
+        <div class="trial-text">
+          <h2 class="serif">{t(lang, 'packages.trial.t')}</h2>
+          <p>{t(lang, 'packages.trial.d')}</p>
+        </div>
+        <a class="btn btn-ghost" href={href(lang, 'online-egitim.html') + '#basvuru'}>{t(lang, 'packages.apply')}<Icon name="arrow-right" size={17} /></a>
+      </article>
     </div>
   </section>
   <section class="section-tight">
@@ -47,11 +65,24 @@ const cards = [
   </section>
 </Base>
 <style>
-  .pkg { padding: 28px; display: flex; flex-direction: column; gap: 14px; }
-  .pkg h2 { font-size: 26px; }
+  .pkg { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .pkg h2 { font-size: 24px; }
   .pkg p { color: var(--text-2); flex: 1; }
-  .pkg .btn { align-self: flex-start; margin-top: 8px; }
-  .trial { border-color: var(--gold-line); background: radial-gradient(120% 120% at 100% 0%, rgba(210, 172, 99, 0.12), transparent 60%), var(--surface); }
+  .pkg .btn { align-self: stretch; justify-content: center; margin-top: 6px; }
+  .pkg.gold { border-color: var(--gold-line); }
+  .tag { align-self: flex-start; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 999px; color: #fff; }
+  .tag.gold { background: #C9A227; }
+  .tag.silver { background: #8E9AAF; }
+  .price { display: flex; flex-direction: column; gap: 4px; }
+  .price strong { font-size: 30px; line-height: 1.1; }
+  .price small { font-size: 15px; font-weight: 500; color: var(--text-2); }
+  .small-label { font-size: 13px; }
+  .off { align-self: flex-start; font-size: 13px; font-weight: 700; color: #fff; background: #2f9e55; padding: 3px 8px; border-radius: 8px; }
+  .card-price { font-size: 14px; }
+  .trial { margin-top: clamp(14px, 2vw, 22px); flex-direction: row; align-items: center; gap: 20px; border-color: var(--gold-line); background: radial-gradient(120% 120% at 100% 0%, rgba(210, 172, 99, 0.12), transparent 60%), var(--surface); }
+  .trial .trial-text { flex: 1; }
+  .trial .btn { align-self: center; margin-top: 0; }
+  @media (max-width: 760px) { .trial { flex-direction: column; align-items: flex-start; } .trial .btn { align-self: stretch; } }
   .includes { width: calc(100% - 2 * var(--gutter)); display: flex; flex-direction: column; gap: 18px; padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
   .includes ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
   .includes li { display: flex; gap: 10px; color: var(--text-2); }
