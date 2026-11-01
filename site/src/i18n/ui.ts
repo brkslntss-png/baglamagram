@@ -3,7 +3,7 @@ const tr = {
   // Genel
   'site.name': 'Mahmut Burak ASLANTAŞ',
   'site.tagline': 'Bağlama sanatçısı ve müzik öğretmeni',
-  'site.description': 'Mahmut Burak Aslantaş: bağlama sanatçısı, müzik öğretmeni. Online bağlama eğitimi, notalar, şiirler ve konserler.',
+  'site.description': 'Mahmut Burak Aslantaş ile online bağlama dersleri: birebir canlı dersler, ders kayıtları, notalar ve öğrenciye özel uygulama. Şiirler, besteler ve konserler.',
   'nav.home': 'Ana Sayfa',
   'nav.about': 'Hakkında',
   'nav.edu': 'Online Eğitim',
@@ -35,6 +35,7 @@ const tr = {
   'common.playVideo': 'Videoyu oynat',
 
   // Ana sayfa
+  'home.lead': 'Bağlama sanatçısı ve müzik öğretmeni. Birebir canlı online bağlama dersleri, ders kayıtları ve notalarla; her seviyeye, yetenek sınavına hazırlığa kadar.',
   'home.quote': 'Sanatsız kalan bir milletin hayat damarlarından biri kopmuş demektir.',
   'home.quoteAuthor': 'Mustafa Kemal Atatürk',
   'home.ctaEdu': 'Online Eğitime Başla',
@@ -341,7 +342,7 @@ type Dict = Partial<Record<UIKey, string>>;
 
 const en: Dict = {
   'site.tagline': 'Bağlama artist and music teacher',
-  'site.description': 'Mahmut Burak Aslantaş: bağlama artist and music teacher. Online bağlama lessons, sheet music, poems and concerts.',
+  'site.description': 'Online bağlama lessons with Mahmut Burak Aslantaş: one-to-one live lessons, lesson recordings, sheet music and a student app. Poems, compositions and concerts.',
   'nav.home': 'Home',
   'nav.about': 'About',
   'nav.edu': 'Online Lessons',
@@ -371,6 +372,7 @@ const en: Dict = {
   'common.noResult': 'No results found.',
   'common.onlyTurkish': 'This content is in Turkish.',
   'common.playVideo': 'Play video',
+  'home.lead': 'Bağlama artist and music teacher. One-to-one live online bağlama lessons with recordings and sheet music, for every level up to conservatory entrance exams.',
   'home.quote': 'A nation that has lost its art has lost one of its lifelines.',
   'home.quoteAuthor': 'Mustafa Kemal Atatürk',
   'home.ctaEdu': 'Start Online Lessons',
@@ -665,7 +667,7 @@ const en: Dict = {
 
 const de: Dict = {
   'site.tagline': 'Bağlama-Künstler und Musiklehrer',
-  'site.description': 'Mahmut Burak Aslantaş: Bağlama-Künstler und Musiklehrer. Online-Bağlama-Unterricht, Noten, Gedichte und Konzerte.',
+  'site.description': 'Online-Bağlama-Unterricht mit Mahmut Burak Aslantaş: Live-Einzelstunden, Aufzeichnungen, Noten und eine Schüler-App. Gedichte, Kompositionen und Konzerte.',
   'nav.home': 'Start',
   'nav.about': 'Über mich',
   'nav.edu': 'Online-Unterricht',
@@ -695,6 +697,7 @@ const de: Dict = {
   'common.noResult': 'Keine Ergebnisse gefunden.',
   'common.onlyTurkish': 'Dieser Inhalt ist auf Türkisch.',
   'common.playVideo': 'Video abspielen',
+  'home.lead': 'Bağlama-Künstler und Musiklehrer. Live-Online-Einzelunterricht auf der Bağlama mit Aufzeichnungen und Noten, für jedes Niveau bis zur Aufnahmeprüfung.',
   'home.quote': 'Ein Volk ohne Kunst hat eine seiner Lebensadern verloren.',
   'home.quoteAuthor': 'Mustafa Kemal Atatürk',
   'home.ctaEdu': 'Online-Unterricht starten',
@@ -989,7 +992,7 @@ const de: Dict = {
 
 const ru: Dict = {
   'site.tagline': 'Исполнитель на багламе и учитель музыки',
-  'site.description': 'Махмут Бурак Асланташ — исполнитель на багламе и учитель музыки. Онлайн-уроки игры на багламе, ноты, стихи и концерты.',
+  'site.description': 'Онлайн-уроки игры на багламе с Махмутом Бураком Асланташем: индивидуальные живые уроки, записи, ноты и приложение для учеников. Стихи, композиции и концерты.',
   'nav.home': 'Главная',
   'nav.about': 'Обо мне',
   'nav.edu': 'Онлайн-уроки',
@@ -1019,6 +1022,7 @@ const ru: Dict = {
   'common.noResult': 'Ничего не найдено.',
   'common.onlyTurkish': 'Этот материал на турецком языке.',
   'common.playVideo': 'Смотреть видео',
+  'home.lead': 'Исполнитель на багламе и учитель музыки. Индивидуальные онлайн-уроки игры на багламе с записями и нотами — для любого уровня, вплоть до подготовки к вступительным экзаменам.',
   'home.quote': 'Народ, лишившийся искусства, потерял одну из своих жизненных артерий.',
   'home.quoteAuthor': 'Мустафа Кемаль Ататюрк',
   'home.ctaEdu': 'Начать онлайн-уроки',
