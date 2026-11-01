@@ -1,6 +1,6 @@
 // Yasal metinler: uygulamadaki features/legal/texts.js'in kopyası (mobil depo). Birini değiştirince ötekini de güncelle
 // ve SURUM'u artır. Sitede sipariş alanları "Sipariş sırasında belirtilir" olarak görünür.
-export const SURUM = '2026-11-01.4';
+export const SURUM = '2026-11-01.5';
 
 export const SATICI = {
   unvan: 'Mahmut Burak Aslantaş (Bağlamagram)',
@@ -24,7 +24,7 @@ E-posta: ${SATICI.eposta}
 export const KULLANIM_SARTLARI = `Son güncelleme: 1 Kasım 2026
 
 1. Taraflar ve Tanımlar
-Bu Kullanım Şartları ("Şartlar"), Bağlamagram mobil uygulaması, web portalı ve baglamagram.com.tr ("Platform") üzerinden hizmet sunan ${SATICI.unvan} ("Bağlamagram") ile Platformu kullanan kişiler ("Kullanıcı") arasındaki ilişkiyi düzenler. "Öğrenci" paket veya üyelik satın alan ya da Platformu öğrenci olarak kullanan kişiyi, "Veli" 18 yaşından küçük öğrencinin velisini veya vasisini, "Hoca" Bağlamagram adına ders veren kişiyi, "Gold Üyelik" hocayla canlı online ders ve Platformun tamamını, "Silver Üyelik" yalnız Platformun uygulama içeriklerini, "Paket" belirli sayıda dersten oluşan Gold ders paketini ifade eder.
+Bu Kullanım Şartları ("Şartlar"), Bağlamagram mobil uygulaması, web portalı ve baglamagram.com.tr ("Platform") üzerinden hizmet sunan ${SATICI.unvan} ("Bağlamagram") ile Platformu kullanan kişiler ("Kullanıcı") arasındaki ilişkiyi düzenler. "Öğrenci" ders veya üyelik satın alan ya da Platformu öğrenci olarak kullanan kişiyi, "Veli" 18 yaşından küçük öğrencinin velisini veya vasisini, "Hoca" Bağlamagram adına ders veren kişiyi, "Gold Üyelik" hocayla canlı online ders ve Platformun tamamını, "Silver Üyelik" yalnız Platformun uygulama içeriklerini, "Paket" belirli sayıda dersten oluşan Gold ders paketini ifade eder.
 
 2. Kabul ve Değişiklikler
 Kullanıcı, hesap açarken veya Platformu kullanmaya başladığında bu Şartları, Kişisel Verilerin Korunması Aydınlatma Metni'ni ve satın alma sırasında Ön Bilgilendirme Formu ile Mesafeli Satış Sözleşmesi'ni okuduğunu ve kabul ettiğini beyan eder. Bağlamagram bu Şartları güncelleyebilir; güncel metin Platformda yayımlandığı anda yürürlüğe girer. Ücretli hizmetleri etkileyen önemli değişiklikler Kullanıcıya Platform üzerinden duyurulur; daha önce ödemesi yapılmış paketlerin fiyatı ve ders sayısı değişmez.
@@ -36,7 +36,7 @@ Kullanıcı, kayıt sırasında doğru, güncel ve eksiksiz bilgi vermekle yük�
 Gold Üyelik; satın alınan paketteki ders sayısı kadar hocayla birebir canlı online ders, derslerin kayıtlarına erişim, ders notları, ödevlere geri bildirim ve Platformun tüm içeriklerini kapsar. Silver Üyelik; oyunlar, ders içerikleri, araçlar, teori testleri ve yetenek sınavı hazırlığı gibi uygulama içeriklerini kapsar, hocayla ders içermez. Ücretsiz deneme dersi kişi başına bir kez verilir; Bağlamagram deneme dersi başvurusunu kabul etmeme hakkını saklı tutar. Platformdaki içerikler ve araçlar eğitim amacıyla "olduğu gibi" sunulur; Bağlamagram, içeriklerin her zaman eksiksiz ve hatasız olacağını, Platformun kesintisiz çalışacağını veya herhangi bir sınavda (yetenek sınavları dahil) belirli bir başarının elde edileceğini taahhüt etmez. Öğrencinin gelişimi, düzenli çalışmasına ve derslere katılımına bağlıdır.
 
 5. Ücretler ve Ödeme
-Güncel ücretler, satın alma ekranında ve internet sitesinde vergisiz fiyat ve vergiler dahil ödenecek tutar olarak ayrı ayrı gösterilir; Kullanıcının ödediği tutar vergiler dahil tutardır. Ödeme yalnız Shopier aracılığıyla kredi veya banka kartıyla yapılır; kart bilgileri Shopier'in güvenli ödeme sayfasına girilir ve Bağlamagram'a ulaşmaz; Shopier'in kullanım koşulları da geçerlidir. Paket veya üyelik, ödeme Shopier tarafından onaylandıktan sonra açılır. Bağlamagram ücretleri ileriye dönük olarak değiştirebilir; değişiklik, ödemesi yapılmış paketleri etkilemez. Silver Üyelik bir aylıktır ve kendiliğinden yenilenmez; süresi bitince Kullanıcı dilerse yeniden satın alır.
+Güncel ücretler, satın alma ekranında ve internet sitesinde vergiler dahil olarak gösterilir. Ödeme banka havalesi/EFT ile ya da Shopier aracılığıyla kredi veya banka kartıyla yapılabilir; havale/EFT ile ödemede indirimli fiyat uygulanır. Kartla ödemede kart bilgileri Shopier'in güvenli ödeme sayfasına girilir ve Bağlamagram'a ulaşmaz; kartla ödemelerde Shopier'in kullanım koşulları da geçerlidir. Havale/EFT ile ödemede Kullanıcı, alıcı adını ve IBAN'ı kontrol etmekle yükümlüdür; yanlış hesaba yapılan ödemelerden Bağlamagram sorumlu değildir. "Ödeme yaptım" bildirimi yalnız bilgilendirmedir; paket veya üyelik, ödeme Bağlamagram'ın hesabına geçip doğrulandıktan sonra açılır. Bağlamagram ücretleri ileriye dönük olarak değiştirebilir; değişiklik, ödemesi yapılmış paketleri etkilemez. Silver Üyelik bir aylıktır ve kendiliğinden yenilenmez; süresi bitince Kullanıcı dilerse yeniden satın alır.
 
 6. Ders Planlama, Erteleme ve Katılım
 Ders günü ve saati, öğrencinin tercihleri ve hocanın uygunluğuna göre birlikte belirlenir; belirlenen haftalık ders saati öğrenci adına ayrılır. Öğrenci, dersini en geç ders saatinden 6 (altı) saat önce Platform üzerinden erteleme isteği göndererek veya hocasına yazarak erteleyebilir. Ders saatine 6 saatten az kala yapılan iptaller ile haber verilmeden derse katılınmaması hâlinde o ders yapılmış sayılır ve paketteki ders hakkından düşülür. Öğrencinin 15 dakikadan fazla gecikmesi hâlinde ders yapılmış sayılabilir; geç başlayan ders, ders saatinin sonunda biter. Öğrencinin internet bağlantısı, cihazı, kamerası veya mikrofonundan kaynaklanan aksaklıklar nedeniyle yapılamayan dersler yapılmış sayılır. Hocanın iptal ettiği veya hocadan ya da Bağlamagram'dan kaynaklanan nedenlerle yapılamayan dersler için telafi dersi planlanır; telafi mümkün olmazsa o dersin bedeli iade edilir.
@@ -98,7 +98,7 @@ const siparisAlani = (s: Siparis, alan: keyof NonNullable<Siparis>, bos = 'Sipar
 function hizmetBlok(s: Siparis) {
   return `Hizmet: ${siparisAlani(s, 'paket', 'Satın alma ekranında seçilen Gold ders paketi veya Silver Üyelik')}
 Toplam bedel (vergiler dahil): ${siparisAlani(s, 'tutar')}
-Ödeme yöntemi: ${siparisAlani(s, 'yontem', 'Shopier aracılığıyla kartla ödeme')}
+Ödeme yöntemi: ${siparisAlani(s, 'yontem', 'Banka havalesi/EFT veya Shopier aracılığıyla kartla ödeme')}
 Sipariş tarihi: ${siparisAlani(s, 'tarih')}`;
 }
 
@@ -111,7 +111,7 @@ Telefon: ${siparisAlani(s, 'telefon')}`;
 const HIZMET_NITELIK = `Gold ders paketi: Paketteki ders sayısı kadar, hocayla birebir, yaklaşık 60 dakikalık canlı online bağlama/müzik dersi; derslerin kayıtlarına erişim, ders notları, ödevlere geri bildirim ve Platformun tüm içerikleri. Dersler internet üzerinden görüntülü olarak yapılır; ders günü ve saati Alıcının tercihleri ve hocanın uygunluğuna göre birlikte belirlenir. ${PAKET_SURESI}
 Silver Üyelik: Bir ay süreyle Platformun oyunlar, ders içerikleri, araçlar, teori testleri ve yetenek sınavı hazırlığı gibi uygulama içeriklerine erişim; hocayla ders içermez ve kendiliğinden yenilenmez.`;
 
-const IFA = `Hizmet elektronik ortamda sunulur; fiziksel teslimat yoktur. Ödeme Shopier aracılığıyla kartla yapılıp Shopier tarafından onaylandığında paket veya üyelik Alıcının hesabında kendiliğinden açılır. Gold pakette ilk ders, ödemenin onaylanmasından sonra Alıcı ile birlikte belirlenen ilk uygun gün ve saatte yapılır.`;
+const IFA = `Hizmet elektronik ortamda sunulur; fiziksel teslimat yoktur. Ödeme kartla yapıldığında ve Shopier tarafından onaylandığında, havale/EFT ile yapıldığında ise ödeme Satıcının hesabına geçip doğrulandığında paket veya üyelik Alıcının hesabında kendiliğinden açılır (havale/EFT'de en geç 2 iş günü). Gold pakette ilk ders, ödemenin onaylanmasından sonra Alıcı ile birlikte belirlenen ilk uygun gün ve saatte yapılır.`;
 
 const CAYMA = `Alıcı, ödeme tarihinden itibaren 14 (on dört) gün içinde, herhangi bir gerekçe göstermeden ve cezai şart ödemeden sözleşmeden cayabilir. Cayma bildirimi bu süre içinde ${SATICI.eposta} adresine e-posta ile veya ${SATICI.telefon} numarasına WhatsApp üzerinden yazılı olarak yapılır.
 Cayma hakkının kullanılamayacağı hâller (Mesafeli Sözleşmeler Yönetmeliği md. 15):
@@ -140,7 +140,7 @@ ${HIZMET_NITELIK}
 
 4. Fiyat ve ödeme
 ${hizmetBlok(siparis)}
-Ödenecek toplam bedel vergiler dahildir; satın alma ekranında ayrıca vergisiz fiyat gösterilir. Ödeme yalnız Shopier aracılığıyla kartla yapılır; kart bilgileri Shopier'in güvenli ödeme sayfasına girilir ve Satıcıya ulaşmaz. Ek ücret, kargo veya teslimat bedeli yoktur.
+Fiyatlar vergiler dahildir. Havale/EFT ile ödemede indirimli fiyat uygulanır. Kartla ödemede kart bilgileri Shopier'in güvenli ödeme sayfasına girilir ve Satıcıya ulaşmaz. Ek ücret, kargo veya teslimat bedeli yoktur.
 
 5. İfa (hizmetin sunulması)
 ${IFA}

@@ -6,7 +6,7 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import { href, t, type Lang } from '../../i18n';
-import { IMG, DERS_VERGISIZ, DERS_VERGI_DAHIL, PAKETLER, WHATSAPP } from '../../data/site';
+import { IMG, PAKETLER, WHATSAPP } from '../../data/site';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 // Fiyat yazısı: 14.684,08 ₺ / 3.600 ₺
@@ -16,9 +16,16 @@ const fiyat = (n: number) => {
   return `${String(tam).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}${kurus ? `,${String(kurus).padStart(2, '0')}` : ''} ₺`;
 };
 const kayit = (uyelik: string, id: string) => `/portal/?kayit=1&uyelik=${uyelik}&paket=${id}`;
-const paketler = PAKETLER.map((p) => ({ ...p, link: kayit(p.uyelik, p.id) }));
+const paketler = PAKETLER.map((p) => ({
+  ...p,
+  oran: Math.round(((p.kart - p.havale) / p.kart) * 100),
+  link: kayit(p.uyelik, p.id),
+}));
+const oranlar = paketler.map((p) => p.oran);
+const indirim = { a: Math.min(...oranlar), b: Math.max(...oranlar) };
 const gold4 = paketler.find((p) => p.id === 'gold4')!;
 const silver = paketler.find((p) => p.id === 'silver')!;
+const dersBasi = gold4.havale / gold4.ders;
 const deneme = href(lang, 'online-egitim.html') + '#basvuru';
 
 const adimlar = [
@@ -65,7 +72,7 @@ const ozellikler = ['live', 'games', 'feedback', 'theory'] as const;
         </div>
         <ul class="chips">
           <li><Icon name="video" size={15} />{t(lang, 'pk.chip.live')}</li>
-          <li><Icon name="calendar" size={15} />{t(lang, 'pk.chip.off')}</li>
+          <li><Icon name="gift" size={15} />{t(lang, 'pk.chip.off', indirim)}</li>
           <li><Icon name="shield-check" size={15} />{t(lang, 'pk.chip.safe')}</li>
         </ul>
       </div>
@@ -291,20 +298,14 @@ const ozellikler = ['live', 'games', 'feedback', 'theory'] as const;
             </div>
             <h3 class="serif">{t(lang, p.key)}</h3>
             <div class="price">
-              <div class="pp">
-                <div class="net">
-                  <span class="muted small-label">{t(lang, 'packages.transfer')}</span>
-                  <strong>{fiyat(p.vergisiz)}</strong>
-                </div>
-                <div class="incl">
-                  <span class="small-label">{t(lang, 'pk.incl')}</span>
-                  <strong>{fiyat(p.kart)}</strong>
-                </div>
-              </div>
-              <span class="per">
+              <span class="muted small-label">{t(lang, 'packages.transfer')}</span>
+              <strong>{fiyat(p.havale)}{p.uyelik === 'silver' ? <small> {t(lang, 'packages.month')}</small> : null}</strong>
+              {p.uyelik === 'gold' ? <span class="per">{t(lang, 'pk.perLesson', { p: fiyat(p.havale / (p as any).ders) })}</span> : null}
+              <span class="save-row"><span class="save">{t(lang, 'packages.off', { n: p.oran })}</span><span class="gain">{t(lang, 'pk.save', { p: fiyat(p.kart - p.havale) })}</span></span>
+              <span class="muted card-price">
                 {p.uyelik === 'gold'
-                  ? t(lang, 'pk.cardPer', { q: fiyat(DERS_VERGI_DAHIL) })
-                  : t(lang, 'packages.month')}
+                  ? t(lang, 'pk.cardPer', { p: fiyat(p.kart), q: fiyat(p.kart / (p as any).ders) })
+                  : t(lang, 'packages.card', { p: fiyat(p.kart) })}
               </span>
             </div>
             <ul class="pkg-list">
@@ -361,8 +362,8 @@ const ozellikler = ['live', 'games', 'feedback', 'theory'] as const;
             <tr class="price-row">
               <th scope="row">{t(lang, 'pk.cmp.price')}</th>
               <td>{t(lang, 'pk.cmp.free')}</td>
-              <td>{t(lang, 'pk.cmp.perMonth', { p: fiyat(silver.vergisiz) })}</td>
-              <td class="c-gold">{t(lang, 'pk.cmp.goldPrice', { p: fiyat(DERS_VERGISIZ) })}</td>
+              <td>{t(lang, 'pk.cmp.perMonth', { p: fiyat(silver.havale) })}</td>
+              <td class="c-gold">{t(lang, 'pk.perLesson', { p: fiyat(dersBasi) })}</td>
             </tr>
             <tr class="cta-row">
               <td></td>
@@ -406,7 +407,7 @@ const ozellikler = ['live', 'games', 'feedback', 'theory'] as const;
           <article class="card trust">
             <span class="icon-tile"><Icon name={icon} size={20} /></span>
             <h3>{t(lang, `${k}.t` as any)}</h3>
-            <p>{t(lang, `${k}.d` as any)}</p>
+            <p>{t(lang, `${k}.d` as any, indirim)}</p>
           </article>
         ))}
       </div>
@@ -509,14 +510,10 @@ const ozellikler = ['live', 'games', 'feedback', 'theory'] as const;
   .price small { font-size: 15px; font-weight: 500; color: var(--text-2); }
   .small-label { font-size: 13px; }
   .per { font-size: 14px; color: var(--text-2); font-weight: 600; }
-  .pp { display: flex; flex-direction: column; gap: 8px; }
-  .pp > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .pp .net { flex-direction: row; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-  .pp .net strong { font-size: 20px; color: var(--text-2); }
-  .pp .incl { border: 1.5px solid var(--gold); border-radius: 14px; padding: 8px 12px; background: rgba(210, 172, 99, 0.08); }
-  .pp .incl .small-label { color: var(--gold); font-weight: 700; }
-  .pp .incl strong { font-size: 32px; color: var(--text); }
-  .pp strong { white-space: nowrap; line-height: 1.15; }
+  .save-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .save { font-size: 12.5px; font-weight: 800; color: #fff; background: #2f9e55; padding: 3px 8px; border-radius: 8px; }
+  .gain { font-size: 13px; font-weight: 700; color: var(--ok); }
+  .card-price { font-size: 13.5px; }
   .pkg-list { list-style: none; margin: 0; padding: 14px 0 0; border-top: 1px solid var(--line); display: grid; gap: 9px; flex: 1; align-content: start; }
   .pkg-list li { display: flex; gap: 8px; font-size: 14.5px; color: var(--text-2); line-height: 1.45; }
   .pkg-list li :global(.icon) { margin-top: 2px; }
