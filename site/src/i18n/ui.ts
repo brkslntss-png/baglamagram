@@ -35,7 +35,6 @@ const tr = {
   'common.playVideo': 'Videoyu oynat',
 
   // Ana sayfa
-  'home.lead': 'Bağlama sanatçısı ve müzik öğretmeni. Birebir canlı online bağlama dersleri, ders kayıtları ve notalarla; her seviyeye, yetenek sınavına hazırlığa kadar.',
   'home.quote': 'Sanatsız kalan bir milletin hayat damarlarından biri kopmuş demektir.',
   'home.quoteAuthor': 'Mustafa Kemal Atatürk',
   'home.ctaEdu': 'Online Eğitime Başla',
@@ -372,7 +371,6 @@ const en: Dict = {
   'common.noResult': 'No results found.',
   'common.onlyTurkish': 'This content is in Turkish.',
   'common.playVideo': 'Play video',
-  'home.lead': 'Bağlama artist and music teacher. One-to-one live online bağlama lessons with recordings and sheet music, for every level up to conservatory entrance exams.',
   'home.quote': 'A nation that has lost its art has lost one of its lifelines.',
   'home.quoteAuthor': 'Mustafa Kemal Atatürk',
   'home.ctaEdu': 'Start Online Lessons',
@@ -697,7 +695,6 @@ const de: Dict = {
   'common.noResult': 'Keine Ergebnisse gefunden.',
   'common.onlyTurkish': 'Dieser Inhalt ist auf Türkisch.',
   'common.playVideo': 'Video abspielen',
-  'home.lead': 'Bağlama-Künstler und Musiklehrer. Live-Online-Einzelunterricht auf der Bağlama mit Aufzeichnungen und Noten, für jedes Niveau bis zur Aufnahmeprüfung.',
   'home.quote': 'Ein Volk ohne Kunst hat eine seiner Lebensadern verloren.',
   'home.quoteAuthor': 'Mustafa Kemal Atatürk',
   'home.ctaEdu': 'Online-Unterricht starten',
@@ -1022,7 +1019,6 @@ const ru: Dict = {
   'common.noResult': 'Ничего не найдено.',
   'common.onlyTurkish': 'Этот материал на турецком языке.',
   'common.playVideo': 'Смотреть видео',
-  'home.lead': 'Исполнитель на багламе и учитель музыки. Индивидуальные онлайн-уроки игры на багламе с записями и нотами — для любого уровня, вплоть до подготовки к вступительным экзаменам.',
   'home.quote': 'Народ, лишившийся искусства, потерял одну из своих жизненных артерий.',
   'home.quoteAuthor': 'Мустафа Кемаль Ататюрк',
   'home.ctaEdu': 'Начать онлайн-уроки',
