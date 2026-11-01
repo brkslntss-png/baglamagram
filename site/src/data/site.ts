@@ -48,15 +48,15 @@ export const SHOPIER = 'https://www.shopier.com/baglamagram';
 export const WHATSAPP = 'https://wa.me/905335060921';
 
 // Satılan paketler (uygulamada features/access/plans.js ve functions/index.js → PAKETLER ile aynı).
-// 1 Kasım 2026 (Burak): havale kaldırıldı, ödeme yalnız kartla; ekranda vergisiz fiyat (modül başı 899 ₺) büyük,
-// vergiler dahil ödenecek tutar (kart, modül başı 1.129 ₺) yanında. "Ders" yerine "modül".
-export const MODUL_VERGISIZ = 899;
-export const MODUL_VERGI_DAHIL = 1129;
+// 1 Kasım 2026 (Burak, GVK 20/B istisnası): havale kaldırıldı, ödeme yalnız kartla; ekranda vergisiz fiyat (ders başı
+// 899 ₺) ve daha büyük, çerçeveli vergiler dahil ödenecek tutar (kart, ders başı 1.129 ₺).
+export const DERS_VERGISIZ = 899;
+export const DERS_VERGI_DAHIL = 1129;
 export const PAKETLER = [
   { id: 'gold4', key: 'packages.gold4', uyelik: 'gold', ders: 4, vergisiz: 3596, kart: 4516 },
   { id: 'gold8', key: 'packages.gold8', uyelik: 'gold', ders: 8, vergisiz: 7192, kart: 9032 },
   { id: 'gold12', key: 'packages.gold12', uyelik: 'gold', ders: 12, vergisiz: 10788, kart: 13548 },
-  { id: 'silver', key: 'packages.silver', uyelik: 'silver', ay: 1, vergisiz: 200, kart: 328 },
+  { id: 'silver', key: 'packages.silver', uyelik: 'silver', ay: 1, vergisiz: 200, kart: 249 },
 ] as const;
 
 // Yasal sayfalar (metinler src/data/legal.ts): alt bilgide ve paketler sayfasında bağlantı
