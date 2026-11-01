@@ -2,30 +2,42 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import { href, t, type Lang } from '../../i18n';
-import { LISTED_POEMS, POEMS, poemUrl, excerpt, type Poem } from '../../data/poems';
+import { LISTED_POEMS, POEMS, poemUrl, excerpt, localize, type Poem } from '../../data/poems';
 import { SONGS } from '../../data/songs';
 interface Props { lang: Lang; poem: Poem }
-const { lang, poem } = Astro.props;
+const { lang, poem: original } = Astro.props;
+const poem = localize(original, lang);
+const tl = poem.translated ? lang : 'tr';
 const list = poem.listed ? LISTED_POEMS : POEMS;
 const i = list.findIndex((p) => p.slug === poem.slug);
-const prev = i > 0 ? list[i - 1] : null;
-const next = i >= 0 && i < list.length - 1 ? list[i + 1] : null;
+const prev = i > 0 ? localize(list[i - 1], lang) : null;
+const next = i >= 0 && i < list.length - 1 ? localize(list[i + 1], lang) : null;
 const song = SONGS.find((s) => s.slug === poem.slug);
 const stanzas = poem.text.split(/\n\s*\n/);
+const origStanzas = original.text.split(/\n\s*\n/);
 ---
 <Base title={poem.title} description={excerpt(poem, 3)}>
   <article class="page-hero poem-page">
     <div class="container narrow">
       <a class="link-arrow" href={href(lang, 'siirler.html')}><Icon name="arrow-left" size={17} />{t(lang, 'poems.back')}</a>
-      <h1 class="title-xl" lang="tr">{poem.title}</h1>
+      <h1 class="title-xl" lang={tl}>{poem.title}</h1>
       <p class="by">Mahmut Burak Aslantaş</p>
-      <div class="text serif" lang="tr">
+      {poem.translated ? <p class="note">{t(lang, 'poems.translated')} · <span lang="tr" class="serif">{original.title}</span></p> : null}
+      <div class="text serif" lang={tl}>
         {stanzas.map((s) => <p>{s}</p>)}
       </div>
+      {poem.translated ? (
+        <details class="orig">
+          <summary>{t(lang, 'poems.original')}</summary>
+          <div class="text serif" lang="tr">
+            {origStanzas.map((s) => <p>{s}</p>)}
+          </div>
+        </details>
+      ) : null}
       {song ? <a class="btn btn-ghost" href={href(lang, song.page)}><Icon name="music" size={17} />{t(lang, 'notes.title')}: {song.title}</a> : null}
       <nav class="pn" aria-label="">
-        {prev ? <a class="card" href={href(lang, poemUrl(prev.slug))}><small>{t(lang, 'poems.prev')}</small><span class="serif" lang="tr">{prev.title}</span></a> : <span></span>}
-        {next ? <a class="card next" href={href(lang, poemUrl(next.slug))}><small>{t(lang, 'poems.next')}</small><span class="serif" lang="tr">{next.title}</span></a> : <span></span>}
+        {prev ? <a class="card" href={href(lang, poemUrl(prev.slug))}><small>{t(lang, 'poems.prev')}</small><span class="serif" lang={tl}>{prev.title}</span></a> : <span></span>}
+        {next ? <a class="card next" href={href(lang, poemUrl(next.slug))}><small>{t(lang, 'poems.next')}</small><span class="serif" lang={tl}>{next.title}</span></a> : <span></span>}
       </nav>
     </div>
   </article>
@@ -41,4 +53,8 @@ const stanzas = poem.text.split(/\n\s*\n/);
   .pn span { font-size: 20px; }
   .pn .next { text-align: right; }
   .btn { align-self: flex-start; }
+  .note { color: var(--text-3); font-size: 14px; margin-top: -8px; }
+  .note span { font-style: italic; }
+  .orig summary { cursor: pointer; color: var(--gold); font-size: 15px; font-weight: 600; padding: 6px 0; }
+  .orig .text { margin-top: 12px; }
 </style>

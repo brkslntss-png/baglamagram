@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import { href, t, type Lang } from '../../i18n';
-import { LISTED_POEMS, excerpt, poemUrl } from '../../data/poems';
+import { LISTED_POEMS, excerpt, localize, poemUrl } from '../../data/poems';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 ---
@@ -23,8 +23,8 @@ const { lang } = Astro.props;
   <section class="section-tight">
     <div class="container">
       <div class="grid grid-3">
-        {LISTED_POEMS.map((p) => (
-          <a class="card poem" href={href(lang, poemUrl(p.slug))} lang="tr" data-poem data-text={`${p.title} ${p.text}`.toLocaleLowerCase('tr')}>
+        {LISTED_POEMS.map((o) => localize(o, lang)).map((p) => (
+          <a class="card poem" href={href(lang, poemUrl(p.slug))} lang={p.translated ? lang : 'tr'} data-poem data-text={`${p.title} ${p.text}`.toLocaleLowerCase(p.translated ? lang : 'tr')}>
             <Icon name="feather" size={20} class="gold" />
             <h2 class="serif">{p.title}</h2>
             <p>{excerpt(p)}</p>

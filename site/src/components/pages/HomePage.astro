@@ -6,12 +6,12 @@ import { href, t, type Lang } from '../../i18n';
 import type { UIKey } from '../../i18n/ui';
 import { CREATIVE_VIDEOS, IMG, INSTAGRAM } from '../../data/site';
 import { QUOTES, quoteIndexFor } from '../../data/quotes';
-import { LISTED_POEMS, excerpt, poemUrl } from '../../data/poems';
+import { LISTED_POEMS, excerpt, localize, poemUrl } from '../../data/poems';
 import { CONCERT_FEATURED } from '../../data/concerts';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const q = QUOTES[quoteIndexFor()];
-const poems = LISTED_POEMS.slice(0, 3);
+const poems = LISTED_POEMS.slice(0, 3).map((p) => localize(p, lang));
 const c = CONCERT_FEATURED;
 // Online dersin artıları (sayaç şeridinin sağı)
 const WHY = [['house', 1], ['globe', 2], ['calendar-clock', 3]] as const;
@@ -141,7 +141,7 @@ const quotesForClient = QUOTES.map((x) => ({ t: x.text[lang], a: x.author?.[lang
       </div>
       <div class="grid grid-3 reveal">
         {poems.map((p) => (
-          <a class="card poem" href={href(lang, poemUrl(p.slug))} lang="tr">
+          <a class="card poem" href={href(lang, poemUrl(p.slug))} lang={p.translated ? lang : 'tr'}>
             <Icon name="feather" size={20} class="gold" />
             <h3 class="serif">{p.title}</h3>
             <p>{excerpt(p)}</p>
