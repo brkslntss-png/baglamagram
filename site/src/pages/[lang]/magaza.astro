@@ -1,6 +1,8 @@
 ---
 import P from '../../components/pages/PackagesPage.astro';
+import NotFound from '../../components/pages/NotFoundPage.astro';
+import { PAKETLER_ACIK } from '../../data/site';
 import { langStaticPaths, type Lang } from '../../i18n';
 export const getStaticPaths = langStaticPaths;
 ---
-<P lang={Astro.params.lang as Lang} />
+{PAKETLER_ACIK ? <P lang={Astro.params.lang as Lang} /> : <NotFound lang={Astro.params.lang as Lang} />}
