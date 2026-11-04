@@ -1,4 +1,5 @@
-// Site haritası: tüm sayfalar dört dilde, hreflang bağlantılarıyla.
+// Site haritası: tüm sayfalar dört dilde, hreflang bağlantılarıyla. Yasal metinler aramada çıkmasın diye yok
+// (sayfaları noindex; Google site bağlantılarında "Terms of Use" gösteriyordu, Burak 4 Kasım 2026).
 import { href, LANGS } from '../i18n';
 import { POEMS } from '../data/poems';
 import { SONGS } from '../data/songs';
@@ -10,7 +11,6 @@ const SITE = 'https://baglamagram.com.tr';
 export function GET() {
   const pages = [
     '', 'hakkinda.html', 'online-egitim.html', 'notalar.html', 'siirler.html', 'konserler.html', ...(PAKETLER_ACIK ? ['magaza.html'] : []), 'blog.html',
-    'kullanim-sartlari.html', 'kvkk.html', 'on-bilgilendirme-formu.html', 'mesafeli-satis-sozlesmesi.html',
     ...POEMS.filter((p) => p.listed).map((p) => `siir-${p.slug}.html`),
     ...SONGS.filter((s) => s.listed).map((s) => s.page),
     ...posts('tr').map((p) => p.page),

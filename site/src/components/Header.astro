@@ -20,9 +20,9 @@ const section = (p: string) => {
 };
 const current = section(page);
 ---
-<a class="skip" href="#main">{t(lang, 'nav.skip')}</a>
+<span data-nosnippet><a class="skip" href="#main">{t(lang, 'nav.skip')}</a></span>
 <header class="site-header" data-header>
-  <div class="container bar">
+  <div class="container bar" data-nosnippet>
     <a class="brand" href={href(lang, '')} aria-label="baglamagram — {t(lang, 'nav.home')}">
       <span class="wordmark" aria-hidden="true"></span>
     </a>
@@ -57,7 +57,7 @@ const current = section(page);
   </div>
 </header>
 
-<div class="mobile-menu" id="mobile-menu" hidden data-menu>
+<div class="mobile-menu" id="mobile-menu" hidden data-menu data-nosnippet>
   <div class="mm-top container">
     <a class="brand" href={href(lang, '')}><span class="wordmark" aria-hidden="true"></span><span class="sr-only">baglamagram</span></a>
     <button class="menu-btn" type="button" data-menu-close><span class="sr-only">{t(lang, 'nav.close')}</span><Icon name="x" size={24} /></button>
