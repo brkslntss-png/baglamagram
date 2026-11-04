@@ -1,0 +1,19 @@
+---
+// "Sayfa bulunamadı" içeriği: 404.astro ve geçici olarak kapatılan sayfalar (ders paketleri; Burak, 4 Kasım 2026:
+// yasal prosedürler tamamlanana kadar) aynı görünümü kullanır.
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import { href, t, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<Base title={t(lang, 'nf.title')} noindex>
+  <section class="page-hero">
+    <div class="container narrow" style="align-items:flex-start">
+      <span class="eyebrow">404</span>
+      <h1 class="title-xl" data-nf-title>{t(lang, 'nf.title')}</h1>
+      <p class="lead" data-nf-text>{t(lang, 'nf.text')}</p>
+      <a class="btn btn-gold" href={href(lang, '')} data-nf-home><Icon name="home" size={18} /><span>{t(lang, 'nf.home')}</span></a>
+    </div>
+  </section>
+</Base>

@@ -50,6 +50,10 @@ export const WHATSAPP = 'https://wa.me/905335060921';
 // Satılan paketler (uygulamada features/access/plans.js ve functions/index.js → PAKETLER ile aynı).
 // 1 Kasım 2026 (Burak): fiyatlar vergiler dahil; havale ders başı 1.100 ₺, kartla 1.300 ₺; Silver 200 / 249 ₺.
 // Havale/EFT ders başı 900 ₺, Silver 200 ₺; kartla Shopier fiyatı. Satın alma portalda: kayıt → ödeme.
+// Ders paketleri sayfası ve üyelik (Burak, 4 Kasım 2026): yasal prosedürler tamamlanana kadar kapalı; sayfa
+// "Sayfa bulunamadı" gösterir. Açmak için true yap (uygulamada da features/access/membership.js → KAYIT_ACIK).
+export const PAKETLER_ACIK = false;
+
 export const PAKETLER = [
   { id: 'gold4', key: 'packages.gold4', uyelik: 'gold', ders: 4, havale: 4400, kart: 5200 },
   { id: 'gold8', key: 'packages.gold8', uyelik: 'gold', ders: 8, havale: 8800, kart: 10400 },

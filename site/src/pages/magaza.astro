@@ -1,4 +1,6 @@
 ---
 import P from '../components/pages/PackagesPage.astro';
+import NotFound from '../components/pages/NotFoundPage.astro';
+import { PAKETLER_ACIK } from '../data/site';
 ---
-<P lang="tr" />
+{PAKETLER_ACIK ? <P lang="tr" /> : <NotFound lang="tr" />}

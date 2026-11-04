@@ -3,12 +3,13 @@ import { href, LANGS } from '../i18n';
 import { POEMS } from '../data/poems';
 import { SONGS } from '../data/songs';
 import { posts } from '../data/blog';
+import { PAKETLER_ACIK } from '../data/site';
 
 const SITE = 'https://baglamagram.com.tr';
 
 export function GET() {
   const pages = [
-    '', 'hakkinda.html', 'online-egitim.html', 'notalar.html', 'siirler.html', 'konserler.html', 'magaza.html', 'blog.html',
+    '', 'hakkinda.html', 'online-egitim.html', 'notalar.html', 'siirler.html', 'konserler.html', ...(PAKETLER_ACIK ? ['magaza.html'] : []), 'blog.html',
     'kullanim-sartlari.html', 'kvkk.html', 'on-bilgilendirme-formu.html', 'mesafeli-satis-sozlesmesi.html',
     ...POEMS.filter((p) => p.listed).map((p) => `siir-${p.slug}.html`),
     ...SONGS.filter((s) => s.listed).map((s) => s.page),
