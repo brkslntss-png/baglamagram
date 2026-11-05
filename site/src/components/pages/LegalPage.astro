@@ -18,7 +18,7 @@ const govde = satirlar.filter((s, i) => !(i === 0 && s === s.toLocaleUpperCase('
 const sayfa = YASAL.find((y) => y.doc === doc)!;
 const title = t(lang, sayfa.key);
 ---
-<Base title={title} description={title}>
+<Base title={title} description={title} noindex>
   <section class="page-hero">
     <div class="container narrow">
       <span class="eyebrow">{t(lang, 'legal.eyebrow')}</span>

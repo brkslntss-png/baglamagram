@@ -70,7 +70,7 @@ const csp = [
     </main>
     <Footer lang={lang} />
 
-    <div class="lang-hint" hidden data-lang-hint>
+    <div class="lang-hint" hidden data-lang-hint data-nosnippet>
       {LANGS.filter((l) => l !== lang).map((l) => (
         <a href={href(l, page)} data-hint-lang={l} data-set-lang={l} hidden>{t(l, 'lang.switch', { lang: LANG_NAMES[l] })}</a>
       ))}

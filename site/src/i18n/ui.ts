@@ -3,7 +3,7 @@ const tr = {
   // Genel
   'site.name': 'Mahmut Burak ASLANTAŞ',
   'site.tagline': 'Bağlama sanatçısı ve müzik öğretmeni',
-  'site.description': 'Mahmut Burak Aslantaş ile online bağlama dersleri: birebir canlı dersler, ders kayıtları, notalar ve öğrenciye özel uygulama. Şiirler, besteler ve konserler.',
+  'site.description': 'baglamagram, Mahmut Burak Aslantaş\'ın online bağlama okulu: birebir canlı dersler, ders kayıtları, notalar ve öğrenciye özel uygulama. Şiirler, besteler ve konserler.',
   'nav.home': 'Ana Sayfa',
   'nav.about': 'Hakkında',
   'nav.edu': 'Online Eğitim',
@@ -341,7 +341,7 @@ type Dict = Partial<Record<UIKey, string>>;
 
 const en: Dict = {
   'site.tagline': 'Bağlama artist and music teacher',
-  'site.description': 'Online bağlama lessons with Mahmut Burak Aslantaş: one-to-one live lessons, lesson recordings, sheet music and a student app. Poems, compositions and concerts.',
+  'site.description': 'baglamagram is Mahmut Burak Aslantaş\'s online bağlama school: one-to-one live lessons, lesson recordings, sheet music and a student app. Poems, compositions and concerts.',
   'nav.home': 'Home',
   'nav.about': 'About',
   'nav.edu': 'Online Lessons',
@@ -665,7 +665,7 @@ const en: Dict = {
 
 const de: Dict = {
   'site.tagline': 'Bağlama-Künstler und Musiklehrer',
-  'site.description': 'Online-Bağlama-Unterricht mit Mahmut Burak Aslantaş: Live-Einzelstunden, Aufzeichnungen, Noten und eine Schüler-App. Gedichte, Kompositionen und Konzerte.',
+  'site.description': 'baglamagram ist die Online-Bağlama-Schule von Mahmut Burak Aslantaş: Live-Einzelstunden, Aufzeichnungen, Noten und eine Schüler-App. Gedichte, Kompositionen und Konzerte.',
   'nav.home': 'Start',
   'nav.about': 'Über mich',
   'nav.edu': 'Online-Unterricht',
@@ -989,7 +989,7 @@ const de: Dict = {
 
 const ru: Dict = {
   'site.tagline': 'Исполнитель на багламе и учитель музыки',
-  'site.description': 'Онлайн-уроки игры на багламе с Махмутом Бураком Асланташем: индивидуальные живые уроки, записи, ноты и приложение для учеников. Стихи, композиции и концерты.',
+  'site.description': 'baglamagram — онлайн-школа игры на багламе Махмута Бурака Асланташа: индивидуальные живые уроки, записи, ноты и приложение для учеников. Стихи, композиции и концерты.',
   'nav.home': 'Главная',
   'nav.about': 'Обо мне',
   'nav.edu': 'Онлайн-уроки',
