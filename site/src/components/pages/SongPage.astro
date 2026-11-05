@@ -6,13 +6,14 @@ import { href, t, type Lang } from '../../i18n';
 import type { Song } from '../../data/songs';
 interface Props { lang: Lang; song: Song }
 const { lang, song } = Astro.props;
+const byText = t(lang, song.instrumental ? 'notes.composer' : 'notes.by', { name: song.by });
 ---
-<Base title={`${song.title} · ${t(lang, 'notes.title')}`} description={`${song.title} — ${t(lang, 'notes.by', { name: song.by })}`}>
+<Base title={`${song.title} · ${t(lang, 'notes.title')}`} description={`${song.title} — ${byText}`}>
   <section class="page-hero">
     <div class="container">
       <a class="link-arrow back" href={href(lang, 'notalar.html')}><Icon name="arrow-left" size={17} />{t(lang, 'notes.back')}</a>
       <h1 class="title-xl">{song.title}</h1>
-      <p class="muted">{t(lang, 'notes.by', { name: song.by })}</p>
+      <p class="muted">{byText}</p>
     </div>
   </section>
   <section class="section-tight">
@@ -26,10 +27,18 @@ const { lang, song } = Astro.props;
         ))}
       </div>
       <aside class="side">
-        <div class="card lyrics">
-          <h2>{t(lang, 'notes.lyrics')}</h2>
-          <p class="serif" lang="tr">{song.lyrics}</p>
-        </div>
+        {song.audio ? (
+          <div class="card listen">
+            <h2>{t(lang, 'notes.listen')}</h2>
+            <audio controls preload="metadata" src={song.audio}></audio>
+          </div>
+        ) : null}
+        {song.lyrics ? (
+          <div class="card lyrics">
+            <h2>{t(lang, 'notes.lyrics')}</h2>
+            <p class="serif" lang="tr">{song.lyrics}</p>
+          </div>
+        ) : null}
         <a class="btn btn-gold" href={`/${song.pdf}`} download><Icon name="download" size={18} />{t(lang, 'notes.pdf')}</a>
       </aside>
     </div>
@@ -45,8 +54,9 @@ const { lang, song } = Astro.props;
   .sheet img { width: 100%; }
   .zoom { position: absolute; left: 12px; bottom: 12px; display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 999px; background: rgba(10, 10, 11, 0.8); color: var(--text); font-size: 13px; font-weight: 600; }
   .side { position: sticky; top: calc(var(--header-h) + 24px); display: flex; flex-direction: column; gap: 14px; }
-  .lyrics { padding: 24px; }
-  .lyrics h2 { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); font-family: var(--sans); margin-bottom: 14px; }
+  .lyrics, .listen { padding: 24px; }
+  .listen audio { width: 100%; }
+  .lyrics h2, .listen h2 { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); font-family: var(--sans); margin-bottom: 14px; }
   .lyrics p { white-space: pre-line; font-size: 18px; line-height: 1.8; font-style: italic; color: var(--text); }
   @media (max-width: 900px) { .song { grid-template-columns: 1fr; } .side { position: static; } }
 </style>

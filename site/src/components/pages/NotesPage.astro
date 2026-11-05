@@ -29,7 +29,7 @@ const songs = SONGS.filter((s) => s.listed);
               <span class="thumb"><img src={s.images[0]} alt="" loading="lazy" decoding="async" /></span>
               <span class="info">
                 <strong class="serif">{s.title}</strong>
-                <small>{t(lang, 'notes.by', { name: s.by })}</small>
+                <small>{t(lang, s.instrumental ? 'notes.composer' : 'notes.by', { name: s.by })}</small>
               </span>
               <Icon name="chevron-right" size={20} class="chev" />
             </a>
