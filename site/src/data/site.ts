@@ -42,6 +42,14 @@ export const APP = {
   apk: 'https://github.com/brkslntss-png/baglamagram/releases/latest/download/baglamagram.2.4.apk',
 };
 
+// Masaüstü uygulaması (depodaki masaustu/ klasörü). Dosyalar GitHub'daki sabit "masaustu" sürümünde durur ve her yeni
+// sürüm aynı adla yüklenir; bu bağlantılar hiç değişmez. APK sürümlerinin "latest"ine dokunulmaz.
+const MASAUSTU_SURUMU = 'https://github.com/brkslntss-png/baglamagram/releases/download/masaustu';
+export const MASAUSTU = {
+  win: `${MASAUSTU_SURUMU}/baglamagram-kurulum.exe`,
+  mac: `${MASAUSTU_SURUMU}/baglamagram-mac.dmg`,
+};
+
 export const FORMSPREE = 'https://formspree.io/f/xnjvyknz';
 export const SHOPIER = 'https://www.shopier.com/baglamagram';
 // Destek (Burak): WhatsApp 0533 506 0921
