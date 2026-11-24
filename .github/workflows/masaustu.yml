@@ -88,6 +88,8 @@ jobs:
       - name: Derle
         env:
           PLATFORM: ${{ matrix.ad }}
+          # electron-builder PR'larda imzayı (ad-hoc dahil) atlıyor; PR'dan inen deneme dosyası da yayındakiyle aynı olsun
+          CSC_FOR_PULL_REQUEST: 'true'
           MAC_CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
           MAC_CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
