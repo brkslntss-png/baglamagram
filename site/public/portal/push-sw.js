@@ -16,7 +16,7 @@ self.addEventListener('push', function (event) {
   }));
 });
 // Dokununca: açık portal varsa ona ekranı söyler (mesajla), yoksa portalı ekranın adresiyle açar (?git=DersHazirlik&…)
-var GIT = ['DersHazirlik', 'OdemeTalepleri', 'Basvurular', 'HataBildirimleri'];
+var GIT = ['DersHazirlik', 'OdemeTalepleri', 'Basvurular', 'HataBildirimleri', 'HaftalikProgram', 'YeniKayitlar', 'Sohbet', 'Mesajlar', 'MesajBildirimleri'];
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
   var nd = event.notification.data || {};
