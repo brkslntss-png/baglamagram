@@ -1,0 +1,124 @@
+{
+  "name": "baglamagram-masaustu",
+  "productName": "baglamagram",
+  "version": "1.0.0",
+  "description": "baglamagram öğrenci portalının Windows ve Mac uygulaması",
+  "author": "baglamagram <baglamagram@gmail.com>",
+  "homepage": "https://baglamagram.com.tr",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "derle:win": "electron-builder --win --publish never",
+    "derle:mac": "electron-builder --mac --publish never",
+    "derle:linux": "electron-builder --linux --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.4.1",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "tr.com.baglamagram.masaustu",
+    "productName": "baglamagram",
+    "copyright": "© baglamagram",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "electronLanguages": [
+      "tr",
+      "en",
+      "en-US",
+      "en-GB",
+      "de",
+      "ru"
+    ],
+    "publish": null,
+    "electronFuses": {
+      "runAsNode": false,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "onlyLoadAppFromAsar": true
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
+      "artifactName": "baglamagram-mac.${ext}",
+      "icon": "build/icon-mac.png",
+      "category": "public.app-category.education",
+      "hardenedRuntime": true,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "extendInfo": {
+        "NSCameraUsageDescription": "Canlı bağlama derslerinde hocanın seni görebilmesi için kamera gerekiyor.",
+        "NSMicrophoneUsageDescription": "Canlı derste hocanın seni duyabilmesi, akort ve ödev kaydı için mikrofon gerekiyor.",
+        "CFBundleDevelopmentRegion": "tr"
+      }
+    },
+    "dmg": {
+      "title": "baglamagram",
+      "iconSize": 100,
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 140,
+          "y": 190
+        },
+        {
+          "x": 400,
+          "y": 190,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "executableName": "baglamagram"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "runAfterFinish": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "baglamagram",
+      "uninstallDisplayName": "baglamagram",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "artifactName": "baglamagram-kurulum.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "build/icon.png",
+      "category": "Education",
+      "executableName": "baglamagram",
+      "artifactName": "baglamagram-linux.${ext}"
+    }
+  }
+}

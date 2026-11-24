@@ -336,6 +336,25 @@ const tr = {
   'apk.iphone': 'iPhone\'da mısın? Uygulamayı ana ekrana ekleyerek kullan.',
   'apk.help': 'Kuramadın mı? WhatsApp\'tan yaz',
   'apk.ok': 'Tamam',
+
+  // Masaüstü uygulaması (Windows, Mac) indirme penceresi
+  'edu.win': 'Windows uygulamasını indir',
+  'edu.mac': 'Mac uygulamasını indir',
+  'mas.win.lead': 'baglamagram Windows uygulaması iniyor (Windows 10 ve 11). Kurmak için:',
+  'mas.win.s1': 'İndirme bitince tarayıcının indirilenler listesinden ya da İndirilenler klasöründen baglamagram-kurulum dosyasını aç.',
+  'mas.win.s2': 'Windows “Windows bilgisayarınızı korudu” derse Ek bilgi’ye, ardından Yine de çalıştır’a tıkla.',
+  'mas.win.s3': 'Kurulum birkaç saniyede biter ve uygulama açılır. Sonra masaüstündeki ya da Başlat menüsündeki baglamagram simgesinden açarsın.',
+  'mas.win.safe': 'Windows’un uyarısı, uygulamanın henüz Microsoft’un ücretli yayıncı imzasını taşımamasından kaynaklanır; virüs bulunduğu anlamına gelmez. Tarayıcın dosyanın “sık indirilmediğini” söylerse indirmenin yanındaki menüden Sakla’yı seç.',
+  'mas.mac.lead': 'baglamagram Mac uygulaması iniyor (macOS 12 ve üstü; Apple Silicon ve Intel). Kurmak için:',
+  'mas.mac.s1': 'İndirme bitince baglamagram-mac dosyasını aç; açılan pencerede baglamagram simgesini Uygulamalar klasörüne sürükle.',
+  'mas.mac.s2': 'Uygulamalar klasöründen baglamagram’ı aç. Mac, Apple’ın uygulamayı doğrulayamadığını söylerse Bitti’ye bas.',
+  'mas.mac.s3': 'Sistem Ayarları › Gizlilik ve Güvenlik’e gir, baglamagram satırındaki Yine de Aç’a tıkla ve parolanı gir. Bunu yalnız ilk seferde yaparsın.',
+  'mas.mac.safe': 'Mac’in uyarısı, uygulamanın henüz Apple’ın ücretli geliştirici imzasını taşımamasından kaynaklanır; virüs bulunduğu anlamına gelmez.',
+  'mas.safe2': 'Uygulama yalnız öğrenci portalını açar. Kamera ve mikrofonu canlı derste ve akortta, sen izin verince kullanır; dosyalarına ve diğer uygulamalarına erişmez.',
+  'mas.safe3': 'Yeni sürüm çıkınca uygulama haber verir; portaldaki yenilikler ise kendiliğinden gelir.',
+  'mas.again': 'İndirme başlamadıysa buraya tıkla',
+  'mas.otherWin': 'Windows bilgisayarın mı var? Windows sürümünü indir',
+  'mas.otherMac': 'Mac’in mi var? Mac sürümünü indir',
 } as const;
 
 export type UIKey = keyof typeof tr;
@@ -665,6 +684,25 @@ const en: Dict = {
   'apk.iphone': 'On an iPhone? Use the app by adding it to your Home Screen.',
   'apk.help': 'Couldn\'t install it? Message us on WhatsApp',
   'apk.ok': 'OK',
+
+  // Masaüstü uygulaması (Windows, Mac) indirme penceresi
+  'edu.win': 'Download the Windows app',
+  'edu.mac': 'Download the Mac app',
+  'mas.win.lead': 'The baglamagram Windows app is downloading (Windows 10 and 11). To install it:',
+  'mas.win.s1': 'When it finishes, open the baglamagram-kurulum file from your browser’s downloads list or your Downloads folder.',
+  'mas.win.s2': 'If Windows says “Windows protected your PC”, click More info, then Run anyway.',
+  'mas.win.s3': 'Setup takes a few seconds and the app opens. After that, start it from the baglamagram icon on your desktop or in the Start menu.',
+  'mas.win.safe': 'The Windows warning appears because the app doesn’t yet carry Microsoft’s paid publisher signature; it doesn’t mean a virus was found. If your browser says the file “isn’t commonly downloaded”, choose Keep from the menu next to the download.',
+  'mas.mac.lead': 'The baglamagram Mac app is downloading (macOS 12 or later; Apple Silicon and Intel). To install it:',
+  'mas.mac.s1': 'When it finishes, open the baglamagram-mac file and drag the baglamagram icon into the Applications folder.',
+  'mas.mac.s2': 'Open baglamagram from Applications. If your Mac says Apple could not verify the app, click Done.',
+  'mas.mac.s3': 'Go to System Settings › Privacy & Security, click Open Anyway next to baglamagram and enter your password. You only do this the first time.',
+  'mas.mac.safe': 'The Mac warning appears because the app doesn’t yet carry Apple’s paid developer signature; it doesn’t mean a virus was found.',
+  'mas.safe2': 'The app only opens the student portal. It uses the camera and microphone in live lessons and the tuner, only with your permission; it never touches your files or other apps.',
+  'mas.safe3': 'When a new version comes out the app lets you know; new portal features arrive by themselves.',
+  'mas.again': 'Click here if the download didn’t start',
+  'mas.otherWin': 'On a Windows PC? Download the Windows version',
+  'mas.otherMac': 'On a Mac? Download the Mac version',
 };
 
 const de: Dict = {
@@ -991,6 +1029,25 @@ const de: Dict = {
   'apk.iphone': 'Auf dem iPhone? Nutze die App, indem du sie zum Home-Bildschirm hinzufügst.',
   'apk.help': 'Hat es nicht geklappt? Schreib uns per WhatsApp',
   'apk.ok': 'OK',
+
+  // Masaüstü uygulaması (Windows, Mac) indirme penceresi
+  'edu.win': 'Windows-App herunterladen',
+  'edu.mac': 'Mac-App herunterladen',
+  'mas.win.lead': 'Die baglamagram-App für Windows wird heruntergeladen (Windows 10 und 11). So installierst du sie:',
+  'mas.win.s1': 'Wenn der Download fertig ist, öffne die Datei baglamagram-kurulum aus der Download-Liste deines Browsers oder aus dem Ordner „Downloads“.',
+  'mas.win.s2': 'Meldet Windows „Der Computer wurde durch Windows geschützt“, klicke auf „Weitere Informationen“ und dann auf „Trotzdem ausführen“.',
+  'mas.win.s3': 'Die Installation dauert nur Sekunden, danach öffnet sich die App. Später startest du sie über das baglamagram-Symbol auf dem Desktop oder im Startmenü.',
+  'mas.win.safe': 'Die Windows-Warnung erscheint, weil die App noch keine kostenpflichtige Herausgebersignatur von Microsoft trägt; sie bedeutet nicht, dass ein Virus gefunden wurde. Meldet dein Browser, die Datei werde „nicht häufig heruntergeladen“, wähle im Menü neben dem Download „Beibehalten“.',
+  'mas.mac.lead': 'Die baglamagram-App für den Mac wird heruntergeladen (ab macOS 12; Apple Silicon und Intel). So installierst du sie:',
+  'mas.mac.s1': 'Wenn der Download fertig ist, öffne die Datei baglamagram-mac und zieh das baglamagram-Symbol in den Ordner „Programme“.',
+  'mas.mac.s2': 'Öffne baglamagram aus „Programme“. Meldet dein Mac, dass Apple die App nicht überprüfen konnte, klicke auf „Fertig“.',
+  'mas.mac.s3': 'Öffne Systemeinstellungen › Datenschutz & Sicherheit, klicke bei baglamagram auf „Dennoch öffnen“ und gib dein Passwort ein. Das ist nur beim ersten Mal nötig.',
+  'mas.mac.safe': 'Die Mac-Warnung erscheint, weil die App noch keine kostenpflichtige Entwicklersignatur von Apple trägt; sie bedeutet nicht, dass ein Virus gefunden wurde.',
+  'mas.safe2': 'Die App öffnet nur das Schülerportal. Kamera und Mikrofon nutzt sie im Live-Unterricht und beim Stimmgerät, nur mit deiner Erlaubnis; auf deine Dateien und andere Apps greift sie nicht zu.',
+  'mas.safe3': 'Erscheint eine neue Version, sagt dir die App Bescheid; Neues im Portal kommt von selbst.',
+  'mas.again': 'Klicke hier, falls der Download nicht startet',
+  'mas.otherWin': 'Am Windows-PC? Windows-Version herunterladen',
+  'mas.otherMac': 'Am Mac? Mac-Version herunterladen',
 };
 
 const ru: Dict = {
@@ -1317,6 +1374,25 @@ const ru: Dict = {
   'apk.iphone': 'У вас iPhone? Добавьте приложение на экран «Домой».',
   'apk.help': 'Не получилось? Напишите в WhatsApp',
   'apk.ok': 'Понятно',
+
+  // Masaüstü uygulaması (Windows, Mac) indirme penceresi
+  'edu.win': 'Скачать приложение для Windows',
+  'edu.mac': 'Скачать приложение для Mac',
+  'mas.win.lead': 'Загружается приложение baglamagram для Windows (Windows 10 и 11). Чтобы установить его:',
+  'mas.win.s1': 'Когда загрузка закончится, откройте файл baglamagram-kurulum из списка загрузок браузера или из папки «Загрузки».',
+  'mas.win.s2': 'Если Windows сообщит «Система Windows защитила ваш компьютер», нажмите «Подробнее», затем «Выполнить в любом случае».',
+  'mas.win.s3': 'Установка займёт несколько секунд, после чего приложение откроется. Потом запускайте его значком baglamagram на рабочем столе или в меню «Пуск».',
+  'mas.win.safe': 'Предупреждение Windows появляется потому, что у приложения пока нет платной подписи издателя от Microsoft; это не значит, что найден вирус. Если браузер сообщит, что файл «скачивают редко», выберите «Сохранить» в меню рядом с загрузкой.',
+  'mas.mac.lead': 'Загружается приложение baglamagram для Mac (macOS 12 и новее; Apple Silicon и Intel). Чтобы установить его:',
+  'mas.mac.s1': 'Когда загрузка закончится, откройте файл baglamagram-mac и перетащите значок baglamagram в папку «Программы».',
+  'mas.mac.s2': 'Откройте baglamagram из «Программ». Если Mac сообщит, что Apple не удалось проверить приложение, нажмите «Готово».',
+  'mas.mac.s3': 'Откройте «Системные настройки» › «Конфиденциальность и безопасность», нажмите «Всё равно открыть» рядом с baglamagram и введите пароль. Это нужно только в первый раз.',
+  'mas.mac.safe': 'Предупреждение Mac появляется потому, что у приложения пока нет платной подписи разработчика Apple; это не значит, что найден вирус.',
+  'mas.safe2': 'Приложение открывает только портал ученика. Камеру и микрофон оно использует на живых уроках и в тюнере, только с вашего разрешения; к вашим файлам и другим программам доступа нет.',
+  'mas.safe3': 'Когда выйдет новая версия, приложение сообщит об этом; обновления портала приходят сами.',
+  'mas.again': 'Нажмите здесь, если загрузка не началась',
+  'mas.otherWin': 'У вас Windows? Скачать версию для Windows',
+  'mas.otherMac': 'У вас Mac? Скачать версию для Mac',
 };
 
 export const ui = { tr, en, de, ru } as const;

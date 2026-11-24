@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import { href, LOCALE, t, type Lang } from '../../i18n';
-import { APP, FORMSPREE, WHATSAPP } from '../../data/site';
+import { APP, FORMSPREE, MASAUSTU, WHATSAPP } from '../../data/site';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const features = [
@@ -17,6 +17,11 @@ const portal = ['edu.portal.i1', 'edu.portal.i2', 'edu.portal.i3', 'edu.portal.i
 // iPhone kurulum kılavuzu: Safari → ••• → Paylaş → Ana Ekrana Ekle → Ekle (ekran görüntüleri /img/ios/)
 const LOGIN_URL = 'https://baglamagram.com.tr/portal/?e=Login';
 const iosSteps = [1, 2, 3, 4, 5] as const;
+// Masaüstü (Windows, Mac): butona basınca indirme başlar, yanında kurulum ve güvenlik penceresi açılır
+const masaustu = [
+  { os: 'win', icon: 'windows', diger: 'mac', digerIcon: 'apple', digerMetin: 'mas.otherMac' },
+  { os: 'mac', icon: 'apple', diger: 'win', digerIcon: 'windows', digerMetin: 'mas.otherWin' },
+] as const;
 const mock = {
   tr: { hi: 'Merhaba', next: 'Sıradaki ders', when: 'Bugün 19:00', hw: 'Ödevin var', hwt: 'Uşşak dizisi', streak: '5 gün seri', tabs: ['Ana Sayfa', 'Dersler', 'Pratik', 'Hoca', 'Profil'] },
   en: { hi: 'Hello', next: 'Next lesson', when: 'Today 7:00 PM', hw: 'Homework', hwt: 'Uşşak scale', streak: '5-day streak', tabs: ['Home', 'Lessons', 'Practice', 'Teacher', 'Profile'] },
@@ -31,6 +36,8 @@ const mock = {
         <div class="stores">
           <button class="apk" type="button" data-ios-open aria-haspopup="dialog"><Icon name="apple" size={17} /><span>{t(lang, 'edu.ios')}</span></button>
           <a class="apk" href={APP.apk} rel="noopener" data-apk><Icon name="android" size={17} /><span>{t(lang, 'edu.apk')}</span><small>{t(lang, 'edu.apkVer', { v: APP.version })}</small></a>
+          <a class="apk" href={MASAUSTU.win} rel="noopener" data-mas="win"><Icon name="windows" size={15} /><span>{t(lang, 'edu.win')}</span></a>
+          <a class="apk" href={MASAUSTU.mac} rel="noopener" data-mas="mac"><Icon name="apple" size={17} /><span>{t(lang, 'edu.mac')}</span></a>
         </div>
         <h1 class="title-xl">{t(lang, 'edu.title')}</h1>
         <p class="lead">{t(lang, 'edu.lead')}</p>
@@ -112,6 +119,38 @@ const mock = {
       <button class="btn btn-gold apk-ok" type="button" data-apk-close>{t(lang, 'apk.ok')}</button>
     </div>
   </dialog>
+
+  {masaustu.map((m) => (
+    <dialog class="ios-guide apk-guide" data-mas-guide={m.os} aria-labelledby={`mas-${m.os}-title`}>
+      <div class="ig-head">
+        <span class={`ig-logo mas-logo-${m.os}`}><Icon name={m.icon} size={m.os === 'win' ? 19 : 22} /></span>
+        <div class="ig-head-text">
+          <h2 id={`mas-${m.os}-title`}>{t(lang, 'apk.title')}</h2>
+          <p>{t(lang, `mas.${m.os}.lead` as any)}</p>
+        </div>
+        <button class="ig-close" type="button" data-mas-close aria-label={t(lang, 'edu.ios.close')}><Icon name="x" size={20} /></button>
+      </div>
+      <ol class="apk-steps">
+        {([1, 2, 3] as const).map((n) => (
+          <li><span class="apk-num">{n}</span><p>{t(lang, `mas.${m.os}.s${n}` as any)}</p></li>
+        ))}
+      </ol>
+      <div class="apk-safe">
+        <h3><Icon name="shield-check" size={19} />{t(lang, 'apk.safeTitle')}</h3>
+        <ul>
+          {['apk.safe1', `mas.${m.os}.safe`, 'mas.safe2', 'mas.safe3'].map((k) => (
+            <li><Icon name="check" size={16} />{t(lang, k as any)}</li>
+          ))}
+        </ul>
+      </div>
+      <div class="apk-foot">
+        <a class="apk-link" href={MASAUSTU[m.os]} rel="noopener"><Icon name="download" size={16} />{t(lang, 'mas.again')}</a>
+        <a class="apk-link" href={MASAUSTU[m.diger]} rel="noopener" data-mas={m.diger}><Icon name={m.digerIcon} size={16} />{t(lang, m.digerMetin)}</a>
+        <a class="apk-link" href={WHATSAPP} target="_blank" rel="noopener"><Icon name="whatsapp" size={16} />{t(lang, 'apk.help')}</a>
+        <button class="btn btn-gold apk-ok" type="button" data-mas-close>{t(lang, 'apk.ok')}</button>
+      </div>
+    </dialog>
+  ))}
 
   <section class="section">
     <div class="container">
@@ -222,6 +261,8 @@ const mock = {
   .apk { align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 16px 0 14px; border-radius: 999px; border: 1px solid var(--gold-line); background: rgba(210, 172, 99, 0.08); color: var(--gold-2); font-size: 14px; font-weight: 600; margin-bottom: 6px; transition: background 0.2s, border-color 0.2s; }
   .apk:hover { background: rgba(210, 172, 99, 0.16); border-color: var(--gold); }
   .apk small { font-size: 12px; font-weight: 500; color: var(--text-2); padding-left: 10px; border-left: 1px solid var(--line-2); }
+  /* Telefonda bilgisayar uygulaması butonları gizli (exe/dmg telefonda işe yaramaz); tablette ve bilgisayarda görünür */
+  @media (max-width: 640px) and (pointer: coarse) { .stores [data-mas] { display: none; } }
   .hero { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; align-items: center; }
   .hero-text { display: flex; flex-direction: column; gap: 22px; }
   .hero-text .title-xl { font-size: clamp(38px, 5.4vw, 72px); }
@@ -351,7 +392,7 @@ const mock = {
     location.replace('/portal/');
   }
 
-  // iPhone kurulum kılavuzu ve Android indirme penceresi
+  // iPhone kurulum kılavuzu, Android ve masaüstü (Windows, Mac) indirme pencereleri
   const openDialog = (d: HTMLDialogElement | null) => {
     if (!d) return;
     if (typeof d.showModal === 'function') { if (!d.open) d.showModal(); } else d.setAttribute('open', '');
@@ -359,14 +400,24 @@ const mock = {
   };
   const guide = document.querySelector<HTMLDialogElement>('[data-ios-guide]');
   const apkGuide = document.querySelector<HTMLDialogElement>('[data-apk-guide]');
-  [guide, apkGuide].forEach((d) => {
-    d?.addEventListener('close', () => { if (!guide?.open && !apkGuide?.open) document.documentElement.style.overflow = ''; });
+  const masGuides = [...document.querySelectorAll<HTMLDialogElement>('[data-mas-guide]')];
+  [guide, apkGuide, ...masGuides].forEach((d) => {
+    d?.addEventListener('close', () => {
+      if (!document.querySelector('dialog[open]')) document.documentElement.style.overflow = '';
+    });
     // Pencerenin dışına (bulanık zemine) dokununca kapanır
     d?.addEventListener('click', (e) => { if (e.target === d) d.close(); });
   });
   guide?.querySelector('[data-ios-close]')?.addEventListener('click', () => guide.close());
   apkGuide?.querySelectorAll('[data-apk-close]').forEach((b) => b.addEventListener('click', () => apkGuide.close()));
   document.querySelectorAll('[data-ios-open]').forEach((b) => b.addEventListener('click', () => openDialog(guide)));
+  masGuides.forEach((d) => d.querySelectorAll('[data-mas-close]').forEach((b) => b.addEventListener('click', () => d.close())));
+  // Masaüstü indirmesi de kendiliğinden sürer; pencere o işletim sisteminin kurulum adımlarını anlatır
+  document.querySelectorAll<HTMLElement>('[data-mas]').forEach((a) => a.addEventListener('click', () => {
+    masGuides.forEach((d) => { if (d.open) d.close(); });
+    const hedef = masGuides.find((d) => d.dataset.masGuide === a.dataset.mas) ?? null;
+    setTimeout(() => openDialog(hedef), 150);
+  }));
   // APK indirmesi kendiliğinden sürer; pencere kurulumu ve güvenliği anlatır
   document.querySelectorAll('[data-apk]').forEach((a) => a.addEventListener('click', () => {
     olay('apk_indir');

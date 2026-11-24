@@ -1,0 +1,177 @@
+# Masaüstü uygulamasını (masaustu/ klasörü) Windows ve Mac için derler.
+#
+# - PR'da: yalnız derler ve açılış testini yapar. Kurulum dosyaları iş akışı sayfasının altında
+#   "masaustu-windows" ve "masaustu-mac" olarak iner; birleştirmeden önce deneyebilirsin.
+# - main'e gönderimde: masaustu/package.json'daki sürüm yayındakinden farklıysa derler, test eder ve
+#   GitHub'daki "masaustu" sürümüne yükler. Sitedeki indirme butonları her zaman bu sürümü indirir;
+#   açık uygulamalar yeni sürümü görüp indirmeyi önerir. APK sürümlerinin "Latest" etiketine dokunulmaz.
+# - Elle (Actions > Masaüstü uygulaması > Run workflow, main dalında): sürüm aynı olsa da derleyip yeniden yükler.
+#
+# İmza (isteğe bağlı). Settings > Secrets and variables > Actions'a eklenirse kullanılır, yoksa imzasız derlenir:
+#   Mac:     MAC_CSC_LINK (Developer ID Application .p12, base64), MAC_CSC_KEY_PASSWORD,
+#            APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID (noter onayı için)
+#   Windows: WIN_CSC_LINK (.pfx, base64), WIN_CSC_KEY_PASSWORD
+name: Masaüstü uygulaması
+
+on:
+  push:
+    branches: [main]
+    paths: ['masaustu/**', '.github/workflows/masaustu.yml']
+  pull_request:
+    paths: ['masaustu/**', '.github/workflows/masaustu.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: masaustu-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  surum:
+    name: Sürümü denetle
+    runs-on: ubuntu-latest
+    outputs:
+      surum: ${{ steps.s.outputs.surum }}
+      yayinla: ${{ steps.s.outputs.yayinla }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: masaustu/package.json
+          sparse-checkout-cone-mode: false
+      - id: s
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OLAY: ${{ github.event_name }}
+        run: |
+          surum=$(node -p "require('./masaustu/package.json').version")
+          yayinda=$(gh release download masaustu -R "$GITHUB_REPOSITORY" -p surum.json -O - 2>/dev/null \
+            | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s).surum)}catch{console.log('')}})")
+          if [ "$OLAY" = pull_request ] || [ "$GITHUB_REF" != refs/heads/main ]; then yayinla=false
+          elif [ "$OLAY" = workflow_dispatch ] || [ "$yayinda" != "$surum" ]; then yayinla=true
+          else yayinla=false; fi
+          echo "package.json: $surum · yayında: ${yayinda:-yok} · yayınlanacak mı: $yayinla"
+          echo "surum=$surum" >> "$GITHUB_OUTPUT"
+          echo "yayinla=$yayinla" >> "$GITHUB_OUTPUT"
+
+  derle:
+    name: Derle (${{ matrix.ad }})
+    needs: surum
+    if: github.event_name == 'pull_request' || needs.surum.outputs.yayinla == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ad: windows
+            os: windows-latest
+            dosya: masaustu/dist/baglamagram-kurulum.exe
+            uygulama: dist/win-unpacked/baglamagram.exe
+          - ad: mac
+            os: macos-latest
+            dosya: masaustu/dist/baglamagram-mac.dmg
+            uygulama: dist/mac-universal/*.app/Contents/MacOS/*
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: masaustu
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: masaustu/package-lock.json
+      - name: Paketleri kur
+        run: npm ci
+      - name: Derle
+        env:
+          PLATFORM: ${{ matrix.ad }}
+          # electron-builder PR'larda imzayı (ad-hoc dahil) atlıyor; PR'dan inen deneme dosyası da yayındakiyle aynı olsun
+          CSC_FOR_PULL_REQUEST: 'true'
+          MAC_CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          MAC_CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          # Boş sırlar "var" sayılmasın
+          for v in MAC_CSC_LINK MAC_CSC_KEY_PASSWORD WIN_CSC_LINK WIN_CSC_KEY_PASSWORD APPLE_ID APPLE_APP_SPECIFIC_PASSWORD APPLE_TEAM_ID; do
+            if [ -z "${!v}" ]; then unset "$v"; fi
+          done
+          if [ "$PLATFORM" = mac ]; then
+            if [ -n "${MAC_CSC_LINK:-}" ]; then
+              echo "Apple Developer kimliğiyle imzalanıyor"
+              CSC_LINK="$MAC_CSC_LINK" CSC_KEY_PASSWORD="${MAC_CSC_KEY_PASSWORD:-}" npx electron-builder --mac --publish never
+            else
+              echo "İmza sırrı yok: ad-hoc imzayla derleniyor"
+              unset APPLE_ID APPLE_APP_SPECIFIC_PASSWORD APPLE_TEAM_ID
+              CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac --publish never -c.mac.identity=-
+            fi
+          else
+            if [ -n "${WIN_CSC_LINK:-}" ]; then
+              echo "Kod imzalama sertifikasıyla imzalanıyor"
+              export CSC_LINK="$WIN_CSC_LINK" CSC_KEY_PASSWORD="${WIN_CSC_KEY_PASSWORD:-}"
+            fi
+            npx electron-builder --win --publish never
+          fi
+          ls -la dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: masaustu-${{ matrix.ad }}
+          path: ${{ matrix.dosya }}
+          compression-level: 0
+          retention-days: 14
+          if-no-files-found: error
+      - name: Açılış testi (uygulama açılıp portalı yüklüyor mu?)
+        run: |
+          uygulama=$(ls -d ${{ matrix.uygulama }} | head -1)
+          echo "Açılıyor: $uygulama"
+          bash test/acilis-testi.sh "$uygulama"
+
+  yayinla:
+    name: GitHub'a yükle
+    needs: [surum, derle]
+    if: needs.surum.outputs.yayinla == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dosyalar
+          merge-multiple: true
+      - name: "\"masaustu\" sürümüne yükle"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SURUM: ${{ needs.surum.outputs.surum }}
+        run: |
+          ls -la dosyalar
+          R="$GITHUB_REPOSITORY"
+          D="https://github.com/$R/releases/download/masaustu"
+          notlar=$(cat <<EOF
+          baglamagram öğrenci portalının bilgisayar uygulaması, sürüm $SURUM.
+
+          - **Windows 10/11:** [baglamagram-kurulum.exe]($D/baglamagram-kurulum.exe)
+          - **Mac (Apple Silicon ve Intel, macOS 12+):** [baglamagram-mac.dmg]($D/baglamagram-mac.dmg)
+
+          Kurulum adımları: https://baglamagram.com.tr/online-egitim.html
+
+          Bu sürüm her yeni masaüstü sürümünde güncellenir; bağlantılar hep en yenisini indirir.
+          EOF
+          )
+          if ! gh release view masaustu -R "$R" > /dev/null 2>&1; then
+            gh release create masaustu -R "$R" --target "$GITHUB_SHA" --latest=false \
+              --title "baglamagram masaüstü $SURUM" --notes "$notlar"
+          fi
+          # Önce kurulum dosyaları, en son surum.json: açık uygulamalar yeni sürümü dosyalar hazır olunca görsün
+          gh release upload masaustu -R "$R" --clobber dosyalar/baglamagram-kurulum.exe dosyalar/baglamagram-mac.dmg
+          printf '{"surum":"%s","tarih":"%s"}\n' "$SURUM" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > surum.json
+          gh release upload masaustu -R "$R" --clobber surum.json
+          gh release edit masaustu -R "$R" --latest=false --title "baglamagram masaüstü $SURUM" --notes "$notlar"
+          # Etiket bu derlemenin kaynağını göstersin
+          gh api -X PATCH "repos/$R/git/refs/tags/masaustu" -f sha="$GITHUB_SHA" -F force=true > /dev/null
+          echo "Yayında: baglamagram masaüstü $SURUM"

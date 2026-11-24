@@ -4,6 +4,7 @@
 |---|---|---|
 | `site/` | Web sitesi (Astro). Türkçe sayfalar kökte, İngilizce/Almanca/Rusça `/en`, `/de`, `/ru` altında. | GitHub Pages (`.github/workflows/pages.yml`, `main`'e her gönderimde) |
 | `site/public/portal/` | Öğrenci ve hoca portalı: Bağlamagram uygulamasının web sürümü (derlenmiş). | GitHub Pages, `/portal/` |
+| `masaustu/` | Windows ve Mac uygulaması (Electron): portalı kendi penceresinde açar. Ayrıntı: `masaustu/README.md` | GitHub Releases, `masaustu` sürümü (`.github/workflows/masaustu.yml`) |
 | `api/chat.js` | BurakAI Hoca yapay zekâ servisi. Yalnızca giriş yapmış kullanıcılar. | Vercel (`baglamagram.vercel.app/api/chat`) |
 | `oyun-muzigi-22/`, `oyun-muzigi-makam/`, `tsm-oyun.mp3` | Oyun sesleri. Uygulama bunları bu depodan okur; **yerlerini değiştirme**. | raw.githubusercontent.com |
 
